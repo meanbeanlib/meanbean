@@ -1,0 +1,67 @@
+package org.meanbean.factories;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.WeakHashMap;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.meanbean.factories.basic.LongFactory;
+import org.meanbean.factories.basic.StringFactory;
+import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomNumberGeneratorProvider;
+import org.meanbean.util.SimpleRandomNumberGenerator;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+@RunWith(MockitoJUnitRunner.class)
+public class CollectionFactoryPluginTest {
+
+	public static final Class<?>[] FACTORY_CLASSES = { List.class, ArrayList.class, LinkedList.class, Map.class,
+	        HashMap.class, IdentityHashMap.class, LinkedHashMap.class, TreeMap.class, WeakHashMap.class, Set.class,
+	        HashSet.class, LinkedHashSet.class, TreeSet.class };
+
+	@Mock
+	private RandomNumberGeneratorProvider randomNumberGeneratorProvider;
+
+	private RandomNumberGenerator randomNumberGenerator = new SimpleRandomNumberGenerator();
+
+	private FactoryCollection factoryCollection;
+
+	@Before
+	public void before() {
+		when(randomNumberGeneratorProvider.getRandomNumberGenerator()).thenReturn(randomNumberGenerator);
+		factoryCollection = new SimpleFactoryCollection();
+		factoryCollection.addFactory(String.class, new StringFactory(randomNumberGenerator));
+		factoryCollection.addFactory(Long.class, new LongFactory(randomNumberGenerator));
+	}
+
+	@Test
+	public void shouldRegisterCollectionFactories() throws Exception {
+		CollectionFactoryPlugin plugin = new CollectionFactoryPlugin();
+		for (Class<?> clazz : FACTORY_CLASSES) {
+			assertThat("Factory for class [" + clazz + "] should not be registered prior to plugin initialization.",
+			        factoryCollection.hasFactory(clazz), is(false));
+		}
+		plugin.initialize(factoryCollection, randomNumberGeneratorProvider);
+		for (Class<?> clazz : FACTORY_CLASSES) {
+			assertThat("Plugin did not register Factory for class [" + clazz + "].",
+			        factoryCollection.hasFactory(clazz), is(true));
+		}
+	}
+}
