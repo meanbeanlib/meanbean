@@ -3,14 +3,14 @@ package org.meanbean.factories.collections;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 public class ArrayListFactoryTest extends ListFactoryTestBase {
 
 	@Override
-    protected ListFactoryBase<String> getListFactory(RandomNumberGenerator randomNumberGenerator, Factory<String> itemFactory) {
-	    return new ArrayListFactory<String>(randomNumberGenerator, itemFactory);
+    protected ListFactoryBase<String> getListFactory(RandomValueGenerator randomValueGenerator, Factory<String> itemFactory) {
+	    return new ArrayListFactory<String>(randomValueGenerator, itemFactory);
     }
 
 	@Override

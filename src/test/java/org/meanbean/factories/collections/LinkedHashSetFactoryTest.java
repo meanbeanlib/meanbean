@@ -3,14 +3,14 @@ package org.meanbean.factories.collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 public class LinkedHashSetFactoryTest extends SetFactoryTestBase {
 
 	@Override
-    protected SetFactoryBase<String> getSetFactory(RandomNumberGenerator randomNumberGenerator, Factory<String> itemFactory) {
-		return new LinkedHashSetFactory<String>(randomNumberGenerator, itemFactory);
+    protected SetFactoryBase<String> getSetFactory(RandomValueGenerator randomValueGenerator, Factory<String> itemFactory) {
+		return new LinkedHashSetFactory<String>(randomValueGenerator, itemFactory);
     }
 
 	@Override

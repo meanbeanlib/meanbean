@@ -3,14 +3,14 @@ package org.meanbean.factories.collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 public class LinkedListFactoryTest extends ListFactoryTestBase {
 
 	@Override
-    protected ListFactoryBase<String> getListFactory(RandomNumberGenerator randomNumberGenerator, Factory<String> itemFactory) {
-	    return new LinkedListFactory<String>(randomNumberGenerator, itemFactory);
+    protected ListFactoryBase<String> getListFactory(RandomValueGenerator randomValueGenerator, Factory<String> itemFactory) {
+	    return new LinkedListFactory<String>(randomValueGenerator, itemFactory);
     }
 
 	@Override
