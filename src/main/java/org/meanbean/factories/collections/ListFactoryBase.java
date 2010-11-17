@@ -2,9 +2,9 @@ package org.meanbean.factories.collections;
 
 import java.util.List;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.factories.basic.FactoryBase;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.factories.basic.RandomFactoryBase;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
  * Abstract Factory that creates Lists of objects of the specified type.
@@ -14,7 +14,7 @@ import org.meanbean.util.RandomNumberGenerator;
  * @param <T>
  *            The data type of the object this Factory creates Lists of.
  */
-public abstract class ListFactoryBase<T> extends FactoryBase<List<T>> {
+public abstract class ListFactoryBase<T> extends RandomFactoryBase<List<T>> {
 
     /** Unique version ID of this Serializable class. */
     private static final long serialVersionUID = 1L;
@@ -25,13 +25,13 @@ public abstract class ListFactoryBase<T> extends FactoryBase<List<T>> {
     /**
      * Construct a new List object Factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      * @param itemFactory
      *            Factory used to create each List item.
      */
-    public ListFactoryBase(RandomNumberGenerator randomNumberGenerator,Factory<T> itemFactory) {
-        super(randomNumberGenerator);
+    public ListFactoryBase(RandomValueGenerator randomValueGenerator,Factory<T> itemFactory) {
+        super(randomValueGenerator);
         validationHelper.ensureExists("itemFactory", "construct ListFactory", itemFactory);
         this.itemFactory = itemFactory;
     }
@@ -43,7 +43,7 @@ public abstract class ListFactoryBase<T> extends FactoryBase<List<T>> {
      */
     public List<T> create() {
         // Basis to randomly decide size of List
-        double randomSize = getRandomNumberGenerator().nextDouble();
+        double randomSize = getRandomValueGenerator().nextDouble();
         int size = (int)(100.0 * randomSize);
         List<T> result = createList();
         for (int idx = 0; idx < size; idx++) {

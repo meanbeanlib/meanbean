@@ -3,11 +3,11 @@ package org.meanbean.factories.collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Factory that creates LinkedLists of objects of the specified type.
+ * Factory that creates random LinkedLists of objects of the specified type.
  * 
  * @author Graham Williamson
  * 
@@ -22,13 +22,13 @@ public class LinkedListFactory<T> extends ListFactoryBase<T> {
     /**
      * Construct a new LinkedList object Factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      * @param itemFactory
      *            Factory used to create each LinkedList item.
      */
-    public LinkedListFactory(RandomNumberGenerator randomNumberGenerator,Factory<T> itemFactory) {
-        super(randomNumberGenerator,itemFactory);
+    public LinkedListFactory(RandomValueGenerator randomValueGenerator,Factory<T> itemFactory) {
+        super(randomValueGenerator,itemFactory);
     }
 
 	/**

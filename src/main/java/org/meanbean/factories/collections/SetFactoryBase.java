@@ -2,9 +2,9 @@ package org.meanbean.factories.collections;
 
 import java.util.Set;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.factories.basic.FactoryBase;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.factories.basic.RandomFactoryBase;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
  * Abstract Factory that creates Sets of objects of the specified type.
@@ -12,7 +12,7 @@ import org.meanbean.util.RandomNumberGenerator;
  * @param <T>
  *            The data type of the object this Factory creates Sets of.
  */
-public abstract class SetFactoryBase<T> extends FactoryBase<Set<T>> {
+public abstract class SetFactoryBase<T> extends RandomFactoryBase<Set<T>> {
 
     /** Unique version ID of this Serializable class. */
     private static final long serialVersionUID = 1L;
@@ -23,13 +23,13 @@ public abstract class SetFactoryBase<T> extends FactoryBase<Set<T>> {
     /**
      * Construct a new Set object Factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      * @param itemFactory
      *            Factory used to create each Set item.
      */
-    public SetFactoryBase(RandomNumberGenerator randomNumberGenerator,Factory<T> itemFactory) {
-        super(randomNumberGenerator);
+    public SetFactoryBase(RandomValueGenerator randomValueGenerator,Factory<T> itemFactory) {
+        super(randomValueGenerator);
         validationHelper.ensureExists("itemFactory", "construct SetFactory", itemFactory);
         this.itemFactory = itemFactory;
     }
@@ -41,7 +41,7 @@ public abstract class SetFactoryBase<T> extends FactoryBase<Set<T>> {
      */
     public Set<T> create() {
         // Basis to randomly decide size of Set
-        double randomSize = getRandomNumberGenerator().nextDouble();
+        double randomSize = getRandomValueGenerator().nextDouble();
         int size = (int)(100.0 * randomSize);
         Set<T> result = createSet();
         for (int idx = 0; idx < size; idx++) {

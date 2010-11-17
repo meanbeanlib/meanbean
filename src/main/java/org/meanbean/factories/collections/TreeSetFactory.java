@@ -3,11 +3,11 @@ package org.meanbean.factories.collections;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Factory that creates TreeSets of objects of the specified type.
+ * Factory that creates random TreeSets of objects of the specified type.
  * 
  * @param <T>
  *            The data type of the object this Factory creates Sets of.
@@ -20,13 +20,13 @@ public class TreeSetFactory<T> extends SetFactoryBase<T> {
 	/**
 	 * Construct a new TreeSet object Factory.
 	 * 
-	 * @param randomNumberGenerator
-	 *            A random number generator used by the Factory to generate random values.
+	 * @param randomValueGenerator
+	 *            A random value generator used by the Factory to generate random values.
 	 * @param itemFactory
 	 *            Factory used to create each Set item.
 	 */
-	public TreeSetFactory(RandomNumberGenerator randomNumberGenerator, Factory<T> itemFactory) {
-		super(randomNumberGenerator, itemFactory);
+	public TreeSetFactory(RandomValueGenerator randomValueGenerator, Factory<T> itemFactory) {
+		super(randomValueGenerator, itemFactory);
 	}
 
 	/**

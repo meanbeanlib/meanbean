@@ -2,9 +2,9 @@ package org.meanbean.factories.collections;
 
 import java.util.Map;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.factories.basic.FactoryBase;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.factories.basic.RandomFactoryBase;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
  * Abstract Factory that creates Maps of objects of the specified type.
@@ -14,7 +14,7 @@ import org.meanbean.util.RandomNumberGenerator;
  * @param <V>
  *            The data type of the values the Maps created by this Factory contain.
  */
-public abstract class MapFactoryBase<K,V> extends FactoryBase<Map<K,V>> {
+public abstract class MapFactoryBase<K,V> extends RandomFactoryBase<Map<K,V>> {
 
     /** Unique version ID of this Serializable class. */
     private static final long serialVersionUID = 1L;
@@ -28,15 +28,15 @@ public abstract class MapFactoryBase<K,V> extends FactoryBase<Map<K,V>> {
     /**
      * Construct a new Map object Factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      * @param keyFactory
      *            Factory used to create each Map key.
      * @param valueFactory
      *            Factory used to create each Map value.
      */
-    public MapFactoryBase(RandomNumberGenerator randomNumberGenerator, Factory<K> keyFactory, Factory<V> valueFactory) {
-        super(randomNumberGenerator);
+    public MapFactoryBase(RandomValueGenerator randomValueGenerator, Factory<K> keyFactory, Factory<V> valueFactory) {
+        super(randomValueGenerator);
         validationHelper.ensureExists("keyFactory", "construct MapFactory", keyFactory);
         validationHelper.ensureExists("valueFactory", "construct MapFactory", valueFactory);
         this.keyFactory = keyFactory;
@@ -50,7 +50,7 @@ public abstract class MapFactoryBase<K,V> extends FactoryBase<Map<K,V>> {
      */
     public Map<K,V> create() {
         // Basis to randomly decide size of Map
-        double randomSize = getRandomNumberGenerator().nextDouble();
+        double randomSize = getRandomValueGenerator().nextDouble();
         int size = (int)(100.0 * randomSize);
         Map<K,V> result = createMap();
         for (int idx = 0; idx < size; idx++) {

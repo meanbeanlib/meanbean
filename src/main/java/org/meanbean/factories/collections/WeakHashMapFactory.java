@@ -3,11 +3,11 @@ package org.meanbean.factories.collections;
 import java.util.WeakHashMap;
 import java.util.Map;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Factory that creates WeakHashMaps of objects of the specified type.
+ * Factory that creates random WeakHashMaps of objects of the specified type.
  * 
  * @param <K>
  *            The data type of the keys the Maps created by this Factory use.
@@ -22,15 +22,15 @@ public class WeakHashMapFactory<K, V> extends MapFactoryBase<K, V> {
     /**
      * Construct a new WeakHashMap object Factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      * @param keyFactory
      *            Factory used to create each Map key.
      * @param valueFactory
      *            Factory used to create each Map value.
      */
-	public WeakHashMapFactory(RandomNumberGenerator randomNumberGenerator, Factory<K> keyFactory, Factory<V> valueFactory) {
-		super(randomNumberGenerator, keyFactory, valueFactory);
+	public WeakHashMapFactory(RandomValueGenerator randomValueGenerator, Factory<K> keyFactory, Factory<V> valueFactory) {
+		super(randomValueGenerator, keyFactory, valueFactory);
 	}
 
 	/**

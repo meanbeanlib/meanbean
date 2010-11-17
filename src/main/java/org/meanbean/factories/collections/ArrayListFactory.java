@@ -3,11 +3,11 @@ package org.meanbean.factories.collections;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Factory that creates ArrayLists of objects of the specified type.
+ * Factory that creates random ArrayLists of objects of the specified type.
  * 
  * @author Graham Williamson
  * 
@@ -22,13 +22,13 @@ public class ArrayListFactory<T> extends ListFactoryBase<T> {
     /**
      * Construct a new ArrayList object Factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      * @param itemFactory
      *            Factory used to create each ArrayList item.
      */
-    public ArrayListFactory(RandomNumberGenerator randomNumberGenerator,Factory<T> itemFactory) {
-        super(randomNumberGenerator,itemFactory);
+    public ArrayListFactory(RandomValueGenerator randomValueGenerator,Factory<T> itemFactory) {
+        super(randomValueGenerator,itemFactory);
     }
 
 	/**

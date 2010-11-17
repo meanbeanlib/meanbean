@@ -3,11 +3,11 @@ package org.meanbean.factories.collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Factory that creates HashSets of objects of the specified type.
+ * Factory that creates random HashSets of objects of the specified type.
  * 
  * @param <T>
  *            The data type of the object this Factory creates Sets of.
@@ -20,13 +20,13 @@ public class HashSetFactory<T> extends SetFactoryBase<T> {
     /**
      * Construct a new HashSet object Factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      * @param itemFactory
      *            Factory used to create each Set item.
      */
-    public HashSetFactory(RandomNumberGenerator randomNumberGenerator,Factory<T> itemFactory) {
-        super(randomNumberGenerator,itemFactory);
+    public HashSetFactory(RandomValueGenerator randomValueGenerator,Factory<T> itemFactory) {
+        super(randomValueGenerator,itemFactory);
     }
 
 	/**
