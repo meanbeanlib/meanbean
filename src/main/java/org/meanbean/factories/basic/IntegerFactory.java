@@ -1,13 +1,13 @@
 package org.meanbean.factories.basic;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete Factory that creates Integer objects.
+ * Concrete Factory that creates random Integer objects.
  * 
  * @author Graham Williamson
  */
-public final class IntegerFactory extends FactoryBase<Integer> {
+public final class IntegerFactory extends RandomFactoryBase<Integer> {
 
     /** Unique version ID of this Serializable class. */
     private static final long serialVersionUID = 1L;
@@ -15,14 +15,14 @@ public final class IntegerFactory extends FactoryBase<Integer> {
     /**
      * Construct a new Integer object factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      *            
      * @throws IllegalArgumentException
-     *             If the specified randomNumberGenerator is deemed illegal. For example, if it is null.
+     *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
      */
-    public IntegerFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-        super(randomNumberGenerator);
+    public IntegerFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+        super(randomValueGenerator);
     }
 
     /**
@@ -32,6 +32,6 @@ public final class IntegerFactory extends FactoryBase<Integer> {
      */
     @Override
     public Integer create() {
-        return getRandomNumberGenerator().nextInt();
+        return getRandomValueGenerator().nextInt();
     }
 }

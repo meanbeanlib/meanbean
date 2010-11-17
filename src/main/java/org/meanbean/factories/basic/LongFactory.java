@@ -1,13 +1,13 @@
 package org.meanbean.factories.basic;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete Factory that creates Long objects.
+ * Concrete Factory that creates random Long objects.
  * 
  * @author Graham Williamson
  */
-public final class LongFactory extends FactoryBase<Long> {
+public final class LongFactory extends RandomFactoryBase<Long> {
 
     /** Unique version ID of this Serializable class. */
     private static final long serialVersionUID = 1L;
@@ -15,14 +15,14 @@ public final class LongFactory extends FactoryBase<Long> {
     /**
      * Construct a new Integer object factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      *            
      * @throws IllegalArgumentException
-     *             If the specified randomNumberGenerator is deemed illegal. For example, if it is null.
+     *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
      */
-    public LongFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-        super(randomNumberGenerator);
+    public LongFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+        super(randomValueGenerator);
     }
 
     /**
@@ -32,6 +32,6 @@ public final class LongFactory extends FactoryBase<Long> {
      */
     @Override
     public Long create() {
-        return getRandomNumberGenerator().nextLong();
+        return getRandomValueGenerator().nextLong();
     }
 }

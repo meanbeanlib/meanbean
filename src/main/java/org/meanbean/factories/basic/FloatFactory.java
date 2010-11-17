@@ -1,13 +1,13 @@
 package org.meanbean.factories.basic;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete Factory that creates Float objects.
+ * Concrete Factory that creates random Float objects.
  * 
  * @author Graham Williamson
  */
-public final class FloatFactory extends FactoryBase<Float> {
+public final class FloatFactory extends RandomFactoryBase<Float> {
 
     /** Unique version ID of this Serializable class. */
     private static final long serialVersionUID = 1L;
@@ -15,14 +15,14 @@ public final class FloatFactory extends FactoryBase<Float> {
     /**
      * Construct a new Float object factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      *            
      * @throws IllegalArgumentException
-     *             If the specified randomNumberGenerator is deemed illegal. For example, if it is null.
+     *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
      */
-    public FloatFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-        super(randomNumberGenerator);
+    public FloatFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+        super(randomValueGenerator);
     }
 
     /**
@@ -33,12 +33,12 @@ public final class FloatFactory extends FactoryBase<Float> {
     @Override
     public Float create() {
     	// Basis of our random number. This value is always positive, so we need to decide the sign
-    	float result = getRandomNumberGenerator().nextFloat();
+    	float result = getRandomValueGenerator().nextFloat();
         // Our float is either based on MAX_VALUE, else MIN_VALUE
-        boolean basedOnMax = getRandomNumberGenerator().nextBoolean();
+        boolean basedOnMax = getRandomValueGenerator().nextBoolean();
         result *= basedOnMax ? Float.MAX_VALUE : Float.MIN_VALUE;
         // Our float is either positive, else negative 
-        boolean positive = getRandomNumberGenerator().nextBoolean();
+        boolean positive = getRandomValueGenerator().nextBoolean();
         result *= positive ? 1 : -1;
         return result;
     }

@@ -1,13 +1,13 @@
 package org.meanbean.factories.basic;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete Factory that creates Short objects.
+ * Concrete Factory that creates random Short objects.
  * 
  * @author Graham Williamson
  */
-public final class ShortFactory extends FactoryBase<Short> {
+public final class ShortFactory extends RandomFactoryBase<Short> {
 
 	/** Unique version ID of this Serializable class. */
 	private static final long serialVersionUID = 1L;
@@ -15,14 +15,14 @@ public final class ShortFactory extends FactoryBase<Short> {
 	/**
 	 * Construct a new Short object factory.
 	 * 
-	 * @param randomNumberGenerator
-	 *            A random number generator used by the Factory to generate random values.
+	 * @param randomValueGenerator
+	 *            A random value generator used by the Factory to generate random values.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             If the specified randomNumberGenerator is deemed illegal. For example, if it is null.
+	 *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
 	 */
-	public ShortFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-		super(randomNumberGenerator);
+	public ShortFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+		super(randomValueGenerator);
 	}
 
 	/**
@@ -34,16 +34,16 @@ public final class ShortFactory extends FactoryBase<Short> {
 	public Short create() {
 		short result = 0;
 		// Basis of our random number. This value is always positive, so we need to decide the sign
-		double randomNumber = getRandomNumberGenerator().nextDouble();
+		double randomNumber = getRandomValueGenerator().nextDouble();
 		// Our short is either based on MAX_VALUE, else MIN_VALUE
-		boolean basedOnMax = getRandomNumberGenerator().nextBoolean();
+		boolean basedOnMax = getRandomValueGenerator().nextBoolean();
 		if (basedOnMax) {
 			result = (short) (Short.MAX_VALUE * randomNumber);
 		} else {
 			result = (short) (Short.MIN_VALUE * randomNumber);
 		}
 		// Our double is either positive, else negative
-		boolean positive = getRandomNumberGenerator().nextBoolean();
+		boolean positive = getRandomValueGenerator().nextBoolean();
 		result *= positive ? 1 : -1;
 		return result;
 	}

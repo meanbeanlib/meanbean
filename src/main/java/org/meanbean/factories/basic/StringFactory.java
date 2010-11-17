@@ -1,13 +1,13 @@
 package org.meanbean.factories.basic;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete Factory that creates String objects.
+ * Concrete Factory that creates random String objects.
  * 
  * @author Graham Williamson
  */
-public final class StringFactory extends FactoryBase<String> {
+public final class StringFactory extends RandomFactoryBase<String> {
 
 	/** Unique version ID of this Serializable class. */
 	private static final long serialVersionUID = 1L;
@@ -15,14 +15,14 @@ public final class StringFactory extends FactoryBase<String> {
 	/**
 	 * Construct a new String object factory.
 	 * 
-	 * @param randomNumberGenerator
-	 *            A random number generator used by the Factory to generate random values.
+	 * @param randomValueGenerator
+	 *            A random value generator used by the Factory to generate random values.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             If the specified randomNumberGenerator is deemed illegal. For example, if it is null.
+	 *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
 	 */
-	public StringFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-		super(randomNumberGenerator);
+	public StringFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+		super(randomValueGenerator);
 	}
 
 	/**
@@ -32,6 +32,6 @@ public final class StringFactory extends FactoryBase<String> {
 	 */
 	@Override
 	public String create() {
-		return "TestString:[" + getRandomNumberGenerator().nextLong() + "]";
+		return "TestString:[" + getRandomValueGenerator().nextLong() + "]";
 	}
 }

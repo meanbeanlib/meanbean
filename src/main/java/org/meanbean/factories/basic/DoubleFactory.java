@@ -1,13 +1,13 @@
 package org.meanbean.factories.basic;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete Factory that creates Double objects.
+ * Concrete Factory that creates random Double objects.
  * 
  * @author Graham Williamson
  */
-public final class DoubleFactory extends FactoryBase<Double> {
+public final class DoubleFactory extends RandomFactoryBase<Double> {
 
     /** Unique version ID of this Serializable class. */
     private static final long serialVersionUID = 1L;
@@ -15,14 +15,14 @@ public final class DoubleFactory extends FactoryBase<Double> {
     /**
      * Construct a new Double object factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      *            
      * @throws IllegalArgumentException
-     *             If the specified randomNumberGenerator is deemed illegal. For example, if it is null.
+     *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
      */
-    public DoubleFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-        super(randomNumberGenerator);
+    public DoubleFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+        super(randomValueGenerator);
     }
 
     /**
@@ -33,12 +33,12 @@ public final class DoubleFactory extends FactoryBase<Double> {
     @Override
     public Double create() {
     	// Basis of our random number. This value is always positive, so we need to decide the sign
-    	double result = getRandomNumberGenerator().nextDouble();
+    	double result = getRandomValueGenerator().nextDouble();
         // Our double is either based on MAX_VALUE, else MIN_VALUE
-        boolean basedOnMax = getRandomNumberGenerator().nextBoolean();
+        boolean basedOnMax = getRandomValueGenerator().nextBoolean();
         result *= basedOnMax ? Double.MAX_VALUE : Double.MIN_VALUE;
         // Our double is either positive, else negative 
-        boolean positive = getRandomNumberGenerator().nextBoolean();
+        boolean positive = getRandomValueGenerator().nextBoolean();
         result *= positive ? 1 : -1;
         return result;
     }

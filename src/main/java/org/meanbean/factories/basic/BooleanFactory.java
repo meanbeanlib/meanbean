@@ -1,37 +1,37 @@
 package org.meanbean.factories.basic;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete Factory that creates Boolean objects.
+ * Concrete Factory that creates random Boolean objects.
  * 
  * @author Graham Williamson
  */
-public final class BooleanFactory extends FactoryBase<Boolean> {
+public final class BooleanFactory extends RandomFactoryBase<Boolean> {
 
-    /** Unique version ID of this Serializable class. */
-    private static final long serialVersionUID = 1L;
-    
-    /**
-     * Construct a new Boolean object factory.
-     * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
-     *            
-     * @throws IllegalArgumentException
-     *             If the specified randomNumberGenerator is deemed illegal. For example, if it is null.
-     */
-    public BooleanFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-        super(randomNumberGenerator);
-    }
+	/** Unique version ID of this Serializable class. */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Create a new Boolean object.
-     * 
-     * @return A new Boolean object.
-     */
-    @Override
-    public Boolean create() {
-        return getRandomNumberGenerator().nextBoolean();
-    }
+	/**
+	 * Construct a new Boolean object factory.
+	 * 
+	 * @param randomValueGenerator
+	 *            A random value generator used by the Factory to generate random values.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
+	 */
+	public BooleanFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+		super(randomValueGenerator);
+	}
+
+	/**
+	 * Create a new Boolean object.
+	 * 
+	 * @return A new Boolean object.
+	 */
+	@Override
+	public Boolean create() {
+		return getRandomValueGenerator().nextBoolean();
+	}
 }

@@ -2,15 +2,15 @@ package org.meanbean.factories.basic;
 
 import java.util.Date;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 
 /**
- * Concrete Factory that creates Date objects.
+ * Concrete Factory that creates random Date objects.
  * 
  * @author Graham Williamson
  */
-public final class DateFactory extends FactoryBase<Date> {
+public final class DateFactory extends RandomFactoryBase<Date> {
 
     /** Unique version ID of this Serializable class. */
     private static final long serialVersionUID = 1L;
@@ -18,14 +18,14 @@ public final class DateFactory extends FactoryBase<Date> {
     /**
      * Construct a new Date object factory.
      * 
-     * @param randomNumberGenerator
-     *            A random number generator used by the Factory to generate random values.
+     * @param randomValueGenerator
+     *            A random value generator used by the Factory to generate random values.
      *            
      * @throws IllegalArgumentException
-     *             If the specified randomNumberGenerator is deemed illegal. For example, if it is null.
+     *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
      */
-    public DateFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-        super(randomNumberGenerator);
+    public DateFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+        super(randomValueGenerator);
     }
 
     /**
@@ -36,7 +36,7 @@ public final class DateFactory extends FactoryBase<Date> {
     @Override
     public Date create() {
         // Get random time since the epoch
-        long randomTime = Math.abs(getRandomNumberGenerator().nextLong());
+        long randomTime = Math.abs(getRandomValueGenerator().nextLong());
         return new Date(randomTime);
     }
 }
