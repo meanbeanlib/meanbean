@@ -23,9 +23,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.factories.basic.LongFactory;
 import org.meanbean.factories.basic.StringFactory;
-import org.meanbean.util.RandomNumberGenerator;
-import org.meanbean.util.RandomNumberGeneratorProvider;
-import org.meanbean.util.SimpleRandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.RandomValueGeneratorProvider;
+import org.meanbean.util.SimpleRandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -37,18 +37,18 @@ public class CollectionFactoryPluginTest {
 	        HashSet.class, LinkedHashSet.class, TreeSet.class };
 
 	@Mock
-	private RandomNumberGeneratorProvider randomNumberGeneratorProvider;
+	private RandomValueGeneratorProvider randomValueGeneratorProvider;
 
-	private RandomNumberGenerator randomNumberGenerator = new SimpleRandomNumberGenerator();
+	private RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
 
 	private FactoryCollection factoryCollection;
 
 	@Before
 	public void before() {
-		when(randomNumberGeneratorProvider.getRandomNumberGenerator()).thenReturn(randomNumberGenerator);
+		when(randomValueGeneratorProvider.getRandomValueGenerator()).thenReturn(randomValueGenerator);
 		factoryCollection = new SimpleFactoryCollection();
-		factoryCollection.addFactory(String.class, new StringFactory(randomNumberGenerator));
-		factoryCollection.addFactory(Long.class, new LongFactory(randomNumberGenerator));
+		factoryCollection.addFactory(String.class, new StringFactory(randomValueGenerator));
+		factoryCollection.addFactory(Long.class, new LongFactory(randomValueGenerator));
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class CollectionFactoryPluginTest {
 			assertThat("Factory for class [" + clazz + "] should not be registered prior to plugin initialization.",
 			        factoryCollection.hasFactory(clazz), is(false));
 		}
-		plugin.initialize(factoryCollection, randomNumberGeneratorProvider);
+		plugin.initialize(factoryCollection, randomValueGeneratorProvider);
 		for (Class<?> clazz : FACTORY_CLASSES) {
 			assertThat("Plugin did not register Factory for class [" + clazz + "].",
 			        factoryCollection.hasFactory(clazz), is(true));

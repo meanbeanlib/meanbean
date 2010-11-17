@@ -9,9 +9,9 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.meanbean.util.RandomNumberGenerator;
-import org.meanbean.util.RandomNumberGeneratorProvider;
-import org.meanbean.util.SimpleRandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.RandomValueGeneratorProvider;
+import org.meanbean.util.SimpleRandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -22,15 +22,15 @@ public class ObjectFactoryPluginTest {
 	        Long.class, Float.class, Double.class, Character.class, String.class, Date.class };
 
 	@Mock
-	private RandomNumberGeneratorProvider randomNumberGeneratorProvider;
+	private RandomValueGeneratorProvider randomValueGeneratorProvider;
 
-	private RandomNumberGenerator randomNumberGenerator = new SimpleRandomNumberGenerator();
+	private RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
 
 	private FactoryCollection factoryCollection;
 
 	@Before
 	public void before() {
-		when(randomNumberGeneratorProvider.getRandomNumberGenerator()).thenReturn(randomNumberGenerator);
+		when(randomValueGeneratorProvider.getRandomValueGenerator()).thenReturn(randomValueGenerator);
 		factoryCollection = new SimpleFactoryCollection();
 	}
 
@@ -41,7 +41,7 @@ public class ObjectFactoryPluginTest {
 			assertThat("Factory for class [" + clazz + "] should not be registered prior to plugin initialization.",
 			        factoryCollection.hasFactory(clazz), is(false));
 		}
-		plugin.initialize(factoryCollection, randomNumberGeneratorProvider);
+		plugin.initialize(factoryCollection, randomValueGeneratorProvider);
 		for (Class<?> clazz : FACTORY_CLASSES) {
 			assertThat("Plugin did not register Factory for class [" + clazz + "].",
 			        factoryCollection.hasFactory(clazz), is(true));

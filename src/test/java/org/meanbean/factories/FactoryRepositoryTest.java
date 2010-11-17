@@ -8,7 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.factories.basic.StringFactory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -19,13 +20,18 @@ public class FactoryRepositoryTest {
 	private Factory<?> mockFactory;
 
 	@Mock
-	private RandomNumberGenerator randomNumberGenerator;
+	private RandomValueGenerator randomValueGenerator;
 
 	private FactoryRepository factoryRepository;
 
 	@Before
 	public void before() {
-		factoryRepository = new FactoryRepository(randomNumberGenerator);
+		factoryRepository = new FactoryRepository(randomValueGenerator);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void constructorShouldPreventNullRandomValueGenerator() throws Exception {
+		new FactoryRepository(null);
 	}
 
 	@Test

@@ -3,6 +3,8 @@ package org.meanbean.factories;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.meanbean.lang.Factory;
+
 /**
  * Simple concrete implementation of the FactoryCollection interface that should be used for testing only.
  * 
