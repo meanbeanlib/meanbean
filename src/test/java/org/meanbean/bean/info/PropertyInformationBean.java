@@ -22,6 +22,10 @@ public class PropertyInformationBean implements PropertyInformation {
 
 	private Method writeMethod;
 
+	private Class<?> readMethodReturnType;
+
+	private Class<?> writeMethodParameterType;
+
 	@Override
 	public String getName() {
 		return name;
@@ -52,6 +56,16 @@ public class PropertyInformationBean implements PropertyInformation {
 		return writeMethod;
 	}
 
+	@Override
+	public Class<?> getReadMethodReturnType() {
+		return readMethodReturnType;
+	}
+
+	@Override
+	public Class<?> getWriteMethodParameterType() throws IllegalArgumentException {
+		return writeMethodParameterType;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -70,6 +84,14 @@ public class PropertyInformationBean implements PropertyInformation {
 
 	public void setWriteMethod(Method writeMethod) {
 		this.writeMethod = writeMethod;
+	}
+
+	public void setReadMethodReturnType(Class<?> readMethodReturnType) {
+		this.readMethodReturnType = readMethodReturnType;
+	}
+
+	public void setWriteMethodParameterType(Class<?> writeMethodParameterType) {
+		this.writeMethodParameterType = writeMethodParameterType;
 	}
 
 	@Override

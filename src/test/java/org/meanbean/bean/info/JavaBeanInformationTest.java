@@ -25,7 +25,7 @@ public class JavaBeanInformationTest {
 
 		private static long nextId = 1;
 
-		private long id; // readable
+		private final long id; // readable
 
 		private String firstName; // readable-writable
 
@@ -86,12 +86,7 @@ public class JavaBeanInformationTest {
 	public void shouldPreventIllegalBeanClass() throws Exception {
 		new JavaBeanInformation(null);
 	}
-	
-	@Test
-    public void shouldThrowBeanInformationExceptionWhenIntrospectionExceptionOccurs() throws Exception {
-	    
-    }
-	
+
 	@Test
 	public void shouldHaveSameBeanClassAsClassPassedToConstructor() throws Exception {
 		Class<BeanWithProperties> beanClass = BeanWithProperties.class;
@@ -104,8 +99,8 @@ public class JavaBeanInformationTest {
 		JavaBeanInformation javaBeanInformation = new JavaBeanInformation(BeanWithProperties.class);
 		assertThat("Incorrect number of propertyNames.", javaBeanInformation.getPropertyNames().size(),
 		        is(EXPECTED_PROPERTIES.size()));
-		assertThat("Incorrect propertyNames.",
-		        EXPECTED_PROPERTIES.containsAll(javaBeanInformation.getPropertyNames()), is(true));
+		assertThat("Incorrect propertyNames.", EXPECTED_PROPERTIES.containsAll(javaBeanInformation.getPropertyNames()),
+		        is(true));
 	}
 
 	@Test
@@ -151,7 +146,7 @@ public class JavaBeanInformationTest {
 		assertThat("Incorrect property writability.", property.isWritable(), is(true));
 		assertThat("Incorrect property writability.", property.isReadableWritable(), is(true));
 	}
-	
+
 	@Test
 	public void shouldHaveLastNamePropertyInformationOfClassPassedToConstructor() throws Exception {
 		JavaBeanInformation javaBeanInformation = new JavaBeanInformation(BeanWithProperties.class);
@@ -163,7 +158,7 @@ public class JavaBeanInformationTest {
 		assertThat("Incorrect property writability.", property.isWritable(), is(true));
 		assertThat("Incorrect property writability.", property.isReadableWritable(), is(true));
 	}
-	
+
 	@Test
 	public void shouldHaveDateOfBirthPropertyInformationOfClassPassedToConstructor() throws Exception {
 		JavaBeanInformation javaBeanInformation = new JavaBeanInformation(BeanWithProperties.class);
@@ -175,7 +170,7 @@ public class JavaBeanInformationTest {
 		assertThat("Incorrect property writability.", property.isWritable(), is(true));
 		assertThat("Incorrect property writability.", property.isReadableWritable(), is(false));
 	}
-	
+
 	@Test
 	public void shouldHaveAgePropertyInformationOfClassPassedToConstructor() throws Exception {
 		JavaBeanInformation javaBeanInformation = new JavaBeanInformation(BeanWithProperties.class);
@@ -187,7 +182,7 @@ public class JavaBeanInformationTest {
 		assertThat("Incorrect property writability.", property.isWritable(), is(false));
 		assertThat("Incorrect property writability.", property.isReadableWritable(), is(false));
 	}
-	
+
 	private Map<String, PropertyInformation> convertToMapOfPropertyNamesToPropertyInformation(
 	        JavaBeanInformation javaBeanInformation) {
 		Map<String, PropertyInformation> propertyMap = new HashMap<String, PropertyInformation>();
