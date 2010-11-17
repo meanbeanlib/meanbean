@@ -1,25 +1,26 @@
 package org.meanbean.test;
 
 import org.meanbean.factories.FactoryCollection;
-import org.meanbean.util.RandomNumberGeneratorProvider;
+import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
  * Defines an object that can test JavaBean objects. <br/>
  * 
- * A mean of customizing testing on a global and per-type basis is also defined.
+ * A means of customising testing on a global and per-type basis is also defined.
  * 
  * @author Graham Williamson
  */
-public interface BeanTester extends RandomNumberGeneratorProvider {
+public interface BeanTester extends RandomValueGeneratorProvider {
 
-	public static final int TEST_ITERATIONS_PER_BEAN = 100;
+	/** Default number of times a bean should be tested. */
+	static final int TEST_ITERATIONS_PER_BEAN = 100;
 
 	/**
-	 * The repository of test data Factories with which you can register Factories for custom Data Types.
+	 * The collection of test data Factories with which you can register new Factories for custom Data Types.
 	 * 
-	 * @return The repository of test data Factories.
+	 * @return The collection of test data Factories.
 	 */
-	FactoryCollection getFactoryRepository();
+	FactoryCollection getFactoryCollection();
 
 	/**
 	 * Set the number of times each bean should be tested, globally. <br/>
@@ -58,35 +59,54 @@ public interface BeanTester extends RandomNumberGeneratorProvider {
 	void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException;
 
 	/**
-	 * Test the type specified by the beanClass parameter.
+	 * Test the type specified by the beanClass parameter. <br />
+	 * 
+	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
+	 * getters and setters function correctly. <br />
+	 * 
+	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * 
+	 * When a test is failed, an AssertionError is thrown.
 	 * 
 	 * @param beanClass
 	 *            The type to be tested.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the beanClass is deemed illegal. For example, if it is null.
+	 * @throws AssertionError
+	 *             If the bean fails the test.
 	 * @throws BeanTestException
 	 *             If an unexpected exception occurs during testing.
 	 */
-	void test(Class<?> beanClass) throws IllegalArgumentException, BeanTestException;
+	void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException;
 
 	/**
 	 * Test the type specified by the beanClass parameter, using the custom Configuration provided as an override to any
-	 * global configuration settings.
+	 * global configuration settings. <br />
+	 * 
+	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
+	 * getters and setters function correctly. <br />
+	 * 
+	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * 
+	 * When a test is failed, an AssertionError is thrown.
 	 * 
 	 * @param beanClass
 	 *            The type to be tested.
 	 * @param configuration
 	 *            The custom Configuration to be used when testing the specified beanClass type. This Configuration is
-	 *            only used for this individual test and will not be retained for future testing of this type. To
-	 *            register a custom Configuration across multiple tests, use <code>addCustomConfiguration()</code>. If
-	 *            no custom Configuration is required, pass <code>null</code>.
+	 *            only used for this individual test and will not be retained for future testing of this or any other
+	 *            type. To register a custom Configuration across multiple tests, use
+	 *            <code>addCustomConfiguration()</code>. If no custom Configuration is required, pass <code>null</code>
+	 *            or use <code>testBean(Class<?>)</code> instead.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
+	 *             If the beanClass is deemed illegal. For example, if it is null.
+	 * @throws AssertionError
+	 *             If the bean fails the test.
 	 * @throws BeanTestException
 	 *             If an unexpected exception occurs during testing.
 	 */
-	void test(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException, BeanTestException;
-
+	void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
+	        AssertionError, BeanTestException;
 }
