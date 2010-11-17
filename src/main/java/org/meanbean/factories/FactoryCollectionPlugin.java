@@ -1,6 +1,6 @@
 package org.meanbean.factories;
 
-import org.meanbean.util.RandomNumberGeneratorProvider;
+import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
  * Defines a plugin that will register Factories with the specified FactoryCollection.
@@ -9,5 +9,5 @@ import org.meanbean.util.RandomNumberGeneratorProvider;
  */
 public interface FactoryCollectionPlugin {
 
-	void initialize(FactoryCollection factoryCollection, RandomNumberGeneratorProvider randomNumberGeneratorProvider);
+	void initialize(FactoryCollection factoryCollection, RandomValueGeneratorProvider randomValueGeneratorProvider);
 }

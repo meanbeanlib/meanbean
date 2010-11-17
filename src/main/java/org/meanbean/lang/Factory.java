@@ -1,4 +1,4 @@
-package org.meanbean.factories;
+package org.meanbean.lang;
 
 /**
  * Defines an object that creates objects of a specified type.

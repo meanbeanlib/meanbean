@@ -1,5 +1,7 @@
 package org.meanbean.factories;
 
+import org.meanbean.lang.Factory;
+
 /**
  * Defines a collection factories of different types of objects.
  * 

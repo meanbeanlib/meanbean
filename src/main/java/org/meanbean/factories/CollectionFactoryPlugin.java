@@ -26,8 +26,8 @@ import org.meanbean.factories.collections.LinkedListFactory;
 import org.meanbean.factories.collections.TreeMapFactory;
 import org.meanbean.factories.collections.TreeSetFactory;
 import org.meanbean.factories.collections.WeakHashMapFactory;
-import org.meanbean.util.RandomNumberGenerator;
-import org.meanbean.util.RandomNumberGeneratorProvider;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
  * Concrete FactoryCollectionPlugin that registers Factories that create Collection objects.
@@ -37,33 +37,33 @@ import org.meanbean.util.RandomNumberGeneratorProvider;
 public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 
 	@Override
-	public void initialize(FactoryCollection factoryCollection, RandomNumberGeneratorProvider randomNumberGeneratorProvider) {
-		RandomNumberGenerator randomNumberGenerator = randomNumberGeneratorProvider.getRandomNumberGenerator();
+	public void initialize(FactoryCollection factoryCollection, RandomValueGeneratorProvider randomValueGeneratorProvider) {
+		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
 		StringFactory stringFactory = (StringFactory) factoryCollection.getFactory(String.class);
 		LongFactory longFactory = (LongFactory) factoryCollection.getFactory(Long.class);
 		// Lists
-		ArrayListFactory<String> arrayListFactory = new ArrayListFactory<String>(randomNumberGenerator, stringFactory);
+		ArrayListFactory<String> arrayListFactory = new ArrayListFactory<String>(randomValueGenerator, stringFactory);
 		factoryCollection.addFactory(List.class, arrayListFactory);
 		factoryCollection.addFactory(ArrayList.class, arrayListFactory);
-		factoryCollection.addFactory(LinkedList.class, new LinkedListFactory<String>(randomNumberGenerator, stringFactory));		
+		factoryCollection.addFactory(LinkedList.class, new LinkedListFactory<String>(randomValueGenerator, stringFactory));		
 		// Maps
-		HashMapFactory<String, Long> hashMapFactory = new HashMapFactory<String, Long>(randomNumberGenerator, stringFactory,
+		HashMapFactory<String, Long> hashMapFactory = new HashMapFactory<String, Long>(randomValueGenerator, stringFactory,
 		        longFactory);
 		factoryCollection.addFactory(Map.class, hashMapFactory);
 		factoryCollection.addFactory(HashMap.class, hashMapFactory);
-		factoryCollection.addFactory(IdentityHashMap.class, new IdentityHashMapFactory<String, Long>(randomNumberGenerator, stringFactory,
+		factoryCollection.addFactory(IdentityHashMap.class, new IdentityHashMapFactory<String, Long>(randomValueGenerator, stringFactory,
 		        longFactory));
-		factoryCollection.addFactory(LinkedHashMap.class, new LinkedHashMapFactory<String, Long>(randomNumberGenerator, stringFactory,
+		factoryCollection.addFactory(LinkedHashMap.class, new LinkedHashMapFactory<String, Long>(randomValueGenerator, stringFactory,
 		        longFactory));
-		factoryCollection.addFactory(TreeMap.class, new TreeMapFactory<String, Long>(randomNumberGenerator, stringFactory,
+		factoryCollection.addFactory(TreeMap.class, new TreeMapFactory<String, Long>(randomValueGenerator, stringFactory,
 		        longFactory));
-		factoryCollection.addFactory(WeakHashMap.class, new WeakHashMapFactory<String, Long>(randomNumberGenerator, stringFactory,
+		factoryCollection.addFactory(WeakHashMap.class, new WeakHashMapFactory<String, Long>(randomValueGenerator, stringFactory,
 		        longFactory));
 		// Sets
-		HashSetFactory<String> hashSetFactory = new HashSetFactory<String>(randomNumberGenerator, stringFactory);
+		HashSetFactory<String> hashSetFactory = new HashSetFactory<String>(randomValueGenerator, stringFactory);
 		factoryCollection.addFactory(Set.class, hashSetFactory);
 		factoryCollection.addFactory(HashSet.class, hashSetFactory);
-		factoryCollection.addFactory(LinkedHashSet.class, new LinkedHashSetFactory<String>(randomNumberGenerator, stringFactory));
-		factoryCollection.addFactory(TreeSet.class, new TreeSetFactory<String>(randomNumberGenerator, stringFactory));
+		factoryCollection.addFactory(LinkedHashSet.class, new LinkedHashSetFactory<String>(randomValueGenerator, stringFactory));
+		factoryCollection.addFactory(TreeSet.class, new TreeSetFactory<String>(randomValueGenerator, stringFactory));
 	}
 }
