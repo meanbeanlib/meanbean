@@ -7,15 +7,15 @@ import static org.hamcrest.Matchers.is;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SimpleRandomNumberGeneratorTest {
+public class SimpleRandomValueGeneratorTest {
 
 	private static final int ITERATIONS = 10000;
 
-	private RandomNumberGenerator randomNumberGenerator;
+	private RandomValueGenerator randomValueGenerator;
 
 	@Before
 	public void before() throws Exception {
-		randomNumberGenerator = new SimpleRandomNumberGenerator();
+		randomValueGenerator = new SimpleRandomValueGenerator();
 	}
 
 	@Test
@@ -23,7 +23,7 @@ public class SimpleRandomNumberGeneratorTest {
 		int totalPositive = 0;
 		int totalNegative = 0;
 		for (int idx = 0; idx < ITERATIONS; idx++) {
-			byte next = randomNumberGenerator.nextByte();
+			byte next = randomValueGenerator.nextByte();
 			if (next < 0) {
 				totalNegative++;
 			} else {
@@ -37,24 +37,24 @@ public class SimpleRandomNumberGeneratorTest {
 	@Test
 	public void nextBytesShouldGenerateArrayOfRequestedSize() {
 		final int size = 100;
-		assertThat("should generate requested size array.", randomNumberGenerator.nextBytes(size).length, is(size));
+		assertThat("should generate requested size array.", randomValueGenerator.nextBytes(size).length, is(size));
 	}
 
 	@Test
 	public void nextBytesShouldPermitGenerationOfArrayOfSizeZero() {
 		final int size = 0;
-		assertThat("should generate requested size array.", randomNumberGenerator.nextBytes(size).length, is(size));
+		assertThat("should generate requested size array.", randomValueGenerator.nextBytes(size).length, is(size));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void nextBytesShouldPreventNegativeSize() {
-		randomNumberGenerator.nextBytes(-1);
+		randomValueGenerator.nextBytes(-1);
 	}
 
 	@Test
 	public void nextBytesShouldGeneratePositiveAndNegativeNumbers() {
 		final int size = 100;
-		byte[] bytes = randomNumberGenerator.nextBytes(size);
+		byte[] bytes = randomValueGenerator.nextBytes(size);
 		assertThat("should generate requested size array.", bytes.length, is(size));
 		int totalPositive = 0;
 		int totalNegative = 0;
@@ -74,7 +74,7 @@ public class SimpleRandomNumberGeneratorTest {
 		int totalPositive = 0;
 		int totalNegative = 0;
 		for (int idx = 0; idx < ITERATIONS; idx++) {
-			int next = randomNumberGenerator.nextInt();
+			int next = randomValueGenerator.nextInt();
 			if (next < 0) {
 				totalNegative++;
 			} else {
@@ -90,7 +90,7 @@ public class SimpleRandomNumberGeneratorTest {
 		int totalPositive = 0;
 		int totalNegative = 0;
 		for (int idx = 0; idx < ITERATIONS; idx++) {
-			long next = randomNumberGenerator.nextLong();
+			long next = randomValueGenerator.nextLong();
 			if (next < 0) {
 				totalNegative++;
 			} else {
@@ -106,7 +106,7 @@ public class SimpleRandomNumberGeneratorTest {
 		int totalTrue = 0;
 		int totalFalse = 0;
 		for (int idx = 0; idx < ITERATIONS; idx++) {
-			boolean next = randomNumberGenerator.nextBoolean();
+			boolean next = randomValueGenerator.nextBoolean();
 			if (next) {
 				totalTrue++;
 			} else {
@@ -121,7 +121,7 @@ public class SimpleRandomNumberGeneratorTest {
 	public void nextFloatShouldGenerateNumbersOnlyWithinZeroInclusiveAndOneExclusive() {
 		int totalOutsideRange = 0;
 		for (int idx = 0; idx < ITERATIONS; idx++) {
-			float next = randomNumberGenerator.nextFloat();
+			float next = randomValueGenerator.nextFloat();
 			if ((next < 0f) || (next >= 1f)) {
 				totalOutsideRange++;
 			}
@@ -133,7 +133,7 @@ public class SimpleRandomNumberGeneratorTest {
 	public void nextDoubleShouldGenerateNumbersOnlyWithinZeroInclusiveAndOneExclusive() {
 		int totalOutsideRange = 0;
 		for (int idx = 0; idx < ITERATIONS; idx++) {
-			double next = randomNumberGenerator.nextDouble();
+			double next = randomValueGenerator.nextDouble();
 			if ((next < 0d) || (next >= 1d)) {
 				totalOutsideRange++;
 			}

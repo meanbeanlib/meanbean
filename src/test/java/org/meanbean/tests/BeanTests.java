@@ -11,13 +11,13 @@ public class BeanTests {
 
 	public void testBeans() {
 		BeanTester beanTester = new BeanTesterImpl();
-		beanTester.getFactoryRepository().addFactory(Gender.class,
-		        new GenderFactory(beanTester.getRandomNumberGenerator()));
+		beanTester.getFactoryCollection().addFactory(Gender.class,
+		        new GenderFactory(beanTester.getRandomValueGenerator()));
 		beanTester.setIterations(1);
 		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder().ignoreProperty("address");
 		// configurationBuilder.addIgnoredProperty("otherFavouriteNumbers");
 		beanTester.addCustomConfiguration(PersonBean.class, configurationBuilder.build());
-		beanTester.test(PersonBean.class);
+		beanTester.testBean(PersonBean.class);
 		System.out.println("INFO: Testing completed!");
 	}
 
