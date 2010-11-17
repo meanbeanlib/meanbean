@@ -3,11 +3,11 @@ package org.meanbean.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.meanbean.factories.Factory;
 import org.meanbean.factories.basic.LongFactory;
 import org.meanbean.factories.basic.StringFactory;
-import org.meanbean.util.RandomNumberGenerator;
-import org.meanbean.util.SimpleRandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.SimpleRandomValueGenerator;
 
 public class ConfigurationBuilderFactory {
 
@@ -23,7 +23,7 @@ public class ConfigurationBuilderFactory {
 
 	public static final String OVERRIDE_PROPERTY_2 = "TEST_IGNORE_PROPERTY_2";
 	
-	private static final RandomNumberGenerator RANDOM_NUMBER_GENERATOR = new SimpleRandomNumberGenerator();
+	private static final RandomValueGenerator RANDOM_NUMBER_GENERATOR = new SimpleRandomValueGenerator();
 	
 	public static final LongFactory OVERRIDE_FACTORY_1 = new LongFactory(RANDOM_NUMBER_GENERATOR);
 

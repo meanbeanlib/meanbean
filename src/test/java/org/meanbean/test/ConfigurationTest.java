@@ -12,12 +12,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.junit.Test;
-import org.meanbean.factories.Factory;
 import org.meanbean.factories.basic.DateFactory;
 import org.meanbean.factories.basic.IntegerFactory;
 import org.meanbean.factories.basic.StringFactory;
-import org.meanbean.util.RandomNumberGenerator;
-import org.meanbean.util.SimpleRandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.SimpleRandomValueGenerator;
 
 public class ConfigurationTest {
 
@@ -36,7 +36,7 @@ public class ConfigurationTest {
 		}
 	};
 
-	private static final RandomNumberGenerator RANDOM_NUMBER_GENERATOR = new SimpleRandomNumberGenerator();
+	private static final RandomValueGenerator RANDOM_NUMBER_GENERATOR = new SimpleRandomValueGenerator();
 
 	private static final Map<String, Factory<?>> EMPTY_OVERRIDE_FACTORIES = Collections.emptyMap();
 
