@@ -4,8 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 public class BooleanFactoryTest extends BasicFactoryTestBase<Boolean> {
 
@@ -14,13 +14,13 @@ public class BooleanFactoryTest extends BasicFactoryTestBase<Boolean> {
 	private static final Boolean RANDOM_BOOLEAN_2 = true;
 
 	@Override
-	protected Factory<Boolean> createFactory(RandomNumberGenerator randomNumberGenerator) {
-		return new BooleanFactory(randomNumberGenerator);
+	protected Factory<Boolean> createFactory(RandomValueGenerator randomValueGenerator) {
+		return new BooleanFactory(randomValueGenerator);
 	}
 
 	@Override
-	protected RandomNumberGenerator createRandomNumberGenerator() {
-		return new ArrayBasedRandomNumberGenerator(null, null, null, null, null, new boolean[] { RANDOM_BOOLEAN_1,
+	protected RandomValueGenerator createRandomNumberGenerator() {
+		return new ArrayBasedRandomValueGenerator(null, null, null, null, null, new boolean[] { RANDOM_BOOLEAN_1,
 		        RANDOM_BOOLEAN_2 });
 	}
 

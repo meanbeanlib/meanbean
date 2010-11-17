@@ -6,10 +6,10 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Test;
-import org.meanbean.util.RandomNumberGenerator;
-import org.meanbean.util.SimpleRandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.SimpleRandomValueGenerator;
 
-public class FactoryBaseTest {
+public class RandomFactoryBaseTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorShouldPreventNullRandomNumberGenerator() throws Exception {
@@ -18,18 +18,18 @@ public class FactoryBaseTest {
 
 	@Test
 	public void getRandomNumberGeneratorShouldReturnRandomNumberGenerator() throws Exception {
-		RandomNumberGenerator randomNumberGenerator = new SimpleRandomNumberGenerator();
-		SimpleFactory<String> factory = new SimpleFactory<String>(randomNumberGenerator);
-		assertThat("RandomNumberGenerator should not be null.", factory.getRandomNumberGenerator(),
+		RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+		SimpleFactory<String> factory = new SimpleFactory<String>(randomValueGenerator);
+		assertThat("RandomNumberGenerator should not be null.", factory.getRandomValueGenerator(),
 		        is(not(nullValue())));
 	}
 
-	static class SimpleFactory<T> extends FactoryBase<T> {
+	static class SimpleFactory<T> extends RandomFactoryBase<T> {
 
 		private static final long serialVersionUID = 1L;
 
-		public SimpleFactory(RandomNumberGenerator randomNumberGenerator) throws IllegalArgumentException {
-			super(randomNumberGenerator);
+		public SimpleFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
+			super(randomValueGenerator);
 		}
 
 		@Override

@@ -4,29 +4,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 public class DoubleFactoryTest extends BasicFactoryTestBase<Double> {
 
 	@Override
-	protected Factory<Double> createFactory(RandomNumberGenerator randomNumberGenerator) {
-		return new DoubleFactory(randomNumberGenerator);
+	protected Factory<Double> createFactory(RandomValueGenerator randomValueGenerator) {
+		return new DoubleFactory(randomValueGenerator);
 	}
 
 	@Override
-	protected RandomNumberGenerator createRandomNumberGenerator() {
+	protected RandomValueGenerator createRandomNumberGenerator() {
 		boolean basedOnMaximum = true;
 		boolean positive = true;
-		return new ArrayBasedRandomNumberGenerator(null, null, null, null, new double[] { 0.61, 0.62 }, new boolean[] {
+		return new ArrayBasedRandomValueGenerator(null, null, null, null, new double[] { 0.61, 0.62 }, new boolean[] {
 		        basedOnMaximum, positive, basedOnMaximum, positive });
 	}
 
-	private RandomNumberGenerator createRandomNumberGenerator(boolean positive, boolean basedOnMaximum,
+	private RandomValueGenerator createRandomNumberGenerator(boolean positive, boolean basedOnMaximum,
 	        double randomNumber) {
-		RandomNumberGenerator randomNumberGenerator = new ArrayBasedRandomNumberGenerator(null, null, null, null,
+		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, null, null,
 		        new double[] { randomNumber }, new boolean[] { basedOnMaximum, positive });
-		return randomNumberGenerator;
+		return randomValueGenerator;
 	}
 
 	@Test

@@ -4,8 +4,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 public class IntegerFactoryTest extends BasicFactoryTestBase<Integer> {
 
@@ -14,13 +14,13 @@ public class IntegerFactoryTest extends BasicFactoryTestBase<Integer> {
 	private static final int RANDOM_INT_2 = 2143793567;
 
 	@Override
-	protected Factory<Integer> createFactory(RandomNumberGenerator randomNumberGenerator) {
-		return new IntegerFactory(randomNumberGenerator);
+	protected Factory<Integer> createFactory(RandomValueGenerator randomValueGenerator) {
+		return new IntegerFactory(randomValueGenerator);
 	}
 
 	@Override
-	protected RandomNumberGenerator createRandomNumberGenerator() {
-		return new ArrayBasedRandomNumberGenerator(null, new int[] { RANDOM_INT_1, RANDOM_INT_2 }, null, null, null,
+	protected RandomValueGenerator createRandomNumberGenerator() {
+		return new ArrayBasedRandomValueGenerator(null, new int[] { RANDOM_INT_1, RANDOM_INT_2 }, null, null, null,
 		        null);
 	}
 

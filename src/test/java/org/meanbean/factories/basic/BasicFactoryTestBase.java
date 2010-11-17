@@ -6,8 +6,8 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
 
 import org.junit.Test;
-import org.meanbean.factories.Factory;
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 
 public abstract class BasicFactoryTestBase<T> {
 
@@ -32,7 +32,7 @@ public abstract class BasicFactoryTestBase<T> {
 	    assertThat("Factory does not create different values.", createdObject1, is(not(createdObject2)));
     }
 
-	protected abstract RandomNumberGenerator createRandomNumberGenerator();
+	protected abstract RandomValueGenerator createRandomNumberGenerator();
 
-	protected abstract Factory<T> createFactory(RandomNumberGenerator randomNumberGenerator);
+	protected abstract Factory<T> createFactory(RandomValueGenerator randomValueGenerator);
 }

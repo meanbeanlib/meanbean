@@ -1,14 +1,14 @@
 package org.meanbean.factories.basic;
 
-import org.meanbean.util.RandomNumberGenerator;
+import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete RandomNumberGenerator that creates random numbers based on an array of random numbers passed to it during
+ * Concrete RandomValueGenerator that creates values based on an array of values passed to it during
  * construction. This should only be used for testing.
  * 
  * @author Graham Williamson
  */
-public class ArrayBasedRandomNumberGenerator implements RandomNumberGenerator {
+public class ArrayBasedRandomValueGenerator implements RandomValueGenerator {
 
 	private final byte[][] bytes;
 
@@ -34,7 +34,7 @@ public class ArrayBasedRandomNumberGenerator implements RandomNumberGenerator {
 
 	private int booleanIdx;
 
-	public ArrayBasedRandomNumberGenerator(byte[][] bytes, int[] ints, long[] longs, float[] floats, double[] doubles,
+	public ArrayBasedRandomValueGenerator(byte[][] bytes, int[] ints, long[] longs, float[] floats, double[] doubles,
 	        boolean[] booleans) {
 		this.bytes = bytes;
 		this.ints = ints;
