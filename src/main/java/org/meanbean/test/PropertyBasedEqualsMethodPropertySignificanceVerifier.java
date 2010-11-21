@@ -21,8 +21,9 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
- * Class that affords functionality to test the equals logic implemented by a type is affected in the expected manner
- * when changes are made to the property values of instances of the type. <br/>
+ * Concrete EqualsMethodPropertySignificanceVerifier implementation that affords functionality to verify that the equals
+ * logic implemented by a type is affected in the expected manner when changes are made to the property values of
+ * instances of the type. <br/>
  * 
  * That is:
  * 
@@ -37,15 +38,16 @@ import org.meanbean.util.ValidationHelper;
  * To do this, instances of the type are created using a specified factory, their properties are manipulated
  * individually and the equality is reassessed. <br/>
  * 
- * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+ * For the test to function correctly, you must specify all properties that are not used in the equals logic
+ * (<quote>insignificant</quote>). <br/>
  * 
- * Use <code>testEquals()</code> to test a class that overrides <code>equals()</code>. <br/>
+ * Use <code>verifyEquals()</code> to test a class that overrides <code>equals()</code>. <br/>
  * 
- * As an example, to test the equals logic implemented by a class called MyClass do the following:
+ * As an example, to verify the equals logic implemented by a class called MyClass do the following:
  * 
  * <pre>
- * EqualsTester equalsTester = new EqualsTester();
- * equalsTester.testEquals(new Factory<MyClass>() {
+ * EqualsMethodPropertySignificanceVerifier verifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+ * verifier.verifyEqualsMethod(new Factory<MyClass>() {
  *    @Override
  *    public MyClass create() {
  *       MyClass() result = new MyClass();
@@ -61,12 +63,12 @@ import org.meanbean.util.ValidationHelper;
  * considered by MyClass's equals logic. <br/>
  * 
  * The following example tests the equals logic implemented by a class called MyComplexClass which has two properties:
- * firstName and lastName. Only firstName is considered in the equals logic. Therefore, we lastName is specified in the
- * unusedProperties varargs:
+ * firstName and lastName. Only firstName is considered in the equals logic. Therefore, lastName is specified in the
+ * insignificantProperties varargs:
  * 
  * <pre>
- * EqualsTester equalsTester = new EqualsTester();
- * equalsTester.testEquals(new Factory<MyComplexClass>() {
+ * EqualsMethodPropertySignificanceVerifier verifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+ * verifier.verifyEqualsMethod(new Factory<MyComplexClass>() {
  *    @Override
  *    public MyComplexClass create() {
  *       MyComplexClass() result = new MyComplexClass();
@@ -80,10 +82,10 @@ import org.meanbean.util.ValidationHelper;
  * 
  * @author Graham Williamson
  */
-public class NotEqualsTester {
+class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMethodPropertySignificanceVerifier {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(NotEqualsTester.class);
+	private final Log log = LogFactory.getLog(PropertyBasedEqualsMethodPropertySignificanceVerifier.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
@@ -102,7 +104,7 @@ public class NotEqualsTester {
 	        randomValueGenerator);
 
 	/**
-	 * Test that the equals logic implemented by the type the specified factory creates is affected in the expected
+	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
 	 * manner when changes are made to the property values of instances of the type. <br/>
 	 * 
 	 * That is:
@@ -126,13 +128,13 @@ public class NotEqualsTester {
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
 	 *            logic. The factory must create logically equivalent but different actual instances of the type upon
 	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
-	 * @param unusedProperties
+	 * @param insignificantProperties
 	 *            The names of properties that are not used when deciding whether objects are logically equivalent. For
 	 *            example, "lastName".
 	 * 
 	 * @throws IllegalArgumentException
-	 *             If either the specified factory or unusedProperties are deemed illegal. For example, if either is
-	 *             <code>null</code>.
+	 *             If either the specified factory or insignificantProperties are deemed illegal. For example, if either
+	 *             is <code>null</code>.
 	 * @throws BeanInformationException
 	 *             If a problem occurs when trying to obtain information about the type to test.
 	 * @throws BeanTestException
@@ -141,13 +143,14 @@ public class NotEqualsTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void testEquals(Factory<?> factory, String... unusedProperties) throws IllegalArgumentException,
-	        BeanInformationException, BeanTestException, AssertionError {
-		testEquals(factory, null, unusedProperties);
+	@Override
+	public void verifyEqualsMethod(Factory<?> factory, String... insignificantProperties)
+	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
+		verifyEqualsMethod(factory, null, insignificantProperties);
 	}
 
 	/**
-	 * Test that the equals logic implemented by the type the specified factory creates is affected in the expected
+	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
 	 * manner when changes are made to the property values of instances of the type. <br/>
 	 * 
 	 * That is:
@@ -175,15 +178,15 @@ public class NotEqualsTester {
 	 *            A custom Configuration to be used when testing to ignore the testing of named properties or use a
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
 	 *            individual test and will not be retained for future testing of this or any other type. If no custom
-	 *            Configuration is required, pass <code>null</code> or use <code>testEquals(Factory<?>,String...)</code>
-	 *            instead.
-	 * @param unusedProperties
+	 *            Configuration is required, pass <code>null</code> or use
+	 *            <code>verifyEqualsMethod(Factory<?>,String...)</code> instead.
+	 * @param insignificantProperties
 	 *            The names of properties that are not used when deciding whether objects are logically equivalent. For
 	 *            example, "lastName".
 	 * 
 	 * @throws IllegalArgumentException
-	 *             If either the specified factory or unusedProperties are deemed illegal. For example, if either is
-	 *             <code>null</code>.
+	 *             If either the specified factory or insignificantProperties are deemed illegal. For example, if either
+	 *             is <code>null</code>.
 	 * @throws BeanInformationException
 	 *             If a problem occurs when trying to obtain information about the type to test.
 	 * @throws BeanTestException
@@ -192,29 +195,32 @@ public class NotEqualsTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void testEquals(Factory<?> factory, Configuration configuration, String... unusedProperties)
+	@Override
+	public void verifyEqualsMethod(Factory<?> factory, Configuration configuration, String... insignificantProperties)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
-		log.debug("testEquals: Entering with factory=[" + factory + "], configuration=[" + configuration
-		        + "] and unusedProperties=[" + unusedProperties + "].");
+		log.debug("verifyEqualsMethod: Entering with factory=[" + factory + "], configuration=[" + configuration
+		        + "] and insignificantProperties=[" + insignificantProperties + "].");
 		validationHelper.ensureExists("factory", "test equals", factory);
-		validationHelper.ensureExists("unusedProperties", "test equals", unusedProperties);
-		List<String> unusedPropertyNames = Arrays.asList(unusedProperties);
+		validationHelper.ensureExists("insignificantProperties", "test equals", insignificantProperties);
+		List<String> insignificantPropertyNames = Arrays.asList(insignificantProperties);
 		Object prototype = factory.create();
-		log.debug("testEquals: Created object prototype=[" + prototype + "] for test.");
+		log.debug("verifyEqualsMethod: Created object prototype=[" + prototype + "] for test.");
 		validationHelper.ensureExists("factory-created object", "test equals", prototype);
 		BeanInformation beanInformation = beanInformationFactory.create(prototype.getClass());
-		log.debug("testEquals: Acquired beanInformation=[" + beanInformation + "].");
+		log.debug("verifyEqualsMethod: Acquired beanInformation=[" + beanInformation + "].");
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
 		for (PropertyInformation property : properties) {
 			if (configuration == null || !configuration.isIgnoredProperty(property.getName())) {
-				testEqualsForProperty(factory, configuration, property,
-				        unusedPropertyNames.contains(property.getName()));
+				verifyEqualsMethodForProperty(factory, configuration, property,
+				        !insignificantPropertyNames.contains(property.getName()));
+			} else {
+				log.debug("verifyEqualsMethod: Ignoring property=[" + property.getName() + "].");
 			}
 		}
 	}
 
 	/**
-	 * Test that the equals logic implemented by the type the specified factory creates is affected in the expected
+	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
 	 * manner when changes are made to the value of the specified property. <br/>
 	 * 
 	 * That is:
@@ -245,9 +251,9 @@ public class NotEqualsTester {
 	 *            Configuration is required, pass <code>null</code>.
 	 * @param property
 	 *            The property to test.
-	 * @param isUnused
-	 *            Set to <code>true</code> if the property is not used when deciding whether objects are logically
-	 *            equivalent; set to <code>false</code> if the property is used when deciding whether objects are
+	 * @param significant
+	 *            Set to <code>true</code> if the property is used when deciding whether objects are logically
+	 *            equivalent; set to <code>false</code> if the property is not used when deciding whether objects are
 	 *            logically equivalent.
 	 * 
 	 * @throws IllegalArgumentException
@@ -260,17 +266,19 @@ public class NotEqualsTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	protected void testEqualsForProperty(Factory<?> factory, Configuration configuration, PropertyInformation property,
-	        boolean isUnused) throws IllegalArgumentException, BeanInformationException, BeanTestException,
-	        AssertionError {
+	protected void verifyEqualsMethodForProperty(Factory<?> factory, Configuration configuration,
+	        PropertyInformation property, boolean significant) throws IllegalArgumentException,
+	        BeanInformationException, BeanTestException, AssertionError {
+		log.debug("verifyEqualsMethodForProperty: Entering with factory=[" + factory + "], configuration=["
+		        + configuration + "], property=[" + property + "] and significant=[" + significant + "].");
 		String propertyName = property.getName();
-		log.debug("testEqualsForProperty: Test for property=[" + propertyName + "].");
+		log.debug("verifyEqualsMethodForProperty: Test for property=[" + propertyName + "].");
 		Object x = factory.create();
 		Object y = factory.create();
-		log.debug("testEqualsForProperty: Created objects x=[" + x + "] and y=[" + y + "].");
+		log.debug("verifyEqualsMethodForProperty: Created objects x=[" + x + "] and y=[" + y + "].");
 		if (!x.equals(y)) {
 			String message = "Cannot test equals if factory does not create logically equivalent objects.";
-			log.debug("testEqualsForProperty: " + message + " Throw IllegalArgumentException.");
+			log.debug("verifyEqualsMethodForProperty: " + message + " Throw IllegalArgumentException.");
 			throw new IllegalArgumentException(message);
 		}
 		try {
@@ -280,28 +288,27 @@ public class NotEqualsTester {
 			validationHelper.ensureExists("factory-created object." + propertyName, "test equals", originalValue);
 			if (!originalValue.equals(xOriginalValue)) {
 				String message = "Cannot test equals if factory does not create objects with same property values.";
-				log.debug("testEqualsForProperty: " + message + " Throw IllegalArgumentException.");
+				log.debug("verifyEqualsMethodForProperty: " + message + " Throw IllegalArgumentException.");
 				throw new IllegalArgumentException(message);
 			}
 			Factory<?> propertyFactory = factoryLookupStrategy.getFactory(propertyName,
 			        property.getWriteMethodParameterType(), configuration);
 			Object newValue = propertyFactory.create();
-			log.debug("testEqualsForProperty: Original property value=[" + originalValue + "]; new property value=["
-			        + newValue + "].");
+			log.debug("verifyEqualsMethodForProperty: Original property value=[" + originalValue
+			        + "]; new property value=[" + newValue + "].");
 			property.getWriteMethod().invoke(y, newValue);
-
-			if (isUnused && !x.equals(y)) {// equality shouldn't have changed but did
+			if (!(significant || x.equals(y))) {// equality shouldn't have changed but did
 				String message = "objects that differ due to (irrelevant) property [" + propertyName
 				        + "] where considered unequal. (x." + propertyName + "=[" + originalValue + "] vs y."
-				        + propertyName + "=[" + newValue + "]).";
-				log.debug("testEquals: " + message);
+				        + propertyName + "=[" + newValue + "]). is property [" + propertyName + "] not irrelevant?";
+				log.debug("verifyEqualsMethodForProperty: " + message);
 				AssertionUtils.fail(message);
 			}
-			if (!isUnused && x.equals(y)) {// equality should have changed but didn't
+			if (significant && x.equals(y)) {// equality should have changed but didn't
 				String message = "objects that differ due to property [" + propertyName
 				        + "] where considered equal. (x." + propertyName + "=[" + originalValue + "] vs y."
-				        + propertyName + "=[" + newValue + "]).";
-				log.debug("testEqualsForProperty: " + message);
+				        + propertyName + "=[" + newValue + "]). is property [" + propertyName + "] irrelevant?";
+				log.debug("verifyEqualsMethodForProperty: " + message);
 				AssertionUtils.fail(message);
 			}
 		} catch (Exception e) {
@@ -310,16 +317,17 @@ public class NotEqualsTester {
 			}
 			String message = "Failed to test property [" + property.getName() + "] due to Exception ["
 			        + e.getClass().getName() + "]: [" + e.getMessage() + "].";
-			log.error("testEqualsForProperty: " + message + " Throw BeanTestException.", e);
+			log.error("verifyEqualsMethodForProperty: " + message + " Throw BeanTestException.", e);
 			throw new BeanTestException(message, e);
 		}
 	}
 
 	/**
-	 * The collection of test data Factories with which you can register new Factories for custom Data Types.
+	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
 	 * 
 	 * @return The collection of test data Factories.
 	 */
+	@Override
 	public FactoryCollection getFactoryCollection() {
 		return factoryCollection;
 	}

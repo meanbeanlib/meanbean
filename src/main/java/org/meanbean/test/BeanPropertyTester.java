@@ -21,46 +21,6 @@ public class BeanPropertyTester {
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
 
 	/**
-	 * Equality test of two objects.
-	 * 
-	 * @author Graham Williamson
-	 */
-	enum EqualityTest {
-
-		/**
-		 * Test the logical equality of two objects (x.equals(y)).
-		 */
-		LOGICAL {
-			@Override
-			public boolean test(Object x, Object y) {
-				return x.equals(y);
-			}
-		},
-
-		/**
-		 * Test the absolute equality of two objects (x == y).
-		 */
-		ABSOLUTE {
-			@Override
-			public boolean test(Object x, Object y) {
-				return x == y;
-			}
-		};
-
-		/**
-		 * Is object x equal to object y.
-		 * 
-		 * @param x
-		 *            The first object to compare.
-		 * @param y
-		 *            The second object to compare.
-		 * 
-		 * @return <code>true</code> if the objects are considered equal; <code>false</code> otherwise.
-		 */
-		public abstract boolean test(Object x, Object y);
-	}
-
-	/**
 	 * Test the property specified by the propertyInformation parameter on the specified bean object using the specified
 	 * testValue. <br/>
 	 * The test is performed by setting the property of the specified bean to the specified testValue via the property

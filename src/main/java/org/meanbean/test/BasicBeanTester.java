@@ -17,18 +17,77 @@ import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryRepository;
 import org.meanbean.lang.Factory;
-import org.meanbean.test.BeanPropertyTester.EqualityTest;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
- * Concrete BeanTester, affording functionality to test JavaBean objects.
+ * Concrete BeanTester that affords a means of testing JavaBean objects with respect to:
+ * 
+ * <ul>
+ * <li>the correct functioning of the object's public getter and setter methods</li>
+ * </ul>
+ * 
+ * Each property is tested by:
+ * 
+ * <ol>
+ * <li>generating a random test value for the specific property type</li>
+ * 
+ * <li>invoking the property setter method, passing the generated test value</li>
+ * 
+ * <li>invoking the property getter method and obtaining the return value</li>
+ * 
+ * <li>verifying that the value obtained from the getter method matches the value passed to the setter method</li>
+ * </ol>
+ * 
+ * Each property of a type is tested in turn. Each type is tested multiple times to reduce the risk of hard-coded values
+ * within a getter or setter matching the random test values generated and the test failing to detect a bug. <br/>
+ * 
+ * Testing can be configured as follows:
+ * 
+ * <ul>
+ * <li>the number of times each type is tested can be configured</li>
+ * 
+ * <li>the properties to test can be configured by specifying properties to ignore on a type</li>
+ * 
+ * <li>custom Factories can be registered to create test values during testing</li>
+ * </ul>
+ * 
+ * See:
+ * 
+ * <ul>
+ * <li><code>setIterations(int)</code> to set the number of times any type is tested</li>
+ * 
+ * <li><code>addCustomConfiguration(Class<?>,Configuration)</code> to add a custom Configuration across all testing of
+ * the specified type</li>
+ * 
+ * <li><code>testBean(Class<?>,Configuration)</code> to specify a custom Configuration for a single test scenario</li>
+ * 
+ * <li><code>getFactoryCollection().addFactory(Class<?>,Factory<?>)</code> to add a custom Factory for a type across all
+ * testing</li>
+ * </ul>
+ * 
+ * The following example shows how to test a class MyClass:
+ * 
+ * <pre>
+ * BeanTester beanTester = new BasicBeanTester();
+ * beanTester.testBean(MyClass.class);
+ * </pre>
+ * 
+ * If the test fails, an AssertionError is thrown. <br/>
+ * 
+ * To ignore a property (say, lastName) when testing a class:
+ * 
+ * <pre>
+ * BeanTester beanTester = new BasicBeanTester();
+ * Configuration configuration = new ConfigurationBuilder().ignoreProperty(&quot;lastName&quot;).build();
+ * beanTester.testBean(MyClass.class, configuration);
+ * </pre>
  * 
  * @author Graham Williamson
  */
-public class BeanTesterImpl implements BeanTester {
+public class BasicBeanTester implements BeanTester {
 
 	/** The number of times each bean is tested, unless a custom Configuration overrides this global setting. */
 	private int iterations = BeanTester.TEST_ITERATIONS_PER_BEAN;
@@ -48,26 +107,16 @@ public class BeanTesterImpl implements BeanTester {
 	        .synchronizedMap(new HashMap<Class<?>, Configuration>());
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory;
+	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
 
 	/** Object that tests the getters and setters of a Bean's property. */
-	private final BeanPropertyTester beanPropertyTester;
+	private final BeanPropertyTester beanPropertyTester = new BeanPropertyTester();
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(BeanTesterImpl.class);
+	private final Log log = LogFactory.getLog(BasicBeanTester.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
-
-	/**
-	 * Construct a new Bean Tester implementation.
-	 */
-	public BeanTesterImpl() {
-		log.debug("BeanTesterImpl: entering.");
-		beanInformationFactory = new JavaBeanInformationFactory();
-		beanPropertyTester = new BeanPropertyTester();
-		log.debug("BeanTesterImpl: exiting.");
-	}
 
 	/**
 	 * The collection of test data Factories with which you can register new Factories for custom Data Types.

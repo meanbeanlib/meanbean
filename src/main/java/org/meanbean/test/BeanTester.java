@@ -4,9 +4,36 @@ import org.meanbean.factories.FactoryCollection;
 import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
- * Defines an object that can test JavaBean objects. <br/>
+ * Defines a means of testing JavaBean objects with respect to:
  * 
- * A means of customising testing on a global and per-type basis is also defined.
+ * <ul>
+ * <li>the correct functioning of the object's public getter and setter methods</li>
+ * </ul>
+ * 
+ * Each property is tested by:
+ * 
+ * <ol>
+ * <li>generating a random test value for the specific property type</li>
+ * 
+ * <li>invoking the property setter method, passing the generated test value</li>
+ * 
+ * <li>invoking the property getter method and obtaining the return value</li>
+ * 
+ * <li>verifying that the value obtained from the getter method matches the value passed to the setter method</li>
+ * </ol>
+ * 
+ * Each property of a type is tested in turn. Each type is tested multiple times to reduce the risk of hard-coded values
+ * within a getter or setter matching the random test values generated and the test failing to detect a bug. <br/>
+ * 
+ * Testing can be configured as follows:
+ * 
+ * <ul>
+ * <li>the number of times each type is tested can be configured</li>
+ * 
+ * <li>the properties to test can be configured by specifying properties to ignore on a type</li>
+ * 
+ * <li>custom Factories can be registered to create test values during testing</li>
+ * </ul>
  * 
  * @author Graham Williamson
  */
