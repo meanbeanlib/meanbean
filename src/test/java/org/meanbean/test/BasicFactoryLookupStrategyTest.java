@@ -11,6 +11,8 @@ import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.basic.EnumFactory;
 import org.meanbean.factories.basic.StringFactory;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.beans.NonBean;
+import org.meanbean.test.beans.NullFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 
@@ -78,26 +80,26 @@ public class BasicFactoryLookupStrategyTest {
 
 	@Test
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanRegisteredFactory() throws Exception {
-		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new CustomFactory())
+		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory())
 		        .build();
 		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, String.class, configuration);
-		assertThat("Incorrect factory.", factory.getClass().getName(), is(CustomFactory.class.getName()));
+		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
 
 	@Test
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanEnumFactory() throws Exception {
-		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new CustomFactory())
+		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory())
 		        .build();
 		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, Color.class, configuration);
-		assertThat("Incorrect factory.", factory.getClass().getName(), is(CustomFactory.class.getName()));
+		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
 
 	@Test
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanDynamicBeanFactory() throws Exception {
-		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new CustomFactory())
+		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory())
 		        .build();
 		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, BasicBean.class, configuration);
-		assertThat("Incorrect factory.", factory.getClass().getName(), is(CustomFactory.class.getName()));
+		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
 
 	public enum Color {
@@ -105,18 +107,5 @@ public class BasicFactoryLookupStrategyTest {
 	}
 
 	public static class BasicBean {
-	}
-
-	public static class NonBean {
-		public NonBean(String parameter) {
-			// Do nothing
-		}
-	}
-
-	private static class CustomFactory implements Factory<Object> {
-		@Override
-		public Object create() {
-			return null; // No used
-		}
 	}
 }

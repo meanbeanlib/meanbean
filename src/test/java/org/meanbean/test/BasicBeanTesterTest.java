@@ -15,14 +15,16 @@ import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.beans.Bean;
+import org.meanbean.test.beans.ComplexBean;
 import org.meanbean.util.RandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BeanTesterImplTest {
+public class BasicBeanTesterTest {
 
-	private BeanTesterImpl beanTester;
+	private BasicBeanTester beanTester;
 
 	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
 
@@ -34,7 +36,7 @@ public class BeanTesterImplTest {
 
 	@Before
 	public void before() {
-		beanTester = new BeanTesterImpl();
+		beanTester = new BasicBeanTester();
 	}
 
 	@Test(expected = IllegalArgumentException.class)

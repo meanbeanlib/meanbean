@@ -2,6 +2,10 @@ package org.meanbean.test;
 
 import org.junit.Test;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.beans.BeanFactory;
+import org.meanbean.test.beans.CounterDrivenHashCodeBean;
+import org.meanbean.test.beans.FieldDrivenEqualsBeanFactory;
+import org.meanbean.test.beans.FieldDrivenHashCodeBean;
 
 public class HashCodeTesterTest {
 
@@ -28,12 +32,7 @@ public class HashCodeTesterTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashCodesEqualShouldPreventTestingNonEqualObjects() throws Exception {
-		hashCodeTester.testHashCodesEqual(new Factory<FieldDrivenEqualsBean>() {
-			@Override
-			public FieldDrivenEqualsBean create() {
-				return new FieldDrivenEqualsBean(false);
-			}
-		});
+		hashCodeTester.testHashCodesEqual(new FieldDrivenEqualsBeanFactory(false));
 	}
 
 	@Test(expected = AssertionError.class)

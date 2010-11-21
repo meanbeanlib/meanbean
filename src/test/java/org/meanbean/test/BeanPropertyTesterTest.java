@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.bean.info.PropertyInformation;
-import org.meanbean.test.BeanPropertyTester.EqualityTest;
 
 public class BeanPropertyTesterTest {
 
