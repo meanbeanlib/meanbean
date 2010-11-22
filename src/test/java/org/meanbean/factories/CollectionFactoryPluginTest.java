@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -13,6 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -34,12 +37,12 @@ public class CollectionFactoryPluginTest {
 
 	public static final Class<?>[] FACTORY_CLASSES = { List.class, ArrayList.class, LinkedList.class, Map.class,
 	        HashMap.class, IdentityHashMap.class, LinkedHashMap.class, TreeMap.class, WeakHashMap.class, Set.class,
-	        HashSet.class, LinkedHashSet.class, TreeSet.class };
+	        HashSet.class, LinkedHashSet.class, TreeSet.class, Collection.class, Queue.class, Deque.class };
 
 	@Mock
 	private RandomValueGeneratorProvider randomValueGeneratorProvider;
 
-	private RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+	private final RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
 
 	private FactoryCollection factoryCollection;
 

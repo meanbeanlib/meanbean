@@ -1,6 +1,8 @@
 package org.meanbean.factories;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -9,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -37,7 +40,8 @@ import org.meanbean.util.RandomValueGeneratorProvider;
 public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 
 	@Override
-	public void initialize(FactoryCollection factoryCollection, RandomValueGeneratorProvider randomValueGeneratorProvider) {
+	public void initialize(FactoryCollection factoryCollection,
+	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
 		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
 		StringFactory stringFactory = (StringFactory) factoryCollection.getFactory(String.class);
 		LongFactory longFactory = (LongFactory) factoryCollection.getFactory(Long.class);
@@ -45,25 +49,31 @@ public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 		ArrayListFactory<String> arrayListFactory = new ArrayListFactory<String>(randomValueGenerator, stringFactory);
 		factoryCollection.addFactory(List.class, arrayListFactory);
 		factoryCollection.addFactory(ArrayList.class, arrayListFactory);
-		factoryCollection.addFactory(LinkedList.class, new LinkedListFactory<String>(randomValueGenerator, stringFactory));		
+		LinkedListFactory<String> linkedListFactory = new LinkedListFactory<String>(randomValueGenerator, stringFactory);
+		factoryCollection.addFactory(LinkedList.class, linkedListFactory);
 		// Maps
-		HashMapFactory<String, Long> hashMapFactory = new HashMapFactory<String, Long>(randomValueGenerator, stringFactory,
-		        longFactory);
+		HashMapFactory<String, Long> hashMapFactory = new HashMapFactory<String, Long>(randomValueGenerator,
+		        stringFactory, longFactory);
 		factoryCollection.addFactory(Map.class, hashMapFactory);
 		factoryCollection.addFactory(HashMap.class, hashMapFactory);
-		factoryCollection.addFactory(IdentityHashMap.class, new IdentityHashMapFactory<String, Long>(randomValueGenerator, stringFactory,
-		        longFactory));
-		factoryCollection.addFactory(LinkedHashMap.class, new LinkedHashMapFactory<String, Long>(randomValueGenerator, stringFactory,
-		        longFactory));
-		factoryCollection.addFactory(TreeMap.class, new TreeMapFactory<String, Long>(randomValueGenerator, stringFactory,
-		        longFactory));
-		factoryCollection.addFactory(WeakHashMap.class, new WeakHashMapFactory<String, Long>(randomValueGenerator, stringFactory,
-		        longFactory));
+		factoryCollection.addFactory(IdentityHashMap.class, new IdentityHashMapFactory<String, Long>(
+		        randomValueGenerator, stringFactory, longFactory));
+		factoryCollection.addFactory(LinkedHashMap.class, new LinkedHashMapFactory<String, Long>(randomValueGenerator,
+		        stringFactory, longFactory));
+		factoryCollection.addFactory(TreeMap.class, new TreeMapFactory<String, Long>(randomValueGenerator,
+		        stringFactory, longFactory));
+		factoryCollection.addFactory(WeakHashMap.class, new WeakHashMapFactory<String, Long>(randomValueGenerator,
+		        stringFactory, longFactory));
 		// Sets
 		HashSetFactory<String> hashSetFactory = new HashSetFactory<String>(randomValueGenerator, stringFactory);
 		factoryCollection.addFactory(Set.class, hashSetFactory);
 		factoryCollection.addFactory(HashSet.class, hashSetFactory);
-		factoryCollection.addFactory(LinkedHashSet.class, new LinkedHashSetFactory<String>(randomValueGenerator, stringFactory));
+		factoryCollection.addFactory(LinkedHashSet.class, new LinkedHashSetFactory<String>(randomValueGenerator,
+		        stringFactory));
 		factoryCollection.addFactory(TreeSet.class, new TreeSetFactory<String>(randomValueGenerator, stringFactory));
+		// Other
+		factoryCollection.addFactory(Collection.class, arrayListFactory);
+		factoryCollection.addFactory(Queue.class, linkedListFactory);
+		factoryCollection.addFactory(Deque.class, linkedListFactory);
 	}
 }
