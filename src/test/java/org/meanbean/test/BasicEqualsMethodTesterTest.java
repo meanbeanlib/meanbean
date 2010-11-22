@@ -12,6 +12,7 @@ import org.meanbean.test.beans.CounterDrivenEqualsBeanFactory;
 import org.meanbean.test.beans.DifferentTypeAcceptingBeanFactory;
 import org.meanbean.test.beans.FieldDrivenEqualsBean;
 import org.meanbean.test.beans.MultiPropertyBean;
+import org.meanbean.test.beans.MultiPropertyBeanFactory;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.NonReflexiveBeanFactory;
 import org.meanbean.test.beans.NullAcceptingBeanFactory;
@@ -145,15 +146,7 @@ public class BasicEqualsMethodTesterTest {
 
 	@Test(expected = AssertionError.class)
 	public void testEqualsMethodShouldThrowAssertionErrorWhenEqualityShouldNotHaveChangedButDid() throws Exception {
-		equalsTester.testEqualsMethod(new Factory<MultiPropertyBean>() {
-			@Override
-			public MultiPropertyBean create() {
-				MultiPropertyBean bean = new MultiPropertyBean();
-				bean.setFirstName("FIRST_NAME");
-				bean.setLastName("LAST_NAME");
-				return bean;
-			}
-		}, "lastName");
+		equalsTester.testEqualsMethod(new MultiPropertyBeanFactory(), "lastName");
 	}
 
 	@Test(expected = AssertionError.class)
@@ -171,29 +164,13 @@ public class BasicEqualsMethodTesterTest {
 
 	@Test
 	public void testEqualsMethodShouldNotThrowAssertionErrorWhenTestPasses() throws Exception {
-		equalsTester.testEqualsMethod(new Factory<MultiPropertyBean>() {
-			@Override
-			public MultiPropertyBean create() {
-				MultiPropertyBean bean = new MultiPropertyBean();
-				bean.setFirstName("FIRST_NAME");
-				bean.setLastName("LAST_NAME");
-				return bean;
-			}
-		});
+		equalsTester.testEqualsMethod(new MultiPropertyBeanFactory());
 	}
 
 	@Test
 	public void testEqualsMethodShouldIgnoreProperties() throws Exception {
 		Configuration configuration = new ConfigurationBuilder().ignoreProperty("lastName").build();
-		equalsTester.testEqualsMethod(new Factory<MultiPropertyBean>() {
-			@Override
-			public MultiPropertyBean create() {
-				MultiPropertyBean bean = new MultiPropertyBean();
-				bean.setFirstName("FIRST_NAME");
-				bean.setLastName("LAST_NAME");
-				return bean;
-			}
-		}, configuration, "lastName");
+		equalsTester.testEqualsMethod(new MultiPropertyBeanFactory(), configuration, "lastName");
 	}
 
 	@Test(expected = AssertionError.class)

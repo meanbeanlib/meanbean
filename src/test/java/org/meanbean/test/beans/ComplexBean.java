@@ -3,12 +3,15 @@ package org.meanbean.test.beans;
 import java.util.Date;
 
 /**
- * A bean with properties of differing types. The equals and hashCode methods are correctly implemented. This class
- * should only be used for testing.
+ * A bean with properties of differing types. It has a business method (which does nothing). It has a read only getter.
+ * It has a write-only ID property. The equals and hashCode methods are correctly implemented and do not consider ID.
+ * This class should only be used for testing.
  * 
  * @author Graham Williamson
  */
 public class ComplexBean {
+
+	private long id;
 
 	private String firstName;
 
@@ -48,6 +51,18 @@ public class ComplexBean {
 
 	public void setFavouriteNumber(long favouriteNumber) {
 		this.favouriteNumber = favouriteNumber;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getAsString() {
+		return toString();
+	}
+
+	public void doSomeBusinessLogic() {
+		// Do nothing
 	}
 
 	@Override
@@ -93,9 +108,9 @@ public class ComplexBean {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("ComplexBean [firstName=").append(firstName).append(", lastName=").append(lastName)
-		        .append(", dateOfBirth=").append(dateOfBirth).append(", favouriteNumber=").append(favouriteNumber)
-		        .append("]");
+		builder.append("ComplexBean [id=").append(id).append(", firstName=").append(firstName).append(", lastName=")
+		        .append(lastName).append(", dateOfBirth=").append(dateOfBirth).append(", favouriteNumber=")
+		        .append(favouriteNumber).append("]");
 		return builder.toString();
 	}
 }

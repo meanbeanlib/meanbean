@@ -5,7 +5,7 @@ package org.meanbean.test;
  * 
  * @author Graham Williamson
  */
-public enum EqualityTest {
+enum EqualityTest {
 
 	/**
 	 * Test the logical equality of two objects (x.equals(y)).

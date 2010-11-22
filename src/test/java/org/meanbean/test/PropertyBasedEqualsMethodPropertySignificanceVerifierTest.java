@@ -14,10 +14,13 @@ import org.meanbean.test.beans.BeanWithBadGetterMethod;
 import org.meanbean.test.beans.BeanWithBadSetterMethod;
 import org.meanbean.test.beans.BeanWithNonBeanProperty;
 import org.meanbean.test.beans.BrokenEqualsMultiPropertyBean;
+import org.meanbean.test.beans.ComplexBeanFactory;
 import org.meanbean.test.beans.FieldDrivenEqualsBean;
 import org.meanbean.test.beans.MultiPropertyBean;
+import org.meanbean.test.beans.MultiPropertyBeanFactory;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.NullFactory;
+import org.meanbean.test.beans.SelfReferencingBeanFactory;
 
 public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
@@ -122,15 +125,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	@Test(expected = AssertionError.class)
 	public void verifyEqualsMethodShouldThrowAssertionErrorWhenEqualityShouldNotHaveChangedButDid() throws Exception {
-		verifier.verifyEqualsMethod(new Factory<MultiPropertyBean>() {
-			@Override
-			public MultiPropertyBean create() {
-				MultiPropertyBean bean = new MultiPropertyBean();
-				bean.setFirstName("FIRST_NAME");
-				bean.setLastName("LAST_NAME");
-				return bean;
-			}
-		}, "lastName");
+		verifier.verifyEqualsMethod(new MultiPropertyBeanFactory(), "lastName");
 	}
 
 	@Test(expected = AssertionError.class)
@@ -147,30 +142,25 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 	}
 
 	@Test
-	public void verifyEqualsMethodShouldNotThrowAssertionErrorWhenTestPasses() throws Exception {
-		verifier.verifyEqualsMethod(new Factory<MultiPropertyBean>() {
-			@Override
-			public MultiPropertyBean create() {
-				MultiPropertyBean bean = new MultiPropertyBean();
-				bean.setFirstName("FIRST_NAME");
-				bean.setLastName("LAST_NAME");
-				return bean;
-			}
-		});
+	public void verifyEqualsMethodShouldNotThrowAssertionErrorWhenTestPassesWithMultiPropertyBean() throws Exception {
+		verifier.verifyEqualsMethod(new MultiPropertyBeanFactory());
+	}
+
+	@Test
+	public void verifyEqualsMethodShouldNotThrowAssertionErrorWhenTestPassesWithSelfReferencingBean() throws Exception {
+		verifier.verifyEqualsMethod(new SelfReferencingBeanFactory());
+	}
+
+	@Test
+	public void verifyEqualsMethodShouldNotThrowAssertionErrorWhenTestPassesWithComplexBean() throws Exception {
+		// This tests whether the verifier can cope with non-readable/non-writable properties, etc.
+		verifier.verifyEqualsMethod(new ComplexBeanFactory());
 	}
 
 	@Test
 	public void verifyEqualsMethodShouldIgnoreProperties() throws Exception {
 		Configuration configuration = new ConfigurationBuilder().ignoreProperty("lastName").build();
-		verifier.verifyEqualsMethod(new Factory<MultiPropertyBean>() {
-			@Override
-			public MultiPropertyBean create() {
-				MultiPropertyBean bean = new MultiPropertyBean();
-				bean.setFirstName("FIRST_NAME");
-				bean.setLastName("LAST_NAME");
-				return bean;
-			}
-		}, configuration, "lastName");
+		verifier.verifyEqualsMethod(new MultiPropertyBeanFactory(), configuration, "lastName");
 	}
 
 	@Test(expected = AssertionError.class)

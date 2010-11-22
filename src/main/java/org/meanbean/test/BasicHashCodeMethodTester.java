@@ -8,17 +8,30 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
- * Class that affords functionality to test the hashCode logic implemented by objects. <br/>
+ * Concrete implementation of the HashCodeMethodTester that provides a means of testing the correctness of the hashCode
+ * logic implemented by a type with respect to:
+ * 
+ * <ul>
+ * <li>the general hashCode contract</li>
+ * </ul>
+ * 
+ * The following is tested:
+ * 
+ * <ul>
+ * <li>that logically equivalent objects have the same hashCode</li>
+ * 
+ * <li>the <strong>consistent</strong> item of the hashCode contract - the hashCode of an object should remain
+ * consistent across multiple invocations, so long as the object does not change</li>
+ * </ul>
  * 
  * Use the tests provided by this class (namely, <code>testHashCode()</code>) to test a class that overrides
- * <code>equals()</code> and <code>hashCode()</code>. <code>testHashCode()</code> invokes all other tests. However, you
- * can invoke each test individually instead. <br/>
+ * <code>hashCode()</code> and <code>equals()</code>.
  * 
  * As an example, to test the hashCode logic implemented by a class called MyClass do the following:
  * 
  * <pre>
- * HashCodeTester hashCodeTester = new HashCodeTester();
- * hashCodeTester.testHashCode(new Factory<MyClass>() {
+ * HashCodeMethodTester tester = new BasicHashCodeMethodTester();
+ * tester.testHashCodeMethod(new Factory<MyClass>() {
  *    @Override
  *    public MyClass create() {
  *       MyClass() result = new MyClass();
@@ -30,14 +43,15 @@ import org.meanbean.util.ValidationHelper;
  * </pre>
  * 
  * The Factory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
- * <code>equals()</code> and <code>hashCode()</code>.
+ * <code>equals()</code> and <code>hashCode()</code>. In the above example, there is only one property, name, which is
+ * considered by MyClass's hashCode logic.
  * 
  * @author Graham Williamson
  */
-public class HashCodeTester {
+public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(HashCodeTester.class);
+	private final Log log = LogFactory.getLog(BasicHashCodeMethodTester.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
@@ -66,12 +80,13 @@ public class HashCodeTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void testHashCode(Factory<?> factory) throws IllegalArgumentException, AssertionError {
-		log.debug("testHashCode: Entering with factory=[" + factory + "].");
-		validationHelper.ensureExists("factory", "test hash code", factory);
+	@Override
+	public void testHashCodeMethod(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+		log.debug("testHashCodeMethod: Entering with factory=[" + factory + "].");
+		validationHelper.ensureExists("factory", "test hash code method", factory);
 		testHashCodesEqual(factory);
 		testHashCodeConsistent(factory);
-		log.debug("testHashCode: Exiting - Equals is correct.");
+		log.debug("testHashCodeMethod: Exiting - Equals is correct.");
 	}
 
 	/**
@@ -92,7 +107,7 @@ public class HashCodeTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void testHashCodesEqual(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	protected void testHashCodesEqual(Factory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("testHashCodesEqual: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test hash codes equal for equal objects", factory);
 		Object x = factory.create();
@@ -130,7 +145,7 @@ public class HashCodeTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void testHashCodeConsistent(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	protected void testHashCodeConsistent(Factory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("testHashCodeConsistent: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test hash code consistent item", factory);
 		Object x = factory.create();

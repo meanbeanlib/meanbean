@@ -11,6 +11,8 @@ import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.bean.info.PropertyInformation;
+import org.meanbean.bean.util.PropertyInformationFilter;
+import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryRepository;
 import org.meanbean.lang.Factory;
@@ -209,6 +211,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 		BeanInformation beanInformation = beanInformationFactory.create(prototype.getClass());
 		log.debug("verifyEqualsMethod: Acquired beanInformation=[" + beanInformation + "].");
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
+		properties = PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
 		for (PropertyInformation property : properties) {
 			if (configuration == null || !configuration.isIgnoredProperty(property.getName())) {
 				verifyEqualsMethodForProperty(factory, configuration, property,
