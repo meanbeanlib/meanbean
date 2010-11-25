@@ -1,5 +1,8 @@
 package org.meanbean.test;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.beans.Bean;
@@ -11,7 +14,7 @@ import org.meanbean.test.beans.BrokenEqualsMultiPropertyBean;
 import org.meanbean.test.beans.CounterDrivenEqualsBeanFactory;
 import org.meanbean.test.beans.DifferentTypeAcceptingBeanFactory;
 import org.meanbean.test.beans.FieldDrivenEqualsBean;
-import org.meanbean.test.beans.MultiPropertyBean;
+import org.meanbean.test.beans.InvocationCountingFactoryWrapper;
 import org.meanbean.test.beans.MultiPropertyBeanFactory;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.NonReflexiveBeanFactory;
@@ -173,23 +176,34 @@ public class BasicEqualsMethodTesterTest {
 		equalsTester.testEqualsMethod(new MultiPropertyBeanFactory(), configuration, "lastName");
 	}
 
-	@Test(expected = AssertionError.class)
+	@Test
 	public void testEqualsMethodShouldUseOverrideFactory() throws Exception {
-		final String lastName = "MY_SPECIAL_TEST_STRING";
-		Configuration configuration = new ConfigurationBuilder().overrideFactory("lastName", new Factory<String>() {
-			@Override
-			public String create() {
-				return lastName;
-			}
-		}).build();
-		equalsTester.testEqualsMethod(new Factory<MultiPropertyBean>() {
-			@Override
-			public MultiPropertyBean create() {
-				MultiPropertyBean bean = new MultiPropertyBean();
-				bean.setFirstName("FIRST_NAME");
-				bean.setLastName(lastName);
-				return bean;
-			}
-		}, configuration);
+		@SuppressWarnings("unchecked")
+		Factory<String> stringFactory = (Factory<String>) equalsTester.getFactoryCollection().getFactory(String.class);
+		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
+		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
+		equalsTester.testEqualsMethod(new BeanFactory(), configuration);
+		assertThat("custom factory was not used", factory.getInvocationCount(), is(1));
 	}
+
+	// TODO REVISIT
+	// @Test(expected = AssertionError.class)
+	// public void testEqualsMethodShouldUseOverrideFactory() throws Exception {
+	// final String lastName = "MY_SPECIAL_TEST_STRING";
+	// Configuration configuration = new ConfigurationBuilder().overrideFactory("lastName", new Factory<String>() {
+	// @Override
+	// public String create() {
+	// return lastName;
+	// }
+	// }).build();
+	// equalsTester.testEqualsMethod(new Factory<MultiPropertyBean>() {
+	// @Override
+	// public MultiPropertyBean create() {
+	// MultiPropertyBean bean = new MultiPropertyBean();
+	// bean.setFirstName("FIRST_NAME");
+	// bean.setLastName(lastName);
+	// return bean;
+	// }
+	// }, configuration);
+	// }
 }

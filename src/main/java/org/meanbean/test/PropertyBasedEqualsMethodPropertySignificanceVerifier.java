@@ -16,7 +16,6 @@ import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryRepository;
 import org.meanbean.lang.Factory;
-import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
@@ -104,6 +103,12 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	/** Provides a means of acquiring a suitable Factory. */
 	private final FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
 	        randomValueGenerator);
+
+	/** Asserts that the equality logic is consistent for a significant property. */
+	private final ObjectPropertyEqualityConsistentAsserter significantAsserter = new SignificantObjectPropertyEqualityConsistentAsserter();
+
+	/** Asserts that the equality logic is consistent for an insignificant property. */
+	private final ObjectPropertyEqualityConsistentAsserter insignificantAsserter = new InsignificantObjectPropertyEqualityConsistentAsserter();
 
 	/**
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
@@ -276,43 +281,34 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 		        + configuration + "], property=[" + property + "] and significant=[" + significant + "].");
 		String propertyName = property.getName();
 		log.debug("verifyEqualsMethodForProperty: Test for property=[" + propertyName + "].");
-		Object x = factory.create();
-		Object y = factory.create();
-		log.debug("verifyEqualsMethodForProperty: Created objects x=[" + x + "] and y=[" + y + "].");
-		if (!x.equals(y)) {
+		Object originalObj = factory.create();
+		Object modifiedObj = factory.create();
+		log.debug("verifyEqualsMethodForProperty: Created objects x=[" + originalObj + "] and y=[" + modifiedObj + "].");
+		if (!originalObj.equals(modifiedObj)) {
 			String message = "Cannot test equals if factory does not create logically equivalent objects.";
 			log.debug("verifyEqualsMethodForProperty: " + message + " Throw IllegalArgumentException.");
 			throw new IllegalArgumentException(message);
 		}
 		try {
-			Object xOriginalValue = property.getReadMethod().invoke(x);
-			Object originalValue = property.getReadMethod().invoke(y);
+			Object xOriginalValue = property.getReadMethod().invoke(originalObj);
+			Object originalVal = property.getReadMethod().invoke(modifiedObj);
 			validationHelper.ensureExists("factory-created object." + propertyName, "test equals", xOriginalValue);
-			validationHelper.ensureExists("factory-created object." + propertyName, "test equals", originalValue);
-			if (!originalValue.equals(xOriginalValue)) {
+			validationHelper.ensureExists("factory-created object." + propertyName, "test equals", originalVal);
+			if (!originalVal.equals(xOriginalValue)) {
 				String message = "Cannot test equals if factory does not create objects with same property values.";
 				log.debug("verifyEqualsMethodForProperty: " + message + " Throw IllegalArgumentException.");
 				throw new IllegalArgumentException(message);
 			}
 			Factory<?> propertyFactory = factoryLookupStrategy.getFactory(propertyName,
 			        property.getWriteMethodParameterType(), configuration);
-			Object newValue = propertyFactory.create();
-			log.debug("verifyEqualsMethodForProperty: Original property value=[" + originalValue
-			        + "]; new property value=[" + newValue + "].");
-			property.getWriteMethod().invoke(y, newValue);
-			if (!(significant || x.equals(y))) {// equality shouldn't have changed but did
-				String message = "objects that differ due to (irrelevant) property [" + propertyName
-				        + "] where considered unequal. (x." + propertyName + "=[" + originalValue + "] vs y."
-				        + propertyName + "=[" + newValue + "]). is property [" + propertyName + "] not irrelevant?";
-				log.debug("verifyEqualsMethodForProperty: " + message);
-				AssertionUtils.fail(message);
-			}
-			if (significant && x.equals(y)) {// equality should have changed but didn't
-				String message = "objects that differ due to property [" + propertyName
-				        + "] where considered equal. (x." + propertyName + "=[" + originalValue + "] vs y."
-				        + propertyName + "=[" + newValue + "]). is property [" + propertyName + "] irrelevant?";
-				log.debug("verifyEqualsMethodForProperty: " + message);
-				AssertionUtils.fail(message);
+			Object newVal = propertyFactory.create();
+			log.debug("verifyEqualsMethodForProperty: Original property value=[" + originalVal
+			        + "]; new property value=[" + newVal + "].");
+			property.getWriteMethod().invoke(modifiedObj, newVal);
+			if (significant) {
+				significantAsserter.assertConsistent(propertyName, originalObj, modifiedObj, originalVal, newVal);
+			} else {
+				insignificantAsserter.assertConsistent(propertyName, originalObj, modifiedObj, originalVal, newVal);
 			}
 		} catch (Exception e) {
 			if (e instanceof IllegalArgumentException) {

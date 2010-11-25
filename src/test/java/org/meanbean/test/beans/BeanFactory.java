@@ -9,10 +9,12 @@ import org.meanbean.lang.Factory;
  */
 public class BeanFactory implements Factory<Bean> {
 
+	public static final String NAME = "MY_NAME";
+
 	@Override
 	public Bean create() {
 		Bean bean = new Bean();
-		bean.setName("MY_NAME");
+		bean.setName(NAME);
 		return bean;
 	}
 }

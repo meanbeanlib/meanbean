@@ -3,6 +3,7 @@ package org.meanbean.test;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformationException;
+import org.meanbean.factories.FactoryCollection;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
@@ -223,5 +224,15 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 		contractVerifier.verifyEqualsDifferentType(factory);
 		propertySignificanceVerifier.verifyEqualsMethod(factory, configuration, insignificantProperties);
 		log.debug("testEqualsMethod: Exiting - Equals is correct.");
+	}
+
+	/**
+	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
+	 * 
+	 * @return The collection of test data Factories.
+	 */
+	@Override
+	public FactoryCollection getFactoryCollection() {
+		return propertySignificanceVerifier.getFactoryCollection();
 	}
 }

@@ -18,6 +18,8 @@ public class FieldDrivenEqualsBeanFactory implements Factory<FieldDrivenEqualsBe
 
 	@Override
 	public FieldDrivenEqualsBean create() {
-		return new FieldDrivenEqualsBean(equalsResult);
+		FieldDrivenEqualsBean bean = new FieldDrivenEqualsBean(equalsResult);
+		bean.setName("TEST_NAME");
+		return bean;
 	}
 }

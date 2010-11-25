@@ -9,6 +9,8 @@ import org.meanbean.lang.Factory;
  */
 public class CounterDrivenEqualsBeanFactory implements Factory<CounterDrivenEqualsBean> {
 
+	public static final String NAME = "TEST_NAME";
+
 	private final int falseInvocationIndex;
 
 	public CounterDrivenEqualsBeanFactory(int falseInvocationIndex) {
@@ -17,6 +19,8 @@ public class CounterDrivenEqualsBeanFactory implements Factory<CounterDrivenEqua
 
 	@Override
 	public CounterDrivenEqualsBean create() {
-		return new CounterDrivenEqualsBean(falseInvocationIndex);
+		CounterDrivenEqualsBean bean = new CounterDrivenEqualsBean(falseInvocationIndex);
+		bean.setName(NAME);
+		return bean;
 	}
 }

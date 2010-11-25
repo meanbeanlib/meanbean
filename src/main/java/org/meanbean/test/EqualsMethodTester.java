@@ -1,6 +1,7 @@
 package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformationException;
+import org.meanbean.factories.FactoryCollection;
 import org.meanbean.lang.Factory;
 
 /**
@@ -155,4 +156,10 @@ public interface EqualsMethodTester {
 	void testEqualsMethod(Factory<?> factory, Configuration configuration, String... insignificantProperties)
 	        throws IllegalArgumentException, AssertionError;
 
+	/**
+	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
+	 * 
+	 * @return The collection of test data Factories.
+	 */
+	FactoryCollection getFactoryCollection();
 }

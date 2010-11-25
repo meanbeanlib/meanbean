@@ -15,8 +15,11 @@ import org.meanbean.test.beans.BeanWithBadSetterMethod;
 import org.meanbean.test.beans.BeanWithNonBeanProperty;
 import org.meanbean.test.beans.BrokenEqualsMultiPropertyBean;
 import org.meanbean.test.beans.ComplexBeanFactory;
+import org.meanbean.test.beans.CounterDrivenEqualsBeanFactory;
 import org.meanbean.test.beans.FieldDrivenEqualsBean;
-import org.meanbean.test.beans.MultiPropertyBean;
+import org.meanbean.test.beans.FieldDrivenEqualsBeanFactory;
+import org.meanbean.test.beans.IncrementalStringFactory;
+import org.meanbean.test.beans.InvocationCountingFactoryWrapper;
 import org.meanbean.test.beans.MultiPropertyBeanFactory;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.NullFactory;
@@ -25,6 +28,18 @@ import org.meanbean.test.beans.SelfReferencingBeanFactory;
 public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	private final PropertyBasedEqualsMethodPropertySignificanceVerifier verifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+
+	private final BeanFactory beanFactory = new BeanFactory();
+
+	@Test
+	public void shouldGetFactoryRepository() throws Exception {
+		FactoryCollection factoryRepository = verifier.getFactoryCollection();
+		assertThat("Failed to get FactoryRepository.", factoryRepository, is(not(nullValue())));
+		@SuppressWarnings("unchecked")
+		Factory<String> stringFactory = (Factory<String>) factoryRepository.getFactory(String.class);
+		String randomString = stringFactory.create();
+		assertThat("Failed to get random String from FactoryRepository.", randomString, is(not(nullValue())));
+	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsMethodShouldPreventNullFactory() throws Exception {
@@ -163,33 +178,109 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 		verifier.verifyEqualsMethod(new MultiPropertyBeanFactory(), configuration, "lastName");
 	}
 
-	@Test(expected = AssertionError.class)
+	@Test
 	public void verifyEqualsMethodShouldUseOverrideFactory() throws Exception {
-		final String lastName = "MY_SPECIAL_TEST_STRING";
-		Configuration configuration = new ConfigurationBuilder().overrideFactory("lastName", new Factory<String>() {
-			@Override
-			public String create() {
-				return lastName;
-			}
-		}).build();
-		verifier.verifyEqualsMethod(new Factory<MultiPropertyBean>() {
-			@Override
-			public MultiPropertyBean create() {
-				MultiPropertyBean bean = new MultiPropertyBean();
-				bean.setFirstName("FIRST_NAME");
-				bean.setLastName(lastName);
-				return bean;
-			}
-		}, configuration);
+		@SuppressWarnings("unchecked")
+		Factory<String> stringFactory = (Factory<String>) verifier.getFactoryCollection().getFactory(String.class);
+		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
+		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
+		verifier.verifyEqualsMethod(new BeanFactory(), configuration);
+		assertThat("custom factory was not used", factory.getInvocationCount(), is(1));
+	}
+
+	// @Test(expected = AssertionError.class)
+	// public void verifyEqualsMethodShouldUseOverrideFactory() throws Exception {
+	// final String lastName = "MY_SPECIAL_TEST_STRING";
+	// Configuration configuration = new ConfigurationBuilder().overrideFactory("lastName", new Factory<String>() {
+	// @Override
+	// public String create() {
+	// return lastName;
+	// }
+	// }).build();
+	// verifier.verifyEqualsMethod(new Factory<MultiPropertyBean>() {
+	// @Override
+	// public MultiPropertyBean create() {
+	// MultiPropertyBean bean = new MultiPropertyBean();
+	// bean.setFirstName("FIRST_NAME");
+	// bean.setLastName(lastName);
+	// return bean;
+	// }
+	// }, configuration);
+	// }
+
+	@Test(expected = AssertionError.class)
+	public void verifyEqualsShouldThrowAssertionErrorWhenValuesDifferButObjectsStillEqualForSignificantProperty()
+	        throws Exception {
+		verifier.verifyEqualsMethod(new FieldDrivenEqualsBeanFactory(true),
+		        new ConfigurationBuilder().overrideFactory("name", new IncrementalStringFactory()).build());
 	}
 
 	@Test
-	public void shouldGetFactoryRepository() throws Exception {
-		FactoryCollection factoryRepository = verifier.getFactoryCollection();
-		assertThat("Failed to get FactoryRepository.", factoryRepository, is(not(nullValue())));
-		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryRepository.getFactory(String.class);
-		String randomString = stringFactory.create();
-		assertThat("Failed to get random String from FactoryRepository.", randomString, is(not(nullValue())));
+	public void verifyEqualsShouldNotThrowAssertionErrorWhenValuesDifferAndObjectsNotEqualForSignificantProperty()
+	        throws Exception {
+		verifier.verifyEqualsMethod(new BeanFactory(),
+		        new ConfigurationBuilder().overrideFactory("name", new IncrementalStringFactory()).build());
+	}
+
+	@Test(expected = AssertionError.class)
+	public void verifyEqualsShouldThrowAssertionErrorWhenValuesSameButObjectsNotEqualForSignificantProperty()
+	        throws Exception {
+		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", new Factory<String>() {
+			@Override
+			public String create() {
+				return CounterDrivenEqualsBeanFactory.NAME;
+			}
+		}).build();
+		verifier.verifyEqualsMethod(new CounterDrivenEqualsBeanFactory(1), configuration);
+	}
+
+	@Test
+	public void verifyEqualsShouldNotThrowAssertionErrorWhenValuesSameAndObjectsEqualForSignificantProperty()
+	        throws Exception {
+		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", new Factory<String>() {
+			@Override
+			public String create() {
+				return BeanFactory.NAME;
+			}
+		}).build();
+		verifier.verifyEqualsMethod(new BeanFactory(), configuration);
+	}
+
+	@Test
+	public void verifyEqualsShouldNotThrowAssertionErrorWhenValuesDifferAndObjectsEqualForInsignificantProperty()
+	        throws Exception {
+		verifier.verifyEqualsMethod(new FieldDrivenEqualsBeanFactory(true),
+		        new ConfigurationBuilder().overrideFactory("name", new IncrementalStringFactory()).build(), "name");
+	}
+
+	@Test(expected = AssertionError.class)
+	public void verifyEqualsShouldThrowAssertionErrorWhenValuesDifferAndObjectsNotEqualForInsignificantProperty()
+	        throws Exception {
+		verifier.verifyEqualsMethod(new BeanFactory(),
+		        new ConfigurationBuilder().overrideFactory("name", new IncrementalStringFactory()).build(), "name");
+	}
+
+	@Test(expected = AssertionError.class)
+	public void verifyEqualsShouldThrowAssertionErrorWhenValuesSameButObjectsNotEqualForInsignificantProperty()
+	        throws Exception {
+		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", new Factory<String>() {
+			@Override
+			public String create() {
+				return CounterDrivenEqualsBeanFactory.NAME;
+			}
+		}).build();
+		verifier.verifyEqualsMethod(new CounterDrivenEqualsBeanFactory(1), configuration, "name");
+	}
+
+	@Test
+	public void verifyEqualsShouldNotThrowAssertionErrorWhenValuesSameAndObjectsEqualForInsignificantProperty()
+	        throws Exception {
+		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", new Factory<String>() {
+			@Override
+			public String create() {
+				return BeanFactory.NAME;
+			}
+		}).build();
+		verifier.verifyEqualsMethod(new BeanFactory(), configuration);
 	}
 }

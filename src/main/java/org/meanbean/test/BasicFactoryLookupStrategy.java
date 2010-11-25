@@ -139,6 +139,8 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 				Factory<?> dynamicFactory = new DynamicBeanFactory(beanInformationFactory.create(propertyType));
 				dynamicFactory.create(); // Test the factory before registering and returning
 				factoryCollection.addFactory(propertyType, dynamicFactory);
+				log.warn("Using DynamicBeanFactory for [" + propertyName + "] of type [" + propertyType.getName()
+				        + "]. Do you need to register a custom Factory?");
 				result = dynamicFactory;
 			} catch (Exception e) {
 				String message = "Failed to find suitable Factory for property=[" + propertyName + "] of type=["
