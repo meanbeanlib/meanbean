@@ -8,7 +8,7 @@ import org.meanbean.lang.Factory;
  * 
  * @author Graham Williamson
  */
-public interface FactoryLookupStrategy {
+interface FactoryLookupStrategy {
 
 	/**
 	 * Get a factory for the specified property that is of the specified type. <br/>

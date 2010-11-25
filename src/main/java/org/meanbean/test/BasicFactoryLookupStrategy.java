@@ -34,7 +34,7 @@ import org.meanbean.util.ValidationHelper;
  * 
  * @author Graham Williamson
  */
-public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
+class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/** Logging mechanism. */
 	private final Log log = LogFactory.getLog(BasicFactoryLookupStrategy.class);
