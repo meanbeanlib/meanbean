@@ -279,7 +279,7 @@ public class BasicBeanTester implements BeanTester {
 	 * 
 	 * @param beanClass
 	 *            The type to be tested.
-	 * @param configuration
+	 * @param customConfiguration
 	 *            The custom Configuration to be used when testing the specified beanClass type. This Configuration is
 	 *            only used for this individual test and will not be retained for future testing of this or any other
 	 *            type. To register a custom Configuration across multiple tests, use
@@ -324,8 +324,8 @@ public class BasicBeanTester implements BeanTester {
 	 * 
 	 * When a test is failed, an AssertionError is thrown.
 	 * 
-	 * @param beanClass
-	 *            The type to be tested.
+	 * @param beanInformation
+	 *            Information about the type to be tested.
 	 * @param configuration
 	 *            The custom Configuration to be used when testing the specified beanClass type. If no custom
 	 *            Configuration is required, pass <code>null</code> or use <code>testBean(Class<?>)</code> instead.

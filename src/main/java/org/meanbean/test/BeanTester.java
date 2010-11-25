@@ -120,7 +120,7 @@ public interface BeanTester extends RandomValueGeneratorProvider {
 	 * 
 	 * @param beanClass
 	 *            The type to be tested.
-	 * @param configuration
+	 * @param customConfiguration
 	 *            The custom Configuration to be used when testing the specified beanClass type. This Configuration is
 	 *            only used for this individual test and will not be retained for future testing of this or any other
 	 *            type. To register a custom Configuration across multiple tests, use
