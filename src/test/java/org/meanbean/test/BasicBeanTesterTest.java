@@ -31,9 +31,6 @@ public class BasicBeanTesterTest {
 	@Mock
 	private Configuration configuration;
 
-	@Mock
-	private BeanInformation beanInformation;
-
 	@Before
 	public void before() {
 		beanTester = new BasicBeanTester();

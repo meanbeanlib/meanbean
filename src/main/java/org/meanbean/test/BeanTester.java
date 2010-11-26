@@ -1,6 +1,6 @@
 package org.meanbean.test;
 
-import org.meanbean.factories.FactoryCollection;
+import org.meanbean.factories.FactoryCollectionProvider;
 import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
@@ -37,17 +37,10 @@ import org.meanbean.util.RandomValueGeneratorProvider;
  * 
  * @author Graham Williamson
  */
-public interface BeanTester extends RandomValueGeneratorProvider {
+public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollectionProvider {
 
 	/** Default number of times a bean should be tested. */
 	static final int TEST_ITERATIONS_PER_BEAN = 100;
-
-	/**
-	 * The collection of test data Factories with which you can register new Factories for custom Data Types.
-	 * 
-	 * @return The collection of test data Factories.
-	 */
-	FactoryCollection getFactoryCollection();
 
 	/**
 	 * Set the number of times each bean should be tested, globally. <br/>

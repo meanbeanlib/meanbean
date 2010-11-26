@@ -181,7 +181,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
 	 *            logic. The factory must create logically equivalent but different actual instances of the type upon
 	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
-	 * @param configuration
+	 * @param customConfiguration
 	 *            A custom Configuration to be used when testing to ignore the testing of named properties or use a
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
 	 *            individual test and will not be retained for future testing of this or any other type. If no custom
@@ -203,9 +203,9 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 *             If the test fails.
 	 */
 	@Override
-	public void verifyEqualsMethod(Factory<?> factory, Configuration configuration, String... insignificantProperties)
+	public void verifyEqualsMethod(Factory<?> factory, Configuration customConfiguration, String... insignificantProperties)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
-		log.debug("verifyEqualsMethod: Entering with factory=[" + factory + "], configuration=[" + configuration
+		log.debug("verifyEqualsMethod: Entering with factory=[" + factory + "], configuration=[" + customConfiguration
 		        + "] and insignificantProperties=[" + insignificantProperties + "].");
 		validationHelper.ensureExists("factory", "test equals", factory);
 		validationHelper.ensureExists("insignificantProperties", "test equals", insignificantProperties);
@@ -218,8 +218,8 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
 		properties = PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
 		for (PropertyInformation property : properties) {
-			if (configuration == null || !configuration.isIgnoredProperty(property.getName())) {
-				verifyEqualsMethodForProperty(factory, configuration, property,
+			if (customConfiguration == null || !customConfiguration.isIgnoredProperty(property.getName())) {
+				verifyEqualsMethodForProperty(factory, customConfiguration, property,
 				        !insignificantPropertyNames.contains(property.getName()));
 			} else {
 				log.debug("verifyEqualsMethod: Ignoring property=[" + property.getName() + "].");

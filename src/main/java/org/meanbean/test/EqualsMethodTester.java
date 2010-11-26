@@ -1,7 +1,7 @@
 package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformationException;
-import org.meanbean.factories.FactoryCollection;
+import org.meanbean.factories.FactoryCollectionProvider;
 import org.meanbean.lang.Factory;
 
 /**
@@ -42,7 +42,10 @@ import org.meanbean.lang.Factory;
  * 
  * @author Graham Williamson
  */
-public interface EqualsMethodTester {
+public interface EqualsMethodTester extends FactoryCollectionProvider {
+
+	/** Default number of times a type should be tested. */
+	static final int TEST_ITERATIONS_PER_TYPE = 100;
 
 	/**
 	 * Test that the equals logic implemented by the type the specified factory creates is correct by testing:
@@ -132,7 +135,7 @@ public interface EqualsMethodTester {
 	 *            equals logic implemented by the type is correct. The factory must create logically equivalent but
 	 *            different actual instances of the type upon each invocation of <code>create()</code> in order for the
 	 *            test to be meaningful and correct.
-	 * @param configuration
+	 * @param customConfiguration
 	 *            A custom Configuration to be used when testing to ignore the testing of named properties or use a
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
 	 *            individual test and will not be retained for future testing of this or any other type. If no custom
@@ -153,13 +156,6 @@ public interface EqualsMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	void testEqualsMethod(Factory<?> factory, Configuration configuration, String... insignificantProperties)
+	void testEqualsMethod(Factory<?> factory, Configuration customConfiguration, String... insignificantProperties)
 	        throws IllegalArgumentException, AssertionError;
-
-	/**
-	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
-	 * 
-	 * @return The collection of test data Factories.
-	 */
-	FactoryCollection getFactoryCollection();
 }

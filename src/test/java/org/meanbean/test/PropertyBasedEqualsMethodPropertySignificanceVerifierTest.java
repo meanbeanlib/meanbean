@@ -29,8 +29,6 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	private final PropertyBasedEqualsMethodPropertySignificanceVerifier verifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
 
-	private final BeanFactory beanFactory = new BeanFactory();
-
 	@Test
 	public void shouldGetFactoryRepository() throws Exception {
 		FactoryCollection factoryRepository = verifier.getFactoryCollection();

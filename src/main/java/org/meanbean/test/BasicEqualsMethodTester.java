@@ -86,8 +86,11 @@ import org.meanbean.util.ValidationHelper;
  */
 public class BasicEqualsMethodTester implements EqualsMethodTester {
 
+	/** The number of times each type is tested, unless a custom Configuration overrides this global setting. */
+	private final int iterations = EqualsMethodTester.TEST_ITERATIONS_PER_TYPE;
+
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(PropertyBasedEqualsMethodPropertySignificanceVerifier.class);
+	private final Log log = LogFactory.getLog(BasicEqualsMethodTester.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
@@ -189,7 +192,7 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	 *            equals logic implemented by the type is correct. The factory must create logically equivalent but
 	 *            different actual instances of the type upon each invocation of <code>create()</code> in order for the
 	 *            test to be meaningful and correct.
-	 * @param configuration
+	 * @param customConfiguration
 	 *            A custom Configuration to be used when testing to ignore the testing of named properties or use a
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
 	 *            individual test and will not be retained for future testing of this or any other type. If no custom
@@ -211,9 +214,10 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	 *             If the test fails.
 	 */
 	@Override
-	public void testEqualsMethod(Factory<?> factory, Configuration configuration, String... insignificantProperties)
-	        throws IllegalArgumentException, AssertionError {
-		log.debug("testEqualsMethod: Entering with factory=[" + factory + "].");
+	public void testEqualsMethod(Factory<?> factory, Configuration customConfiguration,
+	        String... insignificantProperties) throws IllegalArgumentException, AssertionError {
+		log.debug("testEqualsMethod: Entering with factory=[" + factory + "], customConfiguration=["
+		        + customConfiguration + "], insignificantProperties=[" + insignificantProperties + "].");
 		validationHelper.ensureExists("factory", "test equals method", factory);
 		validationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
 		contractVerifier.verifyEqualsReflexive(factory);
@@ -222,7 +226,16 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 		contractVerifier.verifyEqualsConsistent(factory);
 		contractVerifier.verifyEqualsNull(factory);
 		contractVerifier.verifyEqualsDifferentType(factory);
-		propertySignificanceVerifier.verifyEqualsMethod(factory, configuration, insignificantProperties);
+		// Override the standard number of iterations if need be
+		int iterations = this.iterations;
+		if ((customConfiguration != null) && (customConfiguration.hasIterationsOverride())) {
+			iterations = customConfiguration.getIterations();
+		}
+		// Test property significance 'iterations' times
+		for (int idx = 0; idx < iterations; idx++) {
+			log.debug("testEqualsMethod: Iteration [" + idx + "].");
+			propertySignificanceVerifier.verifyEqualsMethod(factory, customConfiguration, insignificantProperties);
+		}
 		log.debug("testEqualsMethod: Exiting - Equals is correct.");
 	}
 
