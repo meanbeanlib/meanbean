@@ -22,11 +22,15 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
+ * <p>
  * Concrete EqualsMethodPropertySignificanceVerifier implementation that affords functionality to verify that the equals
  * logic implemented by a type is affected in the expected manner when changes are made to the property values of
  * instances of the type. <br/>
+ * </p>
  * 
+ * <p>
  * That is:
+ * </p>
  * 
  * <ul>
  * <li>the equality of an object should not be affected by properties that are changed, but are not considered in the
@@ -36,15 +40,23 @@ import org.meanbean.util.ValidationHelper;
  * logic</li>
  * </ul>
  * 
+ * <p>
  * To do this, instances of the type are created using a specified factory, their properties are manipulated
  * individually and the equality is reassessed. <br/>
+ * </p>
  * 
+ * <p>
  * For the test to function correctly, you must specify all properties that are not used in the equals logic
  * (<quote>insignificant</quote>). <br/>
+ * </p>
  * 
+ * <p>
  * Use <code>verifyEquals()</code> to test a class that overrides <code>equals()</code>. <br/>
+ * </p>
  * 
+ * <p>
  * As an example, to verify the equals logic implemented by a class called MyClass do the following:
+ * </p>
  * 
  * <pre>
  * EqualsMethodPropertySignificanceVerifier verifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
@@ -59,13 +71,17 @@ import org.meanbean.util.ValidationHelper;
  * });
  * </pre>
  * 
+ * <p>
  * The Factory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
  * <code>equals()</code> and <code>hashCode()</code>. In the above example, there is only one property, name, which is
  * considered by MyClass's equals logic. <br/>
+ * </p>
  * 
+ * <p>
  * The following example tests the equals logic implemented by a class called MyComplexClass which has two properties:
  * firstName and lastName. Only firstName is considered in the equals logic. Therefore, lastName is specified in the
  * insignificantProperties varargs:
+ * </p>
  * 
  * <pre>
  * EqualsMethodPropertySignificanceVerifier verifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
@@ -105,16 +121,22 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	        randomValueGenerator);
 
 	/** Asserts that the equality logic is consistent for a significant property. */
-	private final ObjectPropertyEqualityConsistentAsserter significantAsserter = new SignificantObjectPropertyEqualityConsistentAsserter();
+	private final ObjectPropertyEqualityConsistentAsserter significantAsserter =
+	        new SignificantObjectPropertyEqualityConsistentAsserter();
 
 	/** Asserts that the equality logic is consistent for an insignificant property. */
-	private final ObjectPropertyEqualityConsistentAsserter insignificantAsserter = new InsignificantObjectPropertyEqualityConsistentAsserter();
+	private final ObjectPropertyEqualityConsistentAsserter insignificantAsserter =
+	        new InsignificantObjectPropertyEqualityConsistentAsserter();
 
 	/**
+	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
 	 * manner when changes are made to the property values of instances of the type. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * That is:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the equality of an object should not be affected by properties that are changed, but are not considered in
@@ -124,12 +146,18 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * To do this, instances of the type are created using the specified factory, their properties are manipulated
 	 * individually and the equality is reassessed. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
@@ -157,10 +185,14 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	}
 
 	/**
+	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
 	 * manner when changes are made to the property values of instances of the type. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * That is:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the equality of an object should not be affected by properties that are changed, but are not considered in
@@ -170,12 +202,18 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * To do this, instances of the type are created using the specified factory, their properties are manipulated
 	 * individually and the equality is reassessed. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
@@ -203,8 +241,9 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 *             If the test fails.
 	 */
 	@Override
-	public void verifyEqualsMethod(Factory<?> factory, Configuration customConfiguration, String... insignificantProperties)
-	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
+	public void verifyEqualsMethod(Factory<?> factory, Configuration customConfiguration,
+	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
+	        BeanTestException, AssertionError {
 		log.debug("verifyEqualsMethod: Entering with factory=[" + factory + "], configuration=[" + customConfiguration
 		        + "] and insignificantProperties=[" + insignificantProperties + "].");
 		validationHelper.ensureExists("factory", "test equals", factory);
@@ -228,10 +267,14 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	}
 
 	/**
+	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
 	 * manner when changes are made to the value of the specified property. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * That is:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the equality of an object should not be affected by properties that are changed, but are not considered in
@@ -241,12 +284,18 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * To do this, instances of the type are created using the specified factory, the specified property is manipulated
 	 * and the equality is reassessed. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * For the test to function correctly, you must specify whether the property is used in the equals logic. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
@@ -299,8 +348,9 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 				log.debug("verifyEqualsMethodForProperty: " + message + " Throw IllegalArgumentException.");
 				throw new IllegalArgumentException(message);
 			}
-			Factory<?> propertyFactory = factoryLookupStrategy.getFactory(propertyName,
-			        property.getWriteMethodParameterType(), configuration);
+			Factory<?> propertyFactory =
+			        factoryLookupStrategy.getFactory(propertyName, property.getWriteMethodParameterType(),
+			                configuration);
 			Object newVal = propertyFactory.create();
 			log.debug("verifyEqualsMethodForProperty: Original property value=[" + originalVal
 			        + "]; new property value=[" + newVal + "].");
@@ -314,8 +364,9 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 			if (e instanceof IllegalArgumentException) {
 				throw (IllegalArgumentException) e; // re-throw without wrapping
 			}
-			String message = "Failed to test property [" + property.getName() + "] due to Exception ["
-			        + e.getClass().getName() + "]: [" + e.getMessage() + "].";
+			String message =
+			        "Failed to test property [" + property.getName() + "] due to Exception [" + e.getClass().getName()
+			                + "]: [" + e.getMessage() + "].";
 			log.error("verifyEqualsMethodForProperty: " + message + " Throw BeanTestException.", e);
 			throw new BeanTestException(message, e);
 		}
