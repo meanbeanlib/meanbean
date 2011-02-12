@@ -3,13 +3,17 @@ package org.meanbean.test;
 import org.meanbean.lang.Factory;
 
 /**
+ * <p>
  * Defines a means of testing the correctness of the hashCode logic implemented by a type with respect to:
+ * </p>
  * 
  * <ul>
  * <li>the general hashCode contract</li>
  * </ul>
  * 
+ * <p>
  * The following is tested:
+ * </p>
  * 
  * <ul>
  * <li>that logically equivalent objects have the same hashCode</li>
@@ -24,7 +28,9 @@ import org.meanbean.lang.Factory;
 public interface HashCodeMethodTester {
 
 	/**
+	 * <p>
 	 * Test that the hashCode logic implemented by the type the specified factory creates is correct by testing:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>that logically equivalent objects have the same hashCode</li>
@@ -33,7 +39,9 @@ public interface HashCodeMethodTester {
 	 * consistent across multiple invocations, so long as the object does not change</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the

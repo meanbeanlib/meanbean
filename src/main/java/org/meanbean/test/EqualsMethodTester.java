@@ -5,7 +5,9 @@ import org.meanbean.factories.FactoryCollectionProvider;
 import org.meanbean.lang.Factory;
 
 /**
+ * <p>
  * Defines a means of testing the correctness of the equals logic implemented by a type with respect to:
+ * </p>
  * 
  * <ul>
  * <li>the general equals contract</li>
@@ -13,7 +15,9 @@ import org.meanbean.lang.Factory;
  * <li>the programmer's expectation of property significance in object equality</li>
  * </ul>
  * 
+ * <p>
  * The following is tested:
+ * </p>
  * 
  * <ul>
  * <li>the <strong>reflexive</strong> item of the equals contract - <code>x.equals(x)</code> should hold</li>
@@ -48,7 +52,9 @@ public interface EqualsMethodTester extends FactoryCollectionProvider {
 	static final int TEST_ITERATIONS_PER_TYPE = 100;
 
 	/**
+	 * <p>
 	 * Test that the equals logic implemented by the type the specified factory creates is correct by testing:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the <strong>reflexive</strong> item of the equals contract - <code>x.equals(x)</code> should hold</li>
@@ -75,7 +81,9 @@ public interface EqualsMethodTester extends FactoryCollectionProvider {
 	 * considered in the equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
@@ -101,7 +109,9 @@ public interface EqualsMethodTester extends FactoryCollectionProvider {
 	        BeanInformationException, BeanTestException, AssertionError;
 
 	/**
+	 * <p>
 	 * Test that the equals logic implemented by the type the specified factory creates is correct by testing:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the <strong>reflexive</strong> item of the equals contract - <code>x.equals(x)</code> should hold</li>
@@ -128,7 +138,9 @@ public interface EqualsMethodTester extends FactoryCollectionProvider {
 	 * considered in the equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
