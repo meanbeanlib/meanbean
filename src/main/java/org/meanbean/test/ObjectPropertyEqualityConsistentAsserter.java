@@ -8,12 +8,16 @@ package org.meanbean.test;
 interface ObjectPropertyEqualityConsistentAsserter {
 
 	/**
+	 * <p>
 	 * Assert that the equality of two logically equivalent objects is consistent when a change is made to a property of
 	 * one of the objects. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * It is permissible to check the equality of two objects when no change has been made to the named property. This
 	 * check is performed when logically equivalent objects are passed to the <i>originalPropertyValue</i> and
 	 * <i>newPropertyValue</i> arguments.
+	 * </p>
 	 * 
 	 * @param propertyName
 	 *            The name of the property that may have changed.
