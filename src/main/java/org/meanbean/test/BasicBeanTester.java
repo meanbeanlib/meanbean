@@ -23,13 +23,17 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
+ * <p>
  * Concrete BeanTester that affords a means of testing JavaBean objects with respect to:
+ * </p>
  * 
  * <ul>
  * <li>the correct functioning of the object's public getter and setter methods</li>
  * </ul>
  * 
+ * <p>
  * Each property is tested by:
+ * </p>
  * 
  * <ol>
  * <li>generating a random test value for the specific property type</li>
@@ -41,10 +45,14 @@ import org.meanbean.util.ValidationHelper;
  * <li>verifying that the value obtained from the getter method matches the value passed to the setter method</li>
  * </ol>
  * 
+ * <p>
  * Each property of a type is tested in turn. Each type is tested multiple times to reduce the risk of hard-coded values
  * within a getter or setter matching the random test values generated and the test failing to detect a bug. <br/>
+ * </p>
  * 
+ * <p>
  * Testing can be configured as follows:
+ * </p>
  * 
  * <ul>
  * <li>the number of times each type is tested can be configured</li>
@@ -54,7 +62,9 @@ import org.meanbean.util.ValidationHelper;
  * <li>custom Factories can be registered to create test values during testing</li>
  * </ul>
  * 
+ * <p>
  * See:
+ * </p>
  * 
  * <ul>
  * <li><code>setIterations(int)</code> to set the number of times any type is tested</li>
@@ -68,16 +78,22 @@ import org.meanbean.util.ValidationHelper;
  * testing</li>
  * </ul>
  * 
+ * <p>
  * The following example shows how to test a class MyClass:
+ * </p>
  * 
  * <pre>
  * BeanTester beanTester = new BasicBeanTester();
  * beanTester.testBean(MyClass.class);
  * </pre>
  * 
+ * <p>
  * If the test fails, an AssertionError is thrown. <br/>
+ * </p>
  * 
+ * <p>
  * To ignore a property (say, lastName) when testing a class:
+ * </p>
  * 
  * <pre>
  * BeanTester beanTester = new BasicBeanTester();
@@ -139,9 +155,13 @@ public class BasicBeanTester implements BeanTester {
 	}
 
 	/**
+	 * <p>
 	 * Set the number of times each bean should be tested, globally. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * Note: A custom Configuration can override this global test setting.
+	 * </p>
 	 * 
 	 * @param iterations
 	 *            The number of times each bean should be tested. This value must be at least 1.
@@ -161,9 +181,13 @@ public class BasicBeanTester implements BeanTester {
 	}
 
 	/**
+	 * <p>
 	 * Get the number of times each bean should be tested. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * Note: A custom Configuration can override this global setting.
+	 * </p>
 	 * 
 	 * @return The number of times each bean should be tested. This value will be at least 1.
 	 */
@@ -235,14 +259,22 @@ public class BasicBeanTester implements BeanTester {
 	}
 
 	/**
-	 * Test the type specified by the beanClass parameter. <br />
+	 * <p>
+	 * Test the type specified by the beanClass parameter.
+	 * </p>
 	 * 
+	 * <p>
 	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
-	 * getters and setters function correctly. <br />
+	 * getters and setters function correctly.
+	 * </p>
 	 * 
-	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * <p>
+	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures.
+	 * </p>
 	 * 
+	 * <p>
 	 * When a test is failed, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param beanClass
 	 *            The type to be tested.
@@ -267,15 +299,23 @@ public class BasicBeanTester implements BeanTester {
 	}
 
 	/**
+	 * <p>
 	 * Test the type specified by the beanClass parameter, using the custom Configuration provided as an override to any
 	 * global configuration settings. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
 	 * getters and setters function correctly. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * When a test is failed, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param beanClass
 	 *            The type to be tested.
@@ -315,14 +355,22 @@ public class BasicBeanTester implements BeanTester {
 	}
 
 	/**
+	 * <p>
 	 * Test the type specified by the beanInformation parameter using the specified Configuration. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
 	 * getters and setters function correctly. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * When a test is failed, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param beanInformation
 	 *            Information about the type to be tested.
@@ -345,16 +393,17 @@ public class BasicBeanTester implements BeanTester {
 		// Get all properties of the bean
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
 		// Get just the properties of the bean that are readable and writable
-		Collection<PropertyInformation> readableWritableProperties = PropertyInformationFilter.filter(properties,
-		        PropertyVisibility.READABLE_WRITABLE);
+		Collection<PropertyInformation> readableWritableProperties =
+		        PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
 		// Instantiate
 		Object bean = null;
 		try {
 			Factory<Object> beanFactory = new DynamicBeanFactory(beanInformation);
 			bean = beanFactory.create();
 		} catch (Exception e) {
-			String message = "Cannot test bean [" + beanInformation.getBeanClass().getName()
-			        + "]. Failed to instantiate an instance of the bean.";
+			String message =
+			        "Cannot test bean [" + beanInformation.getBeanClass().getName()
+			                + "]. Failed to instantiate an instance of the bean.";
 			log.error("testBean: " + message + " Throw BeanTestException.", e);
 			throw new BeanTestException(message, e);
 		}
@@ -365,15 +414,18 @@ public class BasicBeanTester implements BeanTester {
 				EqualityTest equalityTest = EqualityTest.LOGICAL;
 				Object testValue = null;
 				try {
-					Factory<?> valueFactory = factoryLookupStrategy.getFactory(property.getName(),
-					        property.getWriteMethodParameterType(), configuration);
+					Factory<?> valueFactory =
+					        factoryLookupStrategy.getFactory(property.getName(),
+					                property.getWriteMethodParameterType(), configuration);
 					testValue = valueFactory.create();
 					if (valueFactory instanceof DynamicBeanFactory) {
 						equalityTest = EqualityTest.ABSOLUTE;
 					}
 				} catch (Exception e) {
-					String message = "Cannot test bean [" + beanInformation.getBeanClass().getName()
-					        + "]. Failed to instantiate a test value for property [" + property.getName() + "].";
+					String message =
+					        "Cannot test bean [" + beanInformation.getBeanClass().getName()
+					                + "]. Failed to instantiate a test value for property [" + property.getName()
+					                + "].";
 					log.error("testBean: " + message + " Throw BeanTestException.", e);
 					throw new BeanTestException(message, e);
 				}
