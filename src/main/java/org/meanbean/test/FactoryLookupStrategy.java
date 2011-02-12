@@ -11,10 +11,14 @@ import org.meanbean.lang.Factory;
 interface FactoryLookupStrategy {
 
 	/**
+	 * <p>
 	 * Get a factory for the specified property that is of the specified type. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If ultimately a suitable Factory cannot be found or created, a NoSuchFactoryException detailing the problem is
 	 * thrown.
+	 * </p>
 	 * 
 	 * @param propertyName
 	 *            The name of the property.
