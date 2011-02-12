@@ -4,13 +4,17 @@ import org.meanbean.factories.FactoryCollectionProvider;
 import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
+ * <p>
  * Defines a means of testing JavaBean objects with respect to:
+ * </p>
  * 
  * <ul>
  * <li>the correct functioning of the object's public getter and setter methods</li>
  * </ul>
  * 
+ * <p>
  * Each property is tested by:
+ * </p>
  * 
  * <ol>
  * <li>generating a random test value for the specific property type</li>
@@ -22,10 +26,14 @@ import org.meanbean.util.RandomValueGeneratorProvider;
  * <li>verifying that the value obtained from the getter method matches the value passed to the setter method</li>
  * </ol>
  * 
+ * <p>
  * Each property of a type is tested in turn. Each type is tested multiple times to reduce the risk of hard-coded values
  * within a getter or setter matching the random test values generated and the test failing to detect a bug. <br/>
+ * </p>
  * 
+ * <p>
  * Testing can be configured as follows:
+ * </p>
  * 
  * <ul>
  * <li>the number of times each type is tested can be configured</li>
@@ -43,9 +51,13 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	static final int TEST_ITERATIONS_PER_BEAN = 100;
 
 	/**
+	 * <p>
 	 * Set the number of times each bean should be tested, globally. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * Note: A custom Configuration can override this global test setting.
+	 * </p>
 	 * 
 	 * @param iterations
 	 *            The number of times each bean should be tested. This value must be at least 1.
@@ -56,9 +68,13 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	void setIterations(int iterations) throws IllegalArgumentException;
 
 	/**
+	 * <p>
 	 * Get the number of times each bean should be tested. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * Note: A custom Configuration can override this global setting.
+	 * </p>
 	 * 
 	 * @return The number of times each bean should be tested. This value will be at least 1.
 	 */
@@ -79,14 +95,22 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException;
 
 	/**
+	 * <p>
 	 * Test the type specified by the beanClass parameter. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
 	 * getters and setters function correctly. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * When a test is failed, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param beanClass
 	 *            The type to be tested.
@@ -101,15 +125,23 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException;
 
 	/**
+	 * <p>
 	 * Test the type specified by the beanClass parameter, using the custom Configuration provided as an override to any
 	 * global configuration settings. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
 	 * getters and setters function correctly. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * </p>
 	 * 
+	 * <p>
 	 * When a test is failed, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param beanClass
 	 *            The type to be tested.
