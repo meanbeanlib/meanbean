@@ -8,14 +8,18 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
+ * <p>
  * Concrete implementation of the HashCodeMethodTester that provides a means of testing the correctness of the hashCode
  * logic implemented by a type with respect to:
+ * </p>
  * 
  * <ul>
  * <li>the general hashCode contract</li>
  * </ul>
  * 
+ * <p>
  * The following is tested:
+ * </p>
  * 
  * <ul>
  * <li>that logically equivalent objects have the same hashCode</li>
@@ -24,10 +28,14 @@ import org.meanbean.util.ValidationHelper;
  * consistent across multiple invocations, so long as the object does not change</li>
  * </ul>
  * 
+ * <p>
  * Use the tests provided by this class (namely, <code>testHashCode()</code>) to test a class that overrides
  * <code>hashCode()</code> and <code>equals()</code>.
+ * </p>
  * 
+ * <p>
  * As an example, to test the hashCode logic implemented by a class called MyClass do the following:
+ * </p>
  * 
  * <pre>
  * HashCodeMethodTester tester = new BasicHashCodeMethodTester();
@@ -42,9 +50,11 @@ import org.meanbean.util.ValidationHelper;
  * });
  * </pre>
  * 
+ * <p>
  * The Factory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
  * <code>equals()</code> and <code>hashCode()</code>. In the above example, there is only one property, name, which is
  * considered by MyClass's hashCode logic.
+ * </p>
  * 
  * @author Graham Williamson
  */
@@ -57,7 +67,9 @@ public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
 
 	/**
+	 * <p>
 	 * Test that the hashCode logic implemented by the type the specified factory creates is correct by testing:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>that logically equivalent objects have the same hashCode</li>
@@ -66,7 +78,9 @@ public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 	 * consistent across multiple invocations, so long as the object does not change</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
@@ -90,10 +104,14 @@ public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 	}
 
 	/**
+	 * <p>
 	 * Test that the hashCode logic implemented by the type the specified factory creates returns equal hashCodes for
 	 * logically equivalent objects. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
@@ -116,7 +134,8 @@ public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 		validationHelper.ensureExists("factory-created object", "test hash codes equal for equal objects", x);
 		validationHelper.ensureExists("factory-created object", "test hash codes equal for equal objects", y);
 		if (!x.equals(y)) {
-			String message = "Cannot test hash codes equal for equal objects if factory does not create logically equivalent objects.";
+			String message =
+			        "Cannot test hash codes equal for equal objects if factory does not create logically equivalent objects.";
 			log.debug("testHashCodesEqual: " + message + " Throw IllegalArgumentException.");
 			throw new IllegalArgumentException(message);
 		}
@@ -128,10 +147,14 @@ public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 	}
 
 	/**
+	 * <p>
 	 * Test that the hashCode logic implemented by the type the specified factory creates is consistent with the
 	 * <strong>consistent</strong> item of the hashCode contract. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the

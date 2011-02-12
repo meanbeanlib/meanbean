@@ -9,8 +9,10 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
+ * <p>
  * Concrete implementation of the EqualsMethodTester that provides a means of testing the correctness of the equals
  * logic implemented by a type with respect to:
+ * </p>
  * 
  * <ul>
  * <li>the general equals contract</li>
@@ -18,7 +20,9 @@ import org.meanbean.util.ValidationHelper;
  * <li>the programmer's expectation of property significance in object equality</li>
  * </ul>
  * 
+ * <p>
  * The following is tested:
+ * </p>
  * 
  * <ul>
  * <li>the <strong>reflexive</strong> item of the equals contract - <code>x.equals(x)</code> should hold</li>
@@ -45,7 +49,9 @@ import org.meanbean.util.ValidationHelper;
  * the equality logic</li>
  * </ul>
  * 
+ * <p>
  * As an example, to test the equals logic implemented by a class called MyClass do the following:
+ * </p>
  * 
  * <pre>
  * EqualsMethodTester tester = new BasicEqualsMethodTester();
@@ -60,13 +66,17 @@ import org.meanbean.util.ValidationHelper;
  * });
  * </pre>
  * 
+ * <p>
  * The Factory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
  * <code>equals()</code> and <code>hashCode()</code>. In the above example, there is only one property, name, which is
  * considered by MyClass's equals logic. <br/>
+ * </p>
  * 
+ * <p>
  * The following example tests the equals logic implemented by a class called MyComplexClass which has two properties:
  * firstName and lastName. Only firstName is considered in the equals logic. Therefore, lastName is specified in the
  * insignificantProperties varargs:
+ * </p>
  * 
  * <pre>
  * EqualsMethodTester tester = new BasicEqualsMethodTester();
@@ -99,10 +109,13 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	private final EqualsMethodContractVerifier contractVerifier = new EqualsMethodContractVerifier();
 
 	/** The verifier to which property significance verification is delegated. */
-	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier =
+	        new PropertyBasedEqualsMethodPropertySignificanceVerifier();
 
 	/**
+	 * <p>
 	 * Test that the equals logic implemented by the type the specified factory creates is correct by testing:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the <strong>reflexive</strong> item of the equals contract - <code>x.equals(x)</code> should hold</li>
@@ -129,7 +142,9 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	 * considered in the equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
@@ -158,7 +173,9 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	}
 
 	/**
+	 * <p>
 	 * Test that the equals logic implemented by the type the specified factory creates is correct by testing:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the <strong>reflexive</strong> item of the equals contract - <code>x.equals(x)</code> should hold</li>
@@ -185,7 +202,9 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	 * considered in the equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the

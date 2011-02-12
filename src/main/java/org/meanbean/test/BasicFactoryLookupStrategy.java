@@ -14,7 +14,9 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
+ * <p>
  * Concrete FactoryLookupStrategy that implements the following Factory lookup algorithm:
+ * </p>
  * 
  * <ol>
  * <li>If a Configuration is provided, this is first inspected for a property-specific Factory.</li>
@@ -73,24 +75,38 @@ class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	}
 
 	/**
+	 * <p>
 	 * Get a factory for the specified property that is of the specified type. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If a Configuration is provided, this is first inspected for a property-specific Factory. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If no Configuration is provided or there is no property-specific Factory in the Configuration, the
 	 * FactoryCollection is then searched for a Factory suitable for the type of the property. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If the FactoryCollection does not contain a suitable Factory, an attempt is made to create a Factory for the
-	 * type. <br/>
+	 * type.
+	 * </p>
 	 * 
+	 * <p>
 	 * For example, if the type is an Enum, then a generic Enum Factory will be created for the Enum's constants,
 	 * registered in the Factory Collection for future use, and returned from this method. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * As a last resort, an attempt is made create a Factory that creates objects of the custom data type. If
 	 * successful, this Factory is registered in the Factory Collection for future use, and return from this method. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If ultimately a suitable Factory cannot be found or created, a NoSuchFactoryException detailing the problem is
 	 * thrown.
+	 * </p>
 	 * 
 	 * @param propertyName
 	 *            The name of the property.
@@ -143,8 +159,9 @@ class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 				        + "]. Do you need to register a custom Factory?");
 				result = dynamicFactory;
 			} catch (Exception e) {
-				String message = "Failed to find suitable Factory for property=[" + propertyName + "] of type=["
-				        + propertyType + "]. Please register a custom Factory.";
+				String message =
+				        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
+				                + "]. Please register a custom Factory.";
 				log.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
 				throw new NoSuchFactoryException(message, e);
 			}
