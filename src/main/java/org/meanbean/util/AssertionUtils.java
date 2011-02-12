@@ -5,7 +5,7 @@ package org.meanbean.util;
  * 
  * @author Graham Williamson
  */
-public class AssertionUtils {
+public final class AssertionUtils {
 
 	/**
 	 * Construct a new AssertionUtils.
