@@ -39,6 +39,15 @@ import org.meanbean.util.RandomValueGeneratorProvider;
  */
 public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 
+	/**
+	 * Initialize the plugin, adding Factories to the FactoryCollection.
+	 * 
+	 * @param factoryCollection
+	 *            A FactoryCollection that Factory objects can be added to.
+	 * @param randomValueGeneratorProvider
+	 *            A RandomValueGeneratorProvider that provides access to a RandomValueGenerator that can be used by
+	 *            Factory objects.
+	 */
 	@Override
 	public void initialize(FactoryCollection factoryCollection,
 	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
@@ -49,11 +58,12 @@ public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 		ArrayListFactory<String> arrayListFactory = new ArrayListFactory<String>(randomValueGenerator, stringFactory);
 		factoryCollection.addFactory(List.class, arrayListFactory);
 		factoryCollection.addFactory(ArrayList.class, arrayListFactory);
-		LinkedListFactory<String> linkedListFactory = new LinkedListFactory<String>(randomValueGenerator, stringFactory);
+		LinkedListFactory<String> linkedListFactory =
+		        new LinkedListFactory<String>(randomValueGenerator, stringFactory);
 		factoryCollection.addFactory(LinkedList.class, linkedListFactory);
 		// Maps
-		HashMapFactory<String, Long> hashMapFactory = new HashMapFactory<String, Long>(randomValueGenerator,
-		        stringFactory, longFactory);
+		HashMapFactory<String, Long> hashMapFactory =
+		        new HashMapFactory<String, Long>(randomValueGenerator, stringFactory, longFactory);
 		factoryCollection.addFactory(Map.class, hashMapFactory);
 		factoryCollection.addFactory(HashMap.class, hashMapFactory);
 		factoryCollection.addFactory(IdentityHashMap.class, new IdentityHashMapFactory<String, Long>(
