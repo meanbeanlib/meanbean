@@ -22,18 +22,28 @@ import org.meanbean.util.RandomValueGeneratorProvider;
  */
 public class ObjectFactoryPlugin implements FactoryCollectionPlugin {
 
+	/**
+	 * Initialize the plugin, adding Factories to the FactoryCollection.
+	 * 
+	 * @param factoryCollection
+	 *            A FactoryCollection that Factory objects can be added to.
+	 * @param randomValueGeneratorProvider
+	 *            A RandomValueGeneratorProvider that provides access to a RandomValueGenerator that can be used by
+	 *            Factory objects.
+	 */
 	@Override
-	public void initialize(FactoryCollection factoryCollection, RandomValueGeneratorProvider randomValueGeneratorProvider) {
+	public void initialize(FactoryCollection factoryCollection,
+	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
 		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
 		factoryCollection.addFactory(Boolean.class, new BooleanFactory(randomValueGenerator));
-        factoryCollection.addFactory(Byte.class, new ByteFactory(randomValueGenerator));
-        factoryCollection.addFactory(Short.class, new ShortFactory(randomValueGenerator));
-        factoryCollection.addFactory(Integer.class, new IntegerFactory(randomValueGenerator));
-        factoryCollection.addFactory(Long.class, new LongFactory(randomValueGenerator));
-        factoryCollection.addFactory(Float.class, new FloatFactory(randomValueGenerator));
-        factoryCollection.addFactory(Double.class, new DoubleFactory(randomValueGenerator));
-        factoryCollection.addFactory(Character.class, new CharacterFactory(randomValueGenerator));
-        factoryCollection.addFactory(String.class, new StringFactory(randomValueGenerator));
-        factoryCollection.addFactory(Date.class, new DateFactory(randomValueGenerator));
+		factoryCollection.addFactory(Byte.class, new ByteFactory(randomValueGenerator));
+		factoryCollection.addFactory(Short.class, new ShortFactory(randomValueGenerator));
+		factoryCollection.addFactory(Integer.class, new IntegerFactory(randomValueGenerator));
+		factoryCollection.addFactory(Long.class, new LongFactory(randomValueGenerator));
+		factoryCollection.addFactory(Float.class, new FloatFactory(randomValueGenerator));
+		factoryCollection.addFactory(Double.class, new DoubleFactory(randomValueGenerator));
+		factoryCollection.addFactory(Character.class, new CharacterFactory(randomValueGenerator));
+		factoryCollection.addFactory(String.class, new StringFactory(randomValueGenerator));
+		factoryCollection.addFactory(Date.class, new DateFactory(randomValueGenerator));
 	}
 }
