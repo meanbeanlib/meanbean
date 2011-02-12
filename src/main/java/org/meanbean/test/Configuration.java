@@ -12,17 +12,26 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
+ * <p>
  * Type-specific (i.e. JavaBean-specific) test configuration used to customize testing for a single type. Configuration
  * objects are only required when you want to customize the testing behaviour. Most often the standard testing behaviour
  * will be sufficient. <br/>
+ * </p>
  * 
+ * <p>
  * Configuration objects should be created using a <code>ConfigurationBuilder</code>. <br/>
+ * </p>
  * 
+ * <p>
  * Configuration objects can be passed to <code>BeanTester.test(Class<?>,Configuration);</code> for use as a one-off, or
  * registered with the BeanTester for use thereafter:
  * <code>BeanTester.addCustomConfiguration(Class<?>,Configuration);</code>. <br/>
+ * </p>
  * 
+ * <p>
  * The following can be configured/customized:
+ * </p>
+ * 
  * <ul>
  * <li>The number of times a type is tested.</li>
  * <li>Whether a property is tested or not, by specifying properties of a type that should be ignored.</li>
@@ -107,10 +116,14 @@ public class Configuration implements Serializable {
 	}
 
 	/**
+	 * <p>
 	 * Does the specified property have an override Factory?
+	 * </p>
 	 * 
+	 * <p>
 	 * That is, has a Factory been registered within this Configuration as an override to standard Factory selection for
 	 * the specified property?
+	 * </p>
 	 * 
 	 * @param property
 	 *            The name of the property.
@@ -126,9 +139,13 @@ public class Configuration implements Serializable {
 	}
 
 	/**
+	 * <p>
 	 * Get the override Factory for the specified property, if one has been registered in this Configuration.
+	 * </p>
 	 * 
+	 * <p>
 	 * The returned Factory will be used over the standard Factory for the property.
+	 * </p>
 	 * 
 	 * @param property
 	 *            The name of the property.
