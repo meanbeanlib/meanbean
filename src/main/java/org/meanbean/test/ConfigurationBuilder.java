@@ -27,13 +27,14 @@ public class ConfigurationBuilder {
 	private Integer iterations;
 
 	/** Any properties of a type that should not be tested. Contains property names. */
-	private Set<String> ignoredProperties = Collections.synchronizedSet(new HashSet<String>());
+	private final Set<String> ignoredProperties = Collections.synchronizedSet(new HashSet<String>());
 
 	/**
 	 * Factories that should be used for specific properties, overriding standard Factory selection. Keyed by property
 	 * name.
 	 */
-	private Map<String, Factory<?>> overrideFactories = Collections.synchronizedMap(new HashMap<String, Factory<?>>());
+	private final Map<String, Factory<?>> overrideFactories = Collections
+	        .synchronizedMap(new HashMap<String, Factory<?>>());
 
 	/** Logging mechanism. */
 	private final Log log = LogFactory.getLog(ConfigurationBuilder.class);
@@ -120,8 +121,9 @@ public class ConfigurationBuilder {
 	 */
 	public Configuration build() {
 		log.debug("build: entering.");
-		Configuration configuration = new Configuration(iterations, Collections.unmodifiableSet(ignoredProperties),
-		        Collections.unmodifiableMap(overrideFactories));
+		Configuration configuration =
+		        new Configuration(iterations, Collections.unmodifiableSet(ignoredProperties),
+		                Collections.unmodifiableMap(overrideFactories));
 		Configuration result = configuration;
 		log.debug("build: exiting returning [" + result + "].");
 		return result;
@@ -140,5 +142,4 @@ public class ConfigurationBuilder {
 		        .append("ignoredProperties", ignoredProperties).append("overrideFactories", overrideFactories)
 		        .toString();
 	}
-
 }
