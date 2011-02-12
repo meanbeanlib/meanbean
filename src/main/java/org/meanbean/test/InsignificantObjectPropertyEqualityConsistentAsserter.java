@@ -7,15 +7,21 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
+ * <p>
  * Concrete ObjectPropertyEqualityConsistentAsserter that provides a means of verifying whether the equality of an
  * object and its property is consistent. <br/>
+ * </p>
  * 
+ * <p>
  * This object is specific to testing properties that are "insignificant" in the implemented equals logic of a given
  * object. Insignificant properties are those that are not considered by the equals logic. Whether a property is
  * significant or not changes the test's expectation of whether the property will affect the equality of an object. <br/>
+ * </p>
  * 
+ * <p>
  * Insignificant properties <strong>should not</strong> affect the equality of an object if any of the properties have
  * changed.
+ * </p>
  * 
  * @author Graham Williamson
  */
@@ -28,12 +34,16 @@ class InsignificantObjectPropertyEqualityConsistentAsserter implements ObjectPro
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
 
 	/**
+	 * <p>
 	 * Assert that the equality of two logically equivalent objects is consistent when a change is made to a property of
 	 * one of the objects. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * It is permissible to check the equality of two objects when no change has been made to the named property. This
 	 * check is performed when logically equivalent objects are passed to the <i>originalPropertyValue</i> and
 	 * <i>newPropertyValue</i> arguments.
+	 * </p>
 	 * 
 	 * @param propertyName
 	 *            The name of the property that may have changed.
@@ -66,17 +76,20 @@ class InsignificantObjectPropertyEqualityConsistentAsserter implements ObjectPro
 		validationHelper.ensureExists("newPropertyValue", "assert consistency of equals", newPropertyValue);
 		boolean newPropertyValueEqualsOriginalPropertyValue = newPropertyValue.equals(originalPropertyValue);
 		boolean originalObjectEqualsModifiedObject = originalObject.equals(modifiedObject);
-		String variableString = "(x." + propertyName + "=[" + originalPropertyValue + "] vs y." + propertyName + "=["
-		        + newPropertyValue + "])";
+		String variableString =
+		        "(x." + propertyName + "=[" + originalPropertyValue + "] vs y." + propertyName + "=["
+		                + newPropertyValue + "])";
 		if (!originalObjectEqualsModifiedObject && !newPropertyValueEqualsOriginalPropertyValue) {
-			String message = "objects that differ due to supposedly insignificant property [" + propertyName
-			        + "] where considered unequal. " + variableString + ". is property [" + propertyName
-			        + "] actually significant?";
+			String message =
+			        "objects that differ due to supposedly insignificant property [" + propertyName
+			                + "] where considered unequal. " + variableString + ". is property [" + propertyName
+			                + "] actually significant?";
 			log.debug("verifyEqualsMethodForProperty: " + message);
 			AssertionUtils.fail(message);
 		} else if (!originalObjectEqualsModifiedObject && newPropertyValueEqualsOriginalPropertyValue) {
-			String message = "objects that should be equal were considered unequal when testing insignificant "
-			        + "property [" + propertyName + "]. " + variableString + ". is equals incorrect?";
+			String message =
+			        "objects that should be equal were considered unequal when testing insignificant " + "property ["
+			                + propertyName + "]. " + variableString + ". is equals incorrect?";
 			log.debug("verifyEqualsMethodForProperty: " + message);
 			AssertionUtils.fail(message);
 		}
