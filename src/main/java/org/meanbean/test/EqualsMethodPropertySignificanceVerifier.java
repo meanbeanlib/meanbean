@@ -5,10 +5,14 @@ import org.meanbean.factories.FactoryCollectionProvider;
 import org.meanbean.lang.Factory;
 
 /**
+ * <p>
  * Defines a means of verifying that the equals logic implemented by a type is affected in the expected manner when
  * changes are made to the property values of instances of the type. <br/>
+ * </p>
  * 
+ * <p>
  * That is:
+ * </p>
  * 
  * <ul>
  * <li>the equality of an object should not be affected by properties that are changed, but are not considered in the
@@ -23,10 +27,14 @@ import org.meanbean.lang.Factory;
 interface EqualsMethodPropertySignificanceVerifier extends FactoryCollectionProvider {
 
 	/**
+	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
 	 * manner when changes are made to the property values of instances of the type. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * That is:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the equality of an object should not be affected by properties that are changed, but are not considered in
@@ -36,12 +44,18 @@ interface EqualsMethodPropertySignificanceVerifier extends FactoryCollectionProv
 	 * equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * To do this, instances of the type are created using the specified factory, their properties are manipulated
 	 * individually and the equality is reassessed. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
@@ -66,10 +80,14 @@ interface EqualsMethodPropertySignificanceVerifier extends FactoryCollectionProv
 	        BeanInformationException, BeanTestException, AssertionError;
 
 	/**
+	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
 	 * manner when changes are made to the property values of instances of the type. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * That is:
+	 * </p>
 	 * 
 	 * <ul>
 	 * <li>the equality of an object should not be affected by properties that are changed, but are not considered in
@@ -79,12 +97,18 @@ interface EqualsMethodPropertySignificanceVerifier extends FactoryCollectionProv
 	 * equality logic</li>
 	 * </ul>
 	 * 
+	 * <p>
 	 * To do this, instances of the type are created using the specified factory, their properties are manipulated
 	 * individually and the equality is reassessed. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+	 * </p>
 	 * 
+	 * <p>
 	 * If the test fails, an AssertionError is thrown.
+	 * </p>
 	 * 
 	 * @param factory
 	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
