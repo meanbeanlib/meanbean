@@ -21,11 +21,16 @@ public class BeanPropertyTester {
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
 
 	/**
+	 * <p>
 	 * Test the property specified by the propertyInformation parameter on the specified bean object using the specified
-	 * testValue. <br/>
+	 * testValue.
+	 * </p>
+	 * 
+	 * <p>
 	 * The test is performed by setting the property of the specified bean to the specified testValue via the property
 	 * setter method, then getting the value of the property via the property getter method and asserting that the
 	 * obtained value matches the testValue. This tests the getter and setter methods of the property.
+	 * </p>
 	 * 
 	 * @param bean
 	 *            The object the property should be tested on.
@@ -67,16 +72,18 @@ public class BeanPropertyTester {
 			property.getWriteMethod().invoke(bean, testValue);
 			Object readMethodOutput = property.getReadMethod().invoke(bean);
 			if (!equalityTest.test(testValue, readMethodOutput)) {
-				String message = "Property [" + propertyName + "] getter did not return test value. Expected ["
-				        + testValue + "] but getter returned [" + readMethodOutput + "].";
+				String message =
+				        "Property [" + propertyName + "] getter did not return test value. Expected [" + testValue
+				                + "] but getter returned [" + readMethodOutput + "].";
 				log.info("testProperty: " + message);
 				AssertionUtils.fail(message);
 			} else {
 				log.debug("testProperty: Expected [" + testValue + "] == getter returned [" + readMethodOutput + "].");
 			}
 		} catch (Exception e) {
-			String message = "Failed to test property [" + propertyName + "] due to Exception ["
-			        + e.getClass().getName() + "]: [" + e.getMessage() + "].";
+			String message =
+			        "Failed to test property [" + propertyName + "] due to Exception [" + e.getClass().getName()
+			                + "]: [" + e.getMessage() + "].";
 			log.error("testProperty: " + message + " Throw BeanTestException.", e);
 			throw new BeanTestException(message, e);
 		}
