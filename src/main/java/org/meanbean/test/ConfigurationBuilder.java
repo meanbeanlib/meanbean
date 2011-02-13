@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meanbean.lang.Factory;
@@ -136,10 +134,12 @@ public class ConfigurationBuilder {
 	 */
 	@Override
 	public String toString() {
-		Set<String> ignoredProperties = new TreeSet<String>(this.ignoredProperties);
-		Map<String, Factory<?>> overrideFactories = new TreeMap<String, Factory<?>>(this.overrideFactories);
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("iterations", iterations)
-		        .append("ignoredProperties", ignoredProperties).append("overrideFactories", overrideFactories)
-		        .toString();
+		StringBuilder str = new StringBuilder();
+		str.append("ConfigurationBuilder[");
+		str.append("iterations=").append(iterations).append(",");
+		str.append("ignoredProperties=").append(new TreeSet<String>(this.ignoredProperties)).append(",");
+		str.append("overrideFactories=").append(new TreeMap<String, Factory<?>>(this.overrideFactories));
+		str.append("]");
+		return str.toString();
 	}
 }

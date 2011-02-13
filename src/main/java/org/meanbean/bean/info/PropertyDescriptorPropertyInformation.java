@@ -3,9 +3,6 @@ package org.meanbean.bean.info;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 /**
  * Concrete implementation of PropertyInformation that provides information about a JavaBean property based on a
  * PropertyDescriptor.
@@ -141,9 +138,15 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 */
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("name", name)
-		        .append("isReadable", isReadable()).append("readMethod", getReadMethod())
-		        .append("isWritable", isWritable()).append("writeMethod", getWriteMethod())
-		        .append("isReadableWritable", isReadableWritable()).toString();
+		StringBuilder str = new StringBuilder();
+		str.append("PropertyDescriptorPropertyInformation[");
+		str.append("name=").append(name).append(",");
+		str.append("isReadable=").append(isReadable()).append(",");
+		str.append("readMethod=").append(getReadMethod()).append(",");
+		str.append("isWritable=").append(isWritable()).append(",");
+		str.append("writeMethod=").append(getWriteMethod()).append(",");
+		str.append("isReadableWritable=").append(isReadableWritable());
+		str.append("]");
+		return str.toString();
 	}
 }

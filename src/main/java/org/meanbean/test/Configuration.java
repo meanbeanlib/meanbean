@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
@@ -168,8 +166,12 @@ public class Configuration implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).append("iterations", iterations)
-		        .append("ignoredProperties", ignoredProperties).append("overrideFactories", overrideFactories)
-		        .toString();
+		StringBuilder str = new StringBuilder();
+		str.append("Configuration[");
+		str.append("iterations=").append(iterations).append(",");
+		str.append("ignoredProperties=").append(ignoredProperties).append(",");
+		str.append("overrideFactories=").append(overrideFactories);
+		str.append("]");
+		return str.toString();
 	}
 }
