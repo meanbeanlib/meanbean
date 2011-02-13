@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.meanbean</groupId>
 	<artifactId>meanbean</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>meanbean</name>
 	<url>http://meanbean.org</url>
@@ -52,17 +52,16 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <stylesheetfile>${basedir}/css/stylesheet.css</stylesheetfile>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
-			</plugin>
-		</plugins>
-	</reporting>
 	<dependencies>
 		<dependency>
 			<groupId>commons-logging</groupId>
