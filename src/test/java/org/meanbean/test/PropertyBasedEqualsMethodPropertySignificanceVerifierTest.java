@@ -3,9 +3,15 @@ package org.meanbean.test;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+
+import java.util.Arrays;
 
 import org.junit.Test;
+import org.meanbean.bean.info.BeanInformation;
+import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.beans.Bean;
@@ -20,6 +26,7 @@ import org.meanbean.test.beans.FieldDrivenEqualsBean;
 import org.meanbean.test.beans.FieldDrivenEqualsBeanFactory;
 import org.meanbean.test.beans.IncrementalStringFactory;
 import org.meanbean.test.beans.InvocationCountingFactoryWrapper;
+import org.meanbean.test.beans.MultiPropertyBean;
 import org.meanbean.test.beans.MultiPropertyBeanFactory;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.NullFactory;
@@ -27,7 +34,8 @@ import org.meanbean.test.beans.SelfReferencingBeanFactory;
 
 public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
-	private final PropertyBasedEqualsMethodPropertySignificanceVerifier verifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+	private final PropertyBasedEqualsMethodPropertySignificanceVerifier verifier =
+	        new PropertyBasedEqualsMethodPropertySignificanceVerifier();
 
 	@Test
 	public void shouldGetFactoryRepository() throws Exception {
@@ -184,6 +192,78 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		verifier.verifyEqualsMethod(new BeanFactory(), configuration);
 		assertThat("custom factory was not used", factory.getInvocationCount(), is(1));
+	}
+
+	@Test
+	public void verifyEqualsMethodShouldPreventUnrecognisedPropertyAndPermitRecognisedProperty() throws Exception {
+		String unrecognisedPropertyName = "UNRECOGNISED_PROPERTY";
+		BeanFactory beanFactory = new BeanFactory();
+		Bean bean = beanFactory.create();
+		try {
+			verifier.verifyEqualsMethod(beanFactory, "name", unrecognisedPropertyName);
+		} catch (IllegalArgumentException e) {
+			String expectedExceptionMessage =
+			        "Insignificant properties [" + unrecognisedPropertyName + "] do not exist on "
+			                + bean.getClass().getName() + ".";
+			assertEquals("incorrect exception message", expectedExceptionMessage, e.getMessage());
+			return;
+		}
+		fail("exception was not thrown");
+	}
+
+	@Test
+	public void verifyEqualsMethodShouldPreventUnrecognisedPropertiesAndPermitRecognisedProperties() throws Exception {
+		String unrecognisedPropertyName1 = "UNRECOGNISED_PROPERTY_1";
+		String unrecognisedPropertyName2 = "UNRECOGNISED_PROPERTY_2";
+		MultiPropertyBeanFactory beanFactory = new MultiPropertyBeanFactory();
+		MultiPropertyBean bean = beanFactory.create();
+		try {
+			verifier.verifyEqualsMethod(beanFactory, "firstName", unrecognisedPropertyName1, "lastName",
+			        unrecognisedPropertyName2);
+		} catch (IllegalArgumentException e) {
+			String expectedExceptionMessage =
+			        "Insignificant properties [" + unrecognisedPropertyName1 + "," + unrecognisedPropertyName2
+			                + "] do not exist on " + bean.getClass().getName() + ".";
+			assertEquals("incorrect exception message", expectedExceptionMessage, e.getMessage());
+			return;
+		}
+		fail("exception was not thrown");
+	}
+
+	@Test
+	public void ensureInsignificantPropertiesExistShouldThrowExceptionForSingleUnrecognisedProperty() throws Exception {
+		String unrecognisedPropertyName = "UNRECOGNISED_PROPERTY";
+		BeanInformation beanInformation = new JavaBeanInformationFactory().create(Bean.class);
+		try {
+			verifier.ensureInsignificantPropertiesExist(beanInformation,
+			        Arrays.asList("name", unrecognisedPropertyName));
+		} catch (IllegalArgumentException e) {
+			String expectedExceptionMessage =
+			        "Insignificant properties [" + unrecognisedPropertyName + "] do not exist on "
+			                + Bean.class.getName() + ".";
+			assertEquals("incorrect exception message", expectedExceptionMessage, e.getMessage());
+			return;
+		}
+		fail("exception was not thrown");
+	}
+
+	@Test
+	public void ensureInsignificantPropertiesExistShouldThrowExceptionForMultipleUnrecognisedProperties()
+	        throws Exception {
+		String unrecognisedPropertyName1 = "UNRECOGNISED_PROPERTY_1";
+		String unrecognisedPropertyName2 = "UNRECOGNISED_PROPERTY_2";
+		try {
+			verifier.ensureInsignificantPropertiesExist(
+			        new JavaBeanInformationFactory().create(MultiPropertyBean.class),
+			        Arrays.asList("firstName", unrecognisedPropertyName1, "lastName", unrecognisedPropertyName2));
+		} catch (IllegalArgumentException e) {
+			String expectedExceptionMessage =
+			        "Insignificant properties [" + unrecognisedPropertyName1 + "," + unrecognisedPropertyName2
+			                + "] do not exist on " + MultiPropertyBean.class.getName() + ".";
+			assertEquals("incorrect exception message", expectedExceptionMessage, e.getMessage());
+			return;
+		}
+		fail("exception was not thrown");
 	}
 
 	// @Test(expected = AssertionError.class)

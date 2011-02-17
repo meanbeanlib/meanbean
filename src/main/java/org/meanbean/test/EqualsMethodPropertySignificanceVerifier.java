@@ -67,7 +67,8 @@ interface EqualsMethodPropertySignificanceVerifier extends FactoryCollectionProv
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If either the specified factory or insignificantProperties are deemed illegal. For example, if either
-	 *             is <code>null</code>.
+	 *             is <code>null</code>. Also, if any of the specified insignificantProperties do not exist on the class
+	 *             under test.
 	 * @throws BeanInformationException
 	 *             If a problem occurs when trying to obtain information about the type to test.
 	 * @throws BeanTestException
@@ -126,7 +127,8 @@ interface EqualsMethodPropertySignificanceVerifier extends FactoryCollectionProv
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If either the specified factory or insignificantProperties are deemed illegal. For example, if either
-	 *             is <code>null</code>.
+	 *             is <code>null</code>. Also, if any of the specified insignificantProperties do not exist on the class
+	 *             under test.
 	 * @throws BeanInformationException
 	 *             If a problem occurs when trying to obtain information about the type to test.
 	 * @throws BeanTestException

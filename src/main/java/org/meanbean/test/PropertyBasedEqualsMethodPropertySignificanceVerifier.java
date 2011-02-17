@@ -1,5 +1,6 @@
 package org.meanbean.test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
+import org.meanbean.util.StringUtils;
 import org.meanbean.util.ValidationHelper;
 
 /**
@@ -169,7 +171,8 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If either the specified factory or insignificantProperties are deemed illegal. For example, if either
-	 *             is <code>null</code>.
+	 *             is <code>null</code>. Also, if any of the specified insignificantProperties do not exist on the class
+	 *             under test.
 	 * @throws BeanInformationException
 	 *             If a problem occurs when trying to obtain information about the type to test.
 	 * @throws BeanTestException
@@ -231,7 +234,8 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If either the specified factory or insignificantProperties are deemed illegal. For example, if either
-	 *             is <code>null</code>.
+	 *             is <code>null</code>. Also, if any of the specified insignificantProperties do not exist on the class
+	 *             under test.
 	 * @throws BeanInformationException
 	 *             If a problem occurs when trying to obtain information about the type to test.
 	 * @throws BeanTestException
@@ -254,6 +258,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 		validationHelper.ensureExists("factory-created object", "test equals", prototype);
 		BeanInformation beanInformation = beanInformationFactory.create(prototype.getClass());
 		log.debug("verifyEqualsMethod: Acquired beanInformation=[" + beanInformation + "].");
+		ensureInsignificantPropertiesExist(beanInformation, insignificantPropertyNames);
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
 		properties = PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
 		for (PropertyInformation property : properties) {
@@ -264,6 +269,34 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 				log.debug("verifyEqualsMethod: Ignoring property=[" + property.getName() + "].");
 			}
 		}
+	}
+
+	/**
+	 * Ensure that all of the specified insignificant properties exist on the specified bean. If an insignificant
+	 * property is specified that does not exist on the bean, an <code>IllegalArgumentException</code> is thrown.
+	 * 
+	 * @param beanInformation
+	 *            Information about the bean on which all of the insignificant properties should exist.
+	 * @param insignificantProperties
+	 *            The names of the insignificant properties that should exist on the bean.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If an insignificant property is specified that does not exist on the specified bean.
+	 */
+	protected void ensureInsignificantPropertiesExist(BeanInformation beanInformation,
+	        List<String> insignificantProperties) throws IllegalArgumentException {
+		log.debug("ensureInsignificantPropertiesExist: Entering with beanInformation=[" + beanInformation
+		        + "] and insignificantProperties=[" + insignificantProperties + "].");
+		List<String> unrecognisedPropertyNames = new ArrayList<String>(insignificantProperties);
+		unrecognisedPropertyNames.removeAll(beanInformation.getPropertyNames());
+		if (!unrecognisedPropertyNames.isEmpty()) {
+			String message =
+			        "Insignificant properties [" + StringUtils.join(unrecognisedPropertyNames, ",")
+			                + "] do not exist on " + beanInformation.getBeanClass().getName() + ".";
+			log.debug("ensureInsignificantPropertiesExist: " + message + " Throw IllegalArgumentException.");
+			throw new IllegalArgumentException(message);
+		}
+		log.debug("ensureInsignificantPropertiesExist: Exiting.");
 	}
 
 	/**
