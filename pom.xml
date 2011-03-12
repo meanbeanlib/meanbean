@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.meanbean</groupId>
 	<artifactId>meanbean</artifactId>
-	<version>0.0.6</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>meanbean</name>
 	<url>http://meanbean.org</url>
@@ -28,6 +28,14 @@
 				<role>developer</role>
 			</roles>
 		</developer>
+		<developer>
+            <id>shainnif</id>
+            <name>Shaine Ismail</name>
+            <email>shaine@meanbean.org</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
 	</developers>
 	<build>
 		<plugins>
