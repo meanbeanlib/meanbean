@@ -75,8 +75,28 @@
 					<stylesheetfile>${basedir}/css/stylesheet.css</stylesheetfile>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>meanBeanRepository</id>
+			<name>Mean Bean Repository</name>
+			<url>file://${basedir}/target/deploy</url>
+		</repository>
+	</distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>commons-logging</groupId>
