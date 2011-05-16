@@ -3,13 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.meanbean</groupId>
 	<artifactId>meanbean</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>meanbean</name>
 	<description>
 	   Mean Bean is an open source Java test library that tests equals and hashCode contract compliance, as well as
 	   JavaBean/POJO getter and setter methods.</description>
 	<url>http://meanbean.org</url>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -23,7 +28,8 @@
 	</licenses>
 	<scm>
 		<url>http://meanbean.svn.sourceforge.net/viewvc/meanbean</url>
-		<connection>http://meanbean.svn.sourceforge.net/viewvc/meanbean</connection>
+		<developerConnection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/trunk/</developerConnection>
+		<connection>scm:svn:http://meanbean.svn.sourceforge.net/svnroot/meanbean/trunk/</connection>
 	</scm>
 	<developers>
 		<developer>
