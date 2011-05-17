@@ -26,9 +26,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://meanbean.svn.sourceforge.net/viewvc/meanbean</url>
+		<url>https://meanbean.svn.sourceforge.net/viewvc/meanbean</url>
 		<developerConnection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/trunk/</developerConnection>
-		<connection>scm:svn:http://meanbean.svn.sourceforge.net/svnroot/meanbean/trunk/</connection>
+		<connection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/trunk/</connection>
 	</scm>
 	<developers>
 		<developer>
