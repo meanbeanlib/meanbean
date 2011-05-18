@@ -27,7 +27,7 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://meanbean.svn.sourceforge.net/viewvc/meanbean/tags/meanbean-1.0.3</url>
+		<url>https://meanbean.svn.sourceforge.net/viewvc/meanbean/tags/meanbean-1.0.3</url>
 		<developerConnection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/tags/meanbean-1.0.3</developerConnection>
 		<connection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/tags/meanbean-1.0.3</connection>
 	</scm>
