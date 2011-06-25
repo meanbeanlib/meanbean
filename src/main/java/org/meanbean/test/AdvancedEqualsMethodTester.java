@@ -25,6 +25,12 @@ import org.meanbean.util.ValidationHelper;
  * </ul>
  * 
  * <p>
+ * This implementation wraps an EqualsMethodTester implementation, delegating to it, decorating it with an improved and
+ * simplified API that does not require the provision of a Factory implementation to test a type. Rather, only the type
+ * to test need be specified.
+ * </p>
+ * 
+ * <p>
  * The following is tested:
  * </p>
  * 
@@ -94,17 +100,42 @@ public class AdvancedEqualsMethodTester implements SmartEqualsMethodTester {
 	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
 
 	/**
+	 * <p>
 	 * Construct a new Advanced Equals Method Tester that provides a means of testing the correctness of the equals
-	 * logic implemented by a type, based solely on the type. The default of <code>BasicEqualsMethodTester</code> logic
-	 * will be used to test the equals logic of a type.
+	 * logic implemented by a type, based solely on the type.
+	 * </p>
+	 * 
+	 * <p>
+	 * This implementation wraps an EqualsMethodTester implementation, delegating to it, decorating it with an improved
+	 * and simplified API that does not require the provision of a Factory implementation to test a type. Rather, only
+	 * the type to test need be specified.
+	 * </p>
+	 * 
+	 * <p>
+	 * This constructor configures the Advanced Equals Method Tester to use the default
+	 * <code>BasicEqualsMethodTester</code> logic.
+	 * </p>
 	 */
 	public AdvancedEqualsMethodTester() {
 		this(new BasicEqualsMethodTester());
 	}
 
 	/**
+	 * <p>
 	 * Construct a new Advanced Equals Method Tester that provides a means of testing the correctness of the equals
 	 * logic implemented by a type, based solely on the type.
+	 * </p>
+	 * 
+	 * <p>
+	 * This implementation wraps an EqualsMethodTester implementation, delegating to it, decorating it with an improved
+	 * and simplified API that does not require the provision of a Factory implementation to test a type. Rather, only
+	 * the type to test need be specified.
+	 * </p>
+	 * 
+	 * <p>
+	 * This constructor configures the Advanced Equals Method Tester to use the specified EqualsMethodTester
+	 * implementation.
+	 * </p>
 	 * 
 	 * @param equalsMethodTester
 	 *            The <code>EqualsMethodTester</code> logic to use to test the equals logic of a type.
