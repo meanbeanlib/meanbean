@@ -1,6 +1,9 @@
 package org.meanbean.test;
 
+import org.meanbean.factories.FactoryCollectionProvider;
+import org.meanbean.factories.util.FactoryLookupStrategyProvider;
 import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
  * <p>
@@ -24,8 +27,8 @@ import org.meanbean.lang.Factory;
  * 
  * @author Graham Williamson
  */
-
-public interface HashCodeMethodTester {
+public interface HashCodeMethodTester extends RandomValueGeneratorProvider, FactoryCollectionProvider,
+        FactoryLookupStrategyProvider {
 
 	/**
 	 * <p>

@@ -2,8 +2,14 @@ package org.meanbean.test;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meanbean.factories.FactoryCollection;
+import org.meanbean.factories.FactoryRepository;
+import org.meanbean.factories.util.BasicFactoryLookupStrategy;
+import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.AssertionUtils;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
@@ -65,6 +71,16 @@ public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+
+	/** Random number generator used by factories to randomly generate values. */
+	private final RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+
+	/** The collection of test data Factories. */
+	private final FactoryCollection factoryCollection = new FactoryRepository(randomValueGenerator);
+
+	/** Provides a means of acquiring a suitable Factory. */
+	private final FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
+	        randomValueGenerator);
 
 	/**
 	 * <p>
@@ -135,7 +151,7 @@ public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 		validationHelper.ensureExists("factory-created object", "test hash codes equal for equal objects", y);
 		if (!x.equals(y)) {
 			String message =
-			        "Cannot test hash codes equal for equal objects if factory does not create logically equivalent objects.";
+			        "Cannot test hash codes equal for equal objects if objects that should be equal are not considered logically equivalent.";
 			log.debug("testHashCodesEqual: " + message + " Throw IllegalArgumentException.");
 			throw new IllegalArgumentException(message);
 		}
@@ -182,5 +198,35 @@ public class BasicHashCodeMethodTester implements HashCodeMethodTester {
 			}
 		}
 		log.debug("testHashCodeConsistent: Exiting - Equals is correct.");
+	}
+
+	/**
+	 * Get a RandomValueGenerator.
+	 * 
+	 * @return A RandomValueGenerator.
+	 */
+	@Override
+	public RandomValueGenerator getRandomValueGenerator() {
+		return randomValueGenerator;
+	}
+
+	/**
+	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
+	 * 
+	 * @return The collection of test data Factories.
+	 */
+	@Override
+	public FactoryCollection getFactoryCollection() {
+		return factoryCollection;
+	}
+
+	/**
+	 * Get the FactoryLookupStrategy, which provides a means of acquiring Factories.
+	 * 
+	 * @return The factory lookup strategy.
+	 */
+	@Override
+	public FactoryLookupStrategy getFactoryLookupStrategy() {
+		return factoryLookupStrategy;
 	}
 }
