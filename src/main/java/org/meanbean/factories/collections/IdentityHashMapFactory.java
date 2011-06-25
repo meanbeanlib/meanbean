@@ -16,20 +16,21 @@ import org.meanbean.util.RandomValueGenerator;
  */
 public class IdentityHashMapFactory<K, V> extends MapFactoryBase<K, V> {
 
-    /** Unique version ID of this Serializable class. */
-    private static final long serialVersionUID = 1L;
+	/** Unique version ID of this Serializable class. */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Construct a new IdentityHashMap object Factory.
-     * 
-     * @param randomValueGenerator
-     *            A random value generator used by the Factory to generate random values.
-     * @param keyFactory
-     *            Factory used to create each Map key.
-     * @param valueFactory
-     *            Factory used to create each Map value.
-     */
-	public IdentityHashMapFactory(RandomValueGenerator randomValueGenerator, Factory<K> keyFactory, Factory<V> valueFactory) {
+	/**
+	 * Construct a new IdentityHashMap object Factory.
+	 * 
+	 * @param randomValueGenerator
+	 *            A random value generator used by the Factory to generate random values.
+	 * @param keyFactory
+	 *            Factory used to create each Map key.
+	 * @param valueFactory
+	 *            Factory used to create each Map value.
+	 */
+	public IdentityHashMapFactory(RandomValueGenerator randomValueGenerator, Factory<K> keyFactory,
+	        Factory<V> valueFactory) {
 		super(randomValueGenerator, keyFactory, valueFactory);
 	}
 

@@ -1,6 +1,5 @@
 package org.meanbean.test.beans;
 
-
 /**
  * A bean whose equals method is driven by a counter that returns false on a specified invocation number. This class
  * should only be used for testing.

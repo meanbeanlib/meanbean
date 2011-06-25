@@ -16,20 +16,20 @@ import org.meanbean.util.RandomValueGenerator;
  */
 public class ArrayListFactory<T> extends ListFactoryBase<T> {
 
-    /** Unique version ID of this Serializable class. */
-    private static final long serialVersionUID = 1L;
-    
-    /**
-     * Construct a new ArrayList object Factory.
-     * 
-     * @param randomValueGenerator
-     *            A random value generator used by the Factory to generate random values.
-     * @param itemFactory
-     *            Factory used to create each ArrayList item.
-     */
-    public ArrayListFactory(RandomValueGenerator randomValueGenerator,Factory<T> itemFactory) {
-        super(randomValueGenerator,itemFactory);
-    }
+	/** Unique version ID of this Serializable class. */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Construct a new ArrayList object Factory.
+	 * 
+	 * @param randomValueGenerator
+	 *            A random value generator used by the Factory to generate random values.
+	 * @param itemFactory
+	 *            Factory used to create each ArrayList item.
+	 */
+	public ArrayListFactory(RandomValueGenerator randomValueGenerator, Factory<T> itemFactory) {
+		super(randomValueGenerator, itemFactory);
+	}
 
 	/**
 	 * Create a new concrete List instance that this Factory will return populated.
@@ -39,5 +39,5 @@ public class ArrayListFactory<T> extends ListFactoryBase<T> {
 	protected List<T> createList() {
 		return new ArrayList<T>();
 	}
-    
+
 }

@@ -2,7 +2,9 @@ package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.factories.FactoryCollectionProvider;
+import org.meanbean.factories.util.FactoryLookupStrategyProvider;
 import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
  * <p>
@@ -46,7 +48,8 @@ import org.meanbean.lang.Factory;
  * 
  * @author Graham Williamson
  */
-public interface EqualsMethodTester extends FactoryCollectionProvider {
+public interface EqualsMethodTester extends RandomValueGeneratorProvider, FactoryCollectionProvider,
+        FactoryLookupStrategyProvider {
 
 	/** Default number of times a type should be tested. */
 	static final int TEST_ITERATIONS_PER_TYPE = 100;

@@ -1,6 +1,5 @@
 package org.meanbean.factories;
 
-
 /**
  * Defines an object that provides access to a FactoryCollection.
  * 

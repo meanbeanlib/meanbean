@@ -20,8 +20,7 @@ public class RandomFactoryBaseTest {
 	public void getRandomNumberGeneratorShouldReturnRandomNumberGenerator() throws Exception {
 		RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
 		SimpleFactory<String> factory = new SimpleFactory<String>(randomValueGenerator);
-		assertThat("RandomNumberGenerator should not be null.", factory.getRandomValueGenerator(),
-		        is(not(nullValue())));
+		assertThat("RandomNumberGenerator should not be null.", factory.getRandomValueGenerator(), is(not(nullValue())));
 	}
 
 	static class SimpleFactory<T> extends RandomFactoryBase<T> {

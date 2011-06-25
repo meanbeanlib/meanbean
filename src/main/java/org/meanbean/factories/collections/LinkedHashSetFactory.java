@@ -14,29 +14,29 @@ import org.meanbean.util.RandomValueGenerator;
  */
 public class LinkedHashSetFactory<T> extends SetFactoryBase<T> {
 
-    /** Unique version ID of this Serializable class. */
-    private static final long serialVersionUID = 1L;
-        
-    /**
-     * Construct a new LinkedHashSet object Factory.
-     * 
-     * @param randomValueGenerator
-     *            A random value generator used by the Factory to generate random values.
-     * @param itemFactory
-     *            Factory used to create each Set item.
-     */
-    public LinkedHashSetFactory(RandomValueGenerator randomValueGenerator,Factory<T> itemFactory) {
-        super(randomValueGenerator,itemFactory);
-    }
+	/** Unique version ID of this Serializable class. */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Construct a new LinkedHashSet object Factory.
+	 * 
+	 * @param randomValueGenerator
+	 *            A random value generator used by the Factory to generate random values.
+	 * @param itemFactory
+	 *            Factory used to create each Set item.
+	 */
+	public LinkedHashSetFactory(RandomValueGenerator randomValueGenerator, Factory<T> itemFactory) {
+		super(randomValueGenerator, itemFactory);
+	}
 
 	/**
 	 * Create a new concrete Set instance that this Factory will return populated.
 	 * 
 	 * @return A concrete Set of the type created by this Factory.
 	 */
-    @Override
+	@Override
 	protected Set<T> createSet() {
 		return new LinkedHashSet<T>();
 	}
-    
+
 }

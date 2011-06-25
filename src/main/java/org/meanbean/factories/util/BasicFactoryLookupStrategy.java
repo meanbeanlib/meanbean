@@ -1,14 +1,13 @@
-package org.meanbean.test;
+package org.meanbean.factories.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meanbean.bean.factory.DynamicBeanFactory;
-import org.meanbean.bean.info.BeanInformationFactory;
-import org.meanbean.bean.info.JavaBeanInformationFactory;
+import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.basic.EnumFactory;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.Configuration;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
@@ -36,7 +35,7 @@ import org.meanbean.util.ValidationHelper;
  * 
  * @author Graham Williamson
  */
-class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
+public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/** Logging mechanism. */
 	private final Log log = LogFactory.getLog(BasicFactoryLookupStrategy.class);
@@ -49,9 +48,6 @@ class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/** The collection of test data Factories. */
 	private final FactoryCollection factoryCollection;
-
-	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory;
 
 	/**
 	 * Construct a new Factory Lookup Strategy.
@@ -71,7 +67,6 @@ class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 		validationHelper.ensureExists("randomValueGenerator", "construct FactoryLookupStrategy", randomValueGenerator);
 		this.factoryCollection = factoryCollection;
 		this.randomValueGenerator = randomValueGenerator;
-		beanInformationFactory = new JavaBeanInformationFactory();
 	}
 
 	/**
@@ -152,12 +147,13 @@ class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			// Try to create a Factory for the object
 			log.debug("getFactory: Try to create a DynamicBeanFactory for propertyType=[" + propertyType + "].");
 			try {
-				Factory<?> dynamicFactory = new DynamicBeanFactory(beanInformationFactory.create(propertyType));
-				dynamicFactory.create(); // Test the factory before registering and returning
-				factoryCollection.addFactory(propertyType, dynamicFactory);
-				log.warn("Using DynamicBeanFactory for [" + propertyName + "] of type [" + propertyType.getName()
-				        + "]. Do you need to register a custom Factory?");
-				result = dynamicFactory;
+				Factory<?> basicFactory = new BasicNewObjectInstanceFactory(propertyType);
+				basicFactory.create(); // Test the factory before registering and returning
+				factoryCollection.addFactory(propertyType, basicFactory);
+				// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
+				log.warn("Using BasicNewObjectInstanceFactory for [" + propertyName + "] of type ["
+				        + propertyType.getName() + "]. Do you need to register a custom Factory?");
+				result = basicFactory;
 			} catch (Exception e) {
 				String message =
 				        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType

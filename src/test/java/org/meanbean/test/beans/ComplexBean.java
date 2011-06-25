@@ -11,15 +11,17 @@ import java.util.Date;
  */
 public class ComplexBean {
 
-	private long id;
+	private long id; // write-only
 
-	private String firstName;
+	private String firstName;// read/write
 
-	private String lastName;
+	private String lastName;// read/write
 
-	private Date dateOfBirth;
+	private Date dateOfBirth;// read-write
 
-	private long favouriteNumber;
+	private long favouriteNumber;// read/write
+
+	// also has a read-only property asString (getAsString)
 
 	public String getFirstName() {
 		return firstName;

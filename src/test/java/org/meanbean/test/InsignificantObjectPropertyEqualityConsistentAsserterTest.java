@@ -6,7 +6,8 @@ import org.meanbean.test.beans.BeanFactory;
 
 public class InsignificantObjectPropertyEqualityConsistentAsserterTest {
 
-	private final ObjectPropertyEqualityConsistentAsserter objectPropertyEqualityConsistentAsserter = new InsignificantObjectPropertyEqualityConsistentAsserter();
+	private final ObjectPropertyEqualityConsistentAsserter objectPropertyEqualityConsistentAsserter =
+	        new InsignificantObjectPropertyEqualityConsistentAsserter();
 
 	private final BeanFactory beanFactory = new BeanFactory();
 

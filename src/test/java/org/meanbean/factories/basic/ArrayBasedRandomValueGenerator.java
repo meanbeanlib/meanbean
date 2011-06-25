@@ -3,8 +3,8 @@ package org.meanbean.factories.basic;
 import org.meanbean.util.RandomValueGenerator;
 
 /**
- * Concrete RandomValueGenerator that creates values based on an array of values passed to it during
- * construction. This should only be used for testing.
+ * Concrete RandomValueGenerator that creates values based on an array of values passed to it during construction. This
+ * should only be used for testing.
  * 
  * @author Graham Williamson
  */

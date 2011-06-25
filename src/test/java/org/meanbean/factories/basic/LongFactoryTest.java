@@ -8,11 +8,11 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 
 public class LongFactoryTest extends BasicFactoryTestBase<Long> {
-	
+
 	private static long RANDOM_LONG_1 = 372036854775807L;
 
 	private static long RANDOM_LONG_2 = -12320685475807L;
-	
+
 	@Override
 	protected Factory<Long> createFactory(RandomValueGenerator randomValueGenerator) {
 		return new LongFactory(randomValueGenerator);

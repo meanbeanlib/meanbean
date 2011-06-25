@@ -1,14 +1,16 @@
-package org.meanbean.test;
+package org.meanbean.factories.util;
 
 import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.BeanTestException;
+import org.meanbean.test.Configuration;
 
 /**
  * Defines a means of acquiring a Factory.
  * 
  * @author Graham Williamson
  */
-interface FactoryLookupStrategy {
+public interface FactoryLookupStrategy {
 
 	/**
 	 * <p>

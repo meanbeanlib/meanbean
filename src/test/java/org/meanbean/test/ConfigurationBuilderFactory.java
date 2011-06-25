@@ -22,9 +22,9 @@ public class ConfigurationBuilderFactory {
 	public static final String OVERRIDE_PROPERTY_1 = "TEST_IGNORE_PROPERTY_1";
 
 	public static final String OVERRIDE_PROPERTY_2 = "TEST_IGNORE_PROPERTY_2";
-	
+
 	private static final RandomValueGenerator RANDOM_NUMBER_GENERATOR = new SimpleRandomValueGenerator();
-	
+
 	public static final LongFactory OVERRIDE_FACTORY_1 = new LongFactory(RANDOM_NUMBER_GENERATOR);
 
 	public static final StringFactory OVERRIDE_FACTORY_2 = new StringFactory(RANDOM_NUMBER_GENERATOR);

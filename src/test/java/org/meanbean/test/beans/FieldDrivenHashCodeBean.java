@@ -1,6 +1,5 @@
 package org.meanbean.test.beans;
 
-
 /**
  * A bean that returns a predetermined value when <code>hashCode()</code> is called. This should only be used for
  * testing.

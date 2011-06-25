@@ -1,6 +1,5 @@
 package org.meanbean.test.beans;
 
-
 /**
  * A bean whose equals method returns false when compared with itself. This class should only be used for testing.
  * 

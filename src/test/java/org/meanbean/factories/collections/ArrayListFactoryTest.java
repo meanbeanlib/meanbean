@@ -9,12 +9,13 @@ import org.meanbean.util.RandomValueGenerator;
 public class ArrayListFactoryTest extends ListFactoryTestBase {
 
 	@Override
-    protected ListFactoryBase<String> getListFactory(RandomValueGenerator randomValueGenerator, Factory<String> itemFactory) {
-	    return new ArrayListFactory<String>(randomValueGenerator, itemFactory);
-    }
+	protected ListFactoryBase<String> getListFactory(RandomValueGenerator randomValueGenerator,
+	        Factory<String> itemFactory) {
+		return new ArrayListFactory<String>(randomValueGenerator, itemFactory);
+	}
 
 	@Override
-    protected List<String> getListOfExpectedType() {
-	    return new ArrayList<String>();
-    }
+	protected List<String> getListOfExpectedType() {
+		return new ArrayList<String>();
+	}
 }

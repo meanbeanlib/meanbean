@@ -24,8 +24,9 @@ public class FloatFactoryTest extends BasicFactoryTestBase<Float> {
 
 	private RandomValueGenerator createRandomNumberGenerator(boolean positive, boolean basedOnMaximum,
 	        float randomNumber) {
-		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, null,
-		        new float[] { randomNumber }, null, new boolean[] { basedOnMaximum, positive });
+		RandomValueGenerator randomValueGenerator =
+		        new ArrayBasedRandomValueGenerator(null, null, null, new float[] { randomNumber }, null, new boolean[] {
+		                basedOnMaximum, positive });
 		return randomValueGenerator;
 	}
 

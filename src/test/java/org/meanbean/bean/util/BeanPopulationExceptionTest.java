@@ -1,11 +1,11 @@
-package org.meanbean.bean.factory;
+package org.meanbean.bean.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import org.junit.Test;
 
-public class BeanCreationExceptionTest {
+public class BeanPopulationExceptionTest {
 
 	private static final String MESSAGE = "TEST_MESSAGE";
 
@@ -13,13 +13,13 @@ public class BeanCreationExceptionTest {
 
 	@Test
 	public void constructWithMessage() throws Exception {
-		BeanCreationException exception = new BeanCreationException(MESSAGE);
+		BeanPopulationException exception = new BeanPopulationException(MESSAGE);
 		assertThat("Message was not set on exception.", exception.getMessage(), is(MESSAGE));
 	}
 
 	@Test
 	public void constructWithMessageAndCause() throws Exception {
-		BeanCreationException exception = new BeanCreationException(MESSAGE, CAUSE);
+		BeanPopulationException exception = new BeanPopulationException(MESSAGE, CAUSE);
 		assertThat("Unexpected message in exception.", exception.getMessage(), is(MESSAGE));
 		assertThat("Unexpected cause in exception.", exception.getCause(), is(CAUSE));
 	}

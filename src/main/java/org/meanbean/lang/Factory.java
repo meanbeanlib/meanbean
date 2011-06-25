@@ -9,10 +9,10 @@ package org.meanbean.lang;
  */
 public interface Factory<T extends Object> {
 
-    /**
-     * Create a new object of the specified type.
-     * 
-     * @return A new object of the specified type.
-     */
-    T create();
+	/**
+	 * Create a new object of the specified type.
+	 * 
+	 * @return A new object of the specified type.
+	 */
+	T create();
 }

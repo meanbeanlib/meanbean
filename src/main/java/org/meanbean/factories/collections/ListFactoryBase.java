@@ -16,41 +16,41 @@ import org.meanbean.util.RandomValueGenerator;
  */
 public abstract class ListFactoryBase<T> extends RandomFactoryBase<List<T>> {
 
-    /** Unique version ID of this Serializable class. */
-    private static final long serialVersionUID = 1L;
-    
-    /** Factory used to create each List item. */
-    private final Factory<T> itemFactory;
-    
-    /**
-     * Construct a new List object Factory.
-     * 
-     * @param randomValueGenerator
-     *            A random value generator used by the Factory to generate random values.
-     * @param itemFactory
-     *            Factory used to create each List item.
-     */
-    public ListFactoryBase(RandomValueGenerator randomValueGenerator,Factory<T> itemFactory) {
-        super(randomValueGenerator);
-        validationHelper.ensureExists("itemFactory", "construct ListFactory", itemFactory);
-        this.itemFactory = itemFactory;
-    }
+	/** Unique version ID of this Serializable class. */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Create a new List of objects of the specified type.
-     * 
-     * @return A new List of object of the specified type.
-     */
-    public List<T> create() {
-        // Basis to randomly decide size of List
-        double randomSize = getRandomValueGenerator().nextDouble();
-        int size = (int)(100.0 * randomSize);
-        List<T> result = createList();
-        for (int idx = 0; idx < size; idx++) {
-            result.add(itemFactory.create());
-        }
-        return result;
-    }
+	/** Factory used to create each List item. */
+	private final Factory<T> itemFactory;
+
+	/**
+	 * Construct a new List object Factory.
+	 * 
+	 * @param randomValueGenerator
+	 *            A random value generator used by the Factory to generate random values.
+	 * @param itemFactory
+	 *            Factory used to create each List item.
+	 */
+	public ListFactoryBase(RandomValueGenerator randomValueGenerator, Factory<T> itemFactory) {
+		super(randomValueGenerator);
+		validationHelper.ensureExists("itemFactory", "construct ListFactory", itemFactory);
+		this.itemFactory = itemFactory;
+	}
+
+	/**
+	 * Create a new List of objects of the specified type.
+	 * 
+	 * @return A new List of object of the specified type.
+	 */
+	public List<T> create() {
+		// Basis to randomly decide size of List
+		double randomSize = getRandomValueGenerator().nextDouble();
+		int size = (int) (100.0 * randomSize);
+		List<T> result = createList();
+		for (int idx = 0; idx < size; idx++) {
+			result.add(itemFactory.create());
+		}
+		return result;
+	}
 
 	/**
 	 * Create a new concrete List instance that this Factory will return populated.
@@ -58,5 +58,5 @@ public abstract class ListFactoryBase<T> extends RandomFactoryBase<List<T>> {
 	 * @return A concrete List of the type created by this Factory.
 	 */
 	protected abstract List<T> createList();
-    
+
 }

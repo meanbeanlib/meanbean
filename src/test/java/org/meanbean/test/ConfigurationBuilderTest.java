@@ -1,22 +1,20 @@
 package org.meanbean.test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-
-import org.junit.Test;
-import org.meanbean.factories.basic.LongFactory;
-import org.meanbean.factories.basic.StringFactory;
 import static org.meanbean.test.ConfigurationBuilderFactory.IGNORE_PROPERTY_1;
 import static org.meanbean.test.ConfigurationBuilderFactory.IGNORE_PROPERTY_2;
 import static org.meanbean.test.ConfigurationBuilderFactory.IGNORE_PROPERTY_3;
 import static org.meanbean.test.ConfigurationBuilderFactory.ITERATIONS;
-
 import static org.meanbean.test.ConfigurationBuilderFactory.OVERRIDE_FACTORY_1;
 import static org.meanbean.test.ConfigurationBuilderFactory.OVERRIDE_FACTORY_2;
 import static org.meanbean.test.ConfigurationBuilderFactory.OVERRIDE_PROPERTY_1;
 import static org.meanbean.test.ConfigurationBuilderFactory.OVERRIDE_PROPERTY_2;
+
+import org.junit.Test;
+import org.meanbean.factories.basic.LongFactory;
+import org.meanbean.factories.basic.StringFactory;
 
 public class ConfigurationBuilderTest {
 
@@ -43,12 +41,9 @@ public class ConfigurationBuilderTest {
 		final String testProperty = "AN_ADDITIONAL_TEST_PROPERTY";
 		configurationBuilder.ignoreProperty(testProperty);
 		Configuration configuration = configurationBuilder.build();
-		assertThat("Property should be ignored.",
-		        configuration.isIgnoredProperty(IGNORE_PROPERTY_1), is(true));
-		assertThat("Property should be ignored.",
-		        configuration.isIgnoredProperty(IGNORE_PROPERTY_2), is(true));
-		assertThat("Property should be ignored.",
-		        configuration.isIgnoredProperty(IGNORE_PROPERTY_3), is(true));
+		assertThat("Property should be ignored.", configuration.isIgnoredProperty(IGNORE_PROPERTY_1), is(true));
+		assertThat("Property should be ignored.", configuration.isIgnoredProperty(IGNORE_PROPERTY_2), is(true));
+		assertThat("Property should be ignored.", configuration.isIgnoredProperty(IGNORE_PROPERTY_3), is(true));
 		assertThat("Property should be ignored.", configuration.isIgnoredProperty(testProperty), is(true));
 	}
 
@@ -57,14 +52,11 @@ public class ConfigurationBuilderTest {
 		ConfigurationBuilder configurationBuilder = ConfigurationBuilderFactory.create();
 		Configuration configuration = configurationBuilder.build();
 		assertThat("Property should not be ignored.",
-		        configuration.isIgnoredProperty(IGNORE_PROPERTY_1 + "_DIFFERENT"),
-		        is(false));
+		        configuration.isIgnoredProperty(IGNORE_PROPERTY_1 + "_DIFFERENT"), is(false));
 		assertThat("Property should not be ignored.",
-		        configuration.isIgnoredProperty(IGNORE_PROPERTY_2 + "_DIFFERENT"),
-		        is(false));
+		        configuration.isIgnoredProperty(IGNORE_PROPERTY_2 + "_DIFFERENT"), is(false));
 		assertThat("Property should not be ignored.",
-		        configuration.isIgnoredProperty(IGNORE_PROPERTY_3 + "_DIFFERENT"),
-		        is(false));
+		        configuration.isIgnoredProperty(IGNORE_PROPERTY_3 + "_DIFFERENT"), is(false));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -90,11 +82,9 @@ public class ConfigurationBuilderTest {
 	public void overrideFactoryShouldSetOverrideFactoryInConfiguration() throws Exception {
 		ConfigurationBuilder configurationBuilder = ConfigurationBuilderFactory.create();
 		Configuration configuration = configurationBuilder.build();
-		assertThat("Override Factory not set.",
-		        (LongFactory) configuration.getOverrideFactory(OVERRIDE_PROPERTY_1),
+		assertThat("Override Factory not set.", (LongFactory) configuration.getOverrideFactory(OVERRIDE_PROPERTY_1),
 		        is(OVERRIDE_FACTORY_1));
-		assertThat("Override Factory not set.",
-		        (StringFactory) configuration.getOverrideFactory(OVERRIDE_PROPERTY_2),
+		assertThat("Override Factory not set.", (StringFactory) configuration.getOverrideFactory(OVERRIDE_PROPERTY_2),
 		        is(OVERRIDE_FACTORY_2));
 	}
 
@@ -102,10 +92,8 @@ public class ConfigurationBuilderTest {
 	public void overrideFactoryShouldOnlySetSpecifiedOverrideFactoriesInConfiguration() throws Exception {
 		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 		Configuration configuration = configurationBuilder.build();
-		assertThat("Override Factory not set.",
-		        configuration.getOverrideFactory(OVERRIDE_PROPERTY_1), is(nullValue()));
-		assertThat("Override Factory not set.",
-		        configuration.getOverrideFactory(OVERRIDE_PROPERTY_2), is(nullValue()));
+		assertThat("Override Factory not set.", configuration.getOverrideFactory(OVERRIDE_PROPERTY_1), is(nullValue()));
+		assertThat("Override Factory not set.", configuration.getOverrideFactory(OVERRIDE_PROPERTY_2), is(nullValue()));
 	}
 
 	@Test

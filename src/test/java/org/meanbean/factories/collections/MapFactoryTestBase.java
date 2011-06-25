@@ -64,18 +64,18 @@ public abstract class MapFactoryTestBase {
 
 	@Test
 	public void createShouldReturnExpectedSizeOfMap() throws Exception {
-		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS,
-		        null, new double[] { 0.0321 }, null);
+		RandomValueGenerator randomValueGenerator =
+		        new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS, null, new double[] { 0.0321 }, null);
 		Factory<String> keyFactory = new StringFactory(randomValueGenerator);
 		Factory<Long> valueFactory = new LongFactory(randomValueGenerator);
 		MapFactoryBase<String, Long> factory = getMapFactory(randomValueGenerator, keyFactory, valueFactory);
 		assertThat("Incorrect Map created.", factory.create().size(), is(3));
 	}
-	
+
 	@Test
 	public void createShouldReturnExpectedMapContents() throws Exception {
-		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS,
-		        null, new double[] { 0.06 }, null);
+		RandomValueGenerator randomValueGenerator =
+		        new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS, null, new double[] { 0.06 }, null);
 		Factory<String> keyFactory = new StringFactory(randomValueGenerator);
 		Factory<Long> valueFactory = new LongFactory(randomValueGenerator);
 		MapFactoryBase<String, Long> factory = getMapFactory(randomValueGenerator, keyFactory, valueFactory);

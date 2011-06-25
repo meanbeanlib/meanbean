@@ -100,9 +100,9 @@ public class BeanPropertyTesterTest {
 		}
 		assertThat("AssertionError was not thrown when it should have been.", error, is(not(nullValue())));
 		String readMethodOutput = bean.getLastName();
-		String expectedMessage = "Property [" + lastNameProperty.getName()
-		        + "] getter did not return test value. Expected [" + TEST_VALUE + "] but getter returned ["
-		        + readMethodOutput + "].";
+		String expectedMessage =
+		        "Property [" + lastNameProperty.getName() + "] getter did not return test value. Expected ["
+		                + TEST_VALUE + "] but getter returned [" + readMethodOutput + "].";
 		assertThat("Incorrect message in AssertionError.", error.getMessage(), is(expectedMessage));
 	}
 

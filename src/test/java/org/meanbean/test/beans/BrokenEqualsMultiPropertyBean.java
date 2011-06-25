@@ -1,6 +1,5 @@
 package org.meanbean.test.beans;
 
-
 /**
  * A bean with multiple properties, but with a broken hashCode and equals method that neglect to evaluate all
  * properties. This class should only be used for testing.

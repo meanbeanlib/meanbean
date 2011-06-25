@@ -9,12 +9,13 @@ import org.meanbean.util.RandomValueGenerator;
 public class LinkedHashSetFactoryTest extends SetFactoryTestBase {
 
 	@Override
-    protected SetFactoryBase<String> getSetFactory(RandomValueGenerator randomValueGenerator, Factory<String> itemFactory) {
+	protected SetFactoryBase<String> getSetFactory(RandomValueGenerator randomValueGenerator,
+	        Factory<String> itemFactory) {
 		return new LinkedHashSetFactory<String>(randomValueGenerator, itemFactory);
-    }
+	}
 
 	@Override
-    protected Set<String> getSetOfExpectedType() {
-	    return new LinkedHashSet<String>();
-    }
+	protected Set<String> getSetOfExpectedType() {
+		return new LinkedHashSet<String>();
+	}
 }

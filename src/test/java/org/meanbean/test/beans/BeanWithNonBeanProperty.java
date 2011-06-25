@@ -1,6 +1,5 @@
 package org.meanbean.test.beans;
 
-
 /**
  * A bean with a simple property and a non-Bean property, meaning that test data cannot be dynamically created for the
  * non-Bean property. The equals and hashCode methods have been implemented correctly. This class should only be used

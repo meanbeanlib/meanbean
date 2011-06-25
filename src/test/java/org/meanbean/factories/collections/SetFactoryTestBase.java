@@ -60,8 +60,8 @@ public abstract class SetFactoryTestBase {
 
 	@Test
 	public void createShouldReturnExpectedSizeOfSet() throws Exception {
-		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS,
-		        null, new double[] { 0.0421 }, null);
+		RandomValueGenerator randomValueGenerator =
+		        new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS, null, new double[] { 0.0421 }, null);
 		Factory<String> itemFactory = new StringFactory(randomValueGenerator);
 		SetFactoryBase<String> factory = getSetFactory(randomValueGenerator, itemFactory);
 		assertThat("Incorrect Set created.", factory.create().size(), is(4));
@@ -69,8 +69,8 @@ public abstract class SetFactoryTestBase {
 
 	@Test
 	public void createShouldReturnExpectedSetContents() throws Exception {
-		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS,
-		        null, new double[] { 0.06 }, null);
+		RandomValueGenerator randomValueGenerator =
+		        new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS, null, new double[] { 0.06 }, null);
 		Factory<String> itemFactory = new StringFactory(randomValueGenerator);
 		SetFactoryBase<String> factory = getSetFactory(randomValueGenerator, itemFactory);
 		Set<String> expectedSet = factory.createSet();

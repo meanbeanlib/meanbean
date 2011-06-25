@@ -4,7 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.factories.FactoryCollection;
+import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
@@ -69,7 +71,7 @@ import org.meanbean.util.ValidationHelper;
  * <p>
  * The Factory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
  * <code>equals()</code> and <code>hashCode()</code>. In the above example, there is only one property, name, which is
- * considered by MyClass's equals logic. <br/>
+ * considered by MyClass's equals logic.
  * </p>
  * 
  * <p>
@@ -236,7 +238,8 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	 */
 	@Override
 	public void testEqualsMethod(Factory<?> factory, Configuration customConfiguration,
-	        String... insignificantProperties) throws IllegalArgumentException, AssertionError {
+	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
+	        BeanTestException, AssertionError {
 		log.debug("testEqualsMethod: Entering with factory=[" + factory + "], customConfiguration=["
 		        + customConfiguration + "], insignificantProperties=[" + insignificantProperties + "].");
 		validationHelper.ensureExists("factory", "test equals method", factory);
@@ -261,6 +264,16 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	}
 
 	/**
+	 * Get a RandomValueGenerator.
+	 * 
+	 * @return A RandomValueGenerator.
+	 */
+	@Override
+	public RandomValueGenerator getRandomValueGenerator() {
+		return propertySignificanceVerifier.getRandomValueGenerator();
+	}
+
+	/**
 	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
 	 * 
 	 * @return The collection of test data Factories.
@@ -268,5 +281,15 @@ public class BasicEqualsMethodTester implements EqualsMethodTester {
 	@Override
 	public FactoryCollection getFactoryCollection() {
 		return propertySignificanceVerifier.getFactoryCollection();
+	}
+
+	/**
+	 * Get the FactoryLookupStrategy, which provides a means of acquiring Factories.
+	 * 
+	 * @return The factory lookup strategy.
+	 */
+	@Override
+	public FactoryLookupStrategy getFactoryLookupStrategy() {
+		return propertySignificanceVerifier.getFactoryLookupStrategy();
 	}
 }

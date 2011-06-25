@@ -24,8 +24,9 @@ public class DoubleFactoryTest extends BasicFactoryTestBase<Double> {
 
 	private RandomValueGenerator createRandomNumberGenerator(boolean positive, boolean basedOnMaximum,
 	        double randomNumber) {
-		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, null, null,
-		        new double[] { randomNumber }, new boolean[] { basedOnMaximum, positive });
+		RandomValueGenerator randomValueGenerator =
+		        new ArrayBasedRandomValueGenerator(null, null, null, null, new double[] { randomNumber },
+		                new boolean[] { basedOnMaximum, positive });
 		return randomValueGenerator;
 	}
 

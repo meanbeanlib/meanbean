@@ -5,11 +5,12 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.meanbean.bean.factory.DynamicBeanFactory;
+import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryRepository;
 import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.basic.EnumFactory;
 import org.meanbean.factories.basic.StringFactory;
+import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.NullFactory;
@@ -68,9 +69,10 @@ public class BasicFactoryLookupStrategyTest {
 	}
 
 	@Test
-	public void getFactoryShouldReturnDynamicBeanFactoryForUnrecognisedBeanTypes() throws Exception {
+	public void getFactoryShouldReturnBasicNewObjectInstanceFactoryForUnrecognisedBeanTypes() throws Exception {
 		Factory<?> factory = factoryLookupStrategy.getFactory(IRRELEVANT_PROPERTY_NAME, BasicBean.class, null);
-		assertThat("Incorrect factory.", factory.getClass().getName(), is(DynamicBeanFactory.class.getName()));
+		assertThat("Incorrect factory.", factory.getClass().getName(),
+		        is(BasicNewObjectInstanceFactory.class.getName()));
 	}
 
 	@Test(expected = NoSuchFactoryException.class)
@@ -80,24 +82,24 @@ public class BasicFactoryLookupStrategyTest {
 
 	@Test
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanRegisteredFactory() throws Exception {
-		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory())
-		        .build();
+		Configuration configuration =
+		        new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory()).build();
 		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, String.class, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
 
 	@Test
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanEnumFactory() throws Exception {
-		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory())
-		        .build();
+		Configuration configuration =
+		        new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory()).build();
 		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, Color.class, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
 
 	@Test
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanDynamicBeanFactory() throws Exception {
-		Configuration configuration = new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory())
-		        .build();
+		Configuration configuration =
+		        new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory()).build();
 		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, BasicBean.class, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}

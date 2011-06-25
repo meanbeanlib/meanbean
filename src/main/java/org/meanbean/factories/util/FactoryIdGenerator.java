@@ -7,17 +7,17 @@ package org.meanbean.factories.util;
  */
 public interface FactoryIdGenerator {
 
-    /**
-     * Create an ID for the specified class.
-     * 
-     * @param clazz
-     *            The class for which a unique ID should be generated.
-     * 
-     * @return A unique ID, generated for the specified class.
-     * 
-     * @throws IllegalArgumentException
-     *             If the clazz parameter is deemed illegal. For example, if it is null.
-     */
-    String createIdFromClass(Class<?> clazz) throws IllegalArgumentException;
+	/**
+	 * Create an ID for the specified class.
+	 * 
+	 * @param clazz
+	 *            The class for which a unique ID should be generated.
+	 * 
+	 * @return A unique ID, generated for the specified class.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the clazz parameter is deemed illegal. For example, if it is null.
+	 */
+	String createIdFromClass(Class<?> clazz) throws IllegalArgumentException;
 
 }

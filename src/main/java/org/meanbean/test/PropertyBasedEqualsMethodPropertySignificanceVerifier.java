@@ -16,6 +16,8 @@ import org.meanbean.bean.util.PropertyInformationFilter;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryRepository;
+import org.meanbean.factories.util.BasicFactoryLookupStrategy;
+import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
@@ -406,6 +408,16 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	}
 
 	/**
+	 * Get a RandomValueGenerator.
+	 * 
+	 * @return A RandomValueGenerator.
+	 */
+	@Override
+	public RandomValueGenerator getRandomValueGenerator() {
+		return randomValueGenerator;
+	}
+
+	/**
 	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
 	 * 
 	 * @return The collection of test data Factories.
@@ -413,5 +425,15 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	@Override
 	public FactoryCollection getFactoryCollection() {
 		return factoryCollection;
+	}
+
+	/**
+	 * Get the FactoryLookupStrategy, which provides a means of acquiring Factories.
+	 * 
+	 * @return The factory lookup strategy.
+	 */
+	@Override
+	public FactoryLookupStrategy getFactoryLookupStrategy() {
+		return factoryLookupStrategy;
 	}
 }

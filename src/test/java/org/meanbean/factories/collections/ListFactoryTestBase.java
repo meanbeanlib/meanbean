@@ -60,8 +60,8 @@ public abstract class ListFactoryTestBase {
 
 	@Test
 	public void createShouldReturnExpectedSizeOfList() throws Exception {
-		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS,
-		        null, new double[] { 0.0421 }, null);
+		RandomValueGenerator randomValueGenerator =
+		        new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS, null, new double[] { 0.0421 }, null);
 		Factory<String> itemFactory = new StringFactory(randomValueGenerator);
 		ListFactoryBase<String> factory = getListFactory(randomValueGenerator, itemFactory);
 		assertThat("Incorrect List created.", factory.create().size(), is(4));
@@ -69,8 +69,8 @@ public abstract class ListFactoryTestBase {
 
 	@Test
 	public void createShouldReturnExpectedListContents() throws Exception {
-		RandomValueGenerator randomValueGenerator = new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS,
-		        null, new double[] { 0.06 }, null);
+		RandomValueGenerator randomValueGenerator =
+		        new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS, null, new double[] { 0.06 }, null);
 		Factory<String> itemFactory = new StringFactory(randomValueGenerator);
 		ListFactoryBase<String> factory = getListFactory(randomValueGenerator, itemFactory);
 		List<String> expectedList = factory.createList();

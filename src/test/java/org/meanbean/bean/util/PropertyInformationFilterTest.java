@@ -53,8 +53,8 @@ public class PropertyInformationFilterTest {
 		inputProperties.add(PropertyInformationFactory.create(null, true, writable));
 		inputProperties.add(PropertyInformationFactory.create(null, false, writable));
 		inputProperties.add(PropertyInformationFactory.create(null, true, writable));
-		Collection<PropertyInformation> filteredProperties = PropertyInformationFilter.filter(inputProperties,
-		        PropertyVisibility.WRITABLE);
+		Collection<PropertyInformation> filteredProperties =
+		        PropertyInformationFilter.filter(inputProperties, PropertyVisibility.WRITABLE);
 		assertThat("Incorrect filtered properties.", filteredProperties.isEmpty(), is(true));
 	}
 
@@ -65,8 +65,8 @@ public class PropertyInformationFilterTest {
 		inputProperties.add(PropertyInformationFactory.create(null, readable, true));
 		inputProperties.add(PropertyInformationFactory.create(null, readable, false));
 		inputProperties.add(PropertyInformationFactory.create(null, readable, true));
-		Collection<PropertyInformation> filteredProperties = PropertyInformationFilter.filter(inputProperties,
-		        PropertyVisibility.READABLE);
+		Collection<PropertyInformation> filteredProperties =
+		        PropertyInformationFilter.filter(inputProperties, PropertyVisibility.READABLE);
 		assertThat("Incorrect filtered properties.", filteredProperties.isEmpty(), is(true));
 	}
 
@@ -76,15 +76,15 @@ public class PropertyInformationFilterTest {
 		inputProperties.add(PropertyInformationFactory.create(null, true, false));
 		inputProperties.add(PropertyInformationFactory.create(null, true, false));
 		inputProperties.add(PropertyInformationFactory.create(null, false, true));
-		Collection<PropertyInformation> filteredProperties = PropertyInformationFilter.filter(inputProperties,
-		        PropertyVisibility.READABLE_WRITABLE);
+		Collection<PropertyInformation> filteredProperties =
+		        PropertyInformationFilter.filter(inputProperties, PropertyVisibility.READABLE_WRITABLE);
 		assertThat("Incorrect filtered properties.", filteredProperties.isEmpty(), is(true));
 	}
 
 	@Test
 	public void shouldReturnOnlyWritablePropertiesWhenRequested() throws Exception {
-		Collection<PropertyInformation> filteredProperties = PropertyInformationFilter.filter(VALID_PROPERTIES,
-		        PropertyVisibility.WRITABLE);
+		Collection<PropertyInformation> filteredProperties =
+		        PropertyInformationFilter.filter(VALID_PROPERTIES, PropertyVisibility.WRITABLE);
 		assertThat("Incorrect filtered properties.", filteredProperties.size(), is(3));
 		Iterator<PropertyInformation> iterator = filteredProperties.iterator();
 		assertThat("Incorrect filtered properties.", iterator.next(), is(VALID_PROPERTIES.get(0)));
@@ -94,8 +94,8 @@ public class PropertyInformationFilterTest {
 
 	@Test
 	public void shouldReturnOnlyReadablePropertiesWhenRequested() throws Exception {
-		Collection<PropertyInformation> filteredProperties = PropertyInformationFilter.filter(VALID_PROPERTIES,
-		        PropertyVisibility.READABLE);
+		Collection<PropertyInformation> filteredProperties =
+		        PropertyInformationFilter.filter(VALID_PROPERTIES, PropertyVisibility.READABLE);
 		assertThat("Incorrect filtered properties.", filteredProperties.size(), is(3));
 		Iterator<PropertyInformation> iterator = filteredProperties.iterator();
 		assertThat("Incorrect filtered properties.", iterator.next(), is(VALID_PROPERTIES.get(1)));
@@ -105,8 +105,8 @@ public class PropertyInformationFilterTest {
 
 	@Test
 	public void shouldReturnOnlyReadableWritablePropertiesWhenRequested() throws Exception {
-		Collection<PropertyInformation> filteredProperties = PropertyInformationFilter.filter(VALID_PROPERTIES,
-		        PropertyVisibility.READABLE_WRITABLE);
+		Collection<PropertyInformation> filteredProperties =
+		        PropertyInformationFilter.filter(VALID_PROPERTIES, PropertyVisibility.READABLE_WRITABLE);
 		assertThat("Incorrect filtered properties.", filteredProperties.size(), is(1));
 		assertThat("Incorrect filtered properties.", filteredProperties.iterator().next(), is(VALID_PROPERTIES.get(2)));
 	}

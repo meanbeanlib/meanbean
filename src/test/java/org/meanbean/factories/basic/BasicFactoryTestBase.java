@@ -12,25 +12,25 @@ import org.meanbean.util.RandomValueGenerator;
 public abstract class BasicFactoryTestBase<T> {
 
 	@Test(expected = IllegalArgumentException.class)
-    public void constructorShouldPreventNullRandomNumberGenerator() throws Exception {
-	    createFactory(null);
-    }
-	
+	public void constructorShouldPreventNullRandomNumberGenerator() throws Exception {
+		createFactory(null);
+	}
+
 	@Test
-    public void createShouldReturnNewObjectEachInvocation() throws Exception {
-	    Factory<T> factory = createFactory(createRandomNumberGenerator());
-	    T createdObject1 = factory.create();
-	    T createdObject2 = factory.create();
-	    assertThat("Factory does not create new objects.", createdObject1, is(not(sameInstance(createdObject2))));
-    }
-	
-	@Test
-    public void createShouldReturnDifferentValuesEachInvocation() throws Exception {
+	public void createShouldReturnNewObjectEachInvocation() throws Exception {
 		Factory<T> factory = createFactory(createRandomNumberGenerator());
-	    T createdObject1 = factory.create();
-	    T createdObject2 = factory.create();
-	    assertThat("Factory does not create different values.", createdObject1, is(not(createdObject2)));
-    }
+		T createdObject1 = factory.create();
+		T createdObject2 = factory.create();
+		assertThat("Factory does not create new objects.", createdObject1, is(not(sameInstance(createdObject2))));
+	}
+
+	@Test
+	public void createShouldReturnDifferentValuesEachInvocation() throws Exception {
+		Factory<T> factory = createFactory(createRandomNumberGenerator());
+		T createdObject1 = factory.create();
+		T createdObject2 = factory.create();
+		assertThat("Factory does not create different values.", createdObject1, is(not(createdObject2)));
+	}
 
 	protected abstract RandomValueGenerator createRandomNumberGenerator();
 

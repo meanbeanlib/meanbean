@@ -7,15 +7,17 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meanbean.bean.factory.DynamicBeanFactory;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
+import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryRepository;
+import org.meanbean.factories.util.BasicFactoryLookupStrategy;
+import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
@@ -396,9 +398,9 @@ public class BasicBeanTester implements BeanTester {
 		Collection<PropertyInformation> readableWritableProperties =
 		        PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
 		// Instantiate
-		Object bean = null;
+		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
+		Object bean;
 		try {
-			Factory<Object> beanFactory = new DynamicBeanFactory(beanInformation);
 			bean = beanFactory.create();
 		} catch (Exception e) {
 			String message =
@@ -418,7 +420,7 @@ public class BasicBeanTester implements BeanTester {
 					        factoryLookupStrategy.getFactory(property.getName(),
 					                property.getWriteMethodParameterType(), configuration);
 					testValue = valueFactory.create();
-					if (valueFactory instanceof DynamicBeanFactory) {
+					if (valueFactory instanceof BasicNewObjectInstanceFactory) {
 						equalityTest = EqualityTest.ABSOLUTE;
 					}
 				} catch (Exception e) {

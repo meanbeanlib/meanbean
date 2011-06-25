@@ -1,7 +1,7 @@
 package org.meanbean.factories.basic;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.Date;
 
@@ -28,15 +28,17 @@ public class DateFactoryTest extends BasicFactoryTestBase<Date> {
 
 	@Test
 	public void createShouldReturnDateWithTimeInMillisMatchingRandomLong() throws Exception {
-		Factory<Date> factory = createFactory(new ArrayBasedRandomValueGenerator(null, null,
-		        new long[] { RANDOM_LONG_1 }, null, null, null));
+		Factory<Date> factory =
+		        createFactory(new ArrayBasedRandomValueGenerator(null, null, new long[] { RANDOM_LONG_1 }, null, null,
+		                null));
 		assertThat("Incorrect random date.", factory.create().getTime(), is(RANDOM_LONG_1));
 	}
 
 	@Test
 	public void createShouldReturnDateWithTimeInMillisMatchingAbsoluteRandomLong() throws Exception {
-		Factory<Date> factory = createFactory(new ArrayBasedRandomValueGenerator(null, null,
-		        new long[] { RANDOM_LONG_2 }, null, null, null));
+		Factory<Date> factory =
+		        createFactory(new ArrayBasedRandomValueGenerator(null, null, new long[] { RANDOM_LONG_2 }, null, null,
+		                null));
 		assertThat("Incorrect random date.", factory.create().getTime(), is(Math.abs(RANDOM_LONG_2)));
 	}
 }
