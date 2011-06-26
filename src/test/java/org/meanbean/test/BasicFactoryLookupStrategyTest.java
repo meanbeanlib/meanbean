@@ -5,6 +5,10 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.meanbean.bean.info.BeanInformation;
+import org.meanbean.bean.info.BeanInformationFactory;
+import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryRepository;
 import org.meanbean.factories.NoSuchFactoryException;
@@ -16,7 +20,10 @@ import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.NullFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BasicFactoryLookupStrategyTest {
 
 	private static final String PROPERTY_NAME = "A PROPERTY";
@@ -29,11 +36,19 @@ public class BasicFactoryLookupStrategyTest {
 
 	private BasicFactoryLookupStrategy factoryLookupStrategy;
 
+	@Mock
+	private BeanInformation beanInformationMock;
+
+	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+
+	private final BeanInformation beanInformationReal = beanInformationFactory.create(BasicBean.class);
+
 	@Before
 	public void before() {
 		randomValueGenerator = new SimpleRandomValueGenerator();
 		factoryCollection = new FactoryRepository(randomValueGenerator);
 		factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection, randomValueGenerator);
+
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -47,44 +62,56 @@ public class BasicFactoryLookupStrategyTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
+	public void getFactoryShouldPreventNullBeanInformation() throws Exception {
+		factoryLookupStrategy.getFactory(null, IRRELEVANT_PROPERTY_NAME, String.class, null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
 	public void getFactoryShouldPreventNullPropertyName() throws Exception {
-		factoryLookupStrategy.getFactory(null, String.class, null);
+		factoryLookupStrategy.getFactory(beanInformationMock, null, String.class, null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void getFactoryShouldPreventNullPropertyType() throws Exception {
-		factoryLookupStrategy.getFactory(IRRELEVANT_PROPERTY_NAME, null, null);
+		factoryLookupStrategy.getFactory(beanInformationMock, IRRELEVANT_PROPERTY_NAME, null, null);
 	}
 
 	@Test
 	public void getFactoryShouldReturnRegisteredFactoryForRegisteredTypes() throws Exception {
-		Factory<?> factory = factoryLookupStrategy.getFactory(IRRELEVANT_PROPERTY_NAME, String.class, null);
+		Factory<?> factory =
+		        factoryLookupStrategy.getFactory(beanInformationMock, IRRELEVANT_PROPERTY_NAME, String.class, null);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(StringFactory.class.getName()));
 	}
 
 	@Test
 	public void getFactoryShouldReturnEnumFactoryForEnumTypes() throws Exception {
-		Factory<?> factory = factoryLookupStrategy.getFactory(IRRELEVANT_PROPERTY_NAME, Color.class, null);
+		Factory<?> factory =
+		        factoryLookupStrategy.getFactory(beanInformationMock, IRRELEVANT_PROPERTY_NAME, Color.class, null);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(EnumFactory.class.getName()));
 	}
 
+	// TODO TEST EQUIVALENT POPULATED BEAN FACTORY
+
 	@Test
-	public void getFactoryShouldReturnBasicNewObjectInstanceFactoryForUnrecognisedBeanTypes() throws Exception {
-		Factory<?> factory = factoryLookupStrategy.getFactory(IRRELEVANT_PROPERTY_NAME, BasicBean.class, null);
+	public void getFactoryShouldReturnBasicNewObjectInstanceFactoryForUnrecognisedPropertyTypeThatIsSameAsParentBean()
+	        throws Exception {
+		Factory<?> factory =
+		        factoryLookupStrategy.getFactory(beanInformationReal, IRRELEVANT_PROPERTY_NAME, BasicBean.class, null);
 		assertThat("Incorrect factory.", factory.getClass().getName(),
 		        is(BasicNewObjectInstanceFactory.class.getName()));
 	}
 
 	@Test(expected = NoSuchFactoryException.class)
 	public void getFactoryShouldThrowNoSuchFactoryExceptionForUnsupportedTypes() throws Exception {
-		factoryLookupStrategy.getFactory(IRRELEVANT_PROPERTY_NAME, NonBean.class, null);
+		factoryLookupStrategy.getFactory(beanInformationReal, IRRELEVANT_PROPERTY_NAME, NonBean.class, null);
 	}
 
 	@Test
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanRegisteredFactory() throws Exception {
 		Configuration configuration =
 		        new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory()).build();
-		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, String.class, configuration);
+		Factory<?> factory =
+		        factoryLookupStrategy.getFactory(beanInformationMock, PROPERTY_NAME, String.class, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
 
@@ -92,7 +119,8 @@ public class BasicFactoryLookupStrategyTest {
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanEnumFactory() throws Exception {
 		Configuration configuration =
 		        new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory()).build();
-		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, Color.class, configuration);
+		Factory<?> factory =
+		        factoryLookupStrategy.getFactory(beanInformationMock, PROPERTY_NAME, Color.class, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
 
@@ -100,7 +128,8 @@ public class BasicFactoryLookupStrategyTest {
 	public void getFactoryShouldReturnFactoryInConfigurationRatherThanDynamicBeanFactory() throws Exception {
 		Configuration configuration =
 		        new ConfigurationBuilder().overrideFactory(PROPERTY_NAME, new NullFactory()).build();
-		Factory<?> factory = factoryLookupStrategy.getFactory(PROPERTY_NAME, BasicBean.class, configuration);
+		Factory<?> factory =
+		        factoryLookupStrategy.getFactory(beanInformationMock, PROPERTY_NAME, BasicBean.class, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
 

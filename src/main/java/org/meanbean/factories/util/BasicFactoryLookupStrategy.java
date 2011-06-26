@@ -2,10 +2,14 @@ package org.meanbean.factories.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meanbean.bean.info.BeanInformation;
+import org.meanbean.bean.info.BeanInformationFactory;
+import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.basic.EnumFactory;
+import org.meanbean.factories.beans.EquivalentPopulatedBeanFactory;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.Configuration;
 import org.meanbean.util.RandomValueGenerator;
@@ -103,6 +107,8 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	 * thrown.
 	 * </p>
 	 * 
+	 * @param beanInformation
+	 *            Information about the bean the property belongs to.
 	 * @param propertyName
 	 *            The name of the property.
 	 * @param propertyType
@@ -120,11 +126,12 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	 *             Factory.
 	 */
 	@Override
-	public Factory<?> getFactory(String propertyName, Class<?> propertyType, Configuration configuration)
-	        throws IllegalArgumentException, NoSuchFactoryException {
-		log.debug("getFactory: entering with propertyName=[" + propertyName + "], propertyType=[" + propertyType
-		        + "], configuration=[" + configuration + "].");
+	public Factory<?> getFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
+	        Configuration configuration) throws IllegalArgumentException, NoSuchFactoryException {
+		log.debug("getFactory: entering with beanInformatino=[" + beanInformation + "], propertyName=[" + propertyName
+		        + "], propertyType=[" + propertyType + "], configuration=[" + configuration + "].");
 		// Validate
+		validationHelper.ensureExists("beanInformation", "get factory", beanInformation);
 		validationHelper.ensureExists("propertyName", "get factory", propertyName);
 		validationHelper.ensureExists("propertyType", "get factory", propertyType);
 		// Get factory
@@ -143,13 +150,33 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			EnumFactory enumFactory = new EnumFactory(propertyType, randomValueGenerator);
 			factoryCollection.addFactory(propertyType, enumFactory);
 			result = enumFactory;
-		} else {
+		} else if (!propertyType.equals(beanInformation.getBeanClass())) {
 			// Try to create a Factory for the object
 			log.debug("getFactory: Try to create a DynamicBeanFactory for propertyType=[" + propertyType + "].");
 			try {
+				BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+				BeanInformation propertyBeanInformation = beanInformationFactory.create(propertyType);
+				Factory<?> equivalentPopulatedBeanFactory =
+				        new EquivalentPopulatedBeanFactory(propertyBeanInformation, this);
+				equivalentPopulatedBeanFactory.create(); // Test the factory before registering and returning
+				// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
+				log.warn("Using EquivalentPopulatedBeanFactory for [" + propertyName + "] of type ["
+				        + propertyType.getName() + "]. Do you need to register a custom Factory?");
+				result = equivalentPopulatedBeanFactory;
+			} catch (Exception e) {
+				String message =
+				        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
+				                + "]. Please register a custom Factory.";
+				log.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
+				throw new NoSuchFactoryException(message, e);
+			}
+		} else {
+			// Try to create a Factory for the object
+			log.debug("getFactory: Try to create a BasicNewObjectInstanceFactory for propertyType=[" + propertyType
+			        + "].");
+			try {
 				Factory<?> basicFactory = new BasicNewObjectInstanceFactory(propertyType);
 				basicFactory.create(); // Test the factory before registering and returning
-				factoryCollection.addFactory(propertyType, basicFactory);
 				// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
 				log.warn("Using BasicNewObjectInstanceFactory for [" + propertyName + "] of type ["
 				        + propertyType.getName() + "]. Do you need to register a custom Factory?");

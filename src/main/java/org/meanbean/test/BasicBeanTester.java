@@ -417,7 +417,7 @@ public class BasicBeanTester implements BeanTester {
 				Object testValue = null;
 				try {
 					Factory<?> valueFactory =
-					        factoryLookupStrategy.getFactory(property.getName(),
+					        factoryLookupStrategy.getFactory(beanInformation, property.getName(),
 					                property.getWriteMethodParameterType(), configuration);
 					testValue = valueFactory.create();
 					if (valueFactory instanceof BasicNewObjectInstanceFactory) {

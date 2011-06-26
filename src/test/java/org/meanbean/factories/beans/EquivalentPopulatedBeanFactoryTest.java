@@ -61,35 +61,36 @@ public class EquivalentPopulatedBeanFactoryTest {
 		factoryLookupStrategyReal =
 		        new BasicFactoryLookupStrategy(tester.getFactoryCollection(), tester.getRandomValueGenerator());
 		beanInformationReal = new JavaBeanInformationFactory().create(ComplexBean.class);
-		when(factoryLookupStrategyMock.getFactory(ID_KEY, long.class, null)).thenReturn((Factory) new Factory<Long>() {
-			@Override
-			public Long create() {
-				return TEST_ID;
-			}
-		});
-		when(factoryLookupStrategyMock.getFactory(FIRST_NAME_KEY, String.class, null)).thenReturn(
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, ID_KEY, long.class, null)).thenReturn(
+		        (Factory) new Factory<Long>() {
+			        @Override
+			        public Long create() {
+				        return TEST_ID;
+			        }
+		        });
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, FIRST_NAME_KEY, String.class, null)).thenReturn(
 		        (Factory) new Factory<String>() {
 			        @Override
 			        public String create() {
 				        return TEST_FIRST_NAME;
 			        }
 		        });
-		when(factoryLookupStrategyMock.getFactory(LAST_NAME_KEY, String.class, null)).thenReturn(
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, LAST_NAME_KEY, String.class, null)).thenReturn(
 		        (Factory) new Factory<String>() {
 			        @Override
 			        public String create() {
 				        return TEST_LAST_NAME;
 			        }
 		        });
-		when(factoryLookupStrategyMock.getFactory(DATE_OF_BIRTH_KEY, Date.class, null)).thenReturn(
-		        (Factory) new Factory<Date>() {
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, DATE_OF_BIRTH_KEY, Date.class, null))
+		        .thenReturn((Factory) new Factory<Date>() {
 			        @Override
 			        public Date create() {
 				        return TEST_DATE_OF_BIRTH;
 			        }
 		        });
-		when(factoryLookupStrategyMock.getFactory(FAVOURITE_NUMBER_KEY, long.class, null)).thenReturn(
-		        (Factory) new Factory<Long>() {
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, FAVOURITE_NUMBER_KEY, long.class, null))
+		        .thenReturn((Factory) new Factory<Long>() {
 			        @Override
 			        public Long create() {
 				        return TEST_FAVOURITE_NUMBER;

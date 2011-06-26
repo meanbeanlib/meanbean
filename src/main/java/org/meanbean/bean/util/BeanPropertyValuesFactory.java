@@ -78,7 +78,8 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 			Factory<?> valueFactory;
 			try {
 				valueFactory =
-				        factoryLookupStrategy.getFactory(propertyName, property.getWriteMethodParameterType(), null);
+				        factoryLookupStrategy.getFactory(beanInformation, propertyName,
+				                property.getWriteMethodParameterType(), null);
 				log.debug("create: using factory [" + valueFactory.getClass().getName()
 				        + "] to create value for property [" + propertyName + "].");
 				Object value = valueFactory.create();
