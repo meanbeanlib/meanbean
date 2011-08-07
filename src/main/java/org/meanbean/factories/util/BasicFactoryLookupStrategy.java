@@ -130,66 +130,117 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	        Configuration configuration) throws IllegalArgumentException, NoSuchFactoryException {
 		log.debug("getFactory: entering with beanInformatino=[" + beanInformation + "], propertyName=[" + propertyName
 		        + "], propertyType=[" + propertyType + "], configuration=[" + configuration + "].");
-		// Validate
 		validationHelper.ensureExists("beanInformation", "get factory", beanInformation);
 		validationHelper.ensureExists("propertyName", "get factory", propertyName);
 		validationHelper.ensureExists("propertyType", "get factory", propertyType);
-		// Get factory
-		Factory<?> result;
-		if ((configuration != null) && (configuration.hasOverrideFactory(propertyName))) {
-			// Use the Factory override in the Configuration
-			log.debug("getFactory: Configuration has a Factory override for propertyType.");
-			result = configuration.getOverrideFactory(propertyName);
-		} else if (factoryCollection.hasFactory(propertyType)) {
-			// Use the Factory registered in the FactoryCollection
-			log.debug("getFactory: FactoryCollection has a Factory registed for propertyType.");
-			result = factoryCollection.getFactory(propertyType);
-		} else if (propertyType.isEnum()) {
-			// Try to create a Factory for the Enum
-			log.debug("getFactory: propertyType is an enum. Try to create a generic EnumFactory.");
-			EnumFactory enumFactory = new EnumFactory(propertyType, randomValueGenerator);
-			factoryCollection.addFactory(propertyType, enumFactory);
-			result = enumFactory;
-		} else if (!propertyType.equals(beanInformation.getBeanClass())) {
-			// Try to create a Factory for the object
-			log.debug("getFactory: Try to create a DynamicBeanFactory for propertyType=[" + propertyType + "].");
-			try {
-				BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
-				BeanInformation propertyBeanInformation = beanInformationFactory.create(propertyType);
-				Factory<?> equivalentPopulatedBeanFactory =
-				        new EquivalentPopulatedBeanFactory(propertyBeanInformation, this);
-				equivalentPopulatedBeanFactory.create(); // Test the factory before registering and returning
-				// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
-				log.warn("Using EquivalentPopulatedBeanFactory for [" + propertyName + "] of type ["
-				        + propertyType.getName() + "]. Do you need to register a custom Factory?");
-				result = equivalentPopulatedBeanFactory;
-			} catch (Exception e) {
-				String message =
-				        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
-				                + "]. Please register a custom Factory.";
-				log.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
-				throw new NoSuchFactoryException(message, e);
-			}
+		Factory<?> factory = doGetFactory(beanInformation, propertyName, propertyType, configuration);
+		log.debug("getFactory: exiting returning [" + factory + "].");
+		return factory;
+	}
+
+	private Factory<?> doGetFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
+	        Configuration configuration) {
+		if (propertyHasOverrideFactoryInConfiguration(propertyName, configuration)) {
+			return getPropertyOverrideFactoryFromConfiguration(propertyName, configuration);
+		} else if (propertyTypeHasRegisteredFactory(propertyType)) {
+			return getPropertyTypeRegisteredFactory(propertyType);
+		} else if (propertyIsAnEnum(propertyType)) {
+			return getAndCachePropertyEnumFactory(propertyType);
+		} else if (propertyIsNotTheSameTypeAsItsParent(beanInformation, propertyType)) {
+			return createTestedPopulatedBeanFactory(propertyName, propertyType);
 		} else {
-			// Try to create a Factory for the object
-			log.debug("getFactory: Try to create a BasicNewObjectInstanceFactory for propertyType=[" + propertyType
-			        + "].");
-			try {
-				Factory<?> basicFactory = new BasicNewObjectInstanceFactory(propertyType);
-				basicFactory.create(); // Test the factory before registering and returning
-				// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
-				log.warn("Using BasicNewObjectInstanceFactory for [" + propertyName + "] of type ["
-				        + propertyType.getName() + "]. Do you need to register a custom Factory?");
-				result = basicFactory;
-			} catch (Exception e) {
-				String message =
-				        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
-				                + "]. Please register a custom Factory.";
-				log.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
-				throw new NoSuchFactoryException(message, e);
-			}
+			return createTestedUnpopulatedBeanFactory(propertyName, propertyType);
 		}
-		log.debug("getFactory: exiting returning [" + result + "].");
-		return result;
+	}
+
+	private boolean propertyHasOverrideFactoryInConfiguration(String propertyName, Configuration configuration) {
+		return (configuration != null) && (configuration.hasOverrideFactory(propertyName));
+	}
+
+	private Factory<?> getPropertyOverrideFactoryFromConfiguration(String propertyName, Configuration configuration) {
+		return configuration.getOverrideFactory(propertyName);
+	}
+
+	private boolean propertyTypeHasRegisteredFactory(Class<?> propertyType) {
+		return factoryCollection.hasFactory(propertyType);
+	}
+
+	private Factory<?> getPropertyTypeRegisteredFactory(Class<?> propertyType) {
+		return factoryCollection.getFactory(propertyType);
+	}
+
+	private boolean propertyIsAnEnum(Class<?> propertyType) {
+		return propertyType.isEnum();
+	}
+
+	private Factory<?> getAndCachePropertyEnumFactory(Class<?> propertyType) {
+		EnumFactory factory = getEnumPropertyFactory(propertyType);
+		cacheEnumPropertyFactory(propertyType, factory);
+		return factory;
+	}
+
+	private EnumFactory getEnumPropertyFactory(Class<?> propertyType) {
+		return new EnumFactory(propertyType, randomValueGenerator);
+	}
+
+	private void cacheEnumPropertyFactory(Class<?> propertyType, EnumFactory enumFactory) {
+		factoryCollection.addFactory(propertyType, enumFactory);
+	}
+
+	private boolean propertyIsNotTheSameTypeAsItsParent(BeanInformation beanInformation, Class<?> propertyType) {
+		return !propertyType.equals(beanInformation.getBeanClass());
+	}
+
+	private Factory<?> createTestedPopulatedBeanFactory(String propertyName, Class<?> propertyType) {
+		try {
+			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType);
+			testPopulatedBeanFactory(populatedBeanFactory);
+			// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
+			log.warn("Using dynamically created factory for [" + propertyName + "] of type [" + propertyType.getName()
+			        + "]. Do you need to register a custom Factory?");
+			return populatedBeanFactory;
+		} catch (Exception e) {
+			String message =
+			        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
+			                + "]. Please register a custom Factory.";
+			log.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
+			throw new NoSuchFactoryException(message, e);
+		}
+	}
+
+	private Factory<?> createPopulatedBeanFactory(Class<?> propertyType) {
+		BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+		BeanInformation propertyBeanInformation = beanInformationFactory.create(propertyType);
+		Factory<?> equivalentPopulatedBeanFactory = new EquivalentPopulatedBeanFactory(propertyBeanInformation, this);
+		return equivalentPopulatedBeanFactory;
+	}
+
+	private void testPopulatedBeanFactory(Factory<?> equivalentPopulatedBeanFactory) {
+		equivalentPopulatedBeanFactory.create();
+	}
+
+	private Factory<?> createTestedUnpopulatedBeanFactory(String propertyName, Class<?> propertyType) {
+		try {
+			Factory<?> unpopulatedBeanFactory = createUnpopulatedBeanFactory(propertyType);
+			testUnpopulatedBeanFactory(unpopulatedBeanFactory);
+			// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
+			log.warn("Using dynamically created factory for [" + propertyName + "] of type [" + propertyType.getName()
+			        + "]. Do you need to register a custom Factory?");
+			return unpopulatedBeanFactory;
+		} catch (Exception e) {
+			String message =
+			        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
+			                + "]. Please register a custom Factory.";
+			log.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
+			throw new NoSuchFactoryException(message, e);
+		}
+	}
+
+	private Factory<?> createUnpopulatedBeanFactory(Class<?> propertyType) {
+		return new BasicNewObjectInstanceFactory(propertyType);
+	}
+
+	private void testUnpopulatedBeanFactory(Factory<?> basicFactory) {
+		basicFactory.create();
 	}
 }

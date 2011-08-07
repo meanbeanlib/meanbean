@@ -6,8 +6,10 @@ import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
+import org.meanbean.factories.basic.EquivalentEnumFactory;
 import org.meanbean.factories.beans.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
+import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
@@ -272,11 +274,30 @@ public class AdvancedEqualsMethodTester implements SmartEqualsMethodTester {
 		log.debug("testEqualsMethod: Entering with clazz=[" + clazz + "], customConfiguration=[" + customConfiguration
 		        + "], insignificantProperties=[" + insignificantProperties + "].");
 		validationHelper.ensureExists("clazz", "test equals method", clazz);
-		EquivalentPopulatedBeanFactory factory =
-		        new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz),
-		                equalsMethodTester.getFactoryLookupStrategy());
+		Factory<?> factory = createFactory(clazz);
 		equalsMethodTester.testEqualsMethod(factory, customConfiguration, insignificantProperties);
 		log.debug("testEqualsMethod: Exiting - Equals is correct.");
+	}
+
+	private Factory<?> createFactory(Class<?> clazz) {
+		if (classIsAnEnum(clazz)) {
+			return createEnumClassFactory(clazz);
+		} else {
+			return createPopulatedBeanFactory(clazz);
+		}
+	}
+
+	private boolean classIsAnEnum(Class<?> clazz) {
+		return clazz.isEnum();
+	}
+
+	private EquivalentEnumFactory createEnumClassFactory(Class<?> clazz) {
+		return new EquivalentEnumFactory(clazz);
+	}
+
+	private EquivalentPopulatedBeanFactory createPopulatedBeanFactory(Class<?> clazz) {
+		return new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz),
+		        equalsMethodTester.getFactoryLookupStrategy());
 	}
 
 	/**
