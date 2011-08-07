@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.meanbean</groupId>
 	<artifactId>meanbean</artifactId>
-	<version>1.0.9-SNAPSHOT</version>
+	<version>1.0.9</version>
 	<packaging>jar</packaging>
 	<name>meanbean</name>
 	<description>
@@ -27,9 +26,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>https://meanbean.svn.sourceforge.net/viewvc/meanbean/trunk</url>
-		<developerConnection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/trunk</developerConnection>
-		<connection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/trunk</connection>
+		<url>https://meanbean.svn.sourceforge.net/viewvc/meanbean/tags/meanbean-1.0.9</url>
+		<developerConnection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/tags/meanbean-1.0.9</developerConnection>
+		<connection>scm:svn:https://meanbean.svn.sourceforge.net/svnroot/meanbean/tags/meanbean-1.0.9</connection>
 	</scm>
 	<developers>
 		<developer>
