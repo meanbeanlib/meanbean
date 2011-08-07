@@ -119,7 +119,7 @@ public class AdvancedEqualsMethodTester {
 	 * </p>
 	 */
 	public AdvancedEqualsMethodTester() {
-		this(new BasicEqualsMethodTester());
+		this(new EqualsMethodTester());
 	}
 
 	/**

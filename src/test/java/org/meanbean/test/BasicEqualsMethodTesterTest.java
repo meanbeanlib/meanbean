@@ -26,7 +26,7 @@ import org.meanbean.test.beans.NullFactory;
 
 public class BasicEqualsMethodTesterTest {
 
-	private final EqualsMethodTester equalsTester = new BasicEqualsMethodTester();
+	private final EqualsMethodTester equalsTester = new EqualsMethodTester();
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testEqualsMethodShouldPreventNullFactory() throws Exception {
@@ -187,7 +187,7 @@ public class BasicEqualsMethodTesterTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(new BeanFactory(), configuration);
 		assertThat("custom factory was not used", factory.getInvocationCount(),
-		        is(EqualsMethodTester.TEST_ITERATIONS_PER_TYPE));
+		        is(EqualsMethodTester.DEFAULT_TEST_ITERATIONS_PER_TYPE));
 	}
 
 	@Test
@@ -208,7 +208,7 @@ public class BasicEqualsMethodTesterTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(new BeanFactory(), configuration);
 		assertThat("global iterations was not used", factory.getInvocationCount(),
-		        is(EqualsMethodTester.TEST_ITERATIONS_PER_TYPE));
+		        is(EqualsMethodTester.DEFAULT_TEST_ITERATIONS_PER_TYPE));
 	}
 
 	@Test

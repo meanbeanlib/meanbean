@@ -143,7 +143,7 @@ public class AdvancedEqualsMethodTesterTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(Bean.class, configuration);
 		assertThat("custom factory was not used", factory.getInvocationCount(),
-		        is(EqualsMethodTester.TEST_ITERATIONS_PER_TYPE));
+		        is(EqualsMethodTester.DEFAULT_TEST_ITERATIONS_PER_TYPE));
 	}
 
 	@Test
@@ -164,7 +164,7 @@ public class AdvancedEqualsMethodTesterTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(Bean.class, configuration);
 		assertThat("global iterations was not used", factory.getInvocationCount(),
-		        is(EqualsMethodTester.TEST_ITERATIONS_PER_TYPE));
+		        is(EqualsMethodTester.DEFAULT_TEST_ITERATIONS_PER_TYPE));
 	}
 
 	@Test

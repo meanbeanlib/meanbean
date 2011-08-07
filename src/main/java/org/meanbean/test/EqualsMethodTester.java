@@ -1,14 +1,19 @@
 package org.meanbean.test;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformationException;
-import org.meanbean.factories.FactoryCollectionProvider;
-import org.meanbean.factories.util.FactoryLookupStrategyProvider;
+import org.meanbean.factories.FactoryCollection;
+import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
-import org.meanbean.util.RandomValueGeneratorProvider;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.SimpleValidationHelper;
+import org.meanbean.util.ValidationHelper;
 
 /**
  * <p>
- * Defines a means of testing the correctness of the equals logic implemented by a type with respect to:
+ * Concrete implementation of the EqualsMethodTester that provides a means of testing the correctness of the equals
+ * logic implemented by a type with respect to:
  * </p>
  * 
  * <ul>
@@ -46,13 +51,70 @@ import org.meanbean.util.RandomValueGeneratorProvider;
  * the equality logic</li>
  * </ul>
  * 
+ * <p>
+ * As an example, to test the equals logic implemented by a class called MyClass do the following:
+ * </p>
+ * 
+ * <pre>
+ * EqualsMethodTester tester = new BasicEqualsMethodTester();
+ * tester.testEqualsMethod(new Factory<MyClass>() {
+ *    @Override
+ *    public MyClass create() {
+ *       MyClass() result = new MyClass();
+ *       // initialize result...
+ *       result.setName("TEST_NAME");
+ *       return result;
+ *    }
+ * });
+ * </pre>
+ * 
+ * <p>
+ * The Factory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
+ * <code>equals()</code> and <code>hashCode()</code>. In the above example, there is only one property, name, which is
+ * considered by MyClass's equals logic.
+ * </p>
+ * 
+ * <p>
+ * The following example tests the equals logic implemented by a class called MyComplexClass which has two properties:
+ * firstName and lastName. Only firstName is considered in the equals logic. Therefore, lastName is specified in the
+ * insignificantProperties varargs:
+ * </p>
+ * 
+ * <pre>
+ * EqualsMethodTester tester = new BasicEqualsMethodTester();
+ * tester.testEqualsMethod(new Factory<MyComplexClass>() {
+ *    @Override
+ *    public MyComplexClass create() {
+ *       MyComplexClass() result = new MyComplexClass();
+ *       // initialize result...
+ *       result.setFirstName("TEST_FIRST_NAME");
+ *       result.setLastName("TEST_LAST_NAME");
+ *       return result;
+ *    }
+ * }, "lastName");
+ * </pre>
+ * 
  * @author Graham Williamson
  */
-public interface EqualsMethodTester extends RandomValueGeneratorProvider, FactoryCollectionProvider,
-        FactoryLookupStrategyProvider {
+public class EqualsMethodTester {
 
-	/** Default number of times a type should be tested. */
-	static final int TEST_ITERATIONS_PER_TYPE = 100;
+	public static final int DEFAULT_TEST_ITERATIONS_PER_TYPE = 100;
+
+	/** The number of times each type is tested, unless a custom Configuration overrides this global setting. */
+	private final int iterations = DEFAULT_TEST_ITERATIONS_PER_TYPE;
+
+	/** Logging mechanism. */
+	private final Log log = LogFactory.getLog(EqualsMethodTester.class);
+
+	/** Input validation helper. */
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+
+	/** The verifier to which general contract verification is delegated. */
+	private final EqualsMethodContractVerifier contractVerifier = new EqualsMethodContractVerifier();
+
+	/** The verifier to which property significance verification is delegated. */
+	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier =
+	        new PropertyBasedEqualsMethodPropertySignificanceVerifier();
 
 	/**
 	 * <p>
@@ -109,8 +171,10 @@ public interface EqualsMethodTester extends RandomValueGeneratorProvider, Factor
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	void testEqualsMethod(Factory<?> factory, String... insignificantProperties) throws IllegalArgumentException,
-	        BeanInformationException, BeanTestException, AssertionError;
+	public void testEqualsMethod(Factory<?> factory, String... insignificantProperties)
+	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
+		testEqualsMethod(factory, null, insignificantProperties);
+	}
 
 	/**
 	 * <p>
@@ -173,6 +237,56 @@ public interface EqualsMethodTester extends RandomValueGeneratorProvider, Factor
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	void testEqualsMethod(Factory<?> factory, Configuration customConfiguration, String... insignificantProperties)
-	        throws IllegalArgumentException, AssertionError;
+	public void testEqualsMethod(Factory<?> factory, Configuration customConfiguration,
+	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
+	        BeanTestException, AssertionError {
+		log.debug("testEqualsMethod: Entering with factory=[" + factory + "], customConfiguration=["
+		        + customConfiguration + "], insignificantProperties=[" + insignificantProperties + "].");
+		validationHelper.ensureExists("factory", "test equals method", factory);
+		validationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
+		contractVerifier.verifyEqualsReflexive(factory);
+		contractVerifier.verifyEqualsSymmetric(factory);
+		contractVerifier.verifyEqualsTransitive(factory);
+		contractVerifier.verifyEqualsConsistent(factory);
+		contractVerifier.verifyEqualsNull(factory);
+		contractVerifier.verifyEqualsDifferentType(factory);
+		// Override the standard number of iterations if need be
+		int iterations = this.iterations;
+		if ((customConfiguration != null) && (customConfiguration.hasIterationsOverride())) {
+			iterations = customConfiguration.getIterations();
+		}
+		// Test property significance 'iterations' times
+		for (int idx = 0; idx < iterations; idx++) {
+			log.debug("testEqualsMethod: Iteration [" + idx + "].");
+			propertySignificanceVerifier.verifyEqualsMethod(factory, customConfiguration, insignificantProperties);
+		}
+		log.debug("testEqualsMethod: Exiting - Equals is correct.");
+	}
+
+	/**
+	 * Get a RandomValueGenerator.
+	 * 
+	 * @return A RandomValueGenerator.
+	 */
+	public RandomValueGenerator getRandomValueGenerator() {
+		return propertySignificanceVerifier.getRandomValueGenerator();
+	}
+
+	/**
+	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
+	 * 
+	 * @return The collection of test data Factories.
+	 */
+	public FactoryCollection getFactoryCollection() {
+		return propertySignificanceVerifier.getFactoryCollection();
+	}
+
+	/**
+	 * Get the FactoryLookupStrategy, which provides a means of acquiring Factories.
+	 * 
+	 * @return The factory lookup strategy.
+	 */
+	public FactoryLookupStrategy getFactoryLookupStrategy() {
+		return propertySignificanceVerifier.getFactoryLookupStrategy();
+	}
 }
