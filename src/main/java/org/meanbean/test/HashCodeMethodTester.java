@@ -2,8 +2,11 @@ package org.meanbean.test;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.meanbean.bean.info.BeanInformationFactory;
+import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryRepository;
+import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
@@ -15,8 +18,8 @@ import org.meanbean.util.ValidationHelper;
 
 /**
  * <p>
- * Concrete implementation of the HashCodeMethodTester that provides a means of testing the correctness of the hashCode
- * logic implemented by a type with respect to:
+ * Provides a means of testing the correctness of the hashCode logic implemented by a type, based solely on the
+ * provision of the type, with respect to:
  * </p>
  * 
  * <ul>
@@ -45,12 +48,19 @@ import org.meanbean.util.ValidationHelper;
  * 
  * <pre>
  * HashCodeMethodTester tester = new HashCodeMethodTester();
+ * tester.testHashCodeMethod(MyClass.class);
+ * </pre>
+ * 
+ * <p>
+ * To test the hashCode logic implemented by a class called MyClass without a no-argument constructor do the following:
+ * </p>
+ * 
+ * <pre>
+ * HashCodeMethodTester tester = new HashCodeMethodTester();
  * tester.testHashCodeMethod(new Factory&lt;MyClass&gt;() {
  * 	&#064;Override
  * 	public MyClass create() {
- * 		MyClass result = new MyClass();
- * 		// initialize result...
- * 		result.setName(&quot;TEST_NAME&quot;);
+ * 		MyClass result = new MyClass(&quot;TEST_NAME&quot;);
  * 		return result;
  * 	}
  * });
@@ -81,6 +91,9 @@ public class HashCodeMethodTester {
 	/** Provides a means of acquiring a suitable Factory. */
 	private final FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
 	        randomValueGenerator);
+
+	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
+	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
 
 	/**
 	 * <p>
@@ -116,6 +129,39 @@ public class HashCodeMethodTester {
 		testHashCodesEqual(factory);
 		testHashCodeConsistent(factory);
 		log.debug("testHashCodeMethod: Exiting - Equals is correct.");
+	}
+
+	/**
+	 * <p>
+	 * Test that the hashCode logic implemented by the specified type is correct by testing:
+	 * </p>
+	 * 
+	 * <ul>
+	 * <li>that logically equivalent objects have the same hashCode</li>
+	 * 
+	 * <li>the <strong>consistent</strong> item of the hashCode contract - the hashCode of an object should remain
+	 * consistent across multiple invocations, so long as the object does not change</li>
+	 * </ul>
+	 * 
+	 * <p>
+	 * If the test fails, an AssertionError is thrown.
+	 * </p>
+	 * 
+	 * @param clazz
+	 *            The type to test the equals logic of.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the specified clazz is deemed illegal. For example, if it is <code>null</code>.
+	 * @throws AssertionError
+	 *             If the test fails.
+	 */
+	public void testHashCodeMethod(Class<?> clazz) throws IllegalArgumentException, AssertionError {
+		log.debug("testHashCodeMethod: Entering with clazz=[" + clazz + "].");
+		validationHelper.ensureExists("clazz", "test hash code method", clazz);
+		EquivalentPopulatedBeanFactory factory =
+		        new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz), getFactoryLookupStrategy());
+		testHashCodeMethod(factory);
+		log.debug("testHashCodeMethod: Exiting - HashCode is correct.");
 	}
 
 	/**
