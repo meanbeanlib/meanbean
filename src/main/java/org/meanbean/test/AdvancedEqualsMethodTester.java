@@ -87,7 +87,7 @@ import org.meanbean.util.ValidationHelper;
  * 
  * @author Graham Williamson
  */
-public class AdvancedEqualsMethodTester implements SmartEqualsMethodTester {
+public class AdvancedEqualsMethodTester {
 
 	/** Logging mechanism. */
 	private final Log log = LogFactory.getLog(AdvancedEqualsMethodTester.class);
@@ -204,7 +204,6 @@ public class AdvancedEqualsMethodTester implements SmartEqualsMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	@Override
 	public void testEqualsMethod(Class<?> clazz, String... insignificantProperties) throws IllegalArgumentException,
 	        BeanInformationException, BeanTestException, AssertionError {
 		testEqualsMethod(clazz, null, insignificantProperties);
@@ -268,7 +267,6 @@ public class AdvancedEqualsMethodTester implements SmartEqualsMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	@Override
 	public void testEqualsMethod(Class<?> clazz, Configuration customConfiguration, String... insignificantProperties)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
 		log.debug("testEqualsMethod: Entering with clazz=[" + clazz + "], customConfiguration=[" + customConfiguration
@@ -305,7 +303,6 @@ public class AdvancedEqualsMethodTester implements SmartEqualsMethodTester {
 	 * 
 	 * @return A RandomValueGenerator.
 	 */
-	@Override
 	public RandomValueGenerator getRandomValueGenerator() {
 		return equalsMethodTester.getRandomValueGenerator();
 	}
@@ -315,7 +312,6 @@ public class AdvancedEqualsMethodTester implements SmartEqualsMethodTester {
 	 * 
 	 * @return The collection of test data Factories.
 	 */
-	@Override
 	public FactoryCollection getFactoryCollection() {
 		return equalsMethodTester.getFactoryCollection();
 	}
@@ -325,7 +321,6 @@ public class AdvancedEqualsMethodTester implements SmartEqualsMethodTester {
 	 * 
 	 * @return The factory lookup strategy.
 	 */
-	@Override
 	public FactoryLookupStrategy getFactoryLookupStrategy() {
 		return equalsMethodTester.getFactoryLookupStrategy();
 	}

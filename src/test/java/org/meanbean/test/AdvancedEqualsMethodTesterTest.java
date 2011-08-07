@@ -30,7 +30,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class AdvancedEqualsMethodTesterTest {
 
-	private final SmartEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester();
+	private final AdvancedEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester();
 
 	@Mock
 	private EqualsMethodTester equalsMethodTesterMock;
@@ -45,7 +45,7 @@ public class AdvancedEqualsMethodTesterTest {
 	public void testEqualsMethodWithoutConfigurationShouldDelegateToEqualsMethodTester() throws Exception {
 		when(equalsMethodTesterMock.getFactoryLookupStrategy()).thenReturn(factoryLookupStrategyMock);
 		String[] insignificantProperties = new String[] { "property1", "property2" };
-		SmartEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester(equalsMethodTesterMock);
+		AdvancedEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester(equalsMethodTesterMock);
 		equalsTester.testEqualsMethod(ComplexBean.class, insignificantProperties);
 		@SuppressWarnings("rawtypes")
 		ArgumentCaptor<Factory> argument = ArgumentCaptor.forClass(Factory.class);
@@ -59,7 +59,7 @@ public class AdvancedEqualsMethodTesterTest {
 	public void testEqualsMethodWithConfigurationShouldDelegateToEqualsMethodTester() throws Exception {
 		when(equalsMethodTesterMock.getFactoryLookupStrategy()).thenReturn(factoryLookupStrategyMock);
 		String[] insignificantProperties = new String[] { "property1", "property2" };
-		SmartEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester(equalsMethodTesterMock);
+		AdvancedEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester(equalsMethodTesterMock);
 		equalsTester.testEqualsMethod(ComplexBean.class, configurationMock, insignificantProperties);
 		@SuppressWarnings("rawtypes")
 		ArgumentCaptor<Factory> argument = ArgumentCaptor.forClass(Factory.class);

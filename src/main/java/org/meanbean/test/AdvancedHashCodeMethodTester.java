@@ -37,7 +37,7 @@ import org.meanbean.util.ValidationHelper;
  * 
  * @author Graham Williamson
  */
-public class AdvancedHashCodeMethodTester implements SmartHashCodeMethodTester {
+public class AdvancedHashCodeMethodTester {
 
 	/** Logging mechanism. */
 	private final Log log = LogFactory.getLog(AdvancedHashCodeMethodTester.class);
@@ -127,7 +127,6 @@ public class AdvancedHashCodeMethodTester implements SmartHashCodeMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	@Override
 	public void testHashCodeMethod(Class<?> clazz) throws IllegalArgumentException, AssertionError {
 		log.debug("testHashCodeMethod: Entering with clazz=[" + clazz + "].");
 		validationHelper.ensureExists("clazz", "test hash code method", clazz);

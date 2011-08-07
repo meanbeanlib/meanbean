@@ -24,7 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class AdvancedHashCodeMethodTesterTest {
 
-	private final SmartHashCodeMethodTester hashCodeMethodTester = new AdvancedHashCodeMethodTester();
+	private final AdvancedHashCodeMethodTester hashCodeMethodTester = new AdvancedHashCodeMethodTester();
 
 	@Mock
 	private HashCodeMethodTester hashCodeMethodTesterMock;
@@ -35,7 +35,7 @@ public class AdvancedHashCodeMethodTesterTest {
 	@Test
 	public void testHashCodeMethodShouldDelegateToHashCodeMethodTester() throws Exception {
 		when(hashCodeMethodTesterMock.getFactoryLookupStrategy()).thenReturn(factoryLookupStrategyMock);
-		SmartHashCodeMethodTester hashCodeMethodTester = new AdvancedHashCodeMethodTester(hashCodeMethodTesterMock);
+		AdvancedHashCodeMethodTester hashCodeMethodTester = new AdvancedHashCodeMethodTester(hashCodeMethodTesterMock);
 		hashCodeMethodTester.testHashCodeMethod(ComplexBean.class);
 		@SuppressWarnings("rawtypes")
 		ArgumentCaptor<Factory> argument = ArgumentCaptor.forClass(Factory.class);

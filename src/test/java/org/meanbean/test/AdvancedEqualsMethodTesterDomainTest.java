@@ -27,7 +27,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class AdvancedEqualsMethodTesterDomainTest {
 
-	private final SmartEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester();
+	private final AdvancedEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester();
 
 	// Company
 
@@ -156,7 +156,7 @@ public class AdvancedEqualsMethodTesterDomainTest {
 		        + "] equals that does not consider id significant.");
 	}
 
-	private void testEqualsMethodWillThrowObjectCreationExceptionWhenTryingToTestEnum(Class<?> clazz) throws Exception {
+	public void testEqualsMethodWillThrowObjectCreationExceptionWhenTryingToTestEnum(Class<?> clazz) throws Exception {
 		try {
 			equalsTester.testEqualsMethod(clazz);
 		} catch (ObjectCreationException e) {
