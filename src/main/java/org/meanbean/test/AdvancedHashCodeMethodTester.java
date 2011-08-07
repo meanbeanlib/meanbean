@@ -69,7 +69,7 @@ public class AdvancedHashCodeMethodTester {
 	 * </p>
 	 */
 	public AdvancedHashCodeMethodTester() {
-		this(new BasicHashCodeMethodTester());
+		this(new HashCodeMethodTester());
 	}
 
 	/**

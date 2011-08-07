@@ -7,9 +7,9 @@ import org.meanbean.test.beans.CounterDrivenHashCodeBean;
 import org.meanbean.test.beans.FieldDrivenEqualsBeanFactory;
 import org.meanbean.test.beans.FieldDrivenHashCodeBean;
 
-public class BasicHashCodeMethodTesterTest {
+public class HashCodeMethodTesterTest {
 
-	private final BasicHashCodeMethodTester tester = new BasicHashCodeMethodTester();
+	private final HashCodeMethodTester tester = new HashCodeMethodTester();
 
 	private static class NullFactory implements Factory<Object> {
 		@Override
