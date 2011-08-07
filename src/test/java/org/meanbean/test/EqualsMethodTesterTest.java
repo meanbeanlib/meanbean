@@ -24,7 +24,7 @@ import org.meanbean.test.beans.NonReflexiveBeanFactory;
 import org.meanbean.test.beans.NullAcceptingBeanFactory;
 import org.meanbean.test.beans.NullFactory;
 
-public class BasicEqualsMethodTesterTest {
+public class EqualsMethodTesterTest {
 
 	private final EqualsMethodTester equalsTester = new EqualsMethodTester();
 
