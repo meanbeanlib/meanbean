@@ -25,9 +25,9 @@ import org.meanbean.test.beans.domain.Status;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AdvancedEqualsMethodTesterDomainTest {
+public class EqualsMethodTesterDomainTest {
 
-	private final AdvancedEqualsMethodTester equalsTester = new AdvancedEqualsMethodTester();
+	private final EqualsMethodTester equalsTester = new EqualsMethodTester();
 
 	// Company
 

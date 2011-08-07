@@ -1,6 +1,6 @@
 package org.meanbean.test.beans;
 
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 
 /**
  * Factory that creates FieldDrivenEqualsBean instances, populated with the specified equalsResult. This should only be
@@ -8,7 +8,7 @@ import org.meanbean.lang.Factory;
  * 
  * @author Graham Williamson
  */
-public class FieldDrivenEqualsBeanFactory implements Factory<FieldDrivenEqualsBean> {
+public class FieldDrivenEqualsBeanFactory implements EquivalentFactory<FieldDrivenEqualsBean> {
 
 	private final boolean equalsResult;
 

@@ -85,7 +85,7 @@ import org.meanbean.util.ValidationHelper;
  * </p>
  * 
  * <pre>
- * BeanTester beanTester = new BasicBeanTester();
+ * BeanTester beanTester = new BeanTester();
  * beanTester.testBean(MyClass.class);
  * </pre>
  * 
@@ -98,7 +98,7 @@ import org.meanbean.util.ValidationHelper;
  * </p>
  * 
  * <pre>
- * BeanTester beanTester = new BasicBeanTester();
+ * BeanTester beanTester = new BeanTester();
  * Configuration configuration = new ConfigurationBuilder().ignoreProperty(&quot;lastName&quot;).build();
  * beanTester.testBean(MyClass.class, configuration);
  * </pre>

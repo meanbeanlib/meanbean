@@ -4,7 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
-import org.meanbean.factories.beans.EquivalentPopulatedBeanFactory;
+import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 

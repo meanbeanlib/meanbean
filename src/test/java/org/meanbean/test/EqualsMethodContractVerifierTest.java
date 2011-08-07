@@ -1,7 +1,7 @@
 package org.meanbean.test;
 
 import org.junit.Test;
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.test.beans.BeanFactory;
 import org.meanbean.test.beans.CounterDrivenEqualsBeanFactory;
 import org.meanbean.test.beans.DifferentTypeAcceptingBeanFactory;
@@ -9,7 +9,7 @@ import org.meanbean.test.beans.FieldDrivenEqualsBean;
 import org.meanbean.test.beans.FieldDrivenEqualsBeanFactory;
 import org.meanbean.test.beans.NonReflexiveBeanFactory;
 import org.meanbean.test.beans.NullAcceptingBeanFactory;
-import org.meanbean.test.beans.NullFactory;
+import org.meanbean.test.beans.NullEquivalentFactory;
 
 public class EqualsMethodContractVerifierTest {
 
@@ -24,7 +24,7 @@ public class EqualsMethodContractVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsReflexiveShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		verifier.verifyEqualsReflexive(new NullFactory());
+		verifier.verifyEqualsReflexive(new NullEquivalentFactory());
 	}
 
 	@Test(expected = AssertionError.class)
@@ -46,7 +46,7 @@ public class EqualsMethodContractVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsSymmetricShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		verifier.verifyEqualsSymmetric(new NullFactory());
+		verifier.verifyEqualsSymmetric(new NullEquivalentFactory());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -56,7 +56,7 @@ public class EqualsMethodContractVerifierTest {
 
 	@Test(expected = AssertionError.class)
 	public void verifyEqualsSymmetricShouldThrowAssertionErrorWhenEqualsIsNotSymmetric() throws Exception {
-		verifier.verifyEqualsSymmetric(new Factory<FieldDrivenEqualsBean>() {
+		verifier.verifyEqualsSymmetric(new EquivalentFactory<FieldDrivenEqualsBean>() {
 			private int counter;
 
 			@Override
@@ -81,7 +81,7 @@ public class EqualsMethodContractVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsTransitiveShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		verifier.verifyEqualsTransitive(new NullFactory());
+		verifier.verifyEqualsTransitive(new NullEquivalentFactory());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -108,7 +108,7 @@ public class EqualsMethodContractVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsConsistentShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		verifier.verifyEqualsConsistent(new NullFactory());
+		verifier.verifyEqualsConsistent(new NullEquivalentFactory());
 	}
 
 	@Test(expected = AssertionError.class)
@@ -130,7 +130,7 @@ public class EqualsMethodContractVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsNullShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		verifier.verifyEqualsNull(new NullFactory());
+		verifier.verifyEqualsNull(new NullEquivalentFactory());
 	}
 
 	@Test(expected = AssertionError.class)
@@ -152,7 +152,7 @@ public class EqualsMethodContractVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsDifferentTypeShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		verifier.verifyEqualsDifferentType(new NullFactory());
+		verifier.verifyEqualsDifferentType(new NullEquivalentFactory());
 	}
 
 	@Test(expected = AssertionError.class)
@@ -175,7 +175,7 @@ public class EqualsMethodContractVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		verifier.verifyEqualsMethod(new NullFactory());
+		verifier.verifyEqualsMethod(new NullEquivalentFactory());
 	}
 
 	@Test

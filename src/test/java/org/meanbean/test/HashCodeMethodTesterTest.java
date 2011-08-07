@@ -1,22 +1,16 @@
 package org.meanbean.test;
 
 import org.junit.Test;
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.test.beans.BeanFactory;
 import org.meanbean.test.beans.CounterDrivenHashCodeBean;
 import org.meanbean.test.beans.FieldDrivenEqualsBeanFactory;
 import org.meanbean.test.beans.FieldDrivenHashCodeBean;
+import org.meanbean.test.beans.NullEquivalentFactory;
 
 public class HashCodeMethodTesterTest {
 
 	private final HashCodeMethodTester tester = new HashCodeMethodTester();
-
-	private static class NullFactory implements Factory<Object> {
-		@Override
-		public Object create() {
-			return null;
-		}
-	}
 
 	// Equal -----------------------------------------------------------------------------------------------------------
 
@@ -27,7 +21,7 @@ public class HashCodeMethodTesterTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashCodesEqualShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		tester.testHashCodesEqual(new NullFactory());
+		tester.testHashCodesEqual(new NullEquivalentFactory());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -37,7 +31,7 @@ public class HashCodeMethodTesterTest {
 
 	@Test(expected = AssertionError.class)
 	public void testHashCodesEqualShouldThrowAssertionErrorWhenHashCodesAreNotEqual() throws Exception {
-		tester.testHashCodesEqual(new Factory<FieldDrivenHashCodeBean>() {
+		tester.testHashCodesEqual(new EquivalentFactory<FieldDrivenHashCodeBean>() {
 			private int counter;
 
 			@Override
@@ -61,12 +55,12 @@ public class HashCodeMethodTesterTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashCodeConsistentShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		tester.testHashCodeConsistent(new NullFactory());
+		tester.testHashCodeConsistent(new NullEquivalentFactory());
 	}
 
 	@Test(expected = AssertionError.class)
 	public void testHashCodeConsistentShouldThrowAssertionErrorWhenHashCodeIsInconsistent() throws Exception {
-		tester.testHashCodeConsistent(new Factory<CounterDrivenHashCodeBean>() {
+		tester.testHashCodeConsistent(new EquivalentFactory<CounterDrivenHashCodeBean>() {
 			@Override
 			public CounterDrivenHashCodeBean create() {
 				return new CounterDrivenHashCodeBean();
@@ -88,7 +82,7 @@ public class HashCodeMethodTesterTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testHashCodeMethodShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		tester.testHashCodeMethod(new NullFactory());
+		tester.testHashCodeMethod(new NullEquivalentFactory());
 	}
 
 	@Test
@@ -98,7 +92,7 @@ public class HashCodeMethodTesterTest {
 
 	@Test(expected = AssertionError.class)
 	public void testHashCodeMethodShouldThrowAssertionErrorWhenHashCodeIsInconsistent() throws Exception {
-		tester.testHashCodeMethod(new Factory<CounterDrivenHashCodeBean>() {
+		tester.testHashCodeMethod(new EquivalentFactory<CounterDrivenHashCodeBean>() {
 			@Override
 			public CounterDrivenHashCodeBean create() {
 				return new CounterDrivenHashCodeBean();
@@ -108,7 +102,7 @@ public class HashCodeMethodTesterTest {
 
 	@Test(expected = AssertionError.class)
 	public void testHashCodeMethodShouldThrowAssertionErrorWhenHashCodesAreNotEqual() throws Exception {
-		tester.testHashCodeMethod(new Factory<FieldDrivenHashCodeBean>() {
+		tester.testHashCodeMethod(new EquivalentFactory<FieldDrivenHashCodeBean>() {
 			private int counter;
 
 			@Override

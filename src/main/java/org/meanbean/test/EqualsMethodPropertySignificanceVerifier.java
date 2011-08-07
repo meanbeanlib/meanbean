@@ -3,7 +3,7 @@ package org.meanbean.test;
 import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.factories.FactoryCollectionProvider;
 import org.meanbean.factories.util.FactoryLookupStrategyProvider;
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
@@ -80,8 +80,8 @@ interface EqualsMethodPropertySignificanceVerifier extends RandomValueGeneratorP
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	void verifyEqualsMethod(Factory<?> factory, String... insignificantProperties) throws IllegalArgumentException,
-	        BeanInformationException, BeanTestException, AssertionError;
+	void verifyEqualsMethod(EquivalentFactory<?> factory, String... insignificantProperties)
+	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError;
 
 	/**
 	 * <p>
@@ -115,9 +115,9 @@ interface EqualsMethodPropertySignificanceVerifier extends RandomValueGeneratorP
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
-	 *            logic. The factory must create logically equivalent but different actual instances of the type upon
-	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test the
+	 *            equals logic. The factory must create logically equivalent but different actual instances of the type
+	 *            upon each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * @param customConfiguration
 	 *            A custom Configuration to be used when testing to ignore the testing of named properties or use a
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
@@ -140,6 +140,7 @@ interface EqualsMethodPropertySignificanceVerifier extends RandomValueGeneratorP
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	void verifyEqualsMethod(Factory<?> factory, Configuration customConfiguration, String... insignificantProperties)
-	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError;
+	void verifyEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
+	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
+	        BeanTestException, AssertionError;
 }

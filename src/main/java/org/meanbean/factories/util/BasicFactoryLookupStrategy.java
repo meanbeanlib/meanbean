@@ -9,7 +9,7 @@ import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.basic.EnumFactory;
-import org.meanbean.factories.beans.EquivalentPopulatedBeanFactory;
+import org.meanbean.factories.beans.PopulatedBeanFactory;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.Configuration;
 import org.meanbean.util.RandomValueGenerator;
@@ -211,8 +211,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	private Factory<?> createPopulatedBeanFactory(Class<?> propertyType) {
 		BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
 		BeanInformation propertyBeanInformation = beanInformationFactory.create(propertyType);
-		Factory<?> equivalentPopulatedBeanFactory = new EquivalentPopulatedBeanFactory(propertyBeanInformation, this);
-		return equivalentPopulatedBeanFactory;
+		return new PopulatedBeanFactory(propertyBeanInformation, this);
 	}
 
 	private void testPopulatedBeanFactory(Factory<?> equivalentPopulatedBeanFactory) {

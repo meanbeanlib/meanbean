@@ -6,7 +6,7 @@ import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryRepository;
 import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
@@ -44,15 +44,15 @@ import org.meanbean.util.ValidationHelper;
  * </p>
  * 
  * <pre>
- * HashCodeMethodTester tester = new BasicHashCodeMethodTester();
- * tester.testHashCodeMethod(new Factory<MyClass>() {
- *    @Override
- *    public MyClass create() {
- *       MyClass() result = new MyClass();
- *       // initialize result...
- *       result.setName("TEST_NAME");
- *       return result;
- *    }
+ * HashCodeMethodTester tester = new HashCodeMethodTester();
+ * tester.testHashCodeMethod(new Factory&lt;MyClass&gt;() {
+ * 	&#064;Override
+ * 	public MyClass create() {
+ * 		MyClass result = new MyClass();
+ * 		// initialize result...
+ * 		result.setName(&quot;TEST_NAME&quot;);
+ * 		return result;
+ * 	}
  * });
  * </pre>
  * 
@@ -99,10 +99,10 @@ public class HashCodeMethodTester {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
-	 *            equals logic implemented by the type is correct. The factory must create logically equivalent but
-	 *            different actual instances of the type upon each invocation of <code>create()</code> in order for the
-	 *            test to be meaningful and correct.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test
+	 *            whether the equals logic implemented by the type is correct. The factory must create logically
+	 *            equivalent but different actual instances of the type upon each invocation of <code>create()</code> in
+	 *            order for the test to be meaningful and correct.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the specified factory is deemed illegal. For example, if it is <code>null</code>, if it creates a
@@ -110,7 +110,7 @@ public class HashCodeMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void testHashCodeMethod(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	public void testHashCodeMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("testHashCodeMethod: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test hash code method", factory);
 		testHashCodesEqual(factory);
@@ -129,10 +129,10 @@ public class HashCodeMethodTester {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
-	 *            hashCode logic implemented by the type returns equal hashCodes for logically equivalent objects. The
-	 *            factory must create logically equivalent but different actual instances of the type upon each
-	 *            invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test
+	 *            whether the hashCode logic implemented by the type returns equal hashCodes for logically equivalent
+	 *            objects. The factory must create logically equivalent but different actual instances of the type upon
+	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the specified factory is deemed illegal. For example, if it is <code>null</code>, if it creates a
@@ -140,7 +140,7 @@ public class HashCodeMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	protected void testHashCodesEqual(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	protected void testHashCodesEqual(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("testHashCodesEqual: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test hash codes equal for equal objects", factory);
 		Object x = factory.create();
@@ -172,10 +172,10 @@ public class HashCodeMethodTester {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
-	 *            hashCode logic implemented by the type is consistent with the consistent item of the hashCode
-	 *            contract. The factory must create logically equivalent but different actual instances of the type upon
-	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test
+	 *            whether the hashCode logic implemented by the type is consistent with the consistent item of the
+	 *            hashCode contract. The factory must create logically equivalent but different actual instances of the
+	 *            type upon each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the specified factory is deemed illegal. For example, if it is <code>null</code> or if it creates
@@ -183,7 +183,7 @@ public class HashCodeMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	protected void testHashCodeConsistent(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	protected void testHashCodeConsistent(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("testHashCodeConsistent: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test hash code consistent item", factory);
 		Object x = factory.create();

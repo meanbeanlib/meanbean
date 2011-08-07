@@ -1,13 +1,13 @@
 package org.meanbean.test.beans;
 
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 
 /**
  * A factory that creates CounterDrivenEqualsBeans. This class should only be used for testing.
  * 
  * @author Graham Williamson
  */
-public class CounterDrivenEqualsBeanFactory implements Factory<CounterDrivenEqualsBean> {
+public class CounterDrivenEqualsBeanFactory implements EquivalentFactory<CounterDrivenEqualsBean> {
 
 	public static final String NAME = "TEST_NAME";
 

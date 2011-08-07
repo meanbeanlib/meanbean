@@ -3,14 +3,14 @@ package org.meanbean.test.beans;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 
 /**
  * Factory that creates logically equivalent ComplexBean instances. This should only be used for testing.
  * 
  * @author Graham Williamson
  */
-public class ComplexBeanFactory implements Factory<ComplexBean> {
+public class ComplexBeanFactory implements EquivalentFactory<ComplexBean> {
 
 	private static final Date DATE_OF_BIRTH;
 	static {

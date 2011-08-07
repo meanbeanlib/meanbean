@@ -1,6 +1,6 @@
-package org.meanbean.factories.basic;
+package org.meanbean.factories.equivalent;
 
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
@@ -9,7 +9,7 @@ import org.meanbean.util.ValidationHelper;
  * 
  * @author Graham Williamson
  */
-public class EquivalentEnumFactory implements Factory<Enum<?>> {
+public class EquivalentEnumFactory implements EquivalentFactory<Enum<?>> {
 
 	/** Unique version ID of this Serializable class. */
 	private static final long serialVersionUID = 1L;

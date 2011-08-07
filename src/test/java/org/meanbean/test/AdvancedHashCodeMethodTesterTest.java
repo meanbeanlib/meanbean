@@ -8,9 +8,9 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.factories.ObjectCreationException;
-import org.meanbean.factories.beans.EquivalentPopulatedBeanFactory;
+import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.ClassIncrementalHashCodeBean;
 import org.meanbean.test.beans.ComplexBean;
@@ -38,9 +38,9 @@ public class AdvancedHashCodeMethodTesterTest {
 		AdvancedHashCodeMethodTester hashCodeMethodTester = new AdvancedHashCodeMethodTester(hashCodeMethodTesterMock);
 		hashCodeMethodTester.testHashCodeMethod(ComplexBean.class);
 		@SuppressWarnings("rawtypes")
-		ArgumentCaptor<Factory> argument = ArgumentCaptor.forClass(Factory.class);
+		ArgumentCaptor<EquivalentFactory> argument = ArgumentCaptor.forClass(EquivalentFactory.class);
 		verify(hashCodeMethodTesterMock).testHashCodeMethod(argument.capture());
-		Factory<?> factoryUsed = argument.getValue();
+		EquivalentFactory<?> factoryUsed = argument.getValue();
 		assertThat(factoryUsed.getClass().getName(), is(EquivalentPopulatedBeanFactory.class.getName()));
 	}
 

@@ -18,6 +18,7 @@ import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryRepository;
 import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
@@ -164,9 +165,9 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
-	 *            logic. The factory must create logically equivalent but different actual instances of the type upon
-	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test the
+	 *            equals logic. The factory must create logically equivalent but different actual instances of the type
+	 *            upon each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * @param insignificantProperties
 	 *            The names of properties that are not used when deciding whether objects are logically equivalent. For
 	 *            example, "lastName".
@@ -184,7 +185,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 *             If the test fails.
 	 */
 	@Override
-	public void verifyEqualsMethod(Factory<?> factory, String... insignificantProperties)
+	public void verifyEqualsMethod(EquivalentFactory<?> factory, String... insignificantProperties)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
 		verifyEqualsMethod(factory, null, insignificantProperties);
 	}
@@ -221,9 +222,9 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
-	 *            logic. The factory must create logically equivalent but different actual instances of the type upon
-	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test the
+	 *            equals logic. The factory must create logically equivalent but different actual instances of the type
+	 *            upon each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * @param customConfiguration
 	 *            A custom Configuration to be used when testing to ignore the testing of named properties or use a
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
@@ -247,7 +248,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 *             If the test fails.
 	 */
 	@Override
-	public void verifyEqualsMethod(Factory<?> factory, Configuration customConfiguration,
+	public void verifyEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
 	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
 	        BeanTestException, AssertionError {
 		log.debug("verifyEqualsMethod: Entering with factory=[" + factory + "], configuration=[" + customConfiguration
@@ -335,9 +336,9 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * @param beanInformation
 	 *            Information about the bean the property belongs to.
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test the equals
-	 *            logic. The factory must create logically equivalent but different actual instances of the type upon
-	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test the
+	 *            equals logic. The factory must create logically equivalent but different actual instances of the type
+	 *            upon each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * @param configuration
 	 *            A custom Configuration to be used when testing to ignore the testing of named properties or use a
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
@@ -360,7 +361,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	protected void verifyEqualsMethodForProperty(BeanInformation beanInformation, Factory<?> factory,
+	protected void verifyEqualsMethodForProperty(BeanInformation beanInformation, EquivalentFactory<?> factory,
 	        Configuration configuration, PropertyInformation property, boolean significant)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
 		log.debug("verifyEqualsMethodForProperty: Entering with beanInformation=[" + beanInformation + "], factory=["

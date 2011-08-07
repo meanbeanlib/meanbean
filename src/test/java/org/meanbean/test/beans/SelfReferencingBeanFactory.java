@@ -1,13 +1,13 @@
 package org.meanbean.test.beans;
 
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 
 /**
  * Factory that creates logically equivalent SelfReferencingBean instances. This should only be used for testing.
  * 
  * @author Graham Williamson
  */
-public class SelfReferencingBeanFactory implements Factory<SelfReferencingBean> {
+public class SelfReferencingBeanFactory implements EquivalentFactory<SelfReferencingBean> {
 
 	private static final SelfReferencingBean parent = new SelfReferencingBean();
 	static {

@@ -15,24 +15,20 @@ import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
- * Factory that creates object instances based on provided BeanInformation, assigning every instance the same field
- * values.
+ * Factory that creates object instances based on provided BeanInformation, assigning each instance different values.
  * 
  * @author Graham Williamson
  */
-public class EquivalentPopulatedBeanFactory implements Factory<Object> {
+public class PopulatedBeanFactory implements Factory<Object> {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(EquivalentPopulatedBeanFactory.class);
+	private final Log log = LogFactory.getLog(PopulatedBeanFactory.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
 
 	/** The BeanInformation that should be used to create instances of a bean. */
 	private final BeanInformation beanInformation;
-
-	/** The values every object instance created by this Factory should have. */
-	private Map<String, Object> propertyValues;
 
 	/** Creates values that can be used to populate the properties of a Bean. */
 	private final BeanPropertyValuesFactory beanPropertyValuesFactory;
@@ -41,8 +37,8 @@ public class EquivalentPopulatedBeanFactory implements Factory<Object> {
 	private final BeanPopulator beanPopulator = new BasicBeanPopulator();
 
 	/**
-	 * Construct a new Factory that creates object instances based on provided BeanInformation, assigning every instance
-	 * the same field values.
+	 * Construct a new Factory that creates object instances based on provided BeanInformation, assigning each instance
+	 * different field values.
 	 * 
 	 * @param beanInformation
 	 *            Information used to create instances of a bean.
@@ -53,7 +49,7 @@ public class EquivalentPopulatedBeanFactory implements Factory<Object> {
 	 *             If either the specified BeanInformation or the FactoryLookupStrategy is deemed illegal. For example,
 	 *             if either is <code>null</code>.
 	 */
-	public EquivalentPopulatedBeanFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy)
+	public PopulatedBeanFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy)
 	        throws IllegalArgumentException {
 		validationHelper.ensureExists("beanInformation", "construct Factory", beanInformation);
 		validationHelper.ensureExists("factoryLookupStrategy", "construct Factory", factoryLookupStrategy);
@@ -62,8 +58,7 @@ public class EquivalentPopulatedBeanFactory implements Factory<Object> {
 	}
 
 	/**
-	 * Create a new instance of the Bean described in the provided BeanInformation. Every instance created will have the
-	 * same field values.
+	 * Create a new instance of the Bean described in the provided BeanInformation.
 	 * 
 	 * @throws BeanCreationException
 	 *             If an error occurs when creating an instance of the Bean.
@@ -71,13 +66,9 @@ public class EquivalentPopulatedBeanFactory implements Factory<Object> {
 	@Override
 	public Object create() throws BeanCreationException {
 		log.debug("create: entering.");
-		if (propertyValues == null) {
-			log.debug("create: initialise property values cache.");
-			propertyValues = beanPropertyValuesFactory.create();
-		}
+		Map<String, Object> propertyValues = beanPropertyValuesFactory.create();
 		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
 		Object result = beanFactory.create();
-		log.debug("create: created [" + result + "].");
 		beanPopulator.populate(result, beanInformation, propertyValues);
 		log.debug("create: populated [" + result + "].");
 		return result;

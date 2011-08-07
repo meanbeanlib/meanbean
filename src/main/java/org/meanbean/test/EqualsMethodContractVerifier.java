@@ -2,7 +2,7 @@ package org.meanbean.test;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.meanbean.lang.Factory;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
@@ -24,7 +24,7 @@ import org.meanbean.util.ValidationHelper;
  * 
  * <pre>
  * EqualsMethodContractVerifier verifier = new EqualsMethodContractVerifier();
- * verifier.verifyEqualsMethod(new Factory<MyClass>() {
+ * verifier.verifyEqualsMethod(new EquivalentFactory<MyClass>() {
  *    @Override
  *    public MyClass create() {
  *       MyClass() result = new MyClass();
@@ -36,7 +36,7 @@ import org.meanbean.util.ValidationHelper;
  * </pre>
  * 
  * <p>
- * The Factory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
+ * The EquivalentFactory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
  * <code>equals()</code> and <code>hashCode()</code>.
  * </p>
  * 
@@ -82,10 +82,10 @@ class EqualsMethodContractVerifier {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
-	 *            equals logic implemented by the type is correct. The factory must create logically equivalent but
-	 *            different actual instances of the type upon each invocation of <code>create()</code> in order for the
-	 *            test to be meaningful and correct.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test
+	 *            whether the equals logic implemented by the type is correct. The factory must create logically
+	 *            equivalent but different actual instances of the type upon each invocation of <code>create()</code> in
+	 *            order for the test to be meaningful and correct.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the specified factory is deemed illegal. For example, if it is <code>null</code>, if it creates a
@@ -93,7 +93,7 @@ class EqualsMethodContractVerifier {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void verifyEqualsMethod(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	public void verifyEqualsMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("verifyEqualsMethod: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test equals", factory);
 		verifyEqualsReflexive(factory);
@@ -116,10 +116,10 @@ class EqualsMethodContractVerifier {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
-	 *            equals logic implemented by the type is consistent with the reflexive item of the equals contract. The
-	 *            factory must create logically equivalent but different actual instances of the type upon each
-	 *            invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test
+	 *            whether the equals logic implemented by the type is consistent with the reflexive item of the equals
+	 *            contract. The factory must create logically equivalent but different actual instances of the type upon
+	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the specified factory is deemed illegal. For example, if it is <code>null</code> or if it creates
@@ -127,7 +127,7 @@ class EqualsMethodContractVerifier {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void verifyEqualsReflexive(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	public void verifyEqualsReflexive(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("verifyEqualsReflexive: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test equals reflexive item", factory);
 		Object x = factory.create();
@@ -151,10 +151,10 @@ class EqualsMethodContractVerifier {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
-	 *            equals logic implemented by the type is consistent with the symmetric item of the equals contract. The
-	 *            factory must create logically equivalent but different actual instances of the type upon each
-	 *            invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test
+	 *            whether the equals logic implemented by the type is consistent with the symmetric item of the equals
+	 *            contract. The factory must create logically equivalent but different actual instances of the type upon
+	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the specified factory is deemed illegal. For example, if it is <code>null</code>, if it creates a
@@ -162,7 +162,7 @@ class EqualsMethodContractVerifier {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void verifyEqualsSymmetric(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	public void verifyEqualsSymmetric(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("verifyEqualsSymmetric: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test equals symmetric item", factory);
 		Object x = factory.create();
@@ -196,10 +196,10 @@ class EqualsMethodContractVerifier {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
-	 *            equals logic implemented by the type is consistent with the transitive item of the equals contract.
-	 *            The factory must create logically equivalent but different actual instances of the type upon each
-	 *            invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test
+	 *            whether the equals logic implemented by the type is consistent with the transitive item of the equals
+	 *            contract. The factory must create logically equivalent but different actual instances of the type upon
+	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the specified factory is deemed illegal. For example, if it is <code>null</code> or if it creates
@@ -207,7 +207,7 @@ class EqualsMethodContractVerifier {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void verifyEqualsTransitive(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	public void verifyEqualsTransitive(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("verifyEqualsTransitive: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test equals transitive item", factory);
 		Object x = factory.create();
@@ -241,10 +241,10 @@ class EqualsMethodContractVerifier {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates non-null logically equivalent objects that will be used to test whether the
-	 *            equals logic implemented by the type is consistent with the consistent item of the equals contract.
-	 *            The factory must create logically equivalent but different actual instances of the type upon each
-	 *            invocation of <code>create()</code> in order for the test to be meaningful.
+	 *            An EquivalentFactory that creates non-null logically equivalent objects that will be used to test
+	 *            whether the equals logic implemented by the type is consistent with the consistent item of the equals
+	 *            contract. The factory must create logically equivalent but different actual instances of the type upon
+	 *            each invocation of <code>create()</code> in order for the test to be meaningful.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the specified factory is deemed illegal. For example, if it is <code>null</code> or if it creates
@@ -252,7 +252,7 @@ class EqualsMethodContractVerifier {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void verifyEqualsConsistent(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	public void verifyEqualsConsistent(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("verifyEqualsConsistent: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test equals consistent item", factory);
 		Object x = factory.create();
@@ -281,7 +281,7 @@ class EqualsMethodContractVerifier {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates a non-null object that will be used to test whether the equals logic
+	 *            An EquivalentFactory that creates a non-null object that will be used to test whether the equals logic
 	 *            implemented by the type is consistent with the null item of the equals contract. The factory must
 	 *            create a non-null instance of the type upon each invocation of <code>create()</code> in order for the
 	 *            test to function.
@@ -292,7 +292,7 @@ class EqualsMethodContractVerifier {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void verifyEqualsNull(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	public void verifyEqualsNull(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("verifyEqualsNull: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test equals null item", factory);
 		Object x = factory.create();
@@ -317,7 +317,7 @@ class EqualsMethodContractVerifier {
 	 * </p>
 	 * 
 	 * @param factory
-	 *            A Factory that creates a non-null object that will be used to test whether the equals logic
+	 *            An EquivalentFactory that creates a non-null object that will be used to test whether the equals logic
 	 *            implemented by the type is correct when comparing itself with an instance of an entirely different
 	 *            type. The factory must create a non-null instance of the type upon each invocation of
 	 *            <code>create()</code> in order for the test to function.
@@ -328,7 +328,7 @@ class EqualsMethodContractVerifier {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void verifyEqualsDifferentType(Factory<?> factory) throws IllegalArgumentException, AssertionError {
+	public void verifyEqualsDifferentType(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		log.debug("verifyEqualsDifferentType: Entering with factory=[" + factory + "].");
 		validationHelper.ensureExists("factory", "test equals for different types", factory);
 		Object x = factory.create();

@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
+import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;

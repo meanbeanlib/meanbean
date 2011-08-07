@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
+import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.BeanFactory;
@@ -29,7 +30,7 @@ import org.meanbean.test.beans.InvocationCountingFactoryWrapper;
 import org.meanbean.test.beans.MultiPropertyBean;
 import org.meanbean.test.beans.MultiPropertyBeanFactory;
 import org.meanbean.test.beans.NonBean;
-import org.meanbean.test.beans.NullFactory;
+import org.meanbean.test.beans.NullEquivalentFactory;
 import org.meanbean.test.beans.SelfReferencingBeanFactory;
 
 public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
@@ -54,7 +55,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsMethodShouldPreventFactoryThatCreatesNullObjects() throws Exception {
-		verifier.verifyEqualsMethod(new NullFactory());
+		verifier.verifyEqualsMethod(new NullEquivalentFactory());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -74,7 +75,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsMethodShouldPreventFactoryThatCreatesNonEqualObjects() throws Exception {
-		verifier.verifyEqualsMethod(new Factory<FieldDrivenEqualsBean>() {
+		verifier.verifyEqualsMethod(new EquivalentFactory<FieldDrivenEqualsBean>() {
 			private int counter;
 
 			@Override
@@ -87,7 +88,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsMethodShouldPreventFactoryThatCreatesObjectsWithDifferentPropertyValues() throws Exception {
-		verifier.verifyEqualsMethod(new Factory<FieldDrivenEqualsBean>() {
+		verifier.verifyEqualsMethod(new EquivalentFactory<FieldDrivenEqualsBean>() {
 			private int counter;
 
 			@Override
@@ -102,7 +103,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 	@Test(expected = BeanTestException.class)
 	public void verifyEqualsMethodShouldWrapExceptionsThrownWhenInvokingSetterMethodInBeanTestException()
 	        throws Exception {
-		verifier.verifyEqualsMethod(new Factory<BeanWithBadSetterMethod>() {
+		verifier.verifyEqualsMethod(new EquivalentFactory<BeanWithBadSetterMethod>() {
 			@Override
 			public BeanWithBadSetterMethod create() {
 				return new BeanWithBadSetterMethod();
@@ -113,7 +114,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 	@Test(expected = BeanTestException.class)
 	public void verifyEqualsMethodShouldWrapExceptionsThrownWhenInvokingGetterMethodInBeanTestException()
 	        throws Exception {
-		verifier.verifyEqualsMethod(new Factory<BeanWithBadGetterMethod>() {
+		verifier.verifyEqualsMethod(new EquivalentFactory<BeanWithBadGetterMethod>() {
 			@Override
 			public BeanWithBadGetterMethod create() {
 				return new BeanWithBadGetterMethod();
@@ -123,7 +124,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void verifyEqualsMethodShouldPreventNullPropertyValues() throws Exception {
-		verifier.verifyEqualsMethod(new Factory<Bean>() {
+		verifier.verifyEqualsMethod(new EquivalentFactory<Bean>() {
 			@Override
 			public Bean create() {
 				return new Bean(); // null name property
@@ -133,7 +134,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	@Test(expected = BeanTestException.class)
 	public void verifyEqualsMethodShouldWrapNoSuchFactoryExceptionInBeanTestException() throws Exception {
-		verifier.verifyEqualsMethod(new Factory<Object>() {
+		verifier.verifyEqualsMethod(new EquivalentFactory<Object>() {
 			@Override
 			public Object create() {
 				BeanWithNonBeanProperty bean = new BeanWithNonBeanProperty();
@@ -151,7 +152,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
 	@Test(expected = AssertionError.class)
 	public void verifyEqualsMethodShouldThrowAssertionErrorWhenEqualityShouldHaveChangedButDidNot() throws Exception {
-		verifier.verifyEqualsMethod(new Factory<BrokenEqualsMultiPropertyBean>() {
+		verifier.verifyEqualsMethod(new EquivalentFactory<BrokenEqualsMultiPropertyBean>() {
 			@Override
 			public BrokenEqualsMultiPropertyBean create() {
 				BrokenEqualsMultiPropertyBean bean = new BrokenEqualsMultiPropertyBean();
