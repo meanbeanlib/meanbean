@@ -16,7 +16,7 @@ import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
-import org.meanbean.test.BasicBeanTester;
+import org.meanbean.test.BeanTester;
 import org.meanbean.test.beans.ComplexBean;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -57,7 +57,7 @@ public class EquivalentPopulatedBeanFactoryTest {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Before
 	public void setup() {
-		BasicBeanTester tester = new BasicBeanTester();
+		BeanTester tester = new BeanTester();
 		factoryLookupStrategyReal =
 		        new BasicFactoryLookupStrategy(tester.getFactoryCollection(), tester.getRandomValueGenerator());
 		beanInformationReal = new JavaBeanInformationFactory().create(ComplexBean.class);

@@ -20,7 +20,6 @@ import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
-import org.meanbean.test.BasicBeanTester;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.beans.ComplexBean;
 import org.meanbean.test.beans.NonBean;
@@ -36,7 +35,7 @@ public class BeanPropertyValuesFactoryTest {
 	@Mock
 	private FactoryLookupStrategy factoryLookupStrategyMock;
 
-	private final BeanTester beanTesterReal = new BasicBeanTester();
+	private final BeanTester beanTesterReal = new BeanTester();
 
 	private final FactoryLookupStrategy factoryLookupStrategyReal = new BasicFactoryLookupStrategy(
 	        beanTesterReal.getFactoryCollection(), beanTesterReal.getRandomValueGenerator());

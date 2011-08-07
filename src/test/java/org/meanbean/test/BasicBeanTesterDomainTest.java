@@ -12,11 +12,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class BasicBeanTesterDomainTest {
 
-	private BasicBeanTester beanTester;
+	private BeanTester beanTester;
 
 	@Before
 	public void before() {
-		beanTester = new BasicBeanTester();
+		beanTester = new BeanTester();
 	}
 
 	@Test

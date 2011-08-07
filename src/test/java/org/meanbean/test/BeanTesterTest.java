@@ -22,9 +22,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BasicBeanTesterTest {
+public class BeanTesterTest {
 
-	private BasicBeanTester beanTester;
+	private BeanTester beanTester;
 
 	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
 
@@ -33,7 +33,7 @@ public class BasicBeanTesterTest {
 
 	@Before
 	public void before() {
-		beanTester = new BasicBeanTester();
+		beanTester = new BeanTester();
 	}
 
 	@Test(expected = IllegalArgumentException.class)

@@ -1,11 +1,32 @@
 package org.meanbean.test;
 
-import org.meanbean.factories.FactoryCollectionProvider;
-import org.meanbean.util.RandomValueGeneratorProvider;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.meanbean.bean.info.BeanInformation;
+import org.meanbean.bean.info.BeanInformationFactory;
+import org.meanbean.bean.info.JavaBeanInformationFactory;
+import org.meanbean.bean.info.PropertyInformation;
+import org.meanbean.bean.util.PropertyInformationFilter;
+import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
+import org.meanbean.factories.BasicNewObjectInstanceFactory;
+import org.meanbean.factories.FactoryCollection;
+import org.meanbean.factories.FactoryRepository;
+import org.meanbean.factories.util.BasicFactoryLookupStrategy;
+import org.meanbean.factories.util.FactoryLookupStrategy;
+import org.meanbean.lang.Factory;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.SimpleRandomValueGenerator;
+import org.meanbean.util.SimpleValidationHelper;
+import org.meanbean.util.ValidationHelper;
 
 /**
  * <p>
- * Defines a means of testing JavaBean objects with respect to:
+ * Concrete BeanTester that affords a means of testing JavaBean objects with respect to:
  * </p>
  * 
  * <ul>
@@ -43,12 +64,98 @@ import org.meanbean.util.RandomValueGeneratorProvider;
  * <li>custom Factories can be registered to create test values during testing</li>
  * </ul>
  * 
+ * <p>
+ * See:
+ * </p>
+ * 
+ * <ul>
+ * <li><code>setIterations(int)</code> to set the number of times any type is tested</li>
+ * 
+ * <li><code>addCustomConfiguration(Class<?>,Configuration)</code> to add a custom Configuration across all testing of
+ * the specified type</li>
+ * 
+ * <li><code>testBean(Class<?>,Configuration)</code> to specify a custom Configuration for a single test scenario</li>
+ * 
+ * <li><code>getFactoryCollection().addFactory(Class<?>,Factory<?>)</code> to add a custom Factory for a type across all
+ * testing</li>
+ * </ul>
+ * 
+ * <p>
+ * The following example shows how to test a class MyClass:
+ * </p>
+ * 
+ * <pre>
+ * BeanTester beanTester = new BasicBeanTester();
+ * beanTester.testBean(MyClass.class);
+ * </pre>
+ * 
+ * <p>
+ * If the test fails, an AssertionError is thrown. <br/>
+ * </p>
+ * 
+ * <p>
+ * To ignore a property (say, lastName) when testing a class:
+ * </p>
+ * 
+ * <pre>
+ * BeanTester beanTester = new BasicBeanTester();
+ * Configuration configuration = new ConfigurationBuilder().ignoreProperty(&quot;lastName&quot;).build();
+ * beanTester.testBean(MyClass.class, configuration);
+ * </pre>
+ * 
  * @author Graham Williamson
  */
-public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollectionProvider {
+public class BeanTester {
 
 	/** Default number of times a bean should be tested. */
-	static final int TEST_ITERATIONS_PER_BEAN = 100;
+	public static final int TEST_ITERATIONS_PER_BEAN = 100;
+
+	/** The number of times each bean is tested, unless a custom Configuration overrides this global setting. */
+	private int iterations = TEST_ITERATIONS_PER_BEAN;
+
+	/** Random number generator used by factories to randomly generate values. */
+	private final RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+
+	/** The collection of test data Factories. */
+	private final FactoryCollection factoryCollection = new FactoryRepository(randomValueGenerator);
+
+	/** Provides a means of acquiring a suitable Factory. */
+	private final FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
+	        randomValueGenerator);
+
+	/** Custom Configurations that override standard testing behaviour on a per-type basis across all tests. */
+	private final Map<Class<?>, Configuration> customConfigurations = Collections
+	        .synchronizedMap(new HashMap<Class<?>, Configuration>());
+
+	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
+	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+
+	/** Object that tests the getters and setters of a Bean's property. */
+	private final BeanPropertyTester beanPropertyTester = new BeanPropertyTester();
+
+	/** Logging mechanism. */
+	private final Log log = LogFactory.getLog(BeanTester.class);
+
+	/** Input validation helper. */
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+
+	/**
+	 * The collection of test data Factories with which you can register new Factories for custom Data Types.
+	 * 
+	 * @return The collection of test data Factories.
+	 */
+	public FactoryCollection getFactoryCollection() {
+		return factoryCollection;
+	}
+
+	/**
+	 * Get a RandomNumberGenerator.
+	 * 
+	 * @return A RandomNumberGenerator.
+	 */
+	public RandomValueGenerator getRandomValueGenerator() {
+		return randomValueGenerator;
+	}
 
 	/**
 	 * <p>
@@ -65,7 +172,15 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	 * @throws IllegalArgumentException
 	 *             If the iterations parameter is deemed illegal. For example, if it is less than 1.
 	 */
-	void setIterations(int iterations) throws IllegalArgumentException;
+	public void setIterations(int iterations) throws IllegalArgumentException {
+		log.debug("setIterations: entering with iterations=[" + iterations + "].");
+		if (iterations < 1) {
+			log.debug("setIterations: Iterations must be at least 1. Throw IllegalArgumentException.");
+			throw new IllegalArgumentException("Iterations must be at least 1.");
+		}
+		this.iterations = iterations;
+		log.debug("setIterations: exiting.");
+	}
 
 	/**
 	 * <p>
@@ -78,7 +193,9 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	 * 
 	 * @return The number of times each bean should be tested. This value will be at least 1.
 	 */
-	int getIterations();
+	public int getIterations() {
+		return iterations;
+	}
 
 	/**
 	 * Add the specified Configuration as a custom Configuration to be used as an override to any global configuration
@@ -92,20 +209,67 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	 * @throws IllegalArgumentException
 	 *             If either parameter is deemed illegal. For example, if either parameter is null.
 	 */
-	void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException;
+	public void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException {
+		log.debug("addCustomConfiguration: entering with beanClass=[" + beanClass + "], configuration=["
+		        + configuration + "].");
+		validationHelper.ensureExists("beanClass", "add custom configuration", beanClass);
+		validationHelper.ensureExists("configuration", "add custom configuration", configuration);
+		customConfigurations.put(beanClass, configuration);
+		log.debug("addCustomConfiguration: exiting.");
+	}
+
+	/**
+	 * Does the specified type have a custom Configuration registered?
+	 * 
+	 * @param beanClass
+	 *            The type for which a Configuration is sought.
+	 * 
+	 * @return <code>true</code> if a custom Configuration has been registered for the type specified by the beanClass
+	 *         parameter; <code>false</code> otherwise.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
+	 */
+	protected boolean hasCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
+		log.debug("hasCustomConfiguration: entering with beanClass=[" + beanClass + "].");
+		validationHelper.ensureExists("beanClass", "check for custom configuration", beanClass);
+		boolean result = customConfigurations.containsKey(beanClass);
+		log.debug("hasCustomConfiguration: exiting returning [" + result + "].");
+		return result;
+	}
+
+	/**
+	 * Get the custom Configuration registered against the specified type.
+	 * 
+	 * @param beanClass
+	 *            The type for which a Configuration is sought.
+	 * 
+	 * @return A custom Configuration registered against the type specified by the beanClass parameter, if one exists;
+	 *         <code>null</code> otherwise.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
+	 */
+	protected Configuration getCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
+		log.debug("getCustomConfiguration: entering with beanClass=[" + beanClass + "].");
+		validationHelper.ensureExists("beanClass", "get custom configuration", beanClass);
+		Configuration result = customConfigurations.get(beanClass);
+		log.debug("getCustomConfiguration: exiting returning [" + result + "].");
+		return result;
+	}
 
 	/**
 	 * <p>
-	 * Test the type specified by the beanClass parameter. <br />
+	 * Test the type specified by the beanClass parameter.
 	 * </p>
 	 * 
 	 * <p>
 	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
-	 * getters and setters function correctly. <br />
+	 * getters and setters function correctly.
 	 * </p>
 	 * 
 	 * <p>
-	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures.
 	 * </p>
 	 * 
 	 * <p>
@@ -122,7 +286,16 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	 * @throws BeanTestException
 	 *             If an unexpected exception occurs during testing.
 	 */
-	void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException;
+	public void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException {
+		log.debug("testBean: entering with beanClass=[" + beanClass + "].");
+		validationHelper.ensureExists("beanClass", "test bean", beanClass);
+		Configuration customConfiguration = null;
+		if (hasCustomConfiguration(beanClass)) {
+			customConfiguration = getCustomConfiguration(beanClass);
+		}
+		testBean(beanClass, customConfiguration);
+		log.debug("testBean: exiting.");
+	}
 
 	/**
 	 * <p>
@@ -159,6 +332,104 @@ public interface BeanTester extends RandomValueGeneratorProvider, FactoryCollect
 	 * @throws BeanTestException
 	 *             If an unexpected exception occurs during testing.
 	 */
-	void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
-	        AssertionError, BeanTestException;
+	public void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
+	        AssertionError, BeanTestException {
+		log.debug("testBean: entering with beanClass=[" + beanClass + "], customConfiguration=[" + customConfiguration
+		        + "].");
+		validationHelper.ensureExists("beanClass", "test bean", beanClass);
+		// Override the standard number of iterations if need be
+		int iterations = this.iterations;
+		if ((customConfiguration != null) && (customConfiguration.hasIterationsOverride())) {
+			iterations = customConfiguration.getIterations();
+		}
+		// Get all information about a potential JavaBean class
+		BeanInformation beanInformation = beanInformationFactory.create(beanClass);
+		// Test the JavaBean 'iterations' times
+		for (int idx = 0; idx < iterations; idx++) {
+			log.debug("testBean: Iteration [" + idx + "].");
+			testBean(beanInformation, customConfiguration);
+		}
+		log.debug("testBean: exiting.");
+	}
+
+	/**
+	 * <p>
+	 * Test the type specified by the beanInformation parameter using the specified Configuration. <br />
+	 * </p>
+	 * 
+	 * <p>
+	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
+	 * getters and setters function correctly. <br />
+	 * </p>
+	 * 
+	 * <p>
+	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * </p>
+	 * 
+	 * <p>
+	 * When a test is failed, an AssertionError is thrown.
+	 * </p>
+	 * 
+	 * @param beanInformation
+	 *            Information about the type to be tested.
+	 * @param configuration
+	 *            The custom Configuration to be used when testing the specified beanClass type. If no custom
+	 *            Configuration is required, pass <code>null</code> or use <code>testBean(Class<?>)</code> instead.
+	 * 
+	 * @throws IllegalArgumentException
+	 *             If the beanInformation is deemed illegal. For example, if it is null.
+	 * @throws AssertionError
+	 *             If the bean fails the test.
+	 * @throws BeanTestException
+	 *             If an unexpected exception occurs during testing.
+	 */
+	protected void testBean(BeanInformation beanInformation, Configuration configuration)
+	        throws IllegalArgumentException, AssertionError, BeanTestException {
+		log.debug("testBean: entering with beanInformation=[" + beanInformation + "], configuration=[" + configuration
+		        + "].");
+		validationHelper.ensureExists("beanInformation", "test bean", beanInformation);
+		// Get all properties of the bean
+		Collection<PropertyInformation> properties = beanInformation.getProperties();
+		// Get just the properties of the bean that are readable and writable
+		Collection<PropertyInformation> readableWritableProperties =
+		        PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
+		// Instantiate
+		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
+		Object bean;
+		try {
+			bean = beanFactory.create();
+		} catch (Exception e) {
+			String message =
+			        "Cannot test bean [" + beanInformation.getBeanClass().getName()
+			                + "]. Failed to instantiate an instance of the bean.";
+			log.error("testBean: " + message + " Throw BeanTestException.", e);
+			throw new BeanTestException(message, e);
+		}
+		// Test each property
+		for (PropertyInformation property : readableWritableProperties) {
+			// Skip testing any 'ignored' properties
+			if ((configuration == null) || (!configuration.isIgnoredProperty(property.getName()))) {
+				EqualityTest equalityTest = EqualityTest.LOGICAL;
+				Object testValue = null;
+				try {
+					Factory<?> valueFactory =
+					        factoryLookupStrategy.getFactory(beanInformation, property.getName(),
+					                property.getWriteMethodParameterType(), configuration);
+					testValue = valueFactory.create();
+					if (valueFactory instanceof BasicNewObjectInstanceFactory) {
+						equalityTest = EqualityTest.ABSOLUTE;
+					}
+				} catch (Exception e) {
+					String message =
+					        "Cannot test bean [" + beanInformation.getBeanClass().getName()
+					                + "]. Failed to instantiate a test value for property [" + property.getName()
+					                + "].";
+					log.error("testBean: " + message + " Throw BeanTestException.", e);
+					throw new BeanTestException(message, e);
+				}
+				beanPropertyTester.testProperty(bean, property, testValue, equalityTest);
+			}
+		}
+		log.debug("testBean: exiting.");
+	}
 }
