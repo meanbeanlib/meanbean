@@ -1,7 +1,9 @@
 package org.meanbean.factories;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
+import org.meanbean.factories.basic.BigDecimalFactory;
 import org.meanbean.factories.basic.BooleanFactory;
 import org.meanbean.factories.basic.ByteFactory;
 import org.meanbean.factories.basic.CharacterFactory;
@@ -42,6 +44,7 @@ public class ObjectFactoryPlugin implements FactoryCollectionPlugin {
 		factoryCollection.addFactory(Long.class, new LongFactory(randomValueGenerator));
 		factoryCollection.addFactory(Float.class, new FloatFactory(randomValueGenerator));
 		factoryCollection.addFactory(Double.class, new DoubleFactory(randomValueGenerator));
+		factoryCollection.addFactory(BigDecimal.class, new BigDecimalFactory(randomValueGenerator));
 		factoryCollection.addFactory(Character.class, new CharacterFactory(randomValueGenerator));
 		factoryCollection.addFactory(String.class, new StringFactory(randomValueGenerator));
 		factoryCollection.addFactory(Date.class, new DateFactory(randomValueGenerator));

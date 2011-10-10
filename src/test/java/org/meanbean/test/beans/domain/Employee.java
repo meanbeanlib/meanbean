@@ -1,5 +1,6 @@
 package org.meanbean.test.beans.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Queue;
 
@@ -12,6 +13,8 @@ public class Employee extends Person {
 	private Employee manager;
 
 	private Queue<Order> orderQueue;
+
+	private BigDecimal magicNumber;
 
 	public EmployeeId getEmployeeId() {
 		return employeeId;
@@ -45,11 +48,20 @@ public class Employee extends Person {
 		this.orderQueue = orderQueue;
 	}
 
+	public BigDecimal getMagicNumber() {
+		return magicNumber;
+	}
+
+	public void setMagicNumber(BigDecimal magicNumber) {
+		this.magicNumber = magicNumber;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((employeeId == null) ? 0 : employeeId.hashCode());
+		result = prime * result + ((magicNumber == null) ? 0 : magicNumber.hashCode());
 		result = prime * result + ((manager == null) ? 0 : manager.hashCode());
 		result = prime * result + ((orderQueue == null) ? 0 : orderQueue.hashCode());
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
@@ -70,11 +82,16 @@ public class Employee extends Person {
 				return false;
 		} else if (!employeeId.equals(other.employeeId))
 			return false;
+		if (magicNumber == null) {
+			if (other.magicNumber != null)
+				return false;
+		} else if (!magicNumber.equals(other.magicNumber))
+			return false;
 		if (manager == null) {
 			if (other.manager != null)
-				return true;// false;
+				return true; // false;
 		} else if (!manager.equals(other.manager))
-			return true;// false;
+			return true; // false;
 		if (orderQueue == null) {
 			if (other.orderQueue != null)
 				return false;
