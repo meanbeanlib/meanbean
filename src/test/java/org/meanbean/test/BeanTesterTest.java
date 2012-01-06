@@ -17,6 +17,7 @@ import org.meanbean.factories.FactoryCollection;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.ComplexBean;
+import org.meanbean.test.beans.PackagePrivateConstructorObject;
 import org.meanbean.util.RandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -109,6 +110,11 @@ public class BeanTesterTest {
 	public void testBeanThatTakesBeanInformationAndConfigurationShouldPermitNullConfiguration() throws Exception {
 		BeanInformation beanInformation = beanInformationFactory.create(Bean.class);
 		beanTester.testBean(beanInformation, null);
+	}
+
+	@Test
+	public void testBeanShouldBeAbleToTestBeansWithPackagePrivateConstructors() throws Exception {
+		beanTester.testBean(PackagePrivateConstructorObject.class);
 	}
 
 	@Test(expected = AssertionError.class)

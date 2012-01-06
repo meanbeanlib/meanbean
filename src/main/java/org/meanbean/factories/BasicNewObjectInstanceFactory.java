@@ -1,5 +1,8 @@
 package org.meanbean.factories;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.meanbean.lang.Factory;
@@ -53,21 +56,42 @@ public class BasicNewObjectInstanceFactory implements Factory<Object> {
 	@Override
 	public Object create() throws ObjectCreationException {
 		log.debug("create: entering.");
-		Object result;
+		Object result = null;
 		try {
-			result = clazz.newInstance();
+			Constructor<?> declaredConstructor = clazz.getDeclaredConstructor();
+			declaredConstructor.setAccessible(true);
+			result = declaredConstructor.newInstance();
 		} catch (InstantiationException e) {
-			String message =
-			        "Failed to instantiate object of type [" + clazz.getName() + "] due to InstantiationException.";
-			log.debug("create: " + message + " Throw ObjectCreationException.", e);
-			throw new ObjectCreationException(message, e);
+			wrapAndRethrowException(e);
 		} catch (IllegalAccessException e) {
-			String message =
-			        "Failed to instantiate object of type [" + clazz.getName() + "] due to IllegalAccessException.";
-			log.debug("create: " + message + " Throw ObjectCreationException.", e);
-			throw new ObjectCreationException(message, e);
+			wrapAndRethrowException(e);
+		} catch (SecurityException e) {
+			wrapAndRethrowException(e);
+		} catch (NoSuchMethodException e) {
+			wrapAndRethrowException(e);
+		} catch (IllegalArgumentException e) {
+			wrapAndRethrowException(e);
+		} catch (InvocationTargetException e) {
+			wrapAndRethrowException(e);
 		}
 		log.debug("create: exiting returning [" + result + "].");
 		return result;
+	}
+
+	/**
+	 * Wraps the specified Exception within an ObjectCreationException and throws it.
+	 * 
+	 * @param exception
+	 *            The Exception to wrap and (re)throw.
+	 * 
+	 * @throws ObjectCreationException
+	 *             The ObjectCreationException wrapping the specified Exception.
+	 */
+	private void wrapAndRethrowException(Exception exception) throws ObjectCreationException {
+		String message =
+		        "Failed to instantiate object of type [" + clazz.getName() + "] due to "
+		                + exception.getClass().getSimpleName() + ".";
+		log.debug("wrapAndRethrowException: " + message + " Throw ObjectCreationException.", exception);
+		throw new ObjectCreationException(message, exception);
 	}
 }

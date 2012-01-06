@@ -3,11 +3,13 @@ package org.meanbean.factories;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 
 import org.junit.Test;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.NonBean;
+import org.meanbean.test.beans.PackagePrivateConstructorObject;
 import org.meanbean.test.beans.PrivateConstructorObject;
 
 public class BasicNewObjectInstanceFactoryTest {
@@ -30,9 +32,15 @@ public class BasicNewObjectInstanceFactoryTest {
 		new BasicNewObjectInstanceFactory(NonBean.class).create();
 	}
 
-	@Test(expected = ObjectCreationException.class)
-	public void createWillThrowObjectCreationExceptionWhenClassHasPrivateConstructor() throws Exception {
-		new BasicNewObjectInstanceFactory(PrivateConstructorObject.class).create();
+	@Test
+	public void createShouldReturnNewObjectEvenWhenClassHasPrivateConstructor() throws Exception {
+		Object createdObject = new BasicNewObjectInstanceFactory(PrivateConstructorObject.class).create();
+		assertThat("Factory failed to create non-null object.", createdObject, is(not(nullValue())));
 	}
 
+	@Test
+	public void createShouldReturnNewObjectEvenWhenClassHasPackagePrivateConstructor() throws Exception {
+		Object createdObject = new BasicNewObjectInstanceFactory(PackagePrivateConstructorObject.class).create();
+		assertThat("Factory failed to create non-null object.", createdObject, is(not(nullValue())));
+	}
 }
