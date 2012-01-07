@@ -19,7 +19,6 @@ public class ComplexBeanFactory implements EquivalentFactory<ComplexBean> {
 		DATE_OF_BIRTH = calendar.getTime();
 	}
 
-	@Override
 	public ComplexBean create() {
 		ComplexBean bean = new ComplexBean();
 		bean.setId(1);

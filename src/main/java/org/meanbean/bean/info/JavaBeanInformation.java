@@ -82,7 +82,6 @@ class JavaBeanInformation implements BeanInformation {
 	 * 
 	 * @return The type of bean this object contains information about.
 	 */
-	@Override
 	public Class<?> getBeanClass() {
 		return beanClass;
 	}
@@ -92,7 +91,6 @@ class JavaBeanInformation implements BeanInformation {
 	 * 
 	 * @return A Collection of names of all properties of the bean.
 	 */
-	@Override
 	public Collection<String> getPropertyNames() {
 		return properties.keySet();
 	}
@@ -102,7 +100,6 @@ class JavaBeanInformation implements BeanInformation {
 	 * 
 	 * @return A Collection of all properties of the bean.
 	 */
-	@Override
 	public Collection<PropertyInformation> getProperties() {
 		return properties.values();
 	}

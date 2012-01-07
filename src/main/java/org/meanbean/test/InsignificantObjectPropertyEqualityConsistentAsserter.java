@@ -63,7 +63,6 @@ class InsignificantObjectPropertyEqualityConsistentAsserter implements ObjectPro
 	 * @throws AssertionError
 	 *             If the equality of the modified object is inconsistent with the changes made to its property.
 	 */
-	@Override
 	public void assertConsistent(String propertyName, Object originalObject, Object modifiedObject,
 	        Object originalPropertyValue, Object newPropertyValue) throws IllegalArgumentException, AssertionError {
 		log.debug("assertConsistent: Entering with propertyName=[" + propertyName + "], originalObject=["

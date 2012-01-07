@@ -48,7 +48,6 @@ public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 	 *            A RandomValueGeneratorProvider that provides access to a RandomValueGenerator that can be used by
 	 *            Factory objects.
 	 */
-	@Override
 	public void initialize(FactoryCollection factoryCollection,
 	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
 		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();

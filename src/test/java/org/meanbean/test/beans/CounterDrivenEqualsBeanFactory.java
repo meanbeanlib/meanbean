@@ -17,7 +17,6 @@ public class CounterDrivenEqualsBeanFactory implements EquivalentFactory<Counter
 		this.falseInvocationIndex = falseInvocationIndex;
 	}
 
-	@Override
 	public CounterDrivenEqualsBean create() {
 		CounterDrivenEqualsBean bean = new CounterDrivenEqualsBean(falseInvocationIndex);
 		bean.setName(NAME);

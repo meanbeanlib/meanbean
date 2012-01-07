@@ -184,7 +184,6 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	@Override
 	public void verifyEqualsMethod(EquivalentFactory<?> factory, String... insignificantProperties)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
 		verifyEqualsMethod(factory, null, insignificantProperties);
@@ -247,7 +246,6 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	@Override
 	public void verifyEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
 	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
 	        BeanTestException, AssertionError {
@@ -416,7 +414,6 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * 
 	 * @return A RandomValueGenerator.
 	 */
-	@Override
 	public RandomValueGenerator getRandomValueGenerator() {
 		return randomValueGenerator;
 	}
@@ -426,7 +423,6 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * 
 	 * @return The collection of test data Factories.
 	 */
-	@Override
 	public FactoryCollection getFactoryCollection() {
 		return factoryCollection;
 	}
@@ -436,7 +432,6 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * 
 	 * @return The factory lookup strategy.
 	 */
-	@Override
 	public FactoryLookupStrategy getFactoryLookupStrategy() {
 		return factoryLookupStrategy;
 	}

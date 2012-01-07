@@ -66,7 +66,6 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 	 * @throws ObjectCreationException
 	 *             If an error occurs when creating the map of values.
 	 */
-	@Override
 	public Map<String, Object> create() throws ObjectCreationException {
 		log.debug("create: entering.");
 		Map<String, Object> propertyValues = new HashMap<String, Object>();

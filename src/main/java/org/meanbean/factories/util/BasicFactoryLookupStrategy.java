@@ -125,7 +125,6 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	 *             If an unexpected exception occurs when getting the Factory, including failing to find a suitable
 	 *             Factory.
 	 */
-	@Override
 	public Factory<?> getFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
 	        Configuration configuration) throws IllegalArgumentException, NoSuchFactoryException {
 		log.debug("getFactory: entering with beanInformatino=[" + beanInformation + "], propertyName=[" + propertyName

@@ -118,7 +118,6 @@ public class FactoryRepositoryTest {
 	}
 
 	static class RegisteredFactory implements Factory<RegisteredTestClass> {
-		@Override
 		public RegisteredTestClass create() {
 			return null; // Not tested here - do nothing
 		}

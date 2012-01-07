@@ -148,13 +148,11 @@ public class BeanTesterTest {
 	        throws Exception {
 		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 		configurationBuilder.overrideFactory("lastName", new Factory<String>() {
-			@Override
 			public String create() {
 				return "LastName" + System.currentTimeMillis();
 			}
 		});
 		configurationBuilder.overrideFactory("dateOfBirth", new Factory<Date>() {
-			@Override
 			public Date create() {
 				return new Date();
 			}

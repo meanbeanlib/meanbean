@@ -69,7 +69,6 @@ public class EquivalentPopulatedBeanFactory implements EquivalentFactory<Object>
 	 * @throws BeanCreationException
 	 *             If an error occurs when creating an instance of the Bean.
 	 */
-	@Override
 	public Object create() throws BeanCreationException {
 		log.debug("create: entering.");
 		if (propertyValues == null) {

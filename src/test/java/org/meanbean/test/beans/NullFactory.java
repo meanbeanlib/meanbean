@@ -9,7 +9,6 @@ import org.meanbean.lang.Factory;
  */
 public class NullFactory implements Factory<Object> {
 
-	@Override
 	public Object create() {
 		return null;
 	}

@@ -55,7 +55,6 @@ public class HashCodeMethodTesterTest {
 		tester.testHashCodesEqual(new EquivalentFactory<FieldDrivenHashCodeBean>() {
 			private int counter;
 
-			@Override
 			public FieldDrivenHashCodeBean create() {
 				return new FieldDrivenHashCodeBean(counter++);
 			}
@@ -87,7 +86,6 @@ public class HashCodeMethodTesterTest {
 	@Test(expected = AssertionError.class)
 	public void testHashCodeConsistentShouldThrowAssertionErrorWhenHashCodeIsInconsistent() throws Exception {
 		tester.testHashCodeConsistent(new EquivalentFactory<CounterDrivenHashCodeBean>() {
-			@Override
 			public CounterDrivenHashCodeBean create() {
 				return new CounterDrivenHashCodeBean();
 			}
@@ -124,7 +122,6 @@ public class HashCodeMethodTesterTest {
 	@Test(expected = AssertionError.class)
 	public void testHashCodeMethodShouldThrowAssertionErrorWhenHashCodeIsInconsistent() throws Exception {
 		tester.testHashCodeMethod(new EquivalentFactory<CounterDrivenHashCodeBean>() {
-			@Override
 			public CounterDrivenHashCodeBean create() {
 				return new CounterDrivenHashCodeBean();
 			}
@@ -136,7 +133,6 @@ public class HashCodeMethodTesterTest {
 		tester.testHashCodeMethod(new EquivalentFactory<FieldDrivenHashCodeBean>() {
 			private int counter;
 
-			@Override
 			public FieldDrivenHashCodeBean create() {
 				return new FieldDrivenHashCodeBean(counter++);
 			}

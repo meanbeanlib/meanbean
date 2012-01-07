@@ -62,7 +62,6 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * 
 	 * @return A RandomNumberGenerator.
 	 */
-	@Override
 	public RandomValueGenerator getRandomValueGenerator() {
 		log.debug("getRandomNumberGenerator: entering");
 		log.debug("getRandomNumberGenerator: exiting returning [" + randomValueGenerator + "].");
@@ -99,7 +98,6 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * @throws IllegalArgumentException
 	 *             If either of the required parameters are deemed illegal.
 	 */
-	@Override
 	public void addFactory(Class<?> clazz, Factory<?> factory) throws IllegalArgumentException {
 		log.debug("addFactory: entering with clazz=[" + clazz + "], factory=[" + factory + "].");
 		validationHelper.ensureExists("clazz", "add Factory", clazz);
@@ -135,7 +133,6 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * @throws NoSuchFactoryException
 	 *             If the collection does not contain a Factory registered against the specified class.
 	 */
-	@Override
 	public Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException {
 		log.debug("getFactory: entering with clazz=[" + clazz + "].");
 		validationHelper.ensureExists("clazz", "get Factory", clazz);
@@ -169,7 +166,6 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * @throws IllegalArgumentException
 	 *             If the clazz is deemed illegal.
 	 */
-	@Override
 	public boolean hasFactory(Class<?> clazz) throws IllegalArgumentException {
 		log.debug("hasFactory: entering with clazz=[" + clazz + "].");
 		validationHelper.ensureExists("clazz", "check collection for Factory", clazz);

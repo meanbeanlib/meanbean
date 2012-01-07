@@ -51,7 +51,6 @@ public class SimpleValidationHelper implements ValidationHelper, Serializable {
 	 * @throws IllegalArgumentException
 	 *             If the specified value does not exist.
 	 */
-	@Override
 	public void ensureExists(String name, Object value) throws IllegalArgumentException {
 		log("ensureExists: entering with name=[" + name + "], value=[" + value + "].");
 		if (value == null) {
@@ -81,7 +80,6 @@ public class SimpleValidationHelper implements ValidationHelper, Serializable {
 	 * @throws IllegalArgumentException
 	 *             If the specified value does not exist.
 	 */
-	@Override
 	public void ensureExists(String name, String operation, Object value) throws IllegalArgumentException {
 		log("ensureExists: entering with name=[" + name + "], operation=[" + operation + "], value=[" + value + "].");
 		if (value == null) {

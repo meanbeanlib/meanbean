@@ -42,7 +42,6 @@ public class EquivalentEnumFactory implements EquivalentFactory<Enum<?>> {
 	 * 
 	 * @return An Enum constant of the specified Enum type.
 	 */
-	@Override
 	public Enum<?> create() {
 		return enumConstants[0];
 	}

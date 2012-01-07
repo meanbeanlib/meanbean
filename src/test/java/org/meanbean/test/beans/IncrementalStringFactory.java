@@ -11,7 +11,6 @@ public class IncrementalStringFactory implements Factory<String> {
 
 	private int counter;
 
-	@Override
 	public String create() {
 		return "TEST_STRING_" + counter++;
 	}

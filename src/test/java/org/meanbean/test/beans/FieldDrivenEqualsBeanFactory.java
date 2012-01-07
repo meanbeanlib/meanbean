@@ -16,7 +16,6 @@ public class FieldDrivenEqualsBeanFactory implements EquivalentFactory<FieldDriv
 		this.equalsResult = equalsResult;
 	}
 
-	@Override
 	public FieldDrivenEqualsBean create() {
 		FieldDrivenEqualsBean bean = new FieldDrivenEqualsBean(equalsResult);
 		bean.setName("TEST_NAME");

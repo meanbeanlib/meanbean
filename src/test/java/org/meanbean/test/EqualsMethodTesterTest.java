@@ -88,7 +88,6 @@ public class EqualsMethodTesterTest {
 		equalsTester.testEqualsMethod(new EquivalentFactory<FieldDrivenEqualsBean>() {
 			private int counter;
 
-			@Override
 			public FieldDrivenEqualsBean create() {
 				// 2nd object created by factory always returns false from equals(); others always return true
 				return new FieldDrivenEqualsBean(counter++ != 1);
@@ -101,7 +100,6 @@ public class EqualsMethodTesterTest {
 		equalsTester.testEqualsMethod(new EquivalentFactory<FieldDrivenEqualsBean>() {
 			private int counter;
 
-			@Override
 			public FieldDrivenEqualsBean create() {
 				FieldDrivenEqualsBean bean = new FieldDrivenEqualsBean(true);// equal to everything
 				bean.setName("NAME" + counter++);// property has different value each time
@@ -114,7 +112,6 @@ public class EqualsMethodTesterTest {
 	public void testEqualsMethodShouldWrapExceptionsThrownWhenInvokingSetterMethodInBeanTestException()
 	        throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<BeanWithBadSetterMethod>() {
-			@Override
 			public BeanWithBadSetterMethod create() {
 				return new BeanWithBadSetterMethod();
 			}
@@ -125,7 +122,6 @@ public class EqualsMethodTesterTest {
 	public void testEqualsMethodShouldWrapExceptionsThrownWhenInvokingGetterMethodInBeanTestException()
 	        throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<BeanWithBadGetterMethod>() {
-			@Override
 			public BeanWithBadGetterMethod create() {
 				return new BeanWithBadGetterMethod();
 			}
@@ -135,7 +131,6 @@ public class EqualsMethodTesterTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testEqualsMethodShouldPreventNullPropertyValues() throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<Bean>() {
-			@Override
 			public Bean create() {
 				return new Bean(); // null name property
 			}
@@ -145,7 +140,6 @@ public class EqualsMethodTesterTest {
 	@Test(expected = BeanTestException.class)
 	public void testEqualsMethodShouldWrapNoSuchFactoryExceptionInBeanTestException() throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<BeanWithNonBeanProperty>() {
-			@Override
 			public BeanWithNonBeanProperty create() {
 				BeanWithNonBeanProperty bean = new BeanWithNonBeanProperty();
 				bean.setName("TEST_VALUE");
@@ -163,7 +157,6 @@ public class EqualsMethodTesterTest {
 	@Test(expected = AssertionError.class)
 	public void testEqualsMethodShouldThrowAssertionErrorWhenEqualityShouldHaveChangedButDidNot() throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<BrokenEqualsMultiPropertyBean>() {
-			@Override
 			public BrokenEqualsMultiPropertyBean create() {
 				BrokenEqualsMultiPropertyBean bean = new BrokenEqualsMultiPropertyBean();
 				bean.setFirstName("FIRST_NAME");
