@@ -1,26 +1,16 @@
 package org.meanbean.factories;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import org.meanbean.test.util.MessageAndCauseExceptionTestBase;
 
-import org.junit.Test;
+public class NoSuchFactoryExceptionTest extends MessageAndCauseExceptionTestBase {
 
-public class NoSuchFactoryExceptionTest {
+    @Override
+    public Exception createMessageException(String message) {
+        return new NoSuchFactoryException(message);
+    }
 
-	private static final String MESSAGE = "TEST_MESSAGE";
-
-	private static final Throwable CAUSE = new IllegalArgumentException("ILLEGAL ARGUMENT EXCEPTION MESSAGE");
-
-	@Test
-	public void constructWithMessage() throws Exception {
-		NoSuchFactoryException exception = new NoSuchFactoryException(MESSAGE);
-		assertThat("Message was not set on exception.", exception.getMessage(), is(MESSAGE));
-	}
-
-	@Test
-	public void constructWithMessageAndCause() throws Exception {
-		NoSuchFactoryException exception = new NoSuchFactoryException(MESSAGE, CAUSE);
-		assertThat("Unexpected message in exception.", exception.getMessage(), is(MESSAGE));
-		assertThat("Unexpected cause in exception.", exception.getCause(), is(CAUSE));
-	}
+    @Override
+    public Exception createMessageAndCauseException(String message, Throwable cause) {
+        return new NoSuchFactoryException(message, cause);
+    }
 }
