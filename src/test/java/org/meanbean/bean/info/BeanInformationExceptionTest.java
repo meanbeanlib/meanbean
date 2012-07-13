@@ -7,20 +7,24 @@ import org.junit.Test;
 
 public class BeanInformationExceptionTest {
 
-	private static final String MESSAGE = "TEST_MESSAGE";
+    private static final String EXPECTED_MESSAGE = "TEST_MESSAGE";
 
-	private static final Throwable CAUSE = new IllegalArgumentException("ILLEGAL ARGUMENT EXCEPTION MESSAGE");
+    @Test
+    public void shouldWrapMessage() throws Exception {
+        // When
+        BeanInformationException exception = new BeanInformationException(EXPECTED_MESSAGE);
+        // Then
+        assertThat("Message was not set on exception.", exception.getMessage(), is(EXPECTED_MESSAGE));
+    }
 
-	@Test
-	public void constructWithMessage() throws Exception {
-		BeanInformationException exception = new BeanInformationException(MESSAGE);
-		assertThat("Message was not set on exception.", exception.getMessage(), is(MESSAGE));
-	}
-
-	@Test
-	public void constructWithMessageAndCause() throws Exception {
-		BeanInformationException exception = new BeanInformationException(MESSAGE, CAUSE);
-		assertThat("Unexpected message in exception.", exception.getMessage(), is(MESSAGE));
-		assertThat("Unexpected cause in exception.", exception.getCause(), is(CAUSE));
-	}
+    @Test
+    public void shouldWrapMessageAndCause() throws Exception {
+        // Given
+        final Throwable expectedCause = new IllegalArgumentException("ILLEGAL ARGUMENT EXCEPTION MESSAGE");
+        // When
+        BeanInformationException exception = new BeanInformationException(EXPECTED_MESSAGE, expectedCause);
+        // Then
+        assertThat("Unexpected message in exception.", exception.getMessage(), is(EXPECTED_MESSAGE));
+        assertThat("Unexpected cause in exception.", exception.getCause(), is(expectedCause));
+    }
 }
