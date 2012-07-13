@@ -10,7 +10,7 @@ public class BeanInformationExceptionTest {
     private static final String EXPECTED_MESSAGE = "TEST_MESSAGE";
 
     @Test
-    public void shouldWrapMessage() throws Exception {
+    public void shouldHaveMessage() throws Exception {
         // When
         BeanInformationException exception = new BeanInformationException(EXPECTED_MESSAGE);
         // Then
@@ -18,7 +18,7 @@ public class BeanInformationExceptionTest {
     }
 
     @Test
-    public void shouldWrapMessageAndCause() throws Exception {
+    public void shouldHaveMessageAndCause() throws Exception {
         // Given
         final Throwable expectedCause = new IllegalArgumentException("ILLEGAL ARGUMENT EXCEPTION MESSAGE");
         // When
