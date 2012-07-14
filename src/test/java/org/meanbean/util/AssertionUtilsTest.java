@@ -9,22 +9,27 @@ import org.junit.Test;
 
 public class AssertionUtilsTest {
 
-	private static final String FAIL_MESSAGE = "TEST_FAIL_MESSAGE";
+    @Test(expected = AssertionError.class)
+    public void shouldThrowAssertionError() throws Exception {
+        // Given
+        // When
+        AssertionUtils.fail();
+        // Then - should throw AssertionError
+    }
 
-	@Test(expected = AssertionError.class)
-	public void failShouldThrowAssertionError() throws Exception {
-		AssertionUtils.fail();
-	}
-
-	@Test
-	public void failWithMessageShouldThrowAssertionError() throws Exception {
-		AssertionError assertionError = null;
-		try {
-			AssertionUtils.fail(FAIL_MESSAGE);
-		} catch (AssertionError error) {
-			assertionError = error;
-		}
-		assertThat("fail should have thrown AssertionError.", assertionError, is(not(nullValue())));
-		assertThat("Incorrect message.", assertionError.getMessage(), is(FAIL_MESSAGE));
-	}
+    @Test
+    public void shouldThrowAssertionErrorWithMessage() throws Exception {
+        // Given
+        final String message = "TEST_FAIL_MESSAGE";
+        // When
+        AssertionError assertionError = null;
+        try {
+            AssertionUtils.fail(message);
+        } catch (AssertionError error) {
+            assertionError = error;
+        }
+        // Then
+        assertThat("fail should have thrown AssertionError.", assertionError, is(not(nullValue())));
+        assertThat("Incorrect message.", assertionError.getMessage(), is(message));
+    }
 }
