@@ -1,6 +1,5 @@
 package org.meanbean.bean.info;
 
-import java.lang.reflect.Method;
 
 /**
  * Factory that creates PropertyInformation objects. Should be used for testing only.
@@ -10,52 +9,53 @@ import java.lang.reflect.Method;
 public class PropertyInformationFactory {
 
     /**
-     * Create a new PropertyInformation object with the specified parameters. The new PropertyInformation will not have
-     * a read method nor write method.
+     * Create a new read-only PropertyInformation object with the specified name. The new PropertyInformation will not
+     * have a read method nor write method.
      * 
      * @param name
      *            The name of the property.
-     * @param isReadable
-     *            <code>true</code> if the property is readable, <code>false</code> if it is not readable.
-     * @param isWritable
-     *            <code>true</code> if the property is writable, <code>false</code> if it is not writable.
      * 
      * @return A new PropertyInformation object.
      */
-    public static PropertyInformation create(String name, boolean isReadable, boolean isWritable) {
-        return create(name, isReadable, isWritable, null, null, null, null);
+    public static PropertyInformation createReadOnlyProperty(String name) {
+        return create(name, true, false);
     }
 
     /**
-     * Create a new PropertyInformation object with the specified parameters.
+     * Create a new write-only PropertyInformation object with the specified name. The new PropertyInformation will not
+     * have a read method nor write method.
      * 
      * @param name
      *            The name of the property.
-     * @param isReadable
-     *            <code>true</code> if the property is readable, <code>false</code> if it is not readable.
-     * @param isWritable
-     *            <code>true</code> if the property is writable, <code>false</code> if it is not writable.
-     * @param readMethod
-     *            The read method for the property, or <code>null</code> if the property has no read method.
-     * @param writeMethod
-     *            The write method for the property, or <code>null</code> if the property has no write method.
-     * @param readMethodReturnType
-     *            The return type of the read method.
-     * @param writeMethodParameterType
-     *            The parameter type of the write method.
      * 
      * @return A new PropertyInformation object.
      */
-    public static PropertyInformation create(String name, boolean isReadable, boolean isWritable, Method readMethod,
-            Method writeMethod, Class<?> readMethodReturnType, Class<?> writeMethodParameterType) {
+    public static PropertyInformation createWriteOnlyProperty(String name) {
+        return create(name, false, true);
+    }
+
+    /**
+     * Create a new readable/writable PropertyInformation object with the specified name. The new PropertyInformation
+     * will not have a read method nor write method.
+     * 
+     * @param name
+     *            The name of the property.
+     * 
+     * @return A new PropertyInformation object.
+     */
+    public static PropertyInformation createReadWriteProperty(String name) {
+        return create(name, true, true);
+    }
+
+    private static PropertyInformation create(String name, boolean isReadable, boolean isWritable) {
         PropertyInformationBean propertyInformation = new PropertyInformationBean();
         propertyInformation.setName(name);
         propertyInformation.setReadable(isReadable);
         propertyInformation.setWritable(isWritable);
-        propertyInformation.setReadMethod(readMethod);
-        propertyInformation.setWriteMethod(writeMethod);
-        propertyInformation.setReadMethodReturnType(readMethodReturnType);
-        propertyInformation.setWriteMethodParameterType(writeMethodParameterType);
+        propertyInformation.setReadMethod(null);
+        propertyInformation.setWriteMethod(null);
+        propertyInformation.setReadMethodReturnType(null);
+        propertyInformation.setWriteMethodParameterType(null);
         return propertyInformation;
     }
 }

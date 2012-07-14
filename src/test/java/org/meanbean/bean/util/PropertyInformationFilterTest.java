@@ -2,112 +2,151 @@ package org.meanbean.bean.util;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
+import static org.meanbean.bean.info.PropertyInformationFactory.createReadOnlyProperty;
+import static org.meanbean.bean.info.PropertyInformationFactory.createReadWriteProperty;
+import static org.meanbean.bean.info.PropertyInformationFactory.createWriteOnlyProperty;
+import static org.meanbean.bean.util.PropertyInformationFilter.filter;
+import static org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility.READABLE;
+import static org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility.READABLE_WRITABLE;
+import static org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility.WRITABLE;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
 import org.meanbean.bean.info.PropertyInformation;
-import org.meanbean.bean.info.PropertyInformationFactory;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 
 public class PropertyInformationFilterTest {
 
-	private static final Collection<PropertyInformation> EMPTY_PROPERTIES = new ArrayList<PropertyInformation>();
+    private static final Collection<PropertyInformation> EMPTY_PROPERTIES = Collections.emptyList();
 
-	private static final List<PropertyInformation> VALID_PROPERTIES = new ArrayList<PropertyInformation>() {
-		private static final long serialVersionUID = 1L;
-		{
-			add(PropertyInformationFactory.create(null, false, true));
-			add(PropertyInformationFactory.create(null, true, false));
-			add(PropertyInformationFactory.create(null, true, true));
-			add(PropertyInformationFactory.create(null, true, false));
-			add(PropertyInformationFactory.create(null, false, true));
-		}
-	};
+    private static final PropertyInformation READ_ONLY_PROPERTY_1 = createReadOnlyProperty("R/O Prop 1");
+    private static final PropertyInformation READ_ONLY_PROPERTY_2 = createReadOnlyProperty("R/O Prop 2");
+    private static final PropertyInformation WRITE_ONLY_PROPERTY_1 = createWriteOnlyProperty("W/O Prop 1");
+    private static final PropertyInformation WRITE_ONLY_PROPERTY_2 = createWriteOnlyProperty("W/O Prop 2");
+    private static final PropertyInformation READ_WRITE_PROPERTY_1 = createReadWriteProperty("W/R Prop 1");
+    private static final PropertyInformation READ_WRITE_PROPERTY_2 = createReadWriteProperty("W/R Prop 2");
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldPreventIllegalProperties() throws Exception {
-		PropertyInformationFilter.filter(null, PropertyVisibility.READABLE);
-	}
+    private static final List<PropertyInformation> VALID_PROPERTIES = new ArrayList<PropertyInformation>();
+    static {
+        VALID_PROPERTIES.add(READ_ONLY_PROPERTY_1);
+        VALID_PROPERTIES.add(READ_ONLY_PROPERTY_2);
+        VALID_PROPERTIES.add(WRITE_ONLY_PROPERTY_1);
+        VALID_PROPERTIES.add(WRITE_ONLY_PROPERTY_2);
+        VALID_PROPERTIES.add(READ_WRITE_PROPERTY_1);
+        VALID_PROPERTIES.add(READ_WRITE_PROPERTY_2);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldPreventIllegalFilter() throws Exception {
-		PropertyInformationFilter.filter(EMPTY_PROPERTIES, null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldPreventIllegalProperties() throws Exception {
+        // Given
+        Collection<PropertyInformation> nullProperties = null;
+        PropertyVisibility propertyVisibility = READABLE;
+        // When
+        filter(nullProperties, propertyVisibility);
+        // Then - throw an IllegalArgumentException
+    }
 
-	@Test
-	public void shouldReturnEmptyCollectionWhenPassedEmptyCollection() throws Exception {
-		for (PropertyVisibility filter : PropertyVisibility.values()) {
-			assertThat("Incorrect properties for filter [" + filter + "].",
-			        PropertyInformationFilter.filter(EMPTY_PROPERTIES, filter).isEmpty(), is(true));
-		}
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldPreventIllegalFilter() throws Exception {
+        // Given
+        PropertyVisibility nullPropertyVisibility = null;
+        // When
+        filter(EMPTY_PROPERTIES, nullPropertyVisibility);
+        // Then - throw an IllegalArgumentException
+    }
 
-	@Test
-	public void shouldReturnEmptyCollectionWhenNoWritableMatchesAreFound() throws Exception {
-		final boolean writable = false;
-		Collection<PropertyInformation> inputProperties = new ArrayList<PropertyInformation>();
-		inputProperties.add(PropertyInformationFactory.create(null, true, writable));
-		inputProperties.add(PropertyInformationFactory.create(null, false, writable));
-		inputProperties.add(PropertyInformationFactory.create(null, true, writable));
-		Collection<PropertyInformation> filteredProperties =
-		        PropertyInformationFilter.filter(inputProperties, PropertyVisibility.WRITABLE);
-		assertThat("Incorrect filtered properties.", filteredProperties.isEmpty(), is(true));
-	}
+    @Test
+    public void shouldReturnEmptyCollectionWhenPassedEmptyCollection() throws Exception {
+        shouldReturnEmptyCollectionWhenPassedEmptyCollection(READABLE);
+        shouldReturnEmptyCollectionWhenPassedEmptyCollection(WRITABLE);
+        shouldReturnEmptyCollectionWhenPassedEmptyCollection(READABLE_WRITABLE);
+    }
 
-	@Test
-	public void shouldReturnEmptyCollectionWhenNoReadableMatchesAreFound() throws Exception {
-		final boolean readable = false;
-		Collection<PropertyInformation> inputProperties = new ArrayList<PropertyInformation>();
-		inputProperties.add(PropertyInformationFactory.create(null, readable, true));
-		inputProperties.add(PropertyInformationFactory.create(null, readable, false));
-		inputProperties.add(PropertyInformationFactory.create(null, readable, true));
-		Collection<PropertyInformation> filteredProperties =
-		        PropertyInformationFilter.filter(inputProperties, PropertyVisibility.READABLE);
-		assertThat("Incorrect filtered properties.", filteredProperties.isEmpty(), is(true));
-	}
+    private void shouldReturnEmptyCollectionWhenPassedEmptyCollection(PropertyVisibility propertyVisibility)
+            throws Exception {
+        assertTrue("Expected empty result.", filter(EMPTY_PROPERTIES, propertyVisibility).isEmpty());
+    }
 
-	@Test
-	public void shouldReturnEmptyCollectionWhenNoReadableWritableMatchesAreFound() throws Exception {
-		Collection<PropertyInformation> inputProperties = new ArrayList<PropertyInformation>();
-		inputProperties.add(PropertyInformationFactory.create(null, true, false));
-		inputProperties.add(PropertyInformationFactory.create(null, true, false));
-		inputProperties.add(PropertyInformationFactory.create(null, false, true));
-		Collection<PropertyInformation> filteredProperties =
-		        PropertyInformationFilter.filter(inputProperties, PropertyVisibility.READABLE_WRITABLE);
-		assertThat("Incorrect filtered properties.", filteredProperties.isEmpty(), is(true));
-	}
+    @Test
+    public void shouldReturnEmptyCollectionWhenNoWritableMatchesAreFound() throws Exception {
+        // Given
+        Collection<PropertyInformation> nonWritableProperties = new ArrayList<PropertyInformation>();
+        nonWritableProperties.add(READ_ONLY_PROPERTY_1);
+        nonWritableProperties.add(READ_ONLY_PROPERTY_2);
+        // When
+        Collection<PropertyInformation> filteredProperties = filter(nonWritableProperties, WRITABLE);
+        // Then
+        assertTrue("Expected empty result.", filteredProperties.isEmpty());
+    }
 
-	@Test
-	public void shouldReturnOnlyWritablePropertiesWhenRequested() throws Exception {
-		Collection<PropertyInformation> filteredProperties =
-		        PropertyInformationFilter.filter(VALID_PROPERTIES, PropertyVisibility.WRITABLE);
-		assertThat("Incorrect filtered properties.", filteredProperties.size(), is(3));
-		Iterator<PropertyInformation> iterator = filteredProperties.iterator();
-		assertThat("Incorrect filtered properties.", iterator.next(), is(VALID_PROPERTIES.get(0)));
-		assertThat("Incorrect filtered properties.", iterator.next(), is(VALID_PROPERTIES.get(2)));
-		assertThat("Incorrect filtered properties.", iterator.next(), is(VALID_PROPERTIES.get(4)));
-	}
+    @Test
+    public void shouldReturnEmptyCollectionWhenNoReadableMatchesAreFound() throws Exception {
+        // Given
+        Collection<PropertyInformation> nonReadableProperties = new ArrayList<PropertyInformation>();
+        nonReadableProperties.add(WRITE_ONLY_PROPERTY_1);
+        nonReadableProperties.add(WRITE_ONLY_PROPERTY_2);
+        // When
+        Collection<PropertyInformation> filteredProperties = filter(nonReadableProperties, READABLE);
+        // Then
+        assertTrue("Expected empty result.", filteredProperties.isEmpty());
+    }
 
-	@Test
-	public void shouldReturnOnlyReadablePropertiesWhenRequested() throws Exception {
-		Collection<PropertyInformation> filteredProperties =
-		        PropertyInformationFilter.filter(VALID_PROPERTIES, PropertyVisibility.READABLE);
-		assertThat("Incorrect filtered properties.", filteredProperties.size(), is(3));
-		Iterator<PropertyInformation> iterator = filteredProperties.iterator();
-		assertThat("Incorrect filtered properties.", iterator.next(), is(VALID_PROPERTIES.get(1)));
-		assertThat("Incorrect filtered properties.", iterator.next(), is(VALID_PROPERTIES.get(2)));
-		assertThat("Incorrect filtered properties.", iterator.next(), is(VALID_PROPERTIES.get(3)));
-	}
+    @Test
+    public void shouldReturnEmptyCollectionWhenNoReadableWritableMatchesAreFound() throws Exception {
+        // Given
+        Collection<PropertyInformation> inputProperties = new ArrayList<PropertyInformation>();
+        inputProperties.add(READ_ONLY_PROPERTY_1);
+        inputProperties.add(READ_ONLY_PROPERTY_2);
+        inputProperties.add(WRITE_ONLY_PROPERTY_1);
+        inputProperties.add(WRITE_ONLY_PROPERTY_2);
+        // When
+        Collection<PropertyInformation> filteredProperties = filter(inputProperties, READABLE_WRITABLE);
+        // Then
+        assertTrue("Expected empty result.", filteredProperties.isEmpty());
+    }
 
-	@Test
-	public void shouldReturnOnlyReadableWritablePropertiesWhenRequested() throws Exception {
-		Collection<PropertyInformation> filteredProperties =
-		        PropertyInformationFilter.filter(VALID_PROPERTIES, PropertyVisibility.READABLE_WRITABLE);
-		assertThat("Incorrect filtered properties.", filteredProperties.size(), is(1));
-		assertThat("Incorrect filtered properties.", filteredProperties.iterator().next(), is(VALID_PROPERTIES.get(2)));
-	}
+    @Test
+    public void shouldReturnOnlyWritablePropertiesWhenRequested() throws Exception {
+        // Given
+        // When
+        Collection<PropertyInformation> filteredProperties = filter(VALID_PROPERTIES, WRITABLE);
+        // Then
+        assertThat("Incorrect number of properties.", filteredProperties.size(), is(4));
+        List<PropertyInformation> filteredPropertiesList = new ArrayList<PropertyInformation>(filteredProperties);
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(0), is(WRITE_ONLY_PROPERTY_1));
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(1), is(WRITE_ONLY_PROPERTY_2));
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(2), is(READ_WRITE_PROPERTY_1));
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(3), is(READ_WRITE_PROPERTY_2));
+    }
+
+    @Test
+    public void shouldReturnOnlyReadablePropertiesWhenRequested() throws Exception {
+        // Given
+        // When
+        Collection<PropertyInformation> filteredProperties = filter(VALID_PROPERTIES, READABLE);
+        // Then
+        assertThat("Incorrect filtered properties.", filteredProperties.size(), is(4));
+        List<PropertyInformation> filteredPropertiesList = new ArrayList<PropertyInformation>(filteredProperties);
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(0), is(READ_ONLY_PROPERTY_1));
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(1), is(READ_ONLY_PROPERTY_2));
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(2), is(READ_WRITE_PROPERTY_1));
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(3), is(READ_WRITE_PROPERTY_2));
+    }
+
+    @Test
+    public void shouldReturnOnlyReadableWritablePropertiesWhenRequested() throws Exception {
+        // Given
+        // When
+        Collection<PropertyInformation> filteredProperties = filter(VALID_PROPERTIES, READABLE_WRITABLE);
+        // Then
+        assertThat("Incorrect filtered properties.", filteredProperties.size(), is(2));
+        List<PropertyInformation> filteredPropertiesList = new ArrayList<PropertyInformation>(filteredProperties);
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(0), is(READ_WRITE_PROPERTY_1));
+        assertThat("Incorrect filtered properties.", filteredPropertiesList.get(1), is(READ_WRITE_PROPERTY_2));
+    }
 }
