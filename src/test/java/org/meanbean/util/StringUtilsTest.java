@@ -1,8 +1,8 @@
 package org.meanbean.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,158 +16,126 @@ import org.junit.Test;
  */
 public class StringUtilsTest {
 
-	private static final String LIST_1_ITEM_1 = "Graham";
-	private static final String LIST_1_ITEM_2 = "Robert";
-	private static final String LIST_1_ITEM_3 = "James";
-	private static final String LIST_1_ITEM_4 = "Williamson";
+    private static final List<String> NULL_LIST = null;
 
-	private static final String LIST_2_ITEM_1 = "Kerry";
-	private static final String LIST_2_ITEM_2 = "Julia";
-	private static final String LIST_2_ITEM_3 = "Williamson";
+    private static final String[] NULL_ARRAY = null;
 
-	@Test
-	public void testJoinWithListAndString() {
-		String result1 = StringUtils.join(createTestList1(), ",");
-		assertEquals(createTestString1(","), result1);
+    private static final String INPUT_ITEM_1 = "A";
+    private static final String INPUT_ITEM_2 = "B";
+    private static final String INPUT_ITEM_3 = "C";
+    private static final String INPUT_ITEM_4 = "D";
 
-		String result2 = StringUtils.join(createTestList1(), ":");
-		assertEquals(createTestString1(":"), result2);
+    private static final List<String> INPUT_LIST = new ArrayList<String>();
+    static {
+        INPUT_LIST.add(INPUT_ITEM_1);
+        INPUT_LIST.add(INPUT_ITEM_2);
+        INPUT_LIST.add(INPUT_ITEM_3);
+        INPUT_LIST.add(INPUT_ITEM_4);
+    }
 
-		String result3 = StringUtils.join(createTestList1(), ";");
-		assertEquals(createTestString1(";"), result3);
-		assertNotSame(createTestString1(":"), result3);
-		assertNotSame(createTestString1(","), result3);
+    private static final String[] INPUT_ARRAY = { INPUT_ITEM_1, INPUT_ITEM_2, INPUT_ITEM_3, INPUT_ITEM_4 };
 
-		String result4 = StringUtils.join(createTestList2(), ",");
-		assertEquals(createTestString2(","), result4);
+    @Test
+    public void shouldJoinListWithString() throws Exception {
+        shouldJoinListWithString(INPUT_LIST, ",", expectedStringJoinedBy(","));
+        shouldJoinListWithString(INPUT_LIST, ":", expectedStringJoinedBy(":"));
+        shouldJoinListWithString(INPUT_LIST, ";", expectedStringJoinedBy(";"));
+    }
 
-		String result5 = StringUtils.join(createTestList2(), ":");
-		assertEquals(createTestString2(":"), result5);
+    private void shouldJoinListWithString(List<String> list, String delimiter, String expected) {
+        // Given - input parameters
+        // When
+        String actualResultString = StringUtils.join(list, delimiter);
+        // Then
+        assertThat(actualResultString, is(expected));
+    }
 
-		String result6 = StringUtils.join(createTestList2(), ";");
-		assertEquals(createTestString2(";"), result6);
-		assertNotSame(createTestString2(":"), result6);
-		assertNotSame(createTestString2(","), result6);
+    @Test
+    public void shouldReturnNullWhenJoiningNullListWithString() {
+        // Given
+        String delimiter = ";";
+        // When
+        String actualResultString = StringUtils.join(NULL_LIST, delimiter);
+        // Then
+        assertNull("should return null", actualResultString);
+    }
 
-		assertNull("should return null", StringUtils.join((List<String>) null, ";"));
-	}
+    @Test
+    public void shouldJoinListWithCharacter() throws Exception {
+        shouldJoinListWithCharacter(INPUT_LIST, ',', expectedStringJoinedBy(","));
+        shouldJoinListWithCharacter(INPUT_LIST, ':', expectedStringJoinedBy(":"));
+        shouldJoinListWithCharacter(INPUT_LIST, ';', expectedStringJoinedBy(";"));
+    }
 
-	@Test
-	public void testJoinWithListAndCharacter() {
-		String result1 = StringUtils.join(createTestList1(), ',');
-		assertEquals(createTestString1(","), result1);
+    private void shouldJoinListWithCharacter(List<String> list, char delimiter, String expected) {
+        // Given - input parameters
+        // When
+        String actualResultString = StringUtils.join(list, delimiter);
+        // Then
+        assertThat(actualResultString, is(expected));
+    }
 
-		String result2 = StringUtils.join(createTestList1(), ':');
-		assertEquals(createTestString1(":"), result2);
+    @Test
+    public void shouldReturnNullWhenJoiningNullListWithCharacter() {
+        // Given
+        char delimiter = ';';
+        // When
+        String actualResultString = StringUtils.join(NULL_LIST, delimiter);
+        // Then
+        assertNull("should return null", actualResultString);
+    }
 
-		String result3 = StringUtils.join(createTestList1(), ';');
-		assertEquals(createTestString1(";"), result3);
-		assertNotSame(createTestString1(":"), result3);
-		assertNotSame(createTestString1(","), result3);
+    @Test
+    public void shouldJoinArrayWithString() throws Exception {
+        shouldJoinArrayWithString(INPUT_ARRAY, ",", expectedStringJoinedBy(","));
+        shouldJoinArrayWithString(INPUT_ARRAY, ":", expectedStringJoinedBy(":"));
+        shouldJoinArrayWithString(INPUT_ARRAY, ";", expectedStringJoinedBy(";"));
+    }
 
-		String result4 = StringUtils.join(createTestList2(), ',');
-		assertEquals(createTestString2(","), result4);
+    private void shouldJoinArrayWithString(String[] array, String delimiter, String expected) {
+        // Given - input parameters
+        // When
+        String actualResultString = StringUtils.join(array, delimiter);
+        // Then
+        assertThat(actualResultString, is(expected));
+    }
 
-		String result5 = StringUtils.join(createTestList2(), ':');
-		assertEquals(createTestString2(":"), result5);
+    @Test
+    public void shouldReturnNullWhenJoiningNullArrayWithString() {
+        // Given
+        String delimiter = ";";
+        // When
+        String actualResultString = StringUtils.join(NULL_ARRAY, delimiter);
+        // Then
+        assertNull("should return null", actualResultString);
+    }
 
-		String result6 = StringUtils.join(createTestList2(), ';');
-		assertEquals(createTestString2(";"), result6);
-		assertNotSame(createTestString2(":"), result6);
-		assertNotSame(createTestString2(","), result6);
-	}
+    @Test
+    public void shouldJoinArrayWithCharacter() {
+        shouldJoinListWithCharacter(INPUT_ARRAY, ',', expectedStringJoinedBy(","));
+        shouldJoinListWithCharacter(INPUT_ARRAY, ':', expectedStringJoinedBy(":"));
+        shouldJoinListWithCharacter(INPUT_ARRAY, ';', expectedStringJoinedBy(";"));
+    }
 
-	@Test
-	public void testJoinWithArrayAndString() {
-		String result1 = StringUtils.join(createTestArray1(), ",");
-		assertEquals(createTestString1(","), result1);
+    private void shouldJoinListWithCharacter(String[] array, char delimiter, String expected) {
+        // Given - input parameters
+        // When
+        String actualResultString = StringUtils.join(array, delimiter);
+        // Then
+        assertThat(actualResultString, is(expected));
+    }
 
-		String result2 = StringUtils.join(createTestArray1(), ":");
-		assertEquals(createTestString1(":"), result2);
+    @Test
+    public void shouldReturnNullWhenJoiningNullArrayWithCharacter() {
+        // Given
+        char delimiter = ';';
+        // When
+        String actualResultString = StringUtils.join(NULL_ARRAY, delimiter);
+        // Then
+        assertNull("should return null", actualResultString);
+    }
 
-		String result3 = StringUtils.join(createTestArray1(), ";");
-		assertEquals(createTestString1(";"), result3);
-		assertNotSame(createTestString1(":"), result3);
-		assertNotSame(createTestString1(","), result3);
-
-		String result4 = StringUtils.join(createTestArray2(), ",");
-		assertEquals(createTestString2(","), result4);
-
-		String result5 = StringUtils.join(createTestArray2(), ":");
-		assertEquals(createTestString2(":"), result5);
-
-		String result6 = StringUtils.join(createTestArray2(), ";");
-		assertEquals(createTestString2(";"), result6);
-		assertNotSame(createTestString2(":"), result6);
-		assertNotSame(createTestString2(","), result6);
-
-		assertNull("should return null", StringUtils.join((String[]) null, ";"));
-	}
-
-	@Test
-	public void testJoinWithArrayAndCharacter() {
-		String result1 = StringUtils.join(createTestArray1(), ',');
-		assertEquals(createTestString1(","), result1);
-
-		String result2 = StringUtils.join(createTestArray1(), ':');
-		assertEquals(createTestString1(":"), result2);
-
-		String result3 = StringUtils.join(createTestArray1(), ';');
-		assertEquals(createTestString1(";"), result3);
-		assertNotSame(createTestString1(":"), result3);
-		assertNotSame(createTestString1(","), result3);
-
-		String result4 = StringUtils.join(createTestArray2(), ',');
-		assertEquals(createTestString2(","), result4);
-
-		String result5 = StringUtils.join(createTestArray2(), ':');
-		assertEquals(createTestString2(":"), result5);
-
-		String result6 = StringUtils.join(createTestArray2(), ';');
-		assertEquals(createTestString2(";"), result6);
-		assertNotSame(createTestString2(":"), result6);
-		assertNotSame(createTestString2(","), result6);
-	}
-
-	private List<String> createTestList1() {
-		List<String> result = new ArrayList<String>();
-		result.add(LIST_1_ITEM_1);
-		result.add(LIST_1_ITEM_2);
-		result.add(LIST_1_ITEM_3);
-		result.add(LIST_1_ITEM_4);
-		return result;
-	}
-
-	private List<String> createTestList2() {
-		List<String> result = new ArrayList<String>();
-		result.add(LIST_2_ITEM_1);
-		result.add(LIST_2_ITEM_2);
-		result.add(LIST_2_ITEM_3);
-		return result;
-	}
-
-	private String[] createTestArray1() {
-		String[] result = new String[4];
-		result[0] = LIST_1_ITEM_1;
-		result[1] = LIST_1_ITEM_2;
-		result[2] = LIST_1_ITEM_3;
-		result[3] = LIST_1_ITEM_4;
-		return result;
-	}
-
-	private String[] createTestArray2() {
-		String[] result = new String[3];
-		result[0] = LIST_2_ITEM_1;
-		result[1] = LIST_2_ITEM_2;
-		result[2] = LIST_2_ITEM_3;
-		return result;
-	}
-
-	private String createTestString1(String divider) {
-		return LIST_1_ITEM_1 + divider + LIST_1_ITEM_2 + divider + LIST_1_ITEM_3 + divider + LIST_1_ITEM_4;
-	}
-
-	private String createTestString2(String divider) {
-		return LIST_2_ITEM_1 + divider + LIST_2_ITEM_2 + divider + LIST_2_ITEM_3;
-	}
+    private String expectedStringJoinedBy(String delimiter) {
+        return INPUT_ITEM_1 + delimiter + INPUT_ITEM_2 + delimiter + INPUT_ITEM_3 + delimiter + INPUT_ITEM_4;
+    }
 }
