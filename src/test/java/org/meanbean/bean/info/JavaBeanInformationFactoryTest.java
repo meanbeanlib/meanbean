@@ -6,18 +6,23 @@ import org.junit.Test;
 
 public class JavaBeanInformationFactoryTest {
 
-	private final JavaBeanInformationFactory factory = new JavaBeanInformationFactory();
+    @Test
+    public void shouldCreateCorrectJavaBeanInformation() throws Exception {
+        // Given
+        JavaBeanInformationFactory factory = new JavaBeanInformationFactory();
+        Class<String> inputBeanClass = String.class;
+        // When
+        BeanInformation beanInformation = factory.create(inputBeanClass);
+        // Then
+        assertEquals("Incorrect BeanInformation.", beanInformation.getBeanClass(), inputBeanClass);
+    }
 
-	@Test
-	public void shouldCreate() throws Exception {
-		JavaBeanInformationFactory factory = new JavaBeanInformationFactory();
-		Class<String> inputBeanClass = String.class;
-		BeanInformation beanInformation = factory.create(inputBeanClass);
-		assertEquals("Incorrect BeanInformation.", (Class<?>) beanInformation.getBeanClass(), inputBeanClass);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldPreventNullBeanClass() throws Exception {
-		factory.create(null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldPreventNullBeanClass() throws Exception {
+        // Given
+        JavaBeanInformationFactory factory = new JavaBeanInformationFactory();
+        // When
+        factory.create(null);
+        // Then - throws IllegalArgumentException
+    }
 }
