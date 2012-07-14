@@ -7,28 +7,29 @@ import org.junit.Test;
 
 public class SimpleFactoryIdGeneratorTest {
 
-	private SimpleFactoryIdGenerator simpleFactoryIdGenerator = new SimpleFactoryIdGenerator();
+    private final SimpleFactoryIdGenerator simpleFactoryIdGenerator = new SimpleFactoryIdGenerator();
 
-	@Test(expected = IllegalArgumentException.class)
-	public void createIdFromClassWithInvalidClass() {
-		simpleFactoryIdGenerator.createIdFromClass(null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldPreventIllegalClassParameter() {
+        // Given
+        Class<?> nullClass = null;
+        // When
+        simpleFactoryIdGenerator.createIdFromClass(nullClass);
+        // Then - throw IllegalArgumentException
+    }
 
-	@Test
-	public void createIdFromClassWithString() {
-		String idFromClass = simpleFactoryIdGenerator.createIdFromClass(String.class);
-		assertThat("Incorrect ID created for String.", idFromClass, is(String.class.getName()));
-	}
+    @Test
+    public void shouldCreateIdForClass() {
+        shouldCreateIdForClass(String.class, String.class.getName());
+        shouldCreateIdForClass(Long.class, Long.class.getName());
+        shouldCreateIdForClass(int.class, int.class.getName());
+    }
 
-	@Test
-	public void createIdFromClassWithLong() {
-		String idFromClass = simpleFactoryIdGenerator.createIdFromClass(Long.class);
-		assertThat("Incorrect ID created for Long.", idFromClass, is(Long.class.getName()));
-	}
-
-	@Test
-	public void createIdFromClassWithInt() {
-		String idFromClass = simpleFactoryIdGenerator.createIdFromClass(int.class);
-		assertThat("Incorrect ID created for int.", idFromClass, is(int.class.getName()));
-	}
+    private void shouldCreateIdForClass(Class<?> inputClass, String expectedId) {
+        // Given - input parameters
+        // When
+        String idFromClass = simpleFactoryIdGenerator.createIdFromClass(inputClass);
+        // Then
+        assertThat("Incorrect ID created.", idFromClass, is(expectedId));
+    }
 }
