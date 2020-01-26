@@ -1,8 +1,5 @@
 package org.meanbean.factories;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import org.meanbean.factories.basic.BigDecimalFactory;
 import org.meanbean.factories.basic.BooleanFactory;
 import org.meanbean.factories.basic.ByteFactory;
@@ -16,6 +13,9 @@ import org.meanbean.factories.basic.ShortFactory;
 import org.meanbean.factories.basic.StringFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.RandomValueGeneratorProvider;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Concrete FactoryCollectionPlugin that registers Factories that create basic Java wrapper objects.
@@ -33,7 +33,8 @@ public class ObjectFactoryPlugin implements FactoryCollectionPlugin {
 	 *            A RandomValueGeneratorProvider that provides access to a RandomValueGenerator that can be used by
 	 *            Factory objects.
 	 */
-	public void initialize(FactoryCollection factoryCollection,
+	@Override
+    public void initialize(FactoryCollection factoryCollection,
 	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
 		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
 		factoryCollection.addFactory(Boolean.class, new BooleanFactory(randomValueGenerator));

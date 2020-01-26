@@ -1,5 +1,11 @@
 package org.meanbean.test;
 
+import org.meanbean.lang.Factory;
+import org.meanbean.util.SimpleValidationHelper;
+import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,18 +14,15 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.meanbean.lang.Factory;
-import org.meanbean.util.SimpleValidationHelper;
-import org.meanbean.util.ValidationHelper;
-
 /**
  * Builder object that makes creating Configuration objects easier.
  * 
  * @author Graham Williamson
  */
 public class ConfigurationBuilder {
+
+    /** Logging mechanism. */
+    private static final Logger logger = LoggerFactory.getLogger(ConfigurationBuilder.class);
 
 	/** The number of times a type should be tested. */
 	private Integer iterations;
@@ -34,18 +37,15 @@ public class ConfigurationBuilder {
 	private final Map<String, Factory<?>> overrideFactories = Collections
 	        .synchronizedMap(new HashMap<String, Factory<?>>());
 
-	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(ConfigurationBuilder.class);
-
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * Construct a new Configuration Builder.
 	 */
 	public ConfigurationBuilder() {
-		log.debug("ConfigurationBuilder: entering.");
-		log.debug("ConfigurationBuilder: exiting.");
+		logger.debug("ConfigurationBuilder: entering.");
+		logger.debug("ConfigurationBuilder: exiting.");
 	}
 
 	/**
@@ -60,13 +60,13 @@ public class ConfigurationBuilder {
 	 * @return A Configuration Builder.
 	 */
 	public ConfigurationBuilder iterations(int iterations) {
-		log.debug("iterations: entering with iterations=[" + iterations + "].");
+		logger.debug("iterations: entering with iterations=[{}].", iterations);
 		if (iterations < 1) {
-			log.debug("iterations: Iterations must be at least 1. Throw IllegalArgumentException.");
+			logger.debug("iterations: Iterations must be at least 1. Throw IllegalArgumentException.");
 			throw new IllegalArgumentException("Iterations must be at least 1.");
 		}
 		this.iterations = iterations;
-		log.debug("iterations: exiting returning [" + this + "].");
+		logger.debug("iterations: exiting returning [{}].", this);
 		return this;
 	}
 
@@ -82,10 +82,10 @@ public class ConfigurationBuilder {
 	 * @return A Configuration Builder.
 	 */
 	public ConfigurationBuilder ignoreProperty(String property) throws IllegalArgumentException {
-		log.debug("ignoreProperty: entering with property=[" + property + "].");
+		logger.debug("ignoreProperty: entering with property=[{}].", property);
 		validationHelper.ensureExists("property", "add property to ignored properties collection", property);
 		ignoredProperties.add(property);
-		log.debug("ignoreProperty: exiting returning [" + this + "].");
+		logger.debug("ignoreProperty: exiting returning [{}].", this);
 		return this;
 	}
 
@@ -104,11 +104,11 @@ public class ConfigurationBuilder {
 	 * @return A Configuration Builder.
 	 */
 	public ConfigurationBuilder overrideFactory(String property, Factory<?> factory) throws IllegalArgumentException {
-		log.debug("overrideFactory: entering with property=[" + property + "], factory=[" + factory + "].");
+		logger.debug("overrideFactory: entering with property=[{}], factory=[{}].", property, factory);
 		validationHelper.ensureExists("property", "add override Factory", property);
 		validationHelper.ensureExists("factory", "add override Factory", factory);
 		overrideFactories.put(property, factory);
-		log.debug("overrideFactory: exiting returning[" + this + "].");
+		logger.debug("overrideFactory: exiting returning[{}].", this);
 		return this;
 	}
 
@@ -118,12 +118,12 @@ public class ConfigurationBuilder {
 	 * @return A Configuration object.
 	 */
 	public Configuration build() {
-		log.debug("build: entering.");
+		logger.debug("build: entering.");
 		Configuration configuration =
 		        new Configuration(iterations, Collections.unmodifiableSet(ignoredProperties),
 		                Collections.unmodifiableMap(overrideFactories));
 		Configuration result = configuration;
-		log.debug("build: exiting returning [" + result + "].");
+		logger.debug("build: exiting returning [{}].", result);
 		return result;
 	}
 

@@ -1,9 +1,9 @@
 package org.meanbean.factories.util;
 
-import java.io.Serializable;
-
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+
+import java.io.Serializable;
 
 /**
  * Concrete Factory ID Generator.
@@ -29,7 +29,8 @@ public class SimpleFactoryIdGenerator implements FactoryIdGenerator, Serializabl
 	 * @throws IllegalArgumentException
 	 *             If the clazz parameter is deemed illegal. For example, if it is null.
 	 */
-	public String createIdFromClass(Class<?> clazz) throws IllegalArgumentException {
+	@Override
+    public String createIdFromClass(Class<?> clazz) throws IllegalArgumentException {
 		validationHelper.ensureExists("clazz", "create a key", clazz);
 		return clazz.getName();
 	}

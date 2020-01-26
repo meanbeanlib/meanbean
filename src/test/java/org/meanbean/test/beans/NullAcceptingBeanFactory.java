@@ -9,7 +9,8 @@ import org.meanbean.lang.EquivalentFactory;
  */
 public class NullAcceptingBeanFactory implements EquivalentFactory<NullAcceptingBean> {
 
-	public NullAcceptingBean create() {
+	@Override
+    public NullAcceptingBean create() {
 		return new NullAcceptingBean();
 	}
 }

@@ -1,5 +1,20 @@
 package org.meanbean.factories;
 
+import org.meanbean.factories.basic.LongFactory;
+import org.meanbean.factories.basic.StringFactory;
+import org.meanbean.factories.collections.ArrayListFactory;
+import org.meanbean.factories.collections.HashMapFactory;
+import org.meanbean.factories.collections.HashSetFactory;
+import org.meanbean.factories.collections.IdentityHashMapFactory;
+import org.meanbean.factories.collections.LinkedHashMapFactory;
+import org.meanbean.factories.collections.LinkedHashSetFactory;
+import org.meanbean.factories.collections.LinkedListFactory;
+import org.meanbean.factories.collections.TreeMapFactory;
+import org.meanbean.factories.collections.TreeSetFactory;
+import org.meanbean.factories.collections.WeakHashMapFactory;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.RandomValueGeneratorProvider;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
@@ -17,21 +32,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
 
-import org.meanbean.factories.basic.LongFactory;
-import org.meanbean.factories.basic.StringFactory;
-import org.meanbean.factories.collections.ArrayListFactory;
-import org.meanbean.factories.collections.HashMapFactory;
-import org.meanbean.factories.collections.HashSetFactory;
-import org.meanbean.factories.collections.IdentityHashMapFactory;
-import org.meanbean.factories.collections.LinkedHashMapFactory;
-import org.meanbean.factories.collections.LinkedHashSetFactory;
-import org.meanbean.factories.collections.LinkedListFactory;
-import org.meanbean.factories.collections.TreeMapFactory;
-import org.meanbean.factories.collections.TreeSetFactory;
-import org.meanbean.factories.collections.WeakHashMapFactory;
-import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.RandomValueGeneratorProvider;
-
 /**
  * Concrete FactoryCollectionPlugin that registers Factories that create Collection objects.
  * 
@@ -48,7 +48,8 @@ public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 	 *            A RandomValueGeneratorProvider that provides access to a RandomValueGenerator that can be used by
 	 *            Factory objects.
 	 */
-	public void initialize(FactoryCollection factoryCollection,
+	@Override
+    public void initialize(FactoryCollection factoryCollection,
 	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
 		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
 		StringFactory stringFactory = (StringFactory) factoryCollection.getFactory(String.class);

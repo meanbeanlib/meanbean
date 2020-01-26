@@ -1,10 +1,10 @@
 package org.meanbean.test;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -28,10 +28,10 @@ import org.meanbean.util.ValidationHelper;
 class SignificantObjectPropertyEqualityConsistentAsserter implements ObjectPropertyEqualityConsistentAsserter {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(SignificantObjectPropertyEqualityConsistentAsserter.class);
+	private static final Logger logger = LoggerFactory.getLogger(SignificantObjectPropertyEqualityConsistentAsserter.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * <p>
@@ -63,11 +63,11 @@ class SignificantObjectPropertyEqualityConsistentAsserter implements ObjectPrope
 	 * @throws AssertionError
 	 *             If the equality of the modified object is inconsistent with the changes made to its property.
 	 */
-	public void assertConsistent(String propertyName, Object originalObject, Object modifiedObject,
+	@Override
+    public void assertConsistent(String propertyName, Object originalObject, Object modifiedObject,
 	        Object originalPropertyValue, Object newPropertyValue) throws IllegalArgumentException, AssertionError {
-		log.debug("assertConsistent: Entering with propertyName=[" + propertyName + "], originalObject=["
-		        + originalObject + "], modifiedObject=[" + modifiedObject + "], originalPropertyValue=["
-		        + originalPropertyValue + "], newPropertyValue=[" + newPropertyValue + "].");
+        logger.debug("assertConsistent: Entering with propertyName=[], originalObject=[], modifiedObject=[], originalPropertyValue=[], newPropertyValue=[].",
+                propertyName, originalObject, modifiedObject, originalPropertyValue, newPropertyValue);
 		validationHelper.ensureExists("propertyName", "assert consistency of equals", propertyName);
 		validationHelper.ensureExists("originalObject", "assert consistency of equals", originalObject);
 		validationHelper.ensureExists("modifiedObject", "assert consistency of equals", modifiedObject);
@@ -83,15 +83,15 @@ class SignificantObjectPropertyEqualityConsistentAsserter implements ObjectPrope
 			        "objects that differ due to supposedly significant property [" + propertyName
 			                + "] where considered equal. " + variableString + ". is property [" + propertyName
 			                + "] actually insignificant?";
-			log.debug("assertConsistent: " + message);
+			logger.debug("assertConsistent: {}", message);
 			AssertionUtils.fail(message);
 		} else if (!originalObjectEqualsModifiedObject && newPropertyValueEqualsOriginalPropertyValue) {
 			String message =
 			        "objects that should be equal were considered unequal when testing significant " + "property ["
 			                + propertyName + "]. " + variableString + ". is equals incorrect?";
-			log.debug("assertConsistent: " + message);
+			logger.debug("assertConsistent: {}", message);
 			AssertionUtils.fail(message);
 		}
-		log.debug("assertConsistent: Equals logic is consistent for property [" + propertyName + "]");
+		logger.debug("assertConsistent: Equals logic is consistent for property []", propertyName);
 	}
 }

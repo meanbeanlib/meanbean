@@ -1,9 +1,9 @@
 package org.meanbean.test.beans;
 
+import org.meanbean.lang.EquivalentFactory;
+
 import java.util.Calendar;
 import java.util.Date;
-
-import org.meanbean.lang.EquivalentFactory;
 
 /**
  * Factory that creates logically equivalent ComplexBean instances. This should only be used for testing.
@@ -19,7 +19,8 @@ public class ComplexBeanFactory implements EquivalentFactory<ComplexBean> {
 		DATE_OF_BIRTH = calendar.getTime();
 	}
 
-	public ComplexBean create() {
+	@Override
+    public ComplexBean create() {
 		ComplexBean bean = new ComplexBean();
 		bean.setId(1);
 		bean.setFirstName("TEST_FIRST_NAME");

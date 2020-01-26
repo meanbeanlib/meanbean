@@ -59,7 +59,8 @@ public class EqualsMethodContractVerifierTest {
 		verifier.verifyEqualsSymmetric(new EquivalentFactory<FieldDrivenEqualsBean>() {
 			private int counter;
 
-			public FieldDrivenEqualsBean create() {
+			@Override
+            public FieldDrivenEqualsBean create() {
 				// 2nd object created by factory always returns false from equals(); others always return true
 				return new FieldDrivenEqualsBean(counter++ != 1);
 			}

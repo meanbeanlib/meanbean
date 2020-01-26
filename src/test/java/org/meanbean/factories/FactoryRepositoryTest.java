@@ -1,9 +1,5 @@
 package org.meanbean.factories;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +8,10 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FactoryRepositoryTest {
@@ -118,7 +118,8 @@ public class FactoryRepositoryTest {
 	}
 
 	static class RegisteredFactory implements Factory<RegisteredTestClass> {
-		public RegisteredTestClass create() {
+		@Override
+        public RegisteredTestClass create() {
 			return null; // Not tested here - do nothing
 		}
 	}

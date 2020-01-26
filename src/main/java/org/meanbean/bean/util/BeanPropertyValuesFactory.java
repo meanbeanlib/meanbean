@@ -1,11 +1,5 @@
 package org.meanbean.bean.util;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
@@ -14,6 +8,12 @@ import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Concrete Factory that creates a <code>Map</code> of values, keyed by property name, that could be used to populate
@@ -25,10 +25,10 @@ import org.meanbean.util.ValidationHelper;
 public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(BeanPropertyValuesFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(BeanPropertyValuesFactory.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** Information of the object to create. */
 	private final BeanInformation beanInformation;
@@ -66,12 +66,13 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 	 * @throws ObjectCreationException
 	 *             If an error occurs when creating the map of values.
 	 */
-	public Map<String, Object> create() throws ObjectCreationException {
-		log.debug("create: entering.");
+	@Override
+    public Map<String, Object> create() throws ObjectCreationException {
+		logger.debug("create: entering.");
 		Map<String, Object> propertyValues = new HashMap<String, Object>();
 		Collection<PropertyInformation> writableProperties =
 		        PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
-		log.debug("create: properties to create values for = [" + writableProperties + "].");
+		logger.debug("create: properties to create values for = [{}].", writableProperties);
 		for (PropertyInformation property : writableProperties) {
 			String propertyName = property.getName();
 			Factory<?> valueFactory;
@@ -79,18 +80,18 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 				valueFactory =
 				        factoryLookupStrategy.getFactory(beanInformation, propertyName,
 				                property.getWriteMethodParameterType(), null);
-				log.debug("create: using factory [" + valueFactory.getClass().getName()
-				        + "] to create value for property [" + propertyName + "].");
+				logger.debug("create: using factory [{}] to create value for property [{}].", 
+				        valueFactory.getClass().getName(), propertyName);
 				Object value = valueFactory.create();
-				log.debug("create: created value [" + value + "] for property [" + propertyName + "].");
+				logger.debug("create: created value [{}] for property [{}].", value, propertyName);
 				propertyValues.put(propertyName, value);
 			} catch (Exception e) {
 				String message = "Failed to create a value for property [" + propertyName + "].";
-				log.error("create: " + message + " Throw ObjectCreationException.", e);
+				logger.error("create:{} Throw ObjectCreationException.", message, e);
 				throw new ObjectCreationException(message, e);
 			}
 		}
-		log.debug("create: exiting returning [" + propertyValues + "].");
+		logger.debug("create: exiting returning [{}].", propertyValues);
 		return propertyValues;
 	}
 }

@@ -1,8 +1,8 @@
 package org.meanbean.util;
 
-import java.io.Serializable;
+import org.slf4j.Logger;
 
-import org.apache.commons.logging.Log;
+import java.io.Serializable;
 
 /**
  * Simple concrete ValidationHelper.
@@ -15,7 +15,7 @@ public class SimpleValidationHelper implements ValidationHelper, Serializable {
     private static final long serialVersionUID = 1L;
 
     /** Logging mechanism. */
-    private final transient Log log;
+    private final transient Logger logger;
 
     /**
      * Construct a new Simple Validation Helper.
@@ -30,8 +30,8 @@ public class SimpleValidationHelper implements ValidationHelper, Serializable {
      * @param log
      *            Logging mechanism to use when logging validation exceptions.
      */
-    public SimpleValidationHelper(Log log) {
-        this.log = log;
+    public SimpleValidationHelper(Logger logger) {
+        this.logger = logger;
     }
 
     /**
@@ -51,10 +51,11 @@ public class SimpleValidationHelper implements ValidationHelper, Serializable {
      * @throws IllegalArgumentException
      *             If the specified value does not exist.
      */
+    @Override
     public void ensureExists(String name, Object value) throws IllegalArgumentException {
-        log("ensureExists: entering with name=[" + name + "], value=[" + value + "].");
+        log("ensureExists: entering with name=[{}], value=[{}].", name, value);
         if (value == null) {
-            log("ensureExists: Object [" + name + "] does not exist. Throw IllegalArgumentException.");
+            log("ensureExists: Object [{}] does not exist. Throw IllegalArgumentException.", name);
             throw new IllegalArgumentException("Object [" + name + "] must be provided.");
         }
         log("ensureExists: exiting.");
@@ -80,10 +81,11 @@ public class SimpleValidationHelper implements ValidationHelper, Serializable {
      * @throws IllegalArgumentException
      *             If the specified value does not exist.
      */
+    @Override
     public void ensureExists(String name, String operation, Object value) throws IllegalArgumentException {
-        log("ensureExists: entering with name=[" + name + "], operation=[" + operation + "], value=[" + value + "].");
+        log("ensureExists: entering with name=[{}], operation=[{}], value=[{}].", name, operation, value);
         if (value == null) {
-            log("ensureExists: Object [" + name + "] does not exist. Throw IllegalArgumentException..");
+            log("ensureExists: Object [{}] does not exist. Throw IllegalArgumentException..", name);
             throw new IllegalArgumentException("Cannot " + operation + " with null " + name + ".");
         }
         log("ensureExists: exiting.");
@@ -91,13 +93,10 @@ public class SimpleValidationHelper implements ValidationHelper, Serializable {
 
     /**
      * Log the specified message if logging is configured in this Validation Helper.
-     * 
-     * @param message
-     *            The message to log.
      */
-    private void log(String message) {
-        if (log != null) {
-            log.debug(message);
+    private void log(String message, Object... args) {
+        if (logger != null) {
+            logger.debug(message, args);
         }
     }
 }

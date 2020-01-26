@@ -1,10 +1,10 @@
 package org.meanbean.factories.collections;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Factory that creates random ArrayLists of objects of the specified type.
@@ -36,7 +36,8 @@ public class ArrayListFactory<T> extends ListFactoryBase<T> {
 	 * 
 	 * @return A concrete List of the type created by this Factory.
 	 */
-	protected List<T> createList() {
+	@Override
+    protected List<T> createList() {
 		return new ArrayList<T>();
 	}
 

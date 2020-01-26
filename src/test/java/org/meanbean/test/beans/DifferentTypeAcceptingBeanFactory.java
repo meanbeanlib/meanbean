@@ -9,7 +9,8 @@ import org.meanbean.lang.EquivalentFactory;
  */
 public class DifferentTypeAcceptingBeanFactory implements EquivalentFactory<DifferentTypeAcceptingBean> {
 
-	public DifferentTypeAcceptingBean create() {
+	@Override
+    public DifferentTypeAcceptingBean create() {
 		return new DifferentTypeAcceptingBean();
 	}
 }

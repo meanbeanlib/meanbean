@@ -1,10 +1,10 @@
 package org.meanbean.factories.collections;
 
-import java.util.Set;
-
 import org.meanbean.factories.basic.RandomFactoryBase;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.Set;
 
 /**
  * Abstract Factory that creates Sets of objects of the specified type.
@@ -39,7 +39,8 @@ public abstract class SetFactoryBase<T> extends RandomFactoryBase<Set<T>> {
 	 * 
 	 * @return A new Set of object of the specified type.
 	 */
-	public Set<T> create() {
+	@Override
+    public Set<T> create() {
 		// Basis to randomly decide size of Set
 		double randomSize = getRandomValueGenerator().nextDouble();
 		int size = (int) (100.0 * randomSize);

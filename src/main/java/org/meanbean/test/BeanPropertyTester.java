@@ -1,11 +1,11 @@
 package org.meanbean.test;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An object that tests a Bean's property methods.
@@ -15,10 +15,10 @@ import org.meanbean.util.ValidationHelper;
 public class BeanPropertyTester {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(BeanPropertyTester.class);
+	private static final Logger logger = LoggerFactory.getLogger(BeanPropertyTester.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * <p>
@@ -53,8 +53,8 @@ public class BeanPropertyTester {
 	 */
 	public void testProperty(Object bean, PropertyInformation property, Object testValue, EqualityTest equalityTest)
 	        throws IllegalArgumentException, AssertionError, BeanTestException {
-		log.debug("testProperty: entering with bean=[" + bean + "], property=[" + property + "], testValue=["
-		        + testValue + "], equalityTest=[" + equalityTest + "].");
+		logger.debug("testProperty: entering with bean=[{}], property=[{}], testValue=[{}], equalityTest=[{}].", 
+		        bean, property, testValue, equalityTest);
 		validationHelper.ensureExists("bean", "test property", bean);
 		validationHelper.ensureExists("property", "test property", property);
 		validationHelper.ensureExists("testValue", "test property", testValue);
@@ -75,19 +75,19 @@ public class BeanPropertyTester {
 				String message =
 				        "Property [" + propertyName + "] getter did not return test value. Expected [" + testValue
 				                + "] but getter returned [" + readMethodOutput + "].";
-				log.info("testProperty: " + message);
+				logger.info("testProperty: {}", message);
 				AssertionUtils.fail(message);
 			} else {
-				log.debug("testProperty: Expected [" + testValue + "] == getter returned [" + readMethodOutput + "].");
+				logger.debug("testProperty: Expected [{}] == getter returned [{}].",testValue, readMethodOutput);
 			}
 		} catch (Exception e) {
 			String message =
 			        "Failed to test property [" + propertyName + "] due to Exception [" + e.getClass().getName()
 			                + "]: [" + e.getMessage() + "].";
-			log.error("testProperty: " + message + " Throw BeanTestException.", e);
+			logger.error("testProperty: {} Throw BeanTestException.", message, e);
 			throw new BeanTestException(message, e);
 		}
-		log.debug("testProperty: exiting.");
+		logger.debug("testProperty: exiting.");
 	}
 
 	/**

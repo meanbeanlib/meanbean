@@ -11,7 +11,8 @@ public class BeanFactory implements EquivalentFactory<Bean> {
 
 	public static final String NAME = "MY_NAME";
 
-	public Bean create() {
+	@Override
+    public Bean create() {
 		Bean bean = new Bean();
 		bean.setName(NAME);
 		return bean;

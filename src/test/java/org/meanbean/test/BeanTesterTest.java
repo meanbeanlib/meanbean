@@ -1,12 +1,5 @@
 package org.meanbean.test;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
-import java.util.Date;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +14,13 @@ import org.meanbean.test.beans.PackagePrivateConstructorObject;
 import org.meanbean.util.RandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Date;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BeanTesterTest {
@@ -148,12 +148,14 @@ public class BeanTesterTest {
 	        throws Exception {
 		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 		configurationBuilder.overrideFactory("lastName", new Factory<String>() {
-			public String create() {
+			@Override
+            public String create() {
 				return "LastName" + System.currentTimeMillis();
 			}
 		});
 		configurationBuilder.overrideFactory("dateOfBirth", new Factory<Date>() {
-			public Date create() {
+			@Override
+            public Date create() {
 				return new Date();
 			}
 		});

@@ -1,10 +1,10 @@
 package org.meanbean.factories.collections;
 
-import java.util.Map;
-
 import org.meanbean.factories.basic.RandomFactoryBase;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.Map;
 
 /**
  * Abstract Factory that creates Maps of objects of the specified type.
@@ -48,7 +48,8 @@ public abstract class MapFactoryBase<K, V> extends RandomFactoryBase<Map<K, V>> 
 	 * 
 	 * @return A new Map of object of the specified type.
 	 */
-	public Map<K, V> create() {
+	@Override
+    public Map<K, V> create() {
 		// Basis to randomly decide size of Map
 		double randomSize = getRandomValueGenerator().nextDouble();
 		int size = (int) (100.0 * randomSize);

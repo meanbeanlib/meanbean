@@ -1,9 +1,5 @@
 package org.meanbean.factories.equivalent;
 
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.util.BasicBeanPopulator;
 import org.meanbean.bean.util.BeanPopulator;
@@ -14,6 +10,10 @@ import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Factory that creates object instances based on provided BeanInformation, assigning every instance the same field
@@ -24,10 +24,10 @@ import org.meanbean.util.ValidationHelper;
 public class EquivalentPopulatedBeanFactory implements EquivalentFactory<Object> {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(EquivalentPopulatedBeanFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(EquivalentPopulatedBeanFactory.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** The BeanInformation that should be used to create instances of a bean. */
 	private final BeanInformation beanInformation;
@@ -69,17 +69,18 @@ public class EquivalentPopulatedBeanFactory implements EquivalentFactory<Object>
 	 * @throws BeanCreationException
 	 *             If an error occurs when creating an instance of the Bean.
 	 */
-	public Object create() throws BeanCreationException {
-		log.debug("create: entering.");
+	@Override
+    public Object create() throws BeanCreationException {
+		logger.debug("create: entering.");
 		if (propertyValues == null) {
-			log.debug("create: initialise property values cache.");
+			logger.debug("create: initialise property values cache.");
 			propertyValues = beanPropertyValuesFactory.create();
 		}
 		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
 		Object result = beanFactory.create();
-		log.debug("create: created [" + result + "].");
+		logger.debug("create: created [{}].", result);
 		beanPopulator.populate(result, beanInformation, propertyValues);
-		log.debug("create: populated [" + result + "].");
+		logger.debug("create: populated [{}].", result);
 		return result;
 	}
 }

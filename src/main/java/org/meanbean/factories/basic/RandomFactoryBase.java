@@ -1,12 +1,12 @@
 package org.meanbean.factories.basic;
 
-import java.io.Serializable;
-
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.RandomValueGeneratorProvider;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+
+import java.io.Serializable;
 
 /**
  * Abstract base class for a Factory that creates random objects of the specified type.
@@ -45,7 +45,8 @@ public abstract class RandomFactoryBase<T> implements Factory<T>, RandomValueGen
 	 * 
 	 * @return A random value generator.
 	 */
-	public final RandomValueGenerator getRandomValueGenerator() {
+	@Override
+    public final RandomValueGenerator getRandomValueGenerator() {
 		return randomValueGenerator;
 	}
 
@@ -54,5 +55,6 @@ public abstract class RandomFactoryBase<T> implements Factory<T>, RandomValueGen
 	 * 
 	 * @return A new object of the specified type.
 	 */
-	public abstract T create();
+	@Override
+    public abstract T create();
 }

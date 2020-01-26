@@ -1,9 +1,5 @@
 package org.meanbean.factories.beans;
 
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.util.BasicBeanPopulator;
 import org.meanbean.bean.util.BeanPopulator;
@@ -13,6 +9,10 @@ import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Factory that creates object instances based on provided BeanInformation, assigning each instance different values.
@@ -22,10 +22,10 @@ import org.meanbean.util.ValidationHelper;
 public class PopulatedBeanFactory implements Factory<Object> {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(PopulatedBeanFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(PopulatedBeanFactory.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** The BeanInformation that should be used to create instances of a bean. */
 	private final BeanInformation beanInformation;
@@ -63,13 +63,14 @@ public class PopulatedBeanFactory implements Factory<Object> {
 	 * @throws BeanCreationException
 	 *             If an error occurs when creating an instance of the Bean.
 	 */
-	public Object create() throws BeanCreationException {
-		log.debug("create: entering.");
+	@Override
+    public Object create() throws BeanCreationException {
+		logger.debug("create: entering.");
 		Map<String, Object> propertyValues = beanPropertyValuesFactory.create();
 		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
 		Object result = beanFactory.create();
 		beanPopulator.populate(result, beanInformation, propertyValues);
-		log.debug("create: populated [" + result + "].");
+		logger.debug("create: populated [{}].", result);
 		return result;
 	}
 }

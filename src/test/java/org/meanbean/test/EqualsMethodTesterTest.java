@@ -1,10 +1,5 @@
 package org.meanbean.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.junit.Test;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.lang.EquivalentFactory;
@@ -28,6 +23,11 @@ import org.meanbean.test.beans.NonReflexiveBeanFactory;
 import org.meanbean.test.beans.NullAcceptingBean;
 import org.meanbean.test.beans.NullAcceptingBeanFactory;
 import org.meanbean.test.beans.NullEquivalentFactory;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class EqualsMethodTesterTest {
 
@@ -88,7 +88,8 @@ public class EqualsMethodTesterTest {
 		equalsTester.testEqualsMethod(new EquivalentFactory<FieldDrivenEqualsBean>() {
 			private int counter;
 
-			public FieldDrivenEqualsBean create() {
+			@Override
+            public FieldDrivenEqualsBean create() {
 				// 2nd object created by factory always returns false from equals(); others always return true
 				return new FieldDrivenEqualsBean(counter++ != 1);
 			}
@@ -100,7 +101,8 @@ public class EqualsMethodTesterTest {
 		equalsTester.testEqualsMethod(new EquivalentFactory<FieldDrivenEqualsBean>() {
 			private int counter;
 
-			public FieldDrivenEqualsBean create() {
+			@Override
+            public FieldDrivenEqualsBean create() {
 				FieldDrivenEqualsBean bean = new FieldDrivenEqualsBean(true);// equal to everything
 				bean.setName("NAME" + counter++);// property has different value each time
 				return bean;
@@ -112,7 +114,8 @@ public class EqualsMethodTesterTest {
 	public void testEqualsMethodShouldWrapExceptionsThrownWhenInvokingSetterMethodInBeanTestException()
 	        throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<BeanWithBadSetterMethod>() {
-			public BeanWithBadSetterMethod create() {
+			@Override
+            public BeanWithBadSetterMethod create() {
 				return new BeanWithBadSetterMethod();
 			}
 		});
@@ -122,7 +125,8 @@ public class EqualsMethodTesterTest {
 	public void testEqualsMethodShouldWrapExceptionsThrownWhenInvokingGetterMethodInBeanTestException()
 	        throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<BeanWithBadGetterMethod>() {
-			public BeanWithBadGetterMethod create() {
+			@Override
+            public BeanWithBadGetterMethod create() {
 				return new BeanWithBadGetterMethod();
 			}
 		});
@@ -131,7 +135,8 @@ public class EqualsMethodTesterTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testEqualsMethodShouldPreventNullPropertyValues() throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<Bean>() {
-			public Bean create() {
+			@Override
+            public Bean create() {
 				return new Bean(); // null name property
 			}
 		});
@@ -140,7 +145,8 @@ public class EqualsMethodTesterTest {
 	@Test(expected = BeanTestException.class)
 	public void testEqualsMethodShouldWrapNoSuchFactoryExceptionInBeanTestException() throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<BeanWithNonBeanProperty>() {
-			public BeanWithNonBeanProperty create() {
+			@Override
+            public BeanWithNonBeanProperty create() {
 				BeanWithNonBeanProperty bean = new BeanWithNonBeanProperty();
 				bean.setName("TEST_VALUE");
 				bean.setNonBean(new NonBean("ANOTHER_TEST_VALUE"));
@@ -157,7 +163,8 @@ public class EqualsMethodTesterTest {
 	@Test(expected = AssertionError.class)
 	public void testEqualsMethodShouldThrowAssertionErrorWhenEqualityShouldHaveChangedButDidNot() throws Exception {
 		equalsTester.testEqualsMethod(new EquivalentFactory<BrokenEqualsMultiPropertyBean>() {
-			public BrokenEqualsMultiPropertyBean create() {
+			@Override
+            public BrokenEqualsMultiPropertyBean create() {
 				BrokenEqualsMultiPropertyBean bean = new BrokenEqualsMultiPropertyBean();
 				bean.setFirstName("FIRST_NAME");
 				bean.setLastName("LAST_NAME");

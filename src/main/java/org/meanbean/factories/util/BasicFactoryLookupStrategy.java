@@ -1,7 +1,5 @@
 package org.meanbean.factories.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
@@ -15,6 +13,8 @@ import org.meanbean.test.Configuration;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -42,10 +42,10 @@ import org.meanbean.util.ValidationHelper;
 public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(BasicFactoryLookupStrategy.class);
+	private static final Logger logger = LoggerFactory.getLogger(BasicFactoryLookupStrategy.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** Random number generator used by factories to randomly generate values. */
 	private final RandomValueGenerator randomValueGenerator;
@@ -125,15 +125,16 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	 *             If an unexpected exception occurs when getting the Factory, including failing to find a suitable
 	 *             Factory.
 	 */
-	public Factory<?> getFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
+	@Override
+    public Factory<?> getFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
 	        Configuration configuration) throws IllegalArgumentException, NoSuchFactoryException {
-		log.debug("getFactory: entering with beanInformatino=[" + beanInformation + "], propertyName=[" + propertyName
-		        + "], propertyType=[" + propertyType + "], configuration=[" + configuration + "].");
+		logger.debug("getFactory: entering with beanInformatino=[{}], propertyName=[{}], propertyType=[{}], configuration=[{}].", 
+		        beanInformation, propertyName, propertyType, configuration);
 		validationHelper.ensureExists("beanInformation", "get factory", beanInformation);
 		validationHelper.ensureExists("propertyName", "get factory", propertyName);
 		validationHelper.ensureExists("propertyType", "get factory", propertyType);
 		Factory<?> factory = doGetFactory(beanInformation, propertyName, propertyType, configuration);
-		log.debug("getFactory: exiting returning [" + factory + "].");
+		logger.debug("getFactory: exiting returning [{}].", factory);
 		return factory;
 	}
 
@@ -195,14 +196,14 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType);
 			testPopulatedBeanFactory(populatedBeanFactory);
 			// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
-			log.warn("Using dynamically created factory for [" + propertyName + "] of type [" + propertyType.getName()
-			        + "]. Do you need to register a custom Factory?");
+			logger.warn("Using dynamically created factory for [{}] of type [{}]. Do you need to register a custom Factory?", 
+			        propertyName, propertyType.getName());
 			return populatedBeanFactory;
 		} catch (Exception e) {
 			String message =
 			        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
 			                + "]. Please register a custom Factory.";
-			log.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
+			logger.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
 			throw new NoSuchFactoryException(message, e);
 		}
 	}
@@ -222,14 +223,14 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			Factory<?> unpopulatedBeanFactory = createUnpopulatedBeanFactory(propertyType);
 			testUnpopulatedBeanFactory(unpopulatedBeanFactory);
 			// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
-			log.warn("Using dynamically created factory for [" + propertyName + "] of type [" + propertyType.getName()
-			        + "]. Do you need to register a custom Factory?");
+            logger.warn("Using dynamically created factory for [{}] of type [{}]. Do you need to register a custom Factory?",
+                    propertyName, propertyType.getName());
 			return unpopulatedBeanFactory;
 		} catch (Exception e) {
 			String message =
 			        "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
 			                + "]. Please register a custom Factory.";
-			log.error("getFactory: " + message + " Throw NoSuchFactoryException.", e);
+			logger.error("getFactory:{} Throw NoSuchFactoryException.", message, e);
 			throw new NoSuchFactoryException(message, e);
 		}
 	}

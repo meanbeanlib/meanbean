@@ -1,7 +1,5 @@
 package org.meanbean.test;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
@@ -13,6 +11,8 @@ import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -130,10 +130,10 @@ public class EqualsMethodTester {
 	private final int iterations = DEFAULT_TEST_ITERATIONS_PER_TYPE;
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(EqualsMethodTester.class);
+	private static final Logger logger = LoggerFactory.getLogger(EqualsMethodTester.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
@@ -262,12 +262,12 @@ public class EqualsMethodTester {
 	 */
 	public void testEqualsMethod(Class<?> clazz, Configuration customConfiguration, String... insignificantProperties)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
-		log.debug("testEqualsMethod: Entering with clazz=[" + clazz + "], customConfiguration=[" + customConfiguration
-		        + "], insignificantProperties=[" + insignificantProperties + "].");
+		logger.debug("testEqualsMethod: Entering with clazz=[{}], customConfiguration=[{}], insignificantProperties=[{}].", 
+		        clazz, customConfiguration, insignificantProperties);
 		validationHelper.ensureExists("clazz", "test equals method", clazz);
 		EquivalentFactory<?> factory = createEquivalentFactory(clazz);
 		testEqualsMethod(factory, customConfiguration, insignificantProperties);
-		log.debug("testEqualsMethod: Exiting - Equals is correct.");
+		logger.debug("testEqualsMethod: Exiting - Equals is correct.");
 	}
 
 	/**
@@ -394,7 +394,7 @@ public class EqualsMethodTester {
 	public void testEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
 	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
 	        BeanTestException, AssertionError {
-		log.debug("testEqualsMethod: Entering with factory=[" + factory + "], customConfiguration=["
+		logger.debug("testEqualsMethod: Entering with factory=[" + factory + "], customConfiguration=["
 		        + customConfiguration + "], insignificantProperties=[" + insignificantProperties + "].");
 		validationHelper.ensureExists("factory", "test equals method", factory);
 		validationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
@@ -411,10 +411,10 @@ public class EqualsMethodTester {
 		}
 		// Test property significance 'iterations' times
 		for (int idx = 0; idx < iterations; idx++) {
-			log.debug("testEqualsMethod: Iteration [" + idx + "].");
+			logger.debug("testEqualsMethod: Iteration [" + idx + "].");
 			propertySignificanceVerifier.verifyEqualsMethod(factory, customConfiguration, insignificantProperties);
 		}
-		log.debug("testEqualsMethod: Exiting - Equals is correct.");
+		logger.debug("testEqualsMethod: Exiting - Equals is correct.");
 	}
 
 	/**

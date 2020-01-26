@@ -1,11 +1,11 @@
 package org.meanbean.test;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -45,10 +45,10 @@ import org.meanbean.util.ValidationHelper;
 class EqualsMethodContractVerifier {
 
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(EqualsMethodContractVerifier.class);
+	private static final Logger logger = LoggerFactory.getLogger(EqualsMethodContractVerifier.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** Null value */
 	private static final Object NULL = null;
@@ -94,7 +94,7 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		log.debug("verifyEqualsMethod: Entering with factory=[" + factory + "].");
+		logger.debug("verifyEqualsMethod: Entering with factory=[{}].", factory);
 		validationHelper.ensureExists("factory", "test equals", factory);
 		verifyEqualsReflexive(factory);
 		verifyEqualsSymmetric(factory);
@@ -102,7 +102,7 @@ class EqualsMethodContractVerifier {
 		verifyEqualsConsistent(factory);
 		verifyEqualsNull(factory);
 		verifyEqualsDifferentType(factory);
-		log.debug("verifyEqualsMethod: Exiting - Equals is correct.");
+		logger.debug("verifyEqualsMethod: Exiting - Equals is correct.");
 	}
 
 	/**
@@ -128,16 +128,16 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsReflexive(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		log.debug("verifyEqualsReflexive: Entering with factory=[" + factory + "].");
+		logger.debug("verifyEqualsReflexive: Entering with factory=[{}].", factory);
 		validationHelper.ensureExists("factory", "test equals reflexive item", factory);
 		Object x = factory.create();
-		log.debug("verifyEqualsReflexive: Created object x=[" + x + "] for test.");
+		logger.debug("verifyEqualsReflexive: Created object x=[{}] for test.", x);
 		validationHelper.ensureExists("factory-created object", "test equals reflexive item", x);
 		if (!x.equals(x)) {
-			log.debug("verifyEqualsReflexive: Equals is not reflexive.");
+			logger.debug("verifyEqualsReflexive: Equals is not reflexive.");
 			AssertionUtils.fail("equals is not reflexive.");
 		}
-		log.debug("verifyEqualsReflexive: Exiting - Equals is reflexive.");
+		logger.debug("verifyEqualsReflexive: Exiting - Equals is reflexive.");
 	}
 
 	/**
@@ -163,11 +163,11 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsSymmetric(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		log.debug("verifyEqualsSymmetric: Entering with factory=[" + factory + "].");
+		logger.debug("verifyEqualsSymmetric: Entering with factory=[{}].", factory);
 		validationHelper.ensureExists("factory", "test equals symmetric item", factory);
 		Object x = factory.create();
 		Object y = factory.create();
-		log.debug("verifyEqualsSymmetric: Created objects x=[" + x + "] and y=[" + y + "] for test.");
+		logger.debug("verifyEqualsSymmetric: Created objects x=[{}] and y=[{}] for test.", x, y);
 		validationHelper.ensureExists("factory-created object", "test equals symmetric item", x);
 		validationHelper.ensureExists("factory-created object", "test equals symmetric item", y);
 		if (!x.equals(y)) {
@@ -175,14 +175,14 @@ class EqualsMethodContractVerifier {
 			        "Cannot test equals symmetric item if factory does not create logically equivalent "
 			                + "objects. Does factory not create logically equivalent objects, or do objects not override "
 			                + "equals?";
-			log.debug("verifyEqualsSymmetric: " + message + " Throw IllegalArgumentException.");
+			logger.debug("verifyEqualsSymmetric: {} Throw IllegalArgumentException.", message);
 			throw new IllegalArgumentException(message);
 		}
 		if (x.equals(y) && !y.equals(x)) {
-			log.debug("verifyEqualsSymmetric: Equals is not symmetric.");
+			logger.debug("verifyEqualsSymmetric: Equals is not symmetric.");
 			AssertionUtils.fail("equals is not symmetric.");
 		}
-		log.debug("verifyEqualsSymmetric: Exiting - Equals is symmetric.");
+		logger.debug("verifyEqualsSymmetric: Exiting - Equals is symmetric.");
 	}
 
 	/**
@@ -208,26 +208,26 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsTransitive(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		log.debug("verifyEqualsTransitive: Entering with factory=[" + factory + "].");
+		logger.debug("verifyEqualsTransitive: Entering with factory=[{}].", factory);
 		validationHelper.ensureExists("factory", "test equals transitive item", factory);
 		Object x = factory.create();
 		Object y = factory.create();
 		Object z = factory.create();
-		log.debug("verifyEqualsTransitive: Created objects x=[" + x + "], y=[" + y + "] and z=[" + z + "] for test.");
+		logger.debug("verifyEqualsTransitive: Created objects x=[{}], y=[{}] and z=[{}] for test.", x, y,z);
 		validationHelper.ensureExists("factory-created object", "test equals transitive item", x);
 		validationHelper.ensureExists("factory-created object", "test equals transitive item", y);
 		validationHelper.ensureExists("factory-created object", "test equals transitive item", z);
 		if (!(x.equals(y) && y.equals(z))) {
 			String message =
 			        "Cannot test equals transitive item if factory does not create logically equivalent objects.";
-			log.debug("verifyEqualsTransitive: " + message + " Throw IllegalArgumentException.");
+			logger.debug("verifyEqualsTransitive: {} Throw IllegalArgumentException.", message);
 			throw new IllegalArgumentException(message);
 		}
 		if (x.equals(y) && y.equals(z) && (!x.equals(z))) {
-			log.debug("verifyEqualsTransitive: Equals is not transitive.");
+			logger.debug("verifyEqualsTransitive: Equals is not transitive.");
 			AssertionUtils.fail("equals is not transitive.");
 		}
-		log.debug("verifyEqualsTransitive: Exiting - Equals is transitive.");
+		logger.debug("verifyEqualsTransitive: Exiting - Equals is transitive.");
 	}
 
 	/**
@@ -253,20 +253,20 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsConsistent(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		log.debug("verifyEqualsConsistent: Entering with factory=[" + factory + "].");
+		logger.debug("verifyEqualsConsistent: Entering with factory=[{}].", factory);
 		validationHelper.ensureExists("factory", "test equals consistent item", factory);
 		Object x = factory.create();
 		Object y = factory.create();
-		log.debug("verifyEqualsConsistent: Created objects x=[" + x + "] and y=[" + y + "] for test.");
+		logger.debug("verifyEqualsConsistent: Created objects x=[{}] and y=[{}] for test.", x,y);
 		validationHelper.ensureExists("factory-created object", "test equals consistent item", x);
 		validationHelper.ensureExists("factory-created object", "test equals consistent item", y);
 		for (int idx = 0; idx < 100; idx++) {
 			if (!x.equals(y)) {
-				log.debug("verifyEqualsConsistent: Equals is not consistent on invocation [" + idx + "].");
+				logger.debug("verifyEqualsConsistent: Equals is not consistent on invocation [{}].", idx);
 				AssertionUtils.fail("equals is not consistent on invocation [" + idx + "].");
 			}
 		}
-		log.debug("verifyEqualsConsistent: Exiting - Equals is consistent.");
+		logger.debug("verifyEqualsConsistent: Exiting - Equals is consistent.");
 	}
 
 	/**
@@ -293,16 +293,16 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsNull(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		log.debug("verifyEqualsNull: Entering with factory=[" + factory + "].");
+		logger.debug("verifyEqualsNull: Entering with factory=[{}].", factory);
 		validationHelper.ensureExists("factory", "test equals null item", factory);
 		Object x = factory.create();
-		log.debug("verifyEqualsNull: Created object x=[" + x + "] for test.");
+		logger.debug("verifyEqualsNull: Created object x=[{}] for test.", x);
 		validationHelper.ensureExists("factory-created object", "test equals null item", x);
 		if (x.equals(NULL)) {
-			log.debug("verifyEqualsNull: Equals is incorrect with respect to null comparison.");
+			logger.debug("verifyEqualsNull: Equals is incorrect with respect to null comparison.");
 			AssertionUtils.fail("equals is incorrect with respect to null comparison.");
 		}
-		log.debug("verifyEqualsNull: Exiting - Equals is correct with respect to null comparison.");
+		logger.debug("verifyEqualsNull: Exiting - Equals is correct with respect to null comparison.");
 	}
 
 	/**
@@ -329,17 +329,16 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsDifferentType(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		log.debug("verifyEqualsDifferentType: Entering with factory=[" + factory + "].");
+		logger.debug("verifyEqualsDifferentType: Entering with factory=[{}].", factory);
 		validationHelper.ensureExists("factory", "test equals for different types", factory);
 		Object x = factory.create();
-		Object differentObect = new Object();
-		log.debug("verifyEqualsDifferentType: Created object x=[" + x + "] and differentObject=[" + differentObect
-		        + "] for test.");
+		Object differentObject = new Object();
+		logger.debug("verifyEqualsDifferentType: Created object x=[{}] and differentObject=[{}] for test.", x, differentObject);
 		validationHelper.ensureExists("factory-created object", "test equals for different types", x);
-		if (x.equals(differentObect)) {
-			log.debug("verifyEqualsDifferentType: Equals is incorrect as it found objects of different type to be equal.");
+		if (x.equals(differentObject)) {
+			logger.debug("verifyEqualsDifferentType: Equals is incorrect as it found objects of different type to be equal.");
 			AssertionUtils.fail("equals should not find objects of different type to be equal.");
 		}
-		log.debug("verifyEqualsDifferentType: Exiting - Equals is correct when comparing an object of different type.");
+		logger.debug("verifyEqualsDifferentType: Exiting - Equals is correct when comparing an object of different type.");
 	}
 }

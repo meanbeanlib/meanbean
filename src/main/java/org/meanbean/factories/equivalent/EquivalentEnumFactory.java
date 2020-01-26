@@ -11,9 +11,6 @@ import org.meanbean.util.ValidationHelper;
  */
 public class EquivalentEnumFactory implements EquivalentFactory<Enum<?>> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper();
 
@@ -42,7 +39,8 @@ public class EquivalentEnumFactory implements EquivalentFactory<Enum<?>> {
 	 * 
 	 * @return An Enum constant of the specified Enum type.
 	 */
-	public Enum<?> create() {
+	@Override
+    public Enum<?> create() {
 		return enumConstants[0];
 	}
 }

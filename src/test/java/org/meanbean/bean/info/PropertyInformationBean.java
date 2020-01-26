@@ -23,35 +23,43 @@ public class PropertyInformationBean implements PropertyInformation {
 
 	private Class<?> writeMethodParameterType;
 
-	public String getName() {
+	@Override
+    public String getName() {
 		return name;
 	}
 
-	public boolean isReadable() {
+	@Override
+    public boolean isReadable() {
 		return isReadable;
 	}
 
-	public boolean isWritable() {
+	@Override
+    public boolean isWritable() {
 		return isWritable;
 	}
 
-	public boolean isReadableWritable() {
+	@Override
+    public boolean isReadableWritable() {
 		return isReadable() && isWritable();
 	}
 
-	public Method getReadMethod() {
+	@Override
+    public Method getReadMethod() {
 		return readMethod;
 	}
 
-	public Method getWriteMethod() {
+	@Override
+    public Method getWriteMethod() {
 		return writeMethod;
 	}
 
-	public Class<?> getReadMethodReturnType() {
+	@Override
+    public Class<?> getReadMethodReturnType() {
 		return readMethodReturnType;
 	}
 
-	public Class<?> getWriteMethodParameterType() throws IllegalArgumentException {
+	@Override
+    public Class<?> getWriteMethodParameterType() throws IllegalArgumentException {
 		return writeMethodParameterType;
 	}
 

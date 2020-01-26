@@ -44,31 +44,38 @@ public class ArrayBasedRandomValueGenerator implements RandomValueGenerator {
 		this.booleans = booleans;
 	}
 
-	public byte nextByte() {
+	@Override
+    public byte nextByte() {
 		return nextBytes(1)[0];
 	}
 
-	public byte[] nextBytes(int size) {
+	@Override
+    public byte[] nextBytes(int size) {
 		return bytes[byteIdx++];
 	}
 
-	public int nextInt() {
+	@Override
+    public int nextInt() {
 		return ints[intIdx++];
 	}
 
-	public long nextLong() {
+	@Override
+    public long nextLong() {
 		return longs[longIdx++];
 	}
 
-	public float nextFloat() {
+	@Override
+    public float nextFloat() {
 		return floats[floatIdx++];
 	}
 
-	public double nextDouble() {
+	@Override
+    public double nextDouble() {
 		return doubles[doubleIdx++];
 	}
 
-	public boolean nextBoolean() {
+	@Override
+    public boolean nextBoolean() {
 		return booleans[booleanIdx++];
 	}
 }

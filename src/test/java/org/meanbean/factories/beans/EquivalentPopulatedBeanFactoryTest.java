@@ -1,13 +1,5 @@
 package org.meanbean.factories.beans;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.mockito.Mockito.when;
-
-import java.util.Date;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +13,14 @@ import org.meanbean.test.BeanTester;
 import org.meanbean.test.beans.ComplexBean;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Date;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EquivalentPopulatedBeanFactoryTest {
@@ -64,31 +64,36 @@ public class EquivalentPopulatedBeanFactoryTest {
 		beanInformationReal = new JavaBeanInformationFactory().create(ComplexBean.class);
 		when(factoryLookupStrategyMock.getFactory(beanInformationReal, ID_KEY, long.class, null)).thenReturn(
 		        (Factory) new Factory<Long>() {
-			        public Long create() {
+			        @Override
+                    public Long create() {
 				        return TEST_ID;
 			        }
 		        });
 		when(factoryLookupStrategyMock.getFactory(beanInformationReal, FIRST_NAME_KEY, String.class, null)).thenReturn(
 		        (Factory) new Factory<String>() {
-			        public String create() {
+			        @Override
+                    public String create() {
 				        return TEST_FIRST_NAME;
 			        }
 		        });
 		when(factoryLookupStrategyMock.getFactory(beanInformationReal, LAST_NAME_KEY, String.class, null)).thenReturn(
 		        (Factory) new Factory<String>() {
-			        public String create() {
+			        @Override
+                    public String create() {
 				        return TEST_LAST_NAME;
 			        }
 		        });
 		when(factoryLookupStrategyMock.getFactory(beanInformationReal, DATE_OF_BIRTH_KEY, Date.class, null))
 		        .thenReturn((Factory) new Factory<Date>() {
-			        public Date create() {
+			        @Override
+                    public Date create() {
 				        return TEST_DATE_OF_BIRTH;
 			        }
 		        });
 		when(factoryLookupStrategyMock.getFactory(beanInformationReal, FAVOURITE_NUMBER_KEY, long.class, null))
 		        .thenReturn((Factory) new Factory<Long>() {
-			        public Long create() {
+			        @Override
+                    public Long create() {
 				        return TEST_FAVOURITE_NUMBER;
 			        }
 		        });

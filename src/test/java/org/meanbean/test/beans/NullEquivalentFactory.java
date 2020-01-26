@@ -9,7 +9,8 @@ import org.meanbean.lang.EquivalentFactory;
  */
 public class NullEquivalentFactory implements EquivalentFactory<Object> {
 
-	public Object create() {
+	@Override
+    public Object create() {
 		return null;
 	}
 }

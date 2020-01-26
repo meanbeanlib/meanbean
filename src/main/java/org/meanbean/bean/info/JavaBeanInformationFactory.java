@@ -23,7 +23,8 @@ public class JavaBeanInformationFactory implements BeanInformationFactory {
 	 *             specified type is not a valid JavaBean, or perhaps because an unexpected exception occurred when
 	 *             trying to gather information about the type.
 	 */
-	public BeanInformation create(Class<?> beanClass) throws IllegalArgumentException, BeanInformationException {
+	@Override
+    public BeanInformation create(Class<?> beanClass) throws IllegalArgumentException, BeanInformationException {
 		return new JavaBeanInformation(beanClass);
 	}
 }

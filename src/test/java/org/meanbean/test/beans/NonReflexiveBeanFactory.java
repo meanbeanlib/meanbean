@@ -9,7 +9,8 @@ import org.meanbean.lang.EquivalentFactory;
  */
 public class NonReflexiveBeanFactory implements EquivalentFactory<NonReflexiveBean> {
 
-	public NonReflexiveBean create() {
+	@Override
+    public NonReflexiveBean create() {
 		return new NonReflexiveBean();
 	}
 }

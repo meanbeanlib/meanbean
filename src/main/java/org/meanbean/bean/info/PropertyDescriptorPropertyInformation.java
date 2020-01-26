@@ -33,7 +33,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 * 
 	 * @return The name of the property.
 	 */
-	public String getName() {
+	@Override
+    public String getName() {
 		return name;
 	}
 
@@ -44,7 +45,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 * 
 	 * @return <code>true</code> if the property is publicly readable; <code>false</code> otherwise.
 	 */
-	public boolean isReadable() {
+	@Override
+    public boolean isReadable() {
 		return getReadMethod() != null;
 	}
 
@@ -55,7 +57,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 * 
 	 * @return <code>true</code> if the property is publicly writable; <code>false</code> otherwise.
 	 */
-	public boolean isWritable() {
+	@Override
+    public boolean isWritable() {
 		return getWriteMethod() != null;
 	}
 
@@ -67,7 +70,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 * @return <code>true</code> if the property is publicly readable and publicly writable; <code>false</code>
 	 *         otherwise.
 	 */
-	public boolean isReadableWritable() {
+	@Override
+    public boolean isReadableWritable() {
 		return isReadable() && isWritable();
 	}
 
@@ -77,7 +81,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 * @return The public read method of the property. If the property is not publicly readable, <code>null</code> is
 	 *         returned.
 	 */
-	public Method getReadMethod() {
+	@Override
+    public Method getReadMethod() {
 		return propertyDescriptor.getReadMethod();
 	}
 
@@ -87,7 +92,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 * @return The public write method of the property. If the property is not publicly writable, <code>null</code> is
 	 *         returned.
 	 */
-	public Method getWriteMethod() {
+	@Override
+    public Method getWriteMethod() {
 		return propertyDescriptor.getWriteMethod();
 	}
 
@@ -97,7 +103,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 * @return The return type of the read method. If the property does not have a read method, returns
 	 *         <code>null</code>
 	 */
-	public Class<?> getReadMethodReturnType() {
+	@Override
+    public Class<?> getReadMethodReturnType() {
 		if (isReadable()) {
 			return getReadMethod().getReturnType();
 		}
@@ -113,7 +120,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 * @throws IllegalArgumentException
 	 *             If the write method takes more than one parameter, or zero parameters.
 	 */
-	public Class<?> getWriteMethodParameterType() throws IllegalArgumentException {
+	@Override
+    public Class<?> getWriteMethodParameterType() throws IllegalArgumentException {
 		Class<?> parameterType = null;
 		Method writeMethod = getWriteMethod();
 		if (writeMethod != null) {

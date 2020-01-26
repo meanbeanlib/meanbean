@@ -9,7 +9,8 @@ import org.meanbean.lang.EquivalentFactory;
  */
 public class MultiPropertyBeanFactory implements EquivalentFactory<MultiPropertyBean> {
 
-	public MultiPropertyBean create() {
+	@Override
+    public MultiPropertyBean create() {
 		MultiPropertyBean bean = new MultiPropertyBean();
 		bean.setFirstName("FIRST_NAME");
 		bean.setLastName("LAST_NAME");

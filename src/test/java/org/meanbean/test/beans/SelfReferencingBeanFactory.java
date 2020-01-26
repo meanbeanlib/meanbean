@@ -14,7 +14,8 @@ public class SelfReferencingBeanFactory implements EquivalentFactory<SelfReferen
 		parent.setFirstName("PARENT_FIRST_NAME");
 	}
 
-	public SelfReferencingBean create() {
+	@Override
+    public SelfReferencingBean create() {
 		SelfReferencingBean bean = new SelfReferencingBean();
 		bean.setFirstName("TEST_FIRST_NAME");
 		bean.setLastName("TEST_LAST_NAME");

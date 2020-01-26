@@ -27,7 +27,8 @@ public class PrimitiveFactoryPlugin implements FactoryCollectionPlugin {
 	 *            A RandomValueGeneratorProvider that provides access to a RandomValueGenerator that can be used by
 	 *            Factory objects.
 	 */
-	public void initialize(FactoryCollection factoryCollection,
+	@Override
+    public void initialize(FactoryCollection factoryCollection,
 	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
 		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
 		factoryCollection.addFactory(boolean.class, new BooleanFactory(randomValueGenerator));

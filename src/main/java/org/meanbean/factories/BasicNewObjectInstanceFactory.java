@@ -1,13 +1,13 @@
 package org.meanbean.factories;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Concrete Factory that creates instances of the type of object specified during construction of the Factory. Only
@@ -18,14 +18,11 @@ import org.meanbean.util.ValidationHelper;
  */
 public class BasicNewObjectInstanceFactory implements Factory<Object> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(BasicNewObjectInstanceFactory.class);
+	private static final Logger logger = LoggerFactory.getLogger(BasicNewObjectInstanceFactory.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** The type of Object this Factory should create new instances of. */
 	private final Class<?> clazz;
@@ -53,8 +50,9 @@ public class BasicNewObjectInstanceFactory implements Factory<Object> {
 	 * @throws ObjectCreationException
 	 *             If an instance of the type cannot be constructed, perhaps due to it not having a no-arg constructor.
 	 */
-	public Object create() throws ObjectCreationException {
-		log.debug("create: entering.");
+	@Override
+    public Object create() throws ObjectCreationException {
+		logger.debug("create: entering.");
 		Object result = null;
 		try {
 			Constructor<?> declaredConstructor = clazz.getDeclaredConstructor();
@@ -73,7 +71,7 @@ public class BasicNewObjectInstanceFactory implements Factory<Object> {
 		} catch (InvocationTargetException e) {
 			wrapAndRethrowException(e);
 		}
-		log.debug("create: exiting returning [" + result + "].");
+		logger.debug("create: exiting returning [{}].", result);
 		return result;
 	}
 
@@ -90,7 +88,7 @@ public class BasicNewObjectInstanceFactory implements Factory<Object> {
 		String message =
 		        "Failed to instantiate object of type [" + clazz.getName() + "] due to "
 		                + exception.getClass().getSimpleName() + ".";
-		log.debug("wrapAndRethrowException: " + message + " Throw ObjectCreationException.", exception);
+		logger.debug("wrapAndRethrowException: {} Throw ObjectCreationException.", message, exception);
 		throw new ObjectCreationException(message, exception);
 	}
 }

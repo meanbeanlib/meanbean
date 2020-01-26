@@ -20,7 +20,8 @@ public class InvocationCountingFactoryWrapper<T> implements Factory<T> {
 		this.factory = factory;
 	}
 
-	public T create() {
+	@Override
+    public T create() {
 		invocationCount++;
 		return factory.create();
 	}

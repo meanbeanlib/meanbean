@@ -1,12 +1,5 @@
 package org.meanbean.factories;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.factories.util.FactoryIdGenerator;
 import org.meanbean.factories.util.SimpleFactoryIdGenerator;
 import org.meanbean.lang.Factory;
@@ -14,6 +7,13 @@ import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.RandomValueGeneratorProvider;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Concrete collection factories of different types of objects.
@@ -21,6 +21,9 @@ import org.meanbean.util.ValidationHelper;
  * @author Graham Williamson
  */
 public final class FactoryRepository implements FactoryCollection, RandomValueGeneratorProvider {
+
+    /** Logging mechanism. */
+    private static final Logger logger = LoggerFactory.getLogger(FactoryRepository.class);
 
 	/** Lock to control concurrent access to the internal state of the repository; namely the factories Map. */
 	private final ReadWriteLock factoriesLock = new ReentrantReadWriteLock();
@@ -34,11 +37,8 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	/** Helper that generates keys that are used to key Factories in the factories Map. */
 	private final FactoryIdGenerator keyGenerator = new SimpleFactoryIdGenerator();
 
-	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(FactoryRepository.class);
-
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * Construct a new Factory Repository.
@@ -50,11 +50,11 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 *             If the specified randomValueGenerator is deemed illegal. For example, if it is <code>null</code>.
 	 */
 	public FactoryRepository(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
-		log.debug("FactoryRepository: entering");
+		logger.debug("FactoryRepository: entering");
 		validationHelper.ensureExists("randomValueGenerator", "construct FactoryRepository", randomValueGenerator);
 		this.randomValueGenerator = randomValueGenerator;
 		initialize();
-		log.debug("FactoryRepository: exiting");
+		logger.debug("FactoryRepository: exiting");
 	}
 
 	/**
@@ -62,9 +62,10 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * 
 	 * @return A RandomNumberGenerator.
 	 */
-	public RandomValueGenerator getRandomValueGenerator() {
-		log.debug("getRandomNumberGenerator: entering");
-		log.debug("getRandomNumberGenerator: exiting returning [" + randomValueGenerator + "].");
+	@Override
+    public RandomValueGenerator getRandomValueGenerator() {
+		logger.debug("getRandomNumberGenerator: entering");
+		logger.debug("getRandomNumberGenerator: exiting returning [{}].", randomValueGenerator);
 		return randomValueGenerator;
 	}
 
@@ -72,11 +73,11 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * Initialize the repository prior to public use.
 	 */
 	private void initialize() {
-		log.debug("initialize: entering");
+		logger.debug("initialize: entering");
 		new PrimitiveFactoryPlugin().initialize(this, this);
 		new ObjectFactoryPlugin().initialize(this, this);
 		new CollectionFactoryPlugin().initialize(this, this);
-		log.debug("initialize: exiting");
+		logger.debug("initialize: exiting");
 	}
 
 	/**
@@ -98,8 +99,9 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * @throws IllegalArgumentException
 	 *             If either of the required parameters are deemed illegal.
 	 */
-	public void addFactory(Class<?> clazz, Factory<?> factory) throws IllegalArgumentException {
-		log.debug("addFactory: entering with clazz=[" + clazz + "], factory=[" + factory + "].");
+	@Override
+    public void addFactory(Class<?> clazz, Factory<?> factory) throws IllegalArgumentException {
+		logger.debug("addFactory: entering with clazz=[{}], factory=[{}].", clazz, factory);
 		validationHelper.ensureExists("clazz", "add Factory", clazz);
 		validationHelper.ensureExists("factory", "add Factory", factory);
 		String key = keyGenerator.createIdFromClass(clazz);// Should have prevented Exceptions in Validation above
@@ -109,7 +111,7 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 		} finally {
 			factoriesLock.writeLock().unlock();
 		}
-		log.debug("addFactory: exiting.");
+		logger.debug("addFactory: exiting.");
 	}
 
 	/**
@@ -133,8 +135,9 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * @throws NoSuchFactoryException
 	 *             If the collection does not contain a Factory registered against the specified class.
 	 */
-	public Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException {
-		log.debug("getFactory: entering with clazz=[" + clazz + "].");
+	@Override
+    public Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException {
+		logger.debug("getFactory: entering with clazz=[{}].", clazz);
 		validationHelper.ensureExists("clazz", "get Factory", clazz);
 		String key = keyGenerator.createIdFromClass(clazz);// Should have prevented Exceptions in Validation above
 		Factory<?> factory;
@@ -146,10 +149,10 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 		}
 		if (factory == null) {
 			String message = "Failed to find a Factory registered against [" + key + "] in the Repository.";
-			log.debug("getFactory: " + message + " Throw NoSuchFactoryException.");
+			logger.debug("getFactory: {} Throw NoSuchFactoryException.", message);
 			throw new NoSuchFactoryException(message);
 		}
-		log.debug("getFactory: exiting returning [" + factory + "].");
+		logger.debug("getFactory: exiting returning [{}].", factory);
 		return factory;
 	}
 
@@ -166,14 +169,15 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * @throws IllegalArgumentException
 	 *             If the clazz is deemed illegal.
 	 */
-	public boolean hasFactory(Class<?> clazz) throws IllegalArgumentException {
-		log.debug("hasFactory: entering with clazz=[" + clazz + "].");
+	@Override
+    public boolean hasFactory(Class<?> clazz) throws IllegalArgumentException {
+		logger.debug("hasFactory: entering with clazz=[{}].", clazz);
 		validationHelper.ensureExists("clazz", "check collection for Factory", clazz);
 		String key = keyGenerator.createIdFromClass(clazz);// Should have prevented Exceptions in Validation above
 		try {
 			factoriesLock.readLock().lock();
 			boolean result = factories.containsKey(key);
-			log.debug("hasFactory: exiting returning [" + result + "].");
+			logger.debug("hasFactory: exiting returning [{}].", result);
 			return result;
 		} finally {
 			factoriesLock.readLock().unlock();

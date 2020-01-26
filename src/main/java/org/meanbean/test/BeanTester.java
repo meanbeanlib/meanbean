@@ -1,12 +1,5 @@
 package org.meanbean.test;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
@@ -23,6 +16,13 @@ import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -110,6 +110,9 @@ public class BeanTester {
 	/** Default number of times a bean should be tested. */
 	public static final int TEST_ITERATIONS_PER_BEAN = 100;
 
+    /** Logging mechanism. */
+    private static final Logger logger = LoggerFactory.getLogger(BeanTester.class);
+
 	/** The number of times each bean is tested, unless a custom Configuration overrides this global setting. */
 	private int iterations = TEST_ITERATIONS_PER_BEAN;
 
@@ -133,11 +136,8 @@ public class BeanTester {
 	/** Object that tests the getters and setters of a Bean's property. */
 	private final BeanPropertyTester beanPropertyTester = new BeanPropertyTester();
 
-	/** Logging mechanism. */
-	private final Log log = LogFactory.getLog(BeanTester.class);
-
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(log);
+	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * The collection of test data Factories with which you can register new Factories for custom Data Types.
@@ -173,13 +173,13 @@ public class BeanTester {
 	 *             If the iterations parameter is deemed illegal. For example, if it is less than 1.
 	 */
 	public void setIterations(int iterations) throws IllegalArgumentException {
-		log.debug("setIterations: entering with iterations=[" + iterations + "].");
+		logger.debug("setIterations: entering with iterations=[{}].", iterations);
 		if (iterations < 1) {
-			log.debug("setIterations: Iterations must be at least 1. Throw IllegalArgumentException.");
+			logger.debug("setIterations: Iterations must be at least 1. Throw IllegalArgumentException.");
 			throw new IllegalArgumentException("Iterations must be at least 1.");
 		}
 		this.iterations = iterations;
-		log.debug("setIterations: exiting.");
+		logger.debug("setIterations: exiting.");
 	}
 
 	/**
@@ -210,12 +210,11 @@ public class BeanTester {
 	 *             If either parameter is deemed illegal. For example, if either parameter is null.
 	 */
 	public void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException {
-		log.debug("addCustomConfiguration: entering with beanClass=[" + beanClass + "], configuration=["
-		        + configuration + "].");
+		logger.debug("addCustomConfiguration: entering with beanClass=[{}], configuration=[{}].", beanClass, configuration);
 		validationHelper.ensureExists("beanClass", "add custom configuration", beanClass);
 		validationHelper.ensureExists("configuration", "add custom configuration", configuration);
 		customConfigurations.put(beanClass, configuration);
-		log.debug("addCustomConfiguration: exiting.");
+		logger.debug("addCustomConfiguration: exiting.");
 	}
 
 	/**
@@ -231,10 +230,10 @@ public class BeanTester {
 	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
 	 */
 	protected boolean hasCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
-		log.debug("hasCustomConfiguration: entering with beanClass=[" + beanClass + "].");
+		logger.debug("hasCustomConfiguration: entering with beanClass=[{}].", beanClass);
 		validationHelper.ensureExists("beanClass", "check for custom configuration", beanClass);
 		boolean result = customConfigurations.containsKey(beanClass);
-		log.debug("hasCustomConfiguration: exiting returning [" + result + "].");
+		logger.debug("hasCustomConfiguration: exiting returning [{}].", result);
 		return result;
 	}
 
@@ -251,10 +250,10 @@ public class BeanTester {
 	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
 	 */
 	protected Configuration getCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
-		log.debug("getCustomConfiguration: entering with beanClass=[" + beanClass + "].");
+		logger.debug("getCustomConfiguration: entering with beanClass=[{}].", beanClass);
 		validationHelper.ensureExists("beanClass", "get custom configuration", beanClass);
 		Configuration result = customConfigurations.get(beanClass);
-		log.debug("getCustomConfiguration: exiting returning [" + result + "].");
+		logger.debug("getCustomConfiguration: exiting returning [{}].", result);
 		return result;
 	}
 
@@ -287,14 +286,14 @@ public class BeanTester {
 	 *             If an unexpected exception occurs during testing.
 	 */
 	public void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException {
-		log.debug("testBean: entering with beanClass=[" + beanClass + "].");
+		logger.debug("testBean: entering with beanClass=[{}].", beanClass);
 		validationHelper.ensureExists("beanClass", "test bean", beanClass);
 		Configuration customConfiguration = null;
 		if (hasCustomConfiguration(beanClass)) {
 			customConfiguration = getCustomConfiguration(beanClass);
 		}
 		testBean(beanClass, customConfiguration);
-		log.debug("testBean: exiting.");
+		logger.debug("testBean: exiting.");
 	}
 
 	/**
@@ -334,8 +333,7 @@ public class BeanTester {
 	 */
 	public void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
 	        AssertionError, BeanTestException {
-		log.debug("testBean: entering with beanClass=[" + beanClass + "], customConfiguration=[" + customConfiguration
-		        + "].");
+		logger.debug("testBean: entering with beanClass=[{}], customConfiguration=[{}].", beanClass, customConfiguration);
 		validationHelper.ensureExists("beanClass", "test bean", beanClass);
 		// Override the standard number of iterations if need be
 		int iterations = this.iterations;
@@ -346,10 +344,10 @@ public class BeanTester {
 		BeanInformation beanInformation = beanInformationFactory.create(beanClass);
 		// Test the JavaBean 'iterations' times
 		for (int idx = 0; idx < iterations; idx++) {
-			log.debug("testBean: Iteration [" + idx + "].");
+			logger.debug("testBean: Iteration [{}].", idx);
 			testBean(beanInformation, customConfiguration);
 		}
-		log.debug("testBean: exiting.");
+		logger.debug("testBean: exiting.");
 	}
 
 	/**
@@ -385,8 +383,7 @@ public class BeanTester {
 	 */
 	protected void testBean(BeanInformation beanInformation, Configuration configuration)
 	        throws IllegalArgumentException, AssertionError, BeanTestException {
-		log.debug("testBean: entering with beanInformation=[" + beanInformation + "], configuration=[" + configuration
-		        + "].");
+		logger.debug("testBean: entering with beanInformation=[{}], configuration=[{}].", beanInformation, configuration);
 		validationHelper.ensureExists("beanInformation", "test bean", beanInformation);
 		// Get all properties of the bean
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
@@ -402,7 +399,7 @@ public class BeanTester {
 			String message =
 			        "Cannot test bean [" + beanInformation.getBeanClass().getName()
 			                + "]. Failed to instantiate an instance of the bean.";
-			log.error("testBean: " + message + " Throw BeanTestException.", e);
+			logger.error("testBean:{} Throw BeanTestException.", message, e);
 			throw new BeanTestException(message, e);
 		}
 		// Test each property
@@ -424,12 +421,12 @@ public class BeanTester {
 					        "Cannot test bean [" + beanInformation.getBeanClass().getName()
 					                + "]. Failed to instantiate a test value for property [" + property.getName()
 					                + "].";
-					log.error("testBean: " + message + " Throw BeanTestException.", e);
+					logger.error("testBean:{} Throw BeanTestException.", message, e);
 					throw new BeanTestException(message, e);
 				}
 				beanPropertyTester.testProperty(bean, property, testValue, equalityTest);
 			}
 		}
-		log.debug("testBean: exiting.");
+		logger.debug("testBean: exiting.");
 	}
 }
