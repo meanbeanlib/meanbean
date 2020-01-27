@@ -32,10 +32,12 @@ public interface RandomValueGenerator {
 	 * 
 	 * @return A randomly generated int, which may be positive or negative.
 	 */
-	int nextInt();
+    int nextInt();
+
+    int nextInt(int bound);
 
 	/**
-	 * Generate a random double between 0.0 (inclusive) and 1.0 (exclusive).
+	 * Generate a random long.
 	 * 
 	 * @return A randomly generated double.
 	 */

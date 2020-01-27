@@ -58,6 +58,16 @@ public class ArrayBasedRandomValueGenerator implements RandomValueGenerator {
     public int nextInt() {
 		return ints[intIdx++];
 	}
+	
+    @Override
+    public int nextInt(int bound) {
+        while (true) {
+            int next = nextInt();
+            if (next < bound) {
+                return next;
+            }
+        }
+    }
 
 	@Override
     public long nextLong() {
@@ -78,4 +88,5 @@ public class ArrayBasedRandomValueGenerator implements RandomValueGenerator {
     public boolean nextBoolean() {
 		return booleans[booleanIdx++];
 	}
+
 }

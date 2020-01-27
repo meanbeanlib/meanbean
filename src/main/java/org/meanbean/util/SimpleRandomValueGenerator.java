@@ -2,6 +2,7 @@ package org.meanbean.util;
 
 import java.io.Serializable;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Simple concrete implementation of RandomValueGenerator.
@@ -12,16 +13,6 @@ public class SimpleRandomValueGenerator implements RandomValueGenerator, Seriali
 
 	/** Unique version ID of this Serializable class. */
 	private static final long serialVersionUID = 1L;
-
-	/** The mechanism used to generate random numbers. A wrapped or adapted java.util.Random object. */
-	private final Random random;
-
-	/**
-	 * Construct a new Simple Random Value Generator.
-	 */
-	public SimpleRandomValueGenerator() {
-		random = new Random();
-	}
 
 	/**
 	 * Generate a random byte.
@@ -50,7 +41,7 @@ public class SimpleRandomValueGenerator implements RandomValueGenerator, Seriali
 			throw new IllegalArgumentException("Cannot generate a random array of bytes of negative length.");
 		}
 		byte[] bytes = new byte[size];
-		random.nextBytes(bytes);
+		random().nextBytes(bytes);
 		return bytes;
 	}
 
@@ -61,8 +52,13 @@ public class SimpleRandomValueGenerator implements RandomValueGenerator, Seriali
 	 */
 	@Override
     public int nextInt() {
-		return random.nextInt();
+		return random().nextInt();
 	}
+
+    @Override
+    public int nextInt(int bound) {
+        return random().nextInt(bound);
+    }
 
 	/**
 	 * Generate a random long.
@@ -71,7 +67,7 @@ public class SimpleRandomValueGenerator implements RandomValueGenerator, Seriali
 	 */
 	@Override
     public long nextLong() {
-		return random.nextLong();
+		return random().nextLong();
 	}
 
 	/**
@@ -81,7 +77,7 @@ public class SimpleRandomValueGenerator implements RandomValueGenerator, Seriali
 	 */
 	@Override
     public float nextFloat() {
-		return random.nextFloat();
+		return random().nextFloat();
 	}
 
 	/**
@@ -91,7 +87,7 @@ public class SimpleRandomValueGenerator implements RandomValueGenerator, Seriali
 	 */
 	@Override
     public double nextDouble() {
-		return random.nextDouble();
+		return random().nextDouble();
 	}
 
 	/**
@@ -101,6 +97,11 @@ public class SimpleRandomValueGenerator implements RandomValueGenerator, Seriali
 	 */
 	@Override
     public boolean nextBoolean() {
-		return random.nextBoolean();
-	}
+		return random().nextBoolean();
+    }
+
+    private Random random() {
+        return ThreadLocalRandom.current();
+    }
+
 }

@@ -1,5 +1,7 @@
 package org.meanbean.factories;
 
+import org.meanbean.factories.net.NetFactoryPlugin;
+import org.meanbean.factories.time.TimePlugin;
 import org.meanbean.factories.util.FactoryIdGenerator;
 import org.meanbean.factories.util.SimpleFactoryIdGenerator;
 import org.meanbean.lang.Factory;
@@ -77,6 +79,9 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 		new PrimitiveFactoryPlugin().initialize(this, this);
 		new ObjectFactoryPlugin().initialize(this, this);
 		new CollectionFactoryPlugin().initialize(this, this);
+		new ConcurrentFactoryPlugin().initialize(this, this);
+		new NetFactoryPlugin().initialize(this, this);
+		new TimePlugin().initialize(this, this);
 		logger.debug("initialize: exiting");
 	}
 

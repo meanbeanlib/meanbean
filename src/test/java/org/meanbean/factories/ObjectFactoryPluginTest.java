@@ -1,11 +1,5 @@
 package org.meanbean.factories;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
-
-import java.util.Date;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,11 +9,18 @@ import org.meanbean.util.SimpleRandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Date;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class ObjectFactoryPluginTest {
 
 	public static final Class<?>[] FACTORY_CLASSES = { Boolean.class, Byte.class, Short.class, Integer.class,
-	        Long.class, Float.class, Double.class, Character.class, String.class, Date.class };
+	        Long.class, Float.class, Double.class, Character.class, String.class, Date.class, UUID.class };
 
 	@Mock
 	private RandomValueGeneratorProvider randomValueGeneratorProvider;
