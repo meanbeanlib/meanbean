@@ -16,6 +16,11 @@ import org.meanbean.util.ValidationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static java.util.Collections.synchronizedSet;
+
 /**
  * <p>
  * Concrete FactoryLookupStrategy that implements the following Factory lookup algorithm:
@@ -52,6 +57,8 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/** The collection of test data Factories. */
 	private final FactoryCollection factoryCollection;
+	
+	private final Set<String> dynamicallyCreatedFactories = synchronizedSet(new LinkedHashSet<>());
 
 	/**
 	 * Construct a new Factory Lookup Strategy.
@@ -147,7 +154,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 		} else if (propertyIsAnEnum(propertyType)) {
 			return getAndCachePropertyEnumFactory(propertyType);
 		} else if (propertyIsNotTheSameTypeAsItsParent(beanInformation, propertyType)) {
-			return createTestedPopulatedBeanFactory(propertyName, propertyType);
+			return createTestedPopulatedBeanFactory(beanInformation, propertyName, propertyType);
 		} else {
 			return createTestedUnpopulatedBeanFactory(propertyName, propertyType);
 		}
@@ -191,13 +198,17 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 		return !propertyType.equals(beanInformation.getBeanClass());
 	}
 
-	private Factory<?> createTestedPopulatedBeanFactory(String propertyName, Class<?> propertyType) {
+	private Factory<?> createTestedPopulatedBeanFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType) {
 		try {
 			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType);
 			testPopulatedBeanFactory(populatedBeanFactory);
-			// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
-			logger.warn("Using dynamically created factory for [{}] of type [{}]. Do you need to register a custom Factory?", 
-			        propertyName, propertyType.getName());
+			
+            if (addDynamicallyCreatedFactoryType(beanInformation, propertyType)) {
+                // TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
+                logger.warn("Using dynamically created factory for [{}] of type [{}]. Do you need to register a custom Factory?",
+                        propertyName, propertyType.getName());
+            }
+            
 			return populatedBeanFactory;
 		} catch (Exception e) {
 			String message =
@@ -207,6 +218,17 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			throw new NoSuchFactoryException(message, e);
 		}
 	}
+
+    private boolean addDynamicallyCreatedFactoryType(BeanInformation beanInformation, Class<?> propertyType) {
+        if (dynamicallyCreatedFactories.size() > 1000) {
+            synchronized (dynamicallyCreatedFactories) {
+                // trim the cache size
+                dynamicallyCreatedFactories.removeIf(value -> dynamicallyCreatedFactories.size() > 50);
+            }
+        }
+        String key = beanInformation.getBeanClass().getName() + "." + propertyType.getName();
+        return dynamicallyCreatedFactories.add(key);
+    }
 
 	private Factory<?> createPopulatedBeanFactory(Class<?> propertyType) {
 		BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
