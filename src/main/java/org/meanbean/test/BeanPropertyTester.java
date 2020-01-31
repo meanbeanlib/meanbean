@@ -4,8 +4,8 @@ import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 /**
  * An object that tests a Bean's property methods.
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class BeanPropertyTester {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(BeanPropertyTester.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(BeanPropertyTester.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

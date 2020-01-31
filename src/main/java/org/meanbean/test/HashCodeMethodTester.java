@@ -13,8 +13,8 @@ import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 /**
  * <p>
@@ -77,7 +77,7 @@ import org.slf4j.LoggerFactory;
 public class HashCodeMethodTester {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(HashCodeMethodTester.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(HashCodeMethodTester.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

@@ -1,6 +1,6 @@
 package org.meanbean.util;
 
-import org.slf4j.Logger;
+import org.meanbean.logging.$Logger;
 
 /**
  * Simple concrete ValidationHelper.
@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 public class SimpleValidationHelper implements ValidationHelper {
 
     /** Logging mechanism. */
-    private final transient Logger logger;
+    private final transient $Logger logger;
 
     /**
      * Construct a new Simple Validation Helper.
@@ -25,7 +25,7 @@ public class SimpleValidationHelper implements ValidationHelper {
      * @param log
      *            Logging mechanism to use when logging validation exceptions.
      */
-    public SimpleValidationHelper(Logger logger) {
+    public SimpleValidationHelper($Logger logger) {
         this.logger = logger;
     }
 

@@ -13,8 +13,8 @@ import org.meanbean.test.Configuration;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -47,7 +47,7 @@ import static java.util.Collections.synchronizedSet;
 public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(BasicFactoryLookupStrategy.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(BasicFactoryLookupStrategy.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

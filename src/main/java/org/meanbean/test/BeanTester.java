@@ -12,17 +12,16 @@ import org.meanbean.factories.FactoryRepository;
 import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -111,7 +110,7 @@ public class BeanTester {
 	public static final int TEST_ITERATIONS_PER_BEAN = 100;
 
     /** Logging mechanism. */
-    private static final Logger logger = LoggerFactory.getLogger(BeanTester.class);
+    private static final $Logger logger = $LoggerFactory.getLogger(BeanTester.class);
 
 	/** The number of times each bean is tested, unless a custom Configuration overrides this global setting. */
 	private int iterations = TEST_ITERATIONS_PER_BEAN;
@@ -127,8 +126,7 @@ public class BeanTester {
 	        randomValueGenerator);
 
 	/** Custom Configurations that override standard testing behaviour on a per-type basis across all tests. */
-	private final Map<Class<?>, Configuration> customConfigurations = Collections
-	        .synchronizedMap(new HashMap<Class<?>, Configuration>());
+	private final Map<Class<?>, Configuration> customConfigurations = new ConcurrentHashMap<>();
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();

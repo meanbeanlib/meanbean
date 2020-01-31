@@ -8,8 +8,8 @@ import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import java.util.Map;
 public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(BeanPropertyValuesFactory.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(BeanPropertyValuesFactory.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

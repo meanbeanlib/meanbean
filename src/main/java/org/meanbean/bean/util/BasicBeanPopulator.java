@@ -5,8 +5,8 @@ import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 import java.util.Collection;
 import java.util.Map;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class BasicBeanPopulator implements BeanPopulator {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(BasicBeanPopulator.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(BasicBeanPopulator.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

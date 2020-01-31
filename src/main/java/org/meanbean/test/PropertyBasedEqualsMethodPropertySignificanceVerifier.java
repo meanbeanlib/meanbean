@@ -18,8 +18,8 @@ import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.StringUtils;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,7 +107,7 @@ import java.util.List;
 class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMethodPropertySignificanceVerifier {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(PropertyBasedEqualsMethodPropertySignificanceVerifier.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(PropertyBasedEqualsMethodPropertySignificanceVerifier.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

@@ -2,8 +2,8 @@ package org.meanbean.bean.info;
 
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
@@ -21,7 +21,7 @@ import java.util.Map;
 class JavaBeanInformation implements BeanInformation {
 
     /** Logging mechanism. */
-    private static final Logger logger = LoggerFactory.getLogger(JavaBeanInformation.class);
+    private static final $Logger logger = $LoggerFactory.getLogger(JavaBeanInformation.class);
 
 	/** The type of object this object contains information about. */
 	private final Class<?> beanClass;

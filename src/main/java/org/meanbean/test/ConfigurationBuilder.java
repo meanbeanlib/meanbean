@@ -1,18 +1,17 @@
 package org.meanbean.test;
 
 import org.meanbean.lang.Factory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Builder object that makes creating Configuration objects easier.
@@ -22,20 +21,19 @@ import java.util.TreeSet;
 public class ConfigurationBuilder {
 
     /** Logging mechanism. */
-    private static final Logger logger = LoggerFactory.getLogger(ConfigurationBuilder.class);
+    private static final $Logger logger = $LoggerFactory.getLogger(ConfigurationBuilder.class);
 
 	/** The number of times a type should be tested. */
 	private Integer iterations;
 
 	/** Any properties of a type that should not be tested. Contains property names. */
-	private final Set<String> ignoredProperties = Collections.synchronizedSet(new HashSet<String>());
+	private final Set<String> ignoredProperties = ConcurrentHashMap.newKeySet();
 
 	/**
 	 * Factories that should be used for specific properties, overriding standard Factory selection. Keyed by property
 	 * name.
 	 */
-	private final Map<String, Factory<?>> overrideFactories = Collections
-	        .synchronizedMap(new HashMap<String, Factory<?>>());
+	private final Map<String, Factory<?>> overrideFactories = new ConcurrentHashMap<>();
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

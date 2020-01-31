@@ -3,8 +3,8 @@ package org.meanbean.factories;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -19,7 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 public class BasicNewObjectInstanceFactory implements Factory<Object> {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(BasicNewObjectInstanceFactory.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(BasicNewObjectInstanceFactory.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

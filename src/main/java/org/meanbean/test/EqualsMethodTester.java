@@ -11,8 +11,8 @@ import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 /**
  * <p>
@@ -130,7 +130,7 @@ public class EqualsMethodTester {
 	private final int iterations = DEFAULT_TEST_ITERATIONS_PER_TYPE;
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(EqualsMethodTester.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(EqualsMethodTester.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

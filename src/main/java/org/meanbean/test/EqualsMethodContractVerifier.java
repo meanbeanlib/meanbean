@@ -4,8 +4,8 @@ import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 /**
  * <p>
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 class EqualsMethodContractVerifier {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(EqualsMethodContractVerifier.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(EqualsMethodContractVerifier.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);

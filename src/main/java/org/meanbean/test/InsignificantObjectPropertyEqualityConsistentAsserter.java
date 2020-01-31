@@ -3,8 +3,8 @@ package org.meanbean.test;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 
 /**
  * <p>
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 class InsignificantObjectPropertyEqualityConsistentAsserter implements ObjectPropertyEqualityConsistentAsserter {
 
 	/** Logging mechanism. */
-	private static final Logger logger = LoggerFactory.getLogger(InsignificantObjectPropertyEqualityConsistentAsserter.class);
+	private static final $Logger logger = $LoggerFactory.getLogger(InsignificantObjectPropertyEqualityConsistentAsserter.class);
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
