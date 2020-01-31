@@ -116,26 +116,59 @@ public class BeanTester {
 	private int iterations = TEST_ITERATIONS_PER_BEAN;
 
 	/** Random number generator used by factories to randomly generate values. */
-	private final RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+	private final RandomValueGenerator randomValueGenerator;
 
 	/** The collection of test data Factories. */
-	private final FactoryCollection factoryCollection = new FactoryRepository(randomValueGenerator);
+	private final FactoryCollection factoryCollection;
 
 	/** Provides a means of acquiring a suitable Factory. */
-	private final FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
-	        randomValueGenerator);
+	private final FactoryLookupStrategy factoryLookupStrategy;
 
 	/** Custom Configurations that override standard testing behaviour on a per-type basis across all tests. */
 	private final Map<Class<?>, Configuration> customConfigurations = new ConcurrentHashMap<>();
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+	private final BeanInformationFactory beanInformationFactory;
 
 	/** Object that tests the getters and setters of a Bean's property. */
-	private final BeanPropertyTester beanPropertyTester = new BeanPropertyTester();
+	private final BeanPropertyTester beanPropertyTester;
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
+	private final ValidationHelper validationHelper;
+
+	public BeanTester() {
+		this(TEST_ITERATIONS_PER_BEAN, new ConstructorHelper(),
+				new JavaBeanInformationFactory(),
+				new BeanPropertyTester(),
+				new SimpleValidationHelper(logger));
+	}
+
+	private BeanTester(int iterations, ConstructorHelper constHelper, BeanInformationFactory beanInformationFactory,
+			BeanPropertyTester beanPropertyTester, ValidationHelper validationHelper) {
+		this(iterations,
+				constHelper.randomValueGenerator,
+				constHelper.factoryCollection,
+				constHelper.factoryLookupStrategy,
+				beanInformationFactory,
+				beanPropertyTester,
+				validationHelper);
+	}
+
+	BeanTester(int iterations, RandomValueGenerator randomValueGenerator, FactoryCollection factoryCollection,
+			FactoryLookupStrategy factoryLookupStrategy, BeanInformationFactory beanInformationFactory,
+			BeanPropertyTester beanPropertyTester, ValidationHelper validationHelper) {
+		this.iterations = iterations;
+		this.randomValueGenerator = randomValueGenerator;
+		this.factoryCollection = factoryCollection;
+		this.factoryLookupStrategy = factoryLookupStrategy;
+		this.beanInformationFactory = beanInformationFactory;
+		this.beanPropertyTester = beanPropertyTester;
+		this.validationHelper = validationHelper;
+
+		if (iterations < 1) {
+			throw new IllegalArgumentException("Iterations must be at least 1.");
+		}
+	}
 
 	/**
 	 * The collection of test data Factories with which you can register new Factories for custom Data Types.
@@ -426,5 +459,16 @@ public class BeanTester {
 			}
 		}
 		logger.debug("testBean: exiting.");
+	}
+
+	private static class ConstructorHelper {
+
+		private RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+
+		private FactoryCollection factoryCollection = new FactoryRepository(randomValueGenerator);
+
+		private FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
+				randomValueGenerator);
+
 	}
 }
