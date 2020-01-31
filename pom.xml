@@ -97,7 +97,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.7</version>
 				<configuration>
-					<stylesheetfile>${basedir}/css/stylesheet.css</stylesheetfile>
+                    <stylesheetfile>${basedir}/statics/css/stylesheet.css</stylesheetfile>
 				</configuration>
 				<executions>
 					<execution>
