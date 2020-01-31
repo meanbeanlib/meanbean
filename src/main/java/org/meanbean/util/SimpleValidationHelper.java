@@ -2,17 +2,12 @@ package org.meanbean.util;
 
 import org.slf4j.Logger;
 
-import java.io.Serializable;
-
 /**
  * Simple concrete ValidationHelper.
  * 
  * @author Graham Williamson
  */
-public class SimpleValidationHelper implements ValidationHelper, Serializable {
-
-    /** Unique version ID of this Serializable class. */
-    private static final long serialVersionUID = 1L;
+public class SimpleValidationHelper implements ValidationHelper {
 
     /** Logging mechanism. */
     private final transient Logger logger;

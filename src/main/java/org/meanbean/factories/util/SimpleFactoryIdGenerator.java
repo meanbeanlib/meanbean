@@ -3,17 +3,12 @@ package org.meanbean.factories.util;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
-import java.io.Serializable;
-
 /**
  * Concrete Factory ID Generator.
  * 
  * @author Graham Williamson
  */
-public class SimpleFactoryIdGenerator implements FactoryIdGenerator, Serializable {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
+public class SimpleFactoryIdGenerator implements FactoryIdGenerator {
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper();

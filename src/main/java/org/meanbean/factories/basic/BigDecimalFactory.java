@@ -1,8 +1,8 @@
 package org.meanbean.factories.basic;
 
-import java.math.BigDecimal;
-
 import org.meanbean.util.RandomValueGenerator;
+
+import java.math.BigDecimal;
 
 /**
  * Concrete Factory that creates random BigDecimal objects.
@@ -10,9 +10,6 @@ import org.meanbean.util.RandomValueGenerator;
  * @author Graham Williamson
  */
 public final class BigDecimalFactory extends RandomFactoryBase<BigDecimal> {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Construct a new BigDecimal object factory.

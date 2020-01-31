@@ -14,9 +14,6 @@ import java.util.Set;
  */
 public abstract class SetFactoryBase<T> extends RandomFactoryBase<Set<T>> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	/** Factory used to create each Set item. */
 	private final Factory<T> itemFactory;
 

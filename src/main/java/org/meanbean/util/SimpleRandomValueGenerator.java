@@ -1,6 +1,5 @@
 package org.meanbean.util;
 
-import java.io.Serializable;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -9,10 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * 
  * @author Graham Williamson
  */
-public class SimpleRandomValueGenerator implements RandomValueGenerator, Serializable {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
+public class SimpleRandomValueGenerator implements RandomValueGenerator {
 
 	/**
 	 * Generate a random byte.

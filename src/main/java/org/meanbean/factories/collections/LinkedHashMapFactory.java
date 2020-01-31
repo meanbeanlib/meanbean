@@ -1,10 +1,10 @@
 package org.meanbean.factories.collections;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Factory that creates random LinkedHashMaps of objects of the specified type.
@@ -15,9 +15,6 @@ import org.meanbean.util.RandomValueGenerator;
  *            The data type of the values the Maps created by this Factory contain.
  */
 public class LinkedHashMapFactory<K, V> extends MapFactoryBase<K, V> {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Construct a new LinkedHashMap object Factory.

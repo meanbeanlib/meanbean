@@ -14,9 +14,6 @@ import java.util.stream.IntStream;
 
 public class UrlFactory extends RandomFactoryBase<URL> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	private RandomValueSampler sampler;
 
 	private List<String> schemes = Arrays.asList("http://", "https://", "ftp://");

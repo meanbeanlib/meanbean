@@ -9,9 +9,6 @@ import org.meanbean.util.RandomValueGenerator;
  */
 public final class LongFactory extends RandomFactoryBase<Long> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Construct a new Long object factory.
 	 * 

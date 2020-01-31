@@ -1,12 +1,11 @@
 package org.meanbean.bean.util;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Affords functionality to filter PropertyInformation based on given criteria, such as a property's public visibility
@@ -14,10 +13,7 @@ import org.meanbean.util.ValidationHelper;
  * 
  * @author Graham Williamson
  */
-public final class PropertyInformationFilter implements Serializable {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
+public final class PropertyInformationFilter {
 
 	/** Input validation helper. */
 	private static final ValidationHelper VALIDATION_HELPER = new SimpleValidationHelper();

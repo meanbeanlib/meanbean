@@ -6,8 +6,6 @@ import org.meanbean.util.RandomValueGeneratorProvider;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
-import java.io.Serializable;
-
 /**
  * Abstract base class for a Factory that creates random objects of the specified type.
  * 
@@ -15,10 +13,7 @@ import java.io.Serializable;
  * @param <T>
  *            The data type of the object this Factory creates.
  */
-public abstract class RandomFactoryBase<T> implements Factory<T>, RandomValueGeneratorProvider, Serializable {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
+public abstract class RandomFactoryBase<T> implements Factory<T>, RandomValueGeneratorProvider {
 
 	/** Input validation helper. */
 	protected final ValidationHelper validationHelper = new SimpleValidationHelper();

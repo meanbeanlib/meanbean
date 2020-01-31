@@ -1,10 +1,10 @@
 package org.meanbean.factories.collections;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Factory that creates random TreeMaps of objects of the specified type.
@@ -15,9 +15,6 @@ import org.meanbean.util.RandomValueGenerator;
  *            The data type of the values the Maps created by this Factory contain.
  */
 public class TreeMapFactory<K, V> extends MapFactoryBase<K, V> {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Construct a new TreeMap object Factory.

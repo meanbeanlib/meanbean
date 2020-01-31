@@ -1,8 +1,8 @@
 package org.meanbean.factories.basic;
 
-import java.util.Date;
-
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.Date;
 
 /**
  * Concrete Factory that creates random Date objects.
@@ -10,9 +10,6 @@ import org.meanbean.util.RandomValueGenerator;
  * @author Graham Williamson
  */
 public final class DateFactory extends RandomFactoryBase<Date> {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Construct a new Date object factory.

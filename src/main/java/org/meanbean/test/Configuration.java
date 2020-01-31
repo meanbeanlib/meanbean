@@ -1,13 +1,12 @@
 package org.meanbean.test;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-
 import org.meanbean.lang.Factory;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>
@@ -38,10 +37,7 @@ import org.meanbean.util.ValidationHelper;
  * 
  * @author Graham Williamson
  */
-public class Configuration implements Serializable {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
+public class Configuration {
 
 	/** The number of times a type should be tested. This will be null if it has not been overriden. */
 	private final Integer iterations;

@@ -16,9 +16,6 @@ import java.util.List;
  */
 public class ArrayListFactory<T> extends ListFactoryBase<T> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Construct a new ArrayList object Factory.
 	 * 

@@ -11,9 +11,6 @@ import org.meanbean.util.ValidationHelper;
  */
 public class EnumFactory extends RandomFactoryBase<Enum<?>> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper();
 

@@ -16,9 +16,6 @@ import java.util.List;
  */
 public abstract class ListFactoryBase<T> extends RandomFactoryBase<List<T>> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	/** Factory used to create each List item. */
 	private final Factory<T> itemFactory;
 

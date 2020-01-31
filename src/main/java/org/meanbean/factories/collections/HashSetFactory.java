@@ -1,10 +1,10 @@
 package org.meanbean.factories.collections;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Factory that creates random HashSets of objects of the specified type.
@@ -13,9 +13,6 @@ import org.meanbean.util.RandomValueGenerator;
  *            The data type of the object this Factory creates Sets of.
  */
 public class HashSetFactory<T> extends SetFactoryBase<T> {
-
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Construct a new HashSet object Factory.

@@ -16,9 +16,6 @@ import java.util.Map;
  */
 public abstract class MapFactoryBase<K, V> extends RandomFactoryBase<Map<K, V>> {
 
-	/** Unique version ID of this Serializable class. */
-	private static final long serialVersionUID = 1L;
-
 	/** Factory used to create each Map key. */
 	private final Factory<K> keyFactory;
 

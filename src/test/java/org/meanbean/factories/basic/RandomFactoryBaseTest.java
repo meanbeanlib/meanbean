@@ -1,13 +1,13 @@
 package org.meanbean.factories.basic;
 
+import org.junit.Test;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.SimpleRandomValueGenerator;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-
-import org.junit.Test;
-import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleRandomValueGenerator;
 
 public class RandomFactoryBaseTest {
 
@@ -24,8 +24,6 @@ public class RandomFactoryBaseTest {
 	}
 
 	static class SimpleFactory<T> extends RandomFactoryBase<T> {
-
-		private static final long serialVersionUID = 1L;
 
 		public SimpleFactory(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
 			super(randomValueGenerator);
