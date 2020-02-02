@@ -3,12 +3,10 @@ package org.meanbean.test;
 import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
-import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.equivalent.EquivalentEnumFactory;
 import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
-import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ValidationHelper;
 
 /**
@@ -401,33 +399,6 @@ public class EqualsMethodTester {
 		}
 	}
 
-	/**
-	 * Get a RandomValueGenerator.
-	 * 
-	 * @return A RandomValueGenerator.
-	 */
-	public RandomValueGenerator getRandomValueGenerator() {
-		return propertySignificanceVerifier.getRandomValueGenerator();
-	}
-
-	/**
-	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
-	 * 
-	 * @return The collection of test data Factories.
-	 */
-	public FactoryCollection getFactoryCollection() {
-		return propertySignificanceVerifier.getFactoryCollection();
-	}
-
-	/**
-	 * Get the FactoryLookupStrategy, which provides a means of acquiring Factories.
-	 * 
-	 * @return The factory lookup strategy.
-	 */
-	public FactoryLookupStrategy getFactoryLookupStrategy() {
-		return propertySignificanceVerifier.getFactoryLookupStrategy();
-	}
-
 	private EquivalentFactory<?> createEquivalentFactory(Class<?> clazz) {
 		if (classIsAnEnum(clazz)) {
 			return createEnumClassFactory(clazz);
@@ -445,6 +416,7 @@ public class EqualsMethodTester {
 	}
 
 	private EquivalentPopulatedBeanFactory createPopulatedBeanFactory(Class<?> clazz) {
-		return new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz), getFactoryLookupStrategy());
+		FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
+		return new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz), factoryLookupStrategy);
 	}
 }

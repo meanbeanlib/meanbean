@@ -382,33 +382,4 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 		}
 	}
 
-	/**
-	 * Get a RandomValueGenerator.
-	 * 
-	 * @return A RandomValueGenerator.
-	 */
-	@Override
-    public RandomValueGenerator getRandomValueGenerator() {
-		return randomValueGenerator;
-	}
-
-	/**
-	 * Get the collection of test data Factories with which you can register new Factories for custom Data Types.
-	 * 
-	 * @return The collection of test data Factories.
-	 */
-	@Override
-    public FactoryCollection getFactoryCollection() {
-		return factoryCollection;
-	}
-
-	/**
-	 * Get the FactoryLookupStrategy, which provides a means of acquiring Factories.
-	 * 
-	 * @return The factory lookup strategy.
-	 */
-	@Override
-    public FactoryLookupStrategy getFactoryLookupStrategy() {
-		return factoryLookupStrategy;
-	}
 }

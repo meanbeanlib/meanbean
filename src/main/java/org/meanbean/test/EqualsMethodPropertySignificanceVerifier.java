@@ -1,10 +1,7 @@
 package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformationException;
-import org.meanbean.factories.FactoryCollectionProvider;
-import org.meanbean.factories.util.FactoryLookupStrategyProvider;
 import org.meanbean.lang.EquivalentFactory;
-import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
  * <p>
@@ -26,8 +23,7 @@ import org.meanbean.util.RandomValueGeneratorProvider;
  * 
  * @author Graham Williamson
  */
-interface EqualsMethodPropertySignificanceVerifier extends RandomValueGeneratorProvider, FactoryCollectionProvider,
-        FactoryLookupStrategyProvider {
+interface EqualsMethodPropertySignificanceVerifier {
 
 	/**
 	 * <p>

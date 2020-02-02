@@ -35,15 +35,15 @@ import static org.junit.Assert.fail;
 
 public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
+	private final FactoryCollection factoryCollection = FactoryCollection.getInstance();
 	private final PropertyBasedEqualsMethodPropertySignificanceVerifier verifier =
 	        new PropertyBasedEqualsMethodPropertySignificanceVerifier();
 
 	@Test
 	public void shouldGetFactoryRepository() throws Exception {
-		FactoryCollection factoryRepository = verifier.getFactoryCollection();
-		assertThat("Failed to get FactoryRepository.", factoryRepository, is(not(nullValue())));
+		assertThat("Failed to get FactoryRepository.", factoryCollection, is(not(nullValue())));
 		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryRepository.getFactory(String.class);
+		Factory<String> stringFactory = (Factory<String>) factoryCollection.getFactory(String.class);
 		String randomString = stringFactory.create();
 		assertThat("Failed to get random String from FactoryRepository.", randomString, is(not(nullValue())));
 	}
@@ -189,7 +189,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 	@Test
 	public void verifyEqualsMethodShouldUseOverrideFactory() throws Exception {
 		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) verifier.getFactoryCollection().getFactory(String.class);
+		Factory<String> stringFactory = (Factory<String>) factoryCollection.getFactory(String.class);
 		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		verifier.verifyEqualsMethod(new BeanFactory(), configuration);
