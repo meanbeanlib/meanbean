@@ -1,9 +1,6 @@
 package org.meanbean.logging;
 
-import java.io.PrintStream;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class $LoggerFactory {
 
@@ -28,7 +25,7 @@ public class $LoggerFactory {
 				// no op
 			}
 		}
-		return new ConsoleLogger(clazz, System.out);
+		return new NullLogger();
 	}
 
 	private static class Slf4jLogger implements $Logger {
@@ -91,84 +88,6 @@ public class $LoggerFactory {
 
 	}
 
-	private static class ConsoleLogger implements $Logger {
-
-		private Class<?> clazz;
-		private PrintStream ps;
-
-		public ConsoleLogger(Class<?> clazz, PrintStream ps) {
-			this.clazz = clazz;
-			this.ps = ps;
-		}
-
-		@Override
-		public boolean isTraceEnabled() {
-			return true;
-		}
-
-		@Override
-		public void trace(String format, Object... arguments) {
-			log(format, arguments);
-		}
-
-		@Override
-		public boolean isDebugEnabled() {
-			return true;
-		}
-
-		@Override
-		public void debug(String format, Object... arguments) {
-			log(format, arguments);
-		}
-
-		@Override
-		public boolean isInfoEnabled() {
-			return true;
-		}
-
-		@Override
-		public void info(String format, Object... arguments) {
-			log(format, arguments);
-		}
-
-		@Override
-		public boolean isWarnEnabled() {
-			return true;
-		}
-
-		@Override
-		public void warn(String format, Object... arguments) {
-			log(format, arguments);
-		}
-
-		@Override
-		public boolean isErrorEnabled() {
-			return true;
-		}
-
-		@Override
-		public void error(String format, Object... arguments) {
-			log(format, arguments);
-		}
-
-		private void log(String fmt, Object... args) {
-			String msg = fmt;
-			Object lastArg = null;
-			for (Object arg : args) {
-				lastArg = arg;
-				if (msg.contains("{}")) {
-					String replacement = Matcher.quoteReplacement(String.valueOf(arg));
-					msg = msg.replaceFirst(Pattern.quote("{}"), replacement);
-				}
-			}
-
-			ps.printf("%s - %s%n", clazz.getSimpleName(), msg);
-			if (lastArg instanceof Throwable) {
-				((Throwable) lastArg).printStackTrace(ps);
-			}
-		}
-	}
-
 	private static class Log4j2Logger implements $Logger {
 
 		private final org.apache.logging.log4j.Logger logger;
@@ -228,4 +147,53 @@ public class $LoggerFactory {
 		}
 
 	}
+
+	private static class NullLogger implements $Logger {
+
+		@Override
+		public boolean isTraceEnabled() {
+			return false;
+		}
+
+		@Override
+		public void trace(String format, Object... arguments) {
+		}
+
+		@Override
+		public boolean isDebugEnabled() {
+			return false;
+		}
+
+		@Override
+		public void debug(String format, Object... arguments) {
+		}
+
+		@Override
+		public boolean isInfoEnabled() {
+			return false;
+		}
+
+		@Override
+		public void info(String format, Object... arguments) {
+		}
+
+		@Override
+		public boolean isWarnEnabled() {
+			return false;
+		}
+
+		@Override
+		public void warn(String format, Object... arguments) {
+		}
+
+		@Override
+		public boolean isErrorEnabled() {
+			return false;
+		}
+
+		@Override
+		public void error(String format, Object... arguments) {
+		}
+	}
+
 }
