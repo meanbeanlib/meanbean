@@ -26,12 +26,7 @@ public class FactoryRepositoryTest {
 
 	@Before
 	public void before() {
-		factoryRepository = new FactoryRepository(randomValueGenerator);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void constructorShouldPreventNullRandomValueGenerator() throws Exception {
-		new FactoryRepository(null);
+		factoryRepository = new FactoryRepository();
 	}
 
 	@Test

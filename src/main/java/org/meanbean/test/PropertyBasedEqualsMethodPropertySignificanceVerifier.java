@@ -7,16 +7,12 @@ import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.FactoryCollection;
-import org.meanbean.factories.FactoryRepository;
-import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.lang.Factory;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleRandomValueGenerator;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.StringUtils;
 import org.meanbean.util.ValidationHelper;
 
@@ -109,20 +105,19 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	private static final $Logger logger = $LoggerFactory.getLogger(PropertyBasedEqualsMethodPropertySignificanceVerifier.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
+	private final ValidationHelper validationHelper = ValidationHelper.getInstance(logger);
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/** Random number generator used by factories to randomly generate values. */
-	private final RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 
 	/** The collection of test data Factories. */
-	private final FactoryCollection factoryCollection = new FactoryRepository(randomValueGenerator);
+	private final FactoryCollection factoryCollection = FactoryCollection.getInstance();
 
 	/** Provides a means of acquiring a suitable Factory. */
-	private final FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
-	        randomValueGenerator);
+	private final FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
 
 	/** Asserts that the equality logic is consistent for a significant property. */
 	private final ObjectPropertyEqualityConsistentAsserter significantAsserter =

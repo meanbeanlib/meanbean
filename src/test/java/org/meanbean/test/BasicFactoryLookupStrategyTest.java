@@ -1,8 +1,5 @@
 package org.meanbean.test;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +19,9 @@ import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BasicFactoryLookupStrategyTest {
@@ -46,7 +46,7 @@ public class BasicFactoryLookupStrategyTest {
 	@Before
 	public void before() {
 		randomValueGenerator = new SimpleRandomValueGenerator();
-		factoryCollection = new FactoryRepository(randomValueGenerator);
+		factoryCollection = new FactoryRepository();
 		factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection, randomValueGenerator);
 
 	}

@@ -1,7 +1,17 @@
-package org.meanbean.util;
+/*
+ * Copyright 2016 Martin Winandy
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
+package org.meanbean.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +22,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.ServiceConfigurationError;
+import java.util.stream.Stream;
+
+import static java.lang.Thread.currentThread;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Alternative service loader that supports constructors with arguments in opposite to {@link java.util.ServiceLoader}.
@@ -22,15 +39,11 @@ import java.util.List;
  */
 public final class ServiceLoader<T> {
 
-	private static final $Logger logger = $LoggerFactory.getLogger(ServiceLoader.class);
-	
 	private static final String SERVICE_PREFIX = "META-INF/services/";
 
 	private final Class<? extends T> service;
 	private final Class<?>[] argumentTypes;
-
 	private final ClassLoader classLoader;
-	private final Collection<String> classes;
 
 	/**
 	 * @param service
@@ -38,104 +51,50 @@ public final class ServiceLoader<T> {
 	 * @param argumentTypes
 	 *            Expected argument types for constructors
 	 */
-	public ServiceLoader(final Class<? extends T> service, final Class<?>... argumentTypes) {
+	public ServiceLoader(Class<? extends T> service, Class<?>... argumentTypes) {
 		this.service = service;
 		this.argumentTypes = argumentTypes;
-		this.classLoader = Thread.currentThread().getContextClassLoader() != null
-				? Thread.currentThread().getContextClassLoader()
-				: getClass().getClassLoader();
-		this.classes = loadClasses(classLoader, service);
+		this.classLoader = Stream.of(currentThread().getContextClassLoader(), getClass().getClassLoader())
+				.filter(Objects::nonNull)
+				.findFirst()
+				.orElse(ClassLoader.getSystemClassLoader());
 	}
 
-	/**
-	 * Creates all registered service implementations.
-	 *
-	 * @param arguments
-	 *            Arguments for constructors of service implementations
-	 * @return Instances of all service implementations
-	 */
-	public List<T> createAll(final Object... arguments) {
-		List<T> instances = new ArrayList<T>(classes.size());
-
-		for (String className : classes) {
-			T instance = createInstance(className, arguments);
-			if (instance != null) {
-				instances.add(instance);
-			}
-		}
-
-		return instances;
-	}
-
-	/**
-	 * Loads all registered service class names.
-	 *
-	 * @param <T>
-	 *            Service interface
-	 * @param classLoader
-	 *             Class loader to use for finding service files
-	 * @param service
-	 *            Service interface
-	 * @return Class names
-	 */
-	private static <T> Collection<String> loadClasses(final ClassLoader classLoader, final Class<? extends T> service) {
-		String name = SERVICE_PREFIX + service.getName();
-		Enumeration<URL> urls;
+	public List<T> createAll(Object... arguments) {
 		try {
-			urls = classLoader.getResources(name);
-		} catch (IOException ex) {
-			logger.error("Failed loading services from '{}'", name);
-			return Collections.emptyList();
-		}
-
-		Collection<String> classes = new ArrayList<String>();
-
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			BufferedReader reader = null;
-
-			try {
-				reader = new BufferedReader(new InputStreamReader(url.openStream(), "utf-8"));
-				for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-					line = line.trim();
-					if (line.length() > 0 && line.charAt(0) != '#' && !classes.contains(line)) {
-						classes.add(line);
-					}
-				}
-			} catch (IOException ex) {
-				logger.error("Failed reading service resource '{}'", url, ex);
-			} finally {
-				if (reader != null) {
-					try {
-						reader.close();
-					} catch (IOException ex) {
-						// Ignore
-					}
-				}
+			Collection<String> classNames = findClassNames(classLoader, service);
+			List<T> services = new ArrayList<>(classNames.size());
+			for (String className : classNames) {
+				services.add(createInstance(className, arguments));
 			}
-		}
-
-		return classes;
-	}
-
-	/**
-	 * Creates a new instance of a class.
-	 *
-	 * @param className
-	 *            Fully-qualified class name
-	 * @param arguments
-	 *            Arguments for constructor
-	 * @return A new instance of given class or {@code null} if creation failed
-	 */
-	private T createInstance(final String className, final Object... arguments) {
-		try {
-			Class<?> implementation = Class.forName(className, false, classLoader);
-			Constructor<?> constructor = implementation.getDeclaredConstructor(argumentTypes);
-			Object newInstance = constructor.newInstance(arguments);
-			return this.service.cast(newInstance);
+			return services;
 		} catch (Exception ex) {
-			throw new IllegalStateException("Cannot create service instance for " + className, ex);
+			throw new ServiceConfigurationError("Cannot create service instance for " + service.getName(), ex);
 		}
+	}
+
+	private static <T> Collection<String> findClassNames(ClassLoader classLoader, Class<? extends T> service) throws IOException {
+		String name = SERVICE_PREFIX + service.getName();
+		Enumeration<URL> urls = classLoader.getResources(name);
+		Collection<String> classNames = new LinkedHashSet<>();
+
+		for (URL url : Collections.list(urls)) {
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), UTF_8))) {
+				reader.lines()
+						.map(String::trim)
+						.filter(line -> !line.isEmpty() && line.charAt(0) != '#')
+						.forEach(classNames::add);
+			}
+		}
+
+		return classNames;
+	}
+
+	private T createInstance(String className, Object... arguments) throws Exception {
+		Class<?> implementation = Class.forName(className, false, classLoader);
+		Constructor<?> constructor = implementation.getDeclaredConstructor(argumentTypes);
+		Object newInstance = constructor.newInstance(arguments);
+		return service.cast(newInstance);
 	}
 
 }

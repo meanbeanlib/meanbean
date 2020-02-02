@@ -31,7 +31,7 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	private final Map<String, Factory<?>> factories = new ConcurrentHashMap<>();
 
 	/** Random number generator used by factories to randomly generate values. */
-	private final RandomValueGenerator randomValueGenerator;
+	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 
 	/** Helper that generates keys that are used to key Factories in the factories Map. */
 	private final FactoryIdGenerator keyGenerator = new SimpleFactoryIdGenerator();
@@ -39,21 +39,8 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
-	/**
-	 * Construct a new Factory Repository.
-	 * 
-	 * @param randomValueGenerator
-	 *            The random value generator used by factories to randomly generate values.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the specified randomValueGenerator is deemed illegal. For example, if it is <code>null</code>.
-	 */
-	public FactoryRepository(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
-		logger.debug("FactoryRepository: entering");
-		validationHelper.ensureExists("randomValueGenerator", "construct FactoryRepository", randomValueGenerator);
-		this.randomValueGenerator = randomValueGenerator;
+	public FactoryRepository() throws IllegalArgumentException {
 		initialize();
-		logger.debug("FactoryRepository: exiting");
 	}
 
 	/**
@@ -133,7 +120,7 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 *             If the collection does not contain a Factory registered against the specified class.
 	 */
 	@Override
-    public Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException {
+	public Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException {
 		logger.debug("getFactory: entering with clazz=[{}].", clazz);
 		validationHelper.ensureExists("clazz", "get Factory", clazz);
 		String key = keyGenerator.createIdFromClass(clazz);// Should have prevented Exceptions in Validation above

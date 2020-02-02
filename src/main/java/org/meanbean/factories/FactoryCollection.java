@@ -1,7 +1,6 @@
 package org.meanbean.factories;
 
 import org.meanbean.lang.Factory;
-import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ServiceFactory;
 
 /**
@@ -13,8 +12,6 @@ public interface FactoryCollection {
 
 	public static FactoryCollection getInstance() {
 		return ServiceFactory.getInstance(FactoryCollection.class)
-				.constructorArgs(RandomValueGenerator.getInstance())
-				.constructorTypes(RandomValueGenerator.class)
 				.loadFirst();
 	}
 	

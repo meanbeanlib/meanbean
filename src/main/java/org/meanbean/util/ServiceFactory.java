@@ -17,8 +17,9 @@ public class ServiceFactory<T> {
 	private Class<T> serviceType;
 	private Object[] constructorArgs = {};
 	private Class<?>[] constructorTypes = {};
-	
+
 	private List<T> services;
+	private boolean loadInProgress;
 
 	@SuppressWarnings("unchecked")
 	public static <T> ServiceFactory<T> getInstance(Class<T> serviceType) {
@@ -28,10 +29,6 @@ public class ServiceFactory<T> {
 
 	public static <T> ServiceFactory<T> newInstance(Class<T> serviceType) {
 		return new ServiceFactory<T>(serviceType);
-	}
-	
-	public static void clearCache() {
-		factoryCache.clear();
 	}
 
 	private ServiceFactory(Class<T> serviceType) {
@@ -59,14 +56,25 @@ public class ServiceFactory<T> {
 		return services.get(0);
 	}
 
-	public List<T> load() {
+	public synchronized List<T> load() {
 		if (services != null) {
 			return services;
 		}
-		
-		ServiceLoader<T> loader = new ServiceLoader<>(serviceType, constructorTypes);
-		services = loader.createAll(constructorArgs);
-		Collections.sort(services, Comparator.comparingInt(this::getOrder));
+
+		if (loadInProgress) {
+			// pre-empt stackoverflow
+			throw new IllegalStateException("Load of " + serviceType.getName() + " is already in progress");
+		}
+
+		loadInProgress = true;
+		try {
+			ServiceLoader<T> loader = new ServiceLoader<>(serviceType, constructorTypes);
+			services = loader.createAll(constructorArgs);
+			Collections.sort(services, Comparator.comparingInt(this::getOrder));
+		} finally {
+			loadInProgress = false;
+		}
+
 		return services;
 	}
 

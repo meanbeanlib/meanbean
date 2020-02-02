@@ -55,7 +55,7 @@ public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 		StringFactory stringFactory = (StringFactory) factoryCollection.getFactory(String.class);
 		LongFactory longFactory = (LongFactory) factoryCollection.getFactory(Long.class);
 		// Lists
-		ArrayListFactory<String> arrayListFactory = new ArrayListFactory<String>(randomValueGenerator, stringFactory);
+		ArrayListFactory<?> arrayListFactory = new ArrayListFactory<String>(randomValueGenerator, stringFactory);
 		factoryCollection.addFactory(List.class, arrayListFactory);
 		factoryCollection.addFactory(ArrayList.class, arrayListFactory);
 		LinkedListFactory<String> linkedListFactory =

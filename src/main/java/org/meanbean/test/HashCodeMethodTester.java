@@ -1,20 +1,15 @@
 package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformationFactory;
-import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
-import org.meanbean.factories.FactoryRepository;
 import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
-import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
-import org.meanbean.util.AssertionUtils;
-import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleRandomValueGenerator;
-import org.meanbean.util.SimpleValidationHelper;
-import org.meanbean.util.ValidationHelper;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
+import org.meanbean.util.AssertionUtils;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ValidationHelper;
 
 /**
  * <p>
@@ -80,20 +75,19 @@ public class HashCodeMethodTester {
 	private static final $Logger logger = $LoggerFactory.getLogger(HashCodeMethodTester.class);
 
 	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
+	private final ValidationHelper validationHelper = ValidationHelper.getInstance(logger);
 
 	/** Random number generator used by factories to randomly generate values. */
-	private final RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 
 	/** The collection of test data Factories. */
-	private final FactoryCollection factoryCollection = new FactoryRepository(randomValueGenerator);
+	private final FactoryCollection factoryCollection = FactoryCollection.getInstance();
 
 	/** Provides a means of acquiring a suitable Factory. */
-	private final FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
-	        randomValueGenerator);
+	private final FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/**
 	 * <p>
