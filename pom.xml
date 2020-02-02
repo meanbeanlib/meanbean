@@ -21,8 +21,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<slf4j.version>1.7.25</slf4j.version>
-		<log4j2.version>2.13.0</log4j2.version>
 	</properties>
 
 	<licenses>
@@ -97,7 +95,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.7</version>
 				<configuration>
-                    <stylesheetfile>${basedir}/statics/css/stylesheet.css</stylesheetfile>
+					<stylesheetfile>${basedir}/statics/css/stylesheet.css</stylesheetfile>
 				</configuration>
 				<executions>
 					<execution>
@@ -136,7 +134,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
+			<version>1.7.25</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -146,6 +144,15 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.kohsuke.metainf-services/metainf-services -->
+		<dependency>
+			<groupId>org.kohsuke.metainf-services</groupId>
+			<artifactId>metainf-services</artifactId>
+			<version>1.8</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

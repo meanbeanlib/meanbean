@@ -39,13 +39,17 @@ public class BeanTesterTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void setIterationsShouldPreventIterationsLessThanOne() throws Exception {
-		beanTester.setIterations(0);
+		beanTester = new BeanTesterBuilder()
+				.setIterations(0)
+				.build();
 	}
 
 	@Test
 	public void setIterationsShouldSetIterations() throws Exception {
 		int iterations = 234;
-		beanTester.setIterations(iterations);
+		beanTester = new BeanTesterBuilder()
+				.setIterations(234)
+				.build();
 		assertThat("Incorrect iterations.", beanTester.getIterations(), is(iterations));
 	}
 

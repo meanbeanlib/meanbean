@@ -1,11 +1,14 @@
 package org.meanbean.bean.info;
 
+import org.kohsuke.MetaInfServices;
+
 /**
  * Concrete BeanInformationFactory that creates concrete JavaBeanInformation objects from/based on a specified
  * beanClass.
  * 
  * @author Graham Williamson
  */
+@MetaInfServices
 public class JavaBeanInformationFactory implements BeanInformationFactory {
 
 	/**

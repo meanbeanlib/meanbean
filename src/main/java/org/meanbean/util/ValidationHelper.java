@@ -1,5 +1,7 @@
 package org.meanbean.util;
 
+import org.meanbean.logging.$Logger;
+
 /**
  * Defines an object that affords helpful input validation functionality.
  * 
@@ -7,6 +9,13 @@ package org.meanbean.util;
  */
 public interface ValidationHelper {
 
+	public static ValidationHelper getInstance($Logger logger) {
+		return ServiceFactory.getInstance(ValidationHelper.class)
+				.constructorArgs(logger)
+				.constructorTypes($Logger.class)
+				.loadFirst();
+	}
+	
 	/**
 	 * <p>
 	 * Ensure that the specified value exists, conditionally throwing an IllegalArgumentException if it does not. <br/>

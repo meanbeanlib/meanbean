@@ -1,8 +1,8 @@
 package org.meanbean.factories.util;
 
+import org.kohsuke.MetaInfServices;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationFactory;
-import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.NoSuchFactoryException;
@@ -44,6 +44,7 @@ import static java.util.Collections.synchronizedSet;
  * 
  * @author Graham Williamson
  */
+@MetaInfServices
 public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/** Logging mechanism. */
@@ -232,7 +233,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
     }
 
 	private Factory<?> createPopulatedBeanFactory(Class<?> propertyType) {
-		BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+		BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 		BeanInformation propertyBeanInformation = beanInformationFactory.create(propertyType);
 		return new PopulatedBeanFactory(propertyBeanInformation, this);
 	}

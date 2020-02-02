@@ -2,20 +2,16 @@ package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationFactory;
-import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryCollection;
-import org.meanbean.factories.FactoryRepository;
-import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
@@ -137,21 +133,13 @@ public class BeanTester {
 	private final ValidationHelper validationHelper;
 
 	public BeanTester() {
-		this(TEST_ITERATIONS_PER_BEAN, new ConstructorHelper(),
-				new JavaBeanInformationFactory(),
+		this(TEST_ITERATIONS_PER_BEAN, 
+				RandomValueGenerator.getInstance(),
+				FactoryCollection.getInstance(),
+				FactoryLookupStrategy.getInstance(),
+				BeanInformationFactory.getInstance(),
 				new BeanPropertyTester(),
 				new SimpleValidationHelper(logger));
-	}
-
-	private BeanTester(int iterations, ConstructorHelper constHelper, BeanInformationFactory beanInformationFactory,
-			BeanPropertyTester beanPropertyTester, ValidationHelper validationHelper) {
-		this(iterations,
-				constHelper.randomValueGenerator,
-				constHelper.factoryCollection,
-				constHelper.factoryLookupStrategy,
-				beanInformationFactory,
-				beanPropertyTester,
-				validationHelper);
 	}
 
 	BeanTester(int iterations, RandomValueGenerator randomValueGenerator, FactoryCollection factoryCollection,
@@ -186,31 +174,6 @@ public class BeanTester {
 	 */
 	public RandomValueGenerator getRandomValueGenerator() {
 		return randomValueGenerator;
-	}
-
-	/**
-	 * <p>
-	 * Set the number of times each bean should be tested, globally. <br/>
-	 * </p>
-	 * 
-	 * <p>
-	 * Note: A custom Configuration can override this global test setting.
-	 * </p>
-	 * 
-	 * @param iterations
-	 *            The number of times each bean should be tested. This value must be at least 1.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the iterations parameter is deemed illegal. For example, if it is less than 1.
-	 */
-	public void setIterations(int iterations) throws IllegalArgumentException {
-		logger.debug("setIterations: entering with iterations=[{}].", iterations);
-		if (iterations < 1) {
-			logger.debug("setIterations: Iterations must be at least 1. Throw IllegalArgumentException.");
-			throw new IllegalArgumentException("Iterations must be at least 1.");
-		}
-		this.iterations = iterations;
-		logger.debug("setIterations: exiting.");
 	}
 
 	/**
@@ -459,16 +422,5 @@ public class BeanTester {
 			}
 		}
 		logger.debug("testBean: exiting.");
-	}
-
-	private static class ConstructorHelper {
-
-		private RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
-
-		private FactoryCollection factoryCollection = new FactoryRepository(randomValueGenerator);
-
-		private FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
-				randomValueGenerator);
-
 	}
 }

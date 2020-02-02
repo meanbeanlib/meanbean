@@ -1,18 +1,28 @@
 package org.meanbean.factories.util;
 
 import org.meanbean.bean.info.BeanInformation;
+import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.Configuration;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ServiceFactory;
 
 /**
- * Defines a means of acquiring a Factory.
+ * Defines a means of acquiring a Factory in the context of testing bean properties
  * 
  * @author Graham Williamson
  */
 public interface FactoryLookupStrategy {
 
+	public static FactoryLookupStrategy getInstance() {
+		return ServiceFactory.getInstance(FactoryLookupStrategy.class)
+				.constructorArgs(FactoryCollection.getInstance(), RandomValueGenerator.getInstance())
+				.constructorTypes(FactoryCollection.class, RandomValueGenerator.class)
+				.loadFirst();
+	}
+	
 	/**
 	 * <p>
 	 * Get a factory for the specified property that is of the specified type. <br/>

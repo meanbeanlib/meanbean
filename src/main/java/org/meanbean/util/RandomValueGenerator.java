@@ -7,6 +7,11 @@ package org.meanbean.util;
  */
 public interface RandomValueGenerator {
 
+	public static RandomValueGenerator getInstance() {
+		return ServiceFactory.getInstance(RandomValueGenerator.class)
+				.loadFirst();
+	}
+	
 	/**
 	 * Generate a random byte.
 	 * 

@@ -1,5 +1,6 @@
 package org.meanbean.util;
 
+import org.kohsuke.MetaInfServices;
 import org.meanbean.logging.$Logger;
 
 /**
@@ -7,6 +8,7 @@ import org.meanbean.logging.$Logger;
  * 
  * @author Graham Williamson
  */
+@MetaInfServices
 public class SimpleValidationHelper implements ValidationHelper {
 
     /** Logging mechanism. */

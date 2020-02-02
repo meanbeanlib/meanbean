@@ -3,7 +3,6 @@ package org.meanbean.test;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.bean.info.BeanInformationFactory;
-import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
@@ -13,13 +12,13 @@ import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.lang.Factory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.StringUtils;
 import org.meanbean.util.ValidationHelper;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,7 +112,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/** Random number generator used by factories to randomly generate values. */
 	private final RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();

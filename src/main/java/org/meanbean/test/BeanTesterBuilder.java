@@ -1,33 +1,27 @@
 package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformationFactory;
-import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
-import org.meanbean.factories.FactoryRepository;
-import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleRandomValueGenerator;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 public class BeanTesterBuilder {
 
 	private int iterations = BeanTester.TEST_ITERATIONS_PER_BEAN;
 
-	private RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
+	private RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 
-	private FactoryCollection factoryCollection = new FactoryRepository(randomValueGenerator);
+	private FactoryCollection factoryCollection = FactoryCollection.getInstance();
 
-	private FactoryLookupStrategy factoryLookupStrategy = new BasicFactoryLookupStrategy(factoryCollection,
-			randomValueGenerator);
+	private FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
 
-	private BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+	private BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	private BeanPropertyTester beanPropertyTester = new BeanPropertyTester();
 
-	private ValidationHelper validationHelper = new SimpleValidationHelper($LoggerFactory.getLogger(BeanTester.class));
+	private ValidationHelper validationHelper = ValidationHelper.getInstance($LoggerFactory.getLogger(BeanTester.class));
 
 	public int getIterations() {
 		return iterations;
@@ -92,7 +86,7 @@ public class BeanTesterBuilder {
 		return this;
 	}
 
-	public BeanTester create() {
+	public BeanTester build() {
 		return new BeanTester(iterations,
 				randomValueGenerator,
 				factoryCollection,

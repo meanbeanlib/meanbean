@@ -1,17 +1,17 @@
 package org.meanbean.bean.info;
 
-import org.meanbean.util.SimpleValidationHelper;
-import org.meanbean.util.ValidationHelper;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
+import org.meanbean.util.SimpleValidationHelper;
+import org.meanbean.util.ValidationHelper;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Concrete BeanInformation that gathers and contains information about a JavaBean by using java.beans.BeanInfo.
@@ -20,8 +20,8 @@ import java.util.Map;
  */
 class JavaBeanInformation implements BeanInformation {
 
-    /** Logging mechanism. */
-    private static final $Logger logger = $LoggerFactory.getLogger(JavaBeanInformation.class);
+	/** Logging mechanism. */
+	private static final $Logger logger = $LoggerFactory.getLogger(JavaBeanInformation.class);
 
 	/** The type of object this object contains information about. */
 	private final Class<?> beanClass;
@@ -30,7 +30,7 @@ class JavaBeanInformation implements BeanInformation {
 	private final BeanInfo beanInfo;
 
 	/** Information about each property of the type, keyed by property name. */
-	private final Map<String, PropertyInformation> properties = new HashMap<String, PropertyInformation>();
+	private final Map<String, PropertyInformation> properties = new ConcurrentHashMap<>();
 
 	/** Input validation helper. */
 	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
@@ -49,13 +49,15 @@ class JavaBeanInformation implements BeanInformation {
 	 *             specified type is not a valid JavaBean.
 	 */
 	JavaBeanInformation(Class<?> beanClass) throws IllegalArgumentException, BeanInformationException {
-	    logger.debug("JavaBeanInformation: entering with beanClass=[{}].", beanClass);
+		logger.debug("JavaBeanInformation: entering with beanClass=[{}].", beanClass);
 		validationHelper.ensureExists("beanClass", "gather JavaBean information", beanClass);
 		this.beanClass = beanClass;
 		try {
 			beanInfo = Introspector.getBeanInfo(beanClass);
 		} catch (IntrospectionException e) {
-			logger.debug("JavaBeanInformation: Failed to acquire information about beanClass [{}]. Throw BeanInformationException.", beanClass, e);
+			logger.debug(
+					"JavaBeanInformation: Failed to acquire information about beanClass [{}]. Throw BeanInformationException.",
+					beanClass, e);
 			throw new BeanInformationException("Failed to acquire information about beanClass [" + beanClass + "].", e);
 		}
 		initialize();
@@ -66,7 +68,7 @@ class JavaBeanInformation implements BeanInformation {
 	 * Initialize this object ready for public use. This involves acquiring information about each property of the type.
 	 */
 	private void initialize() {
-	    logger.debug("initialize: entering.");
+		logger.debug("initialize: entering.");
 		for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
 			if ("class".equals(propertyDescriptor.getName()))
 				continue;
@@ -82,7 +84,7 @@ class JavaBeanInformation implements BeanInformation {
 	 * @return The type of bean this object contains information about.
 	 */
 	@Override
-    public Class<?> getBeanClass() {
+	public Class<?> getBeanClass() {
 		return beanClass;
 	}
 
@@ -92,7 +94,7 @@ class JavaBeanInformation implements BeanInformation {
 	 * @return A Collection of names of all properties of the bean.
 	 */
 	@Override
-    public Collection<String> getPropertyNames() {
+	public Collection<String> getPropertyNames() {
 		return properties.keySet();
 	}
 
@@ -102,7 +104,7 @@ class JavaBeanInformation implements BeanInformation {
 	 * @return A Collection of all properties of the bean.
 	 */
 	@Override
-    public Collection<PropertyInformation> getProperties() {
+	public Collection<PropertyInformation> getProperties() {
 		return properties.values();
 	}
 }

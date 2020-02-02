@@ -2,6 +2,9 @@ package org.meanbean.logging;
 
 import java.util.function.Function;
 
+/**
+ * Creates internal logger, favoring slf4j and log4j2, before falling back to null/no-op logger
+ */
 public class $LoggerFactory {
 
 	private static $LoggerFactory INSTANCE = new $LoggerFactory();

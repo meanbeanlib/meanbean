@@ -1,5 +1,8 @@
 package org.meanbean.logging;
 
+/**
+ * Internal facade around well-known logging facades
+ */
 public interface $Logger {
 	public boolean isTraceEnabled();
 

@@ -1,5 +1,7 @@
 package org.meanbean.util;
 
+import org.kohsuke.MetaInfServices;
+
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -8,6 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * 
  * @author Graham Williamson
  */
+@MetaInfServices
 public class SimpleRandomValueGenerator implements RandomValueGenerator {
 
 	/**

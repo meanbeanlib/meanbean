@@ -21,6 +21,7 @@ classes/
 .classpath
 .project
 */src/main/java/META-INF/MANIFEST.MF
+.factorypath
 
 # IDEA artifacts and output dirs
 *.iml
@@ -31,3 +32,5 @@ out
 test-output
 .gradletasknamecache
 
+/.apt_generated/
+/.apt_generated_tests/

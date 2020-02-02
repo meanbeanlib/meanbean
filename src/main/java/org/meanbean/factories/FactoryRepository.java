@@ -1,5 +1,6 @@
 package org.meanbean.factories;
 
+import org.kohsuke.MetaInfServices;
 import org.meanbean.factories.net.NetFactoryPlugin;
 import org.meanbean.factories.time.TimePlugin;
 import org.meanbean.factories.util.FactoryIdGenerator;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @author Graham Williamson
  */
+@MetaInfServices(FactoryCollection.class)
 public final class FactoryRepository implements FactoryCollection, RandomValueGeneratorProvider {
 
     /** Logging mechanism. */
