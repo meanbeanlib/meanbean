@@ -262,12 +262,9 @@ public class EqualsMethodTester {
 	 */
 	public void testEqualsMethod(Class<?> clazz, Configuration customConfiguration, String... insignificantProperties)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
-		logger.debug("testEqualsMethod: Entering with clazz=[{}], customConfiguration=[{}], insignificantProperties=[{}].", 
-		        clazz, customConfiguration, insignificantProperties);
 		validationHelper.ensureExists("clazz", "test equals method", clazz);
 		EquivalentFactory<?> factory = createEquivalentFactory(clazz);
 		testEqualsMethod(factory, customConfiguration, insignificantProperties);
-		logger.debug("testEqualsMethod: Exiting - Equals is correct.");
 	}
 
 	/**
@@ -394,8 +391,6 @@ public class EqualsMethodTester {
 	public void testEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
 	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
 	        BeanTestException, AssertionError {
-		logger.debug("testEqualsMethod: Entering with factory=[" + factory + "], customConfiguration=["
-		        + customConfiguration + "], insignificantProperties=[" + insignificantProperties + "].");
 		validationHelper.ensureExists("factory", "test equals method", factory);
 		validationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
 		contractVerifier.verifyEqualsReflexive(factory);
@@ -411,10 +406,8 @@ public class EqualsMethodTester {
 		}
 		// Test property significance 'iterations' times
 		for (int idx = 0; idx < iterations; idx++) {
-			logger.debug("testEqualsMethod: Iteration [" + idx + "].");
 			propertySignificanceVerifier.verifyEqualsMethod(factory, customConfiguration, insignificantProperties);
 		}
-		logger.debug("testEqualsMethod: Exiting - Equals is correct.");
 	}
 
 	/**

@@ -45,13 +45,11 @@ public class BasicBeanPopulator implements BeanPopulator {
 	@Override
     public void populate(Object bean, BeanInformation beanInformation, Map<String, Object> values)
 	        throws IllegalArgumentException, BeanPopulationException {
-		logger.debug("populate: entering.");
 		validationHelper.ensureExists("bean", "populate bean", bean);
 		validationHelper.ensureExists("beanInformation", "populate bean", beanInformation);
 		validationHelper.ensureExists("values", "populate bean", values);
 		Collection<PropertyInformation> writableProperties =
 		        PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
-		logger.debug("populate: properties that could be populated are [{}].", writableProperties);
 		for (PropertyInformation property : writableProperties) {
 			String propertyName = property.getName();
 			if (values.containsKey(propertyName)) {
@@ -66,6 +64,5 @@ public class BasicBeanPopulator implements BeanPopulator {
 				}
 			}
 		}
-		logger.debug("populate: exiting returning [{}].", bean);
 	}
 }

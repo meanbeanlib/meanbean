@@ -53,8 +53,6 @@ public class BeanPropertyTester {
 	 */
 	public void testProperty(Object bean, PropertyInformation property, Object testValue, EqualityTest equalityTest)
 	        throws IllegalArgumentException, AssertionError, BeanTestException {
-		logger.debug("testProperty: entering with bean=[{}], property=[{}], testValue=[{}], equalityTest=[{}].", 
-		        bean, property, testValue, equalityTest);
 		validationHelper.ensureExists("bean", "test property", bean);
 		validationHelper.ensureExists("property", "test property", property);
 		validationHelper.ensureExists("testValue", "test property", testValue);
@@ -78,7 +76,6 @@ public class BeanPropertyTester {
 				logger.info("testProperty: {}", message);
 				AssertionUtils.fail(message);
 			} else {
-				logger.debug("testProperty: Expected [{}] == getter returned [{}].",testValue, readMethodOutput);
 			}
 		} catch (Exception e) {
 			String message =
@@ -87,7 +84,6 @@ public class BeanPropertyTester {
 			logger.error("testProperty: {} Throw BeanTestException.", message, e);
 			throw new BeanTestException(message, e);
 		}
-		logger.debug("testProperty: exiting.");
 	}
 
 	/**

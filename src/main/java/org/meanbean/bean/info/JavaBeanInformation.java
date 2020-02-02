@@ -49,33 +49,26 @@ class JavaBeanInformation implements BeanInformation {
 	 *             specified type is not a valid JavaBean.
 	 */
 	JavaBeanInformation(Class<?> beanClass) throws IllegalArgumentException, BeanInformationException {
-		logger.debug("JavaBeanInformation: entering with beanClass=[{}].", beanClass);
 		validationHelper.ensureExists("beanClass", "gather JavaBean information", beanClass);
 		this.beanClass = beanClass;
 		try {
 			beanInfo = Introspector.getBeanInfo(beanClass);
 		} catch (IntrospectionException e) {
-			logger.debug(
-					"JavaBeanInformation: Failed to acquire information about beanClass [{}]. Throw BeanInformationException.",
-					beanClass, e);
 			throw new BeanInformationException("Failed to acquire information about beanClass [" + beanClass + "].", e);
 		}
 		initialize();
-		logger.debug("JavaBeanInformation: exiting.");
 	}
 
 	/**
 	 * Initialize this object ready for public use. This involves acquiring information about each property of the type.
 	 */
 	private void initialize() {
-		logger.debug("initialize: entering.");
 		for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
 			if ("class".equals(propertyDescriptor.getName()))
 				continue;
 			PropertyInformation propertyInformation = new PropertyDescriptorPropertyInformation(propertyDescriptor);
 			properties.put(propertyInformation.getName(), propertyInformation);
 		}
-		logger.debug("initialize: exiting.");
 	}
 
 	/**

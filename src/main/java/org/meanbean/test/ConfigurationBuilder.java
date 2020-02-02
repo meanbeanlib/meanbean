@@ -42,8 +42,6 @@ public class ConfigurationBuilder {
 	 * Construct a new Configuration Builder.
 	 */
 	public ConfigurationBuilder() {
-		logger.debug("ConfigurationBuilder: entering.");
-		logger.debug("ConfigurationBuilder: exiting.");
 	}
 
 	/**
@@ -58,13 +56,10 @@ public class ConfigurationBuilder {
 	 * @return A Configuration Builder.
 	 */
 	public ConfigurationBuilder iterations(int iterations) {
-		logger.debug("iterations: entering with iterations=[{}].", iterations);
 		if (iterations < 1) {
-			logger.debug("iterations: Iterations must be at least 1. Throw IllegalArgumentException.");
 			throw new IllegalArgumentException("Iterations must be at least 1.");
 		}
 		this.iterations = iterations;
-		logger.debug("iterations: exiting returning [{}].", this);
 		return this;
 	}
 
@@ -80,10 +75,8 @@ public class ConfigurationBuilder {
 	 * @return A Configuration Builder.
 	 */
 	public ConfigurationBuilder ignoreProperty(String property) throws IllegalArgumentException {
-		logger.debug("ignoreProperty: entering with property=[{}].", property);
 		validationHelper.ensureExists("property", "add property to ignored properties collection", property);
 		ignoredProperties.add(property);
-		logger.debug("ignoreProperty: exiting returning [{}].", this);
 		return this;
 	}
 
@@ -102,11 +95,9 @@ public class ConfigurationBuilder {
 	 * @return A Configuration Builder.
 	 */
 	public ConfigurationBuilder overrideFactory(String property, Factory<?> factory) throws IllegalArgumentException {
-		logger.debug("overrideFactory: entering with property=[{}], factory=[{}].", property, factory);
 		validationHelper.ensureExists("property", "add override Factory", property);
 		validationHelper.ensureExists("factory", "add override Factory", factory);
 		overrideFactories.put(property, factory);
-		logger.debug("overrideFactory: exiting returning[{}].", this);
 		return this;
 	}
 
@@ -116,12 +107,10 @@ public class ConfigurationBuilder {
 	 * @return A Configuration object.
 	 */
 	public Configuration build() {
-		logger.debug("build: entering.");
 		Configuration configuration =
 		        new Configuration(iterations, Collections.unmodifiableSet(ignoredProperties),
 		                Collections.unmodifiableMap(overrideFactories));
 		Configuration result = configuration;
-		logger.debug("build: exiting returning [{}].", result);
 		return result;
 	}
 

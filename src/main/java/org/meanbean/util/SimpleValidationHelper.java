@@ -93,7 +93,6 @@ public class SimpleValidationHelper implements ValidationHelper {
      */
     private void log(String message, Object... args) {
         if (logger != null) {
-            logger.debug(message, args);
         }
     }
 }

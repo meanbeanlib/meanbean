@@ -245,16 +245,12 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
     public void verifyEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
 	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
             BeanTestException, AssertionError {
-        logger.debug("verifyEqualsMethod: Entering with factory=[{}], configuration=[{}] and insignificantProperties=[{}].",
-                factory, customConfiguration, insignificantProperties);
 		validationHelper.ensureExists("factory", "test equals", factory);
 		validationHelper.ensureExists("insignificantProperties", "test equals", insignificantProperties);
 		List<String> insignificantPropertyNames = Arrays.asList(insignificantProperties);
 		Object prototype = factory.create();
-		logger.debug("verifyEqualsMethod: Created object prototype=[{}] for test.", prototype);
 		validationHelper.ensureExists("factory-created object", "test equals", prototype);
 		BeanInformation beanInformation = beanInformationFactory.create(prototype.getClass());
-		logger.debug("verifyEqualsMethod: Acquired beanInformation=[{}].", beanInformation);
 		ensureInsignificantPropertiesExist(beanInformation, insignificantPropertyNames);
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
 		properties = PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
@@ -262,8 +258,6 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 			if (customConfiguration == null || !customConfiguration.isIgnoredProperty(property.getName())) {
 				verifyEqualsMethodForProperty(beanInformation, factory, customConfiguration, property,
 				        !insignificantPropertyNames.contains(property.getName()));
-			} else {
-				logger.debug("verifyEqualsMethod: Ignoring property=[{}].", property.getName());
 			}
 		}
 	}
@@ -282,18 +276,14 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 */
 	protected void ensureInsignificantPropertiesExist(BeanInformation beanInformation,
 	        List<String> insignificantProperties) throws IllegalArgumentException {
-		logger.debug("ensureInsignificantPropertiesExist: Entering with beanInformation=[{}] and insignificantProperties=[{}].", 
-		        beanInformation, insignificantProperties);
 		List<String> unrecognisedPropertyNames = new ArrayList<String>(insignificantProperties);
 		unrecognisedPropertyNames.removeAll(beanInformation.getPropertyNames());
 		if (!unrecognisedPropertyNames.isEmpty()) {
 			String message =
 			        "Insignificant properties [" + StringUtils.join(unrecognisedPropertyNames, ",")
 			                + "] do not exist on " + beanInformation.getBeanClass().getName() + ".";
-			logger.debug("ensureInsignificantPropertiesExist: {} Throw IllegalArgumentException.", message);
 			throw new IllegalArgumentException(message);
 		}
-		logger.debug("ensureInsignificantPropertiesExist: Exiting.");
 	}
 
 	/**
@@ -358,16 +348,11 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	protected void verifyEqualsMethodForProperty(BeanInformation beanInformation, EquivalentFactory<?> factory,
 	        Configuration configuration, PropertyInformation property, boolean significant)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
-		logger.debug("verifyEqualsMethodForProperty: Entering with beanInformation=[{}], factory=[{}], configuration=[{}], property=[{}] and significant=[{}].",
-		        beanInformation, factory, configuration, property, significant);
 		String propertyName = property.getName();
-		logger.debug("verifyEqualsMethodForProperty: Test for property=[{}].", propertyName);
 		Object originalObj = factory.create();
 		Object modifiedObj = factory.create();
-		logger.debug("verifyEqualsMethodForProperty: Created objects x=[{}] and y=[{}].", originalObj, modifiedObj);
 		if (!originalObj.equals(modifiedObj)) {
 			String message = "Cannot test equals if factory does not create logically equivalent objects.";
-			logger.debug("verifyEqualsMethodForProperty: {} Throw IllegalArgumentException.", message);
 			throw new IllegalArgumentException(message);
 		}
 		try {
@@ -377,14 +362,12 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 			validationHelper.ensureExists("factory-created object." + propertyName, "test equals", originalVal);
 			if (!originalVal.equals(xOriginalValue)) {
 				String message = "Cannot test equals if factory does not create objects with same property values.";
-				logger.debug("verifyEqualsMethodForProperty: {} Throw IllegalArgumentException.", message);
 				throw new IllegalArgumentException(message);
 			}
 			Factory<?> propertyFactory =
 			        factoryLookupStrategy.getFactory(beanInformation, propertyName,
 			                property.getWriteMethodParameterType(), configuration);
 			Object newVal = propertyFactory.create();
-			logger.debug("verifyEqualsMethodForProperty: Original property value=[{}]; new property value=[{}].", originalVal, newVal);
 			property.getWriteMethod().invoke(modifiedObj, newVal);
 			if (significant) {
 				significantAsserter.assertConsistent(propertyName, originalObj, modifiedObj, originalVal, newVal);

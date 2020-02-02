@@ -68,11 +68,9 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 	 */
 	@Override
     public Map<String, Object> create() throws ObjectCreationException {
-		logger.debug("create: entering.");
 		Map<String, Object> propertyValues = new HashMap<String, Object>();
 		Collection<PropertyInformation> writableProperties =
 		        PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
-		logger.debug("create: properties to create values for = [{}].", writableProperties);
 		for (PropertyInformation property : writableProperties) {
 			String propertyName = property.getName();
 			Factory<?> valueFactory;
@@ -80,10 +78,7 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 				valueFactory =
 				        factoryLookupStrategy.getFactory(beanInformation, propertyName,
 				                property.getWriteMethodParameterType(), null);
-				logger.debug("create: using factory [{}] to create value for property [{}].", 
-				        valueFactory.getClass().getName(), propertyName);
 				Object value = valueFactory.create();
-				logger.debug("create: created value [{}] for property [{}].", value, propertyName);
 				propertyValues.put(propertyName, value);
 			} catch (Exception e) {
 				String message = "Failed to create a value for property [" + propertyName + "].";
@@ -91,7 +86,6 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 				throw new ObjectCreationException(message, e);
 			}
 		}
-		logger.debug("create: exiting returning [{}].", propertyValues);
 		return propertyValues;
 	}
 }

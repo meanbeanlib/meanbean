@@ -136,13 +136,10 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	@Override
     public Factory<?> getFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
 	        Configuration configuration) throws IllegalArgumentException, NoSuchFactoryException {
-		logger.debug("getFactory: entering with beanInformatino=[{}], propertyName=[{}], propertyType=[{}], configuration=[{}].", 
-		        beanInformation, propertyName, propertyType, configuration);
 		validationHelper.ensureExists("beanInformation", "get factory", beanInformation);
 		validationHelper.ensureExists("propertyName", "get factory", propertyName);
 		validationHelper.ensureExists("propertyType", "get factory", propertyType);
 		Factory<?> factory = doGetFactory(beanInformation, propertyName, propertyType, configuration);
-		logger.debug("getFactory: exiting returning [{}].", factory);
 		return factory;
 	}
 

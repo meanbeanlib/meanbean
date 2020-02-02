@@ -204,11 +204,9 @@ public class BeanTester {
 	 *             If either parameter is deemed illegal. For example, if either parameter is null.
 	 */
 	public void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException {
-		logger.debug("addCustomConfiguration: entering with beanClass=[{}], configuration=[{}].", beanClass, configuration);
 		validationHelper.ensureExists("beanClass", "add custom configuration", beanClass);
 		validationHelper.ensureExists("configuration", "add custom configuration", configuration);
 		customConfigurations.put(beanClass, configuration);
-		logger.debug("addCustomConfiguration: exiting.");
 	}
 
 	/**
@@ -224,10 +222,8 @@ public class BeanTester {
 	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
 	 */
 	protected boolean hasCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
-		logger.debug("hasCustomConfiguration: entering with beanClass=[{}].", beanClass);
 		validationHelper.ensureExists("beanClass", "check for custom configuration", beanClass);
 		boolean result = customConfigurations.containsKey(beanClass);
-		logger.debug("hasCustomConfiguration: exiting returning [{}].", result);
 		return result;
 	}
 
@@ -244,10 +240,8 @@ public class BeanTester {
 	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
 	 */
 	protected Configuration getCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
-		logger.debug("getCustomConfiguration: entering with beanClass=[{}].", beanClass);
 		validationHelper.ensureExists("beanClass", "get custom configuration", beanClass);
 		Configuration result = customConfigurations.get(beanClass);
-		logger.debug("getCustomConfiguration: exiting returning [{}].", result);
 		return result;
 	}
 
@@ -280,14 +274,12 @@ public class BeanTester {
 	 *             If an unexpected exception occurs during testing.
 	 */
 	public void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException {
-		logger.debug("testBean: entering with beanClass=[{}].", beanClass);
 		validationHelper.ensureExists("beanClass", "test bean", beanClass);
 		Configuration customConfiguration = null;
 		if (hasCustomConfiguration(beanClass)) {
 			customConfiguration = getCustomConfiguration(beanClass);
 		}
 		testBean(beanClass, customConfiguration);
-		logger.debug("testBean: exiting.");
 	}
 
 	/**
@@ -327,7 +319,6 @@ public class BeanTester {
 	 */
 	public void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
 	        AssertionError, BeanTestException {
-		logger.debug("testBean: entering with beanClass=[{}], customConfiguration=[{}].", beanClass, customConfiguration);
 		validationHelper.ensureExists("beanClass", "test bean", beanClass);
 		// Override the standard number of iterations if need be
 		int iterations = this.iterations;
@@ -338,10 +329,8 @@ public class BeanTester {
 		BeanInformation beanInformation = beanInformationFactory.create(beanClass);
 		// Test the JavaBean 'iterations' times
 		for (int idx = 0; idx < iterations; idx++) {
-			logger.debug("testBean: Iteration [{}].", idx);
 			testBean(beanInformation, customConfiguration);
 		}
-		logger.debug("testBean: exiting.");
 	}
 
 	/**
@@ -377,7 +366,6 @@ public class BeanTester {
 	 */
 	protected void testBean(BeanInformation beanInformation, Configuration configuration)
 	        throws IllegalArgumentException, AssertionError, BeanTestException {
-		logger.debug("testBean: entering with beanInformation=[{}], configuration=[{}].", beanInformation, configuration);
 		validationHelper.ensureExists("beanInformation", "test bean", beanInformation);
 		// Get all properties of the bean
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
@@ -421,6 +409,5 @@ public class BeanTester {
 				beanPropertyTester.testProperty(bean, property, testValue, equalityTest);
 			}
 		}
-		logger.debug("testBean: exiting.");
 	}
 }

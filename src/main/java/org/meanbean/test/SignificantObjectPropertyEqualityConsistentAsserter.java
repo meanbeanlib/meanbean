@@ -66,8 +66,6 @@ class SignificantObjectPropertyEqualityConsistentAsserter implements ObjectPrope
 	@Override
     public void assertConsistent(String propertyName, Object originalObject, Object modifiedObject,
 	        Object originalPropertyValue, Object newPropertyValue) throws IllegalArgumentException, AssertionError {
-        logger.debug("assertConsistent: Entering with propertyName=[], originalObject=[], modifiedObject=[], originalPropertyValue=[], newPropertyValue=[].",
-                propertyName, originalObject, modifiedObject, originalPropertyValue, newPropertyValue);
 		validationHelper.ensureExists("propertyName", "assert consistency of equals", propertyName);
 		validationHelper.ensureExists("originalObject", "assert consistency of equals", originalObject);
 		validationHelper.ensureExists("modifiedObject", "assert consistency of equals", modifiedObject);
@@ -83,15 +81,12 @@ class SignificantObjectPropertyEqualityConsistentAsserter implements ObjectPrope
 			        "objects that differ due to supposedly significant property [" + propertyName
 			                + "] where considered equal. " + variableString + ". is property [" + propertyName
 			                + "] actually insignificant?";
-			logger.debug("assertConsistent: {}", message);
 			AssertionUtils.fail(message);
 		} else if (!originalObjectEqualsModifiedObject && newPropertyValueEqualsOriginalPropertyValue) {
 			String message =
 			        "objects that should be equal were considered unequal when testing significant " + "property ["
 			                + propertyName + "]. " + variableString + ". is equals incorrect?";
-			logger.debug("assertConsistent: {}", message);
 			AssertionUtils.fail(message);
 		}
-		logger.debug("assertConsistent: Equals logic is consistent for property []", propertyName);
 	}
 }

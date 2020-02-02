@@ -71,16 +71,12 @@ public class EquivalentPopulatedBeanFactory implements EquivalentFactory<Object>
 	 */
 	@Override
     public Object create() throws BeanCreationException {
-		logger.debug("create: entering.");
 		if (propertyValues == null) {
-			logger.debug("create: initialise property values cache.");
 			propertyValues = beanPropertyValuesFactory.create();
 		}
 		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
 		Object result = beanFactory.create();
-		logger.debug("create: created [{}].", result);
 		beanPopulator.populate(result, beanInformation, propertyValues);
-		logger.debug("create: populated [{}].", result);
 		return result;
 	}
 }
