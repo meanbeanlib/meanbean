@@ -3,7 +3,6 @@ package org.meanbean.factories;
 import org.kohsuke.MetaInfServices;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.Order;
-import org.meanbean.util.ServiceFactory;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -42,8 +41,9 @@ public class FactoryCollectionRepository implements FactoryCollection {
 	}
 
 	private synchronized Stream<FactoryCollection> factoryCollections() {
-		return ServiceFactory.getInstance(FactoryCollection.class)
-				.load()
+		return FactoryCollection.getServiceDefinition()
+				.getServiceFactory()
+				.getAll()
 				.stream()
 				.filter(factoryCollection -> factoryCollection != this);
 	}

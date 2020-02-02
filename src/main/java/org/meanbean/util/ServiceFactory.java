@@ -5,80 +5,62 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 /**
  * Loads service through META-INF/services mechanism, additionally providing caching and ordering behavior
  */
 public class ServiceFactory<T> {
 
-	private static final Map<Class<?>, ServiceFactory<?>> factoryCache = new ConcurrentHashMap<>();
+	private static final Map<String, Object> factoryCache = new ConcurrentHashMap<>();
 
-	private Class<T> serviceType;
-	private Object[] constructorArgs = {};
-	private Class<?>[] constructorTypes = {};
-
-	private List<T> services;
-	private boolean loadInProgress;
+	private final List<T> services;
 
 	@SuppressWarnings("unchecked")
-	public static <T> ServiceFactory<T> getInstance(Class<T> serviceType) {
-		ServiceFactory<?> factory = factoryCache.computeIfAbsent(serviceType, key -> newInstance(serviceType));
-		return (ServiceFactory<T>) factory;
-	}
+	static synchronized <T> ServiceFactory<T> getInstance(ServiceDefinition<T> definition) {
+		String inprogressKey = "Load of " + definition.getServiceType().getName() + " already in progress";
 
-	public static <T> ServiceFactory<T> newInstance(Class<T> serviceType) {
-		return new ServiceFactory<T>(serviceType);
-	}
-
-	private ServiceFactory(Class<T> serviceType) {
-		this.serviceType = serviceType;
-	}
-
-	public ServiceFactory<T> constructorArgs(Object... args) {
-		this.constructorArgs = args;
-		this.constructorTypes = Stream.of(args)
-				.map(Object::getClass)
-				.toArray(Class<?>[]::new);
-		return this;
-	}
-
-	public ServiceFactory<T> constructorTypes(Class<?>... types) {
-		this.constructorTypes = types;
-		return this;
-	}
-
-	public T loadFirst() {
-		List<T> services = load();
-		if (services.isEmpty()) {
-			throw new IllegalArgumentException("cannot find services for " + serviceType);
-		}
-		return services.get(0);
-	}
-
-	public synchronized List<T> load() {
-		if (services != null) {
-			return services;
+		if (factoryCache.containsKey(inprogressKey)) {
+			throw new IllegalStateException(inprogressKey);
 		}
 
-		if (loadInProgress) {
-			// pre-empt stackoverflow
-			throw new IllegalStateException("Load of " + serviceType.getName() + " is already in progress");
-		}
-
-		loadInProgress = true;
+		factoryCache.put(inprogressKey, inprogressKey);
 		try {
-			ServiceLoader<T> loader = new ServiceLoader<>(serviceType, constructorTypes);
-			services = loader.createAll(constructorArgs);
-			Collections.sort(services, Comparator.comparingInt(this::getOrder));
+			return (ServiceFactory<T>) factoryCache.computeIfAbsent(definition.getServiceType().getName(),
+					key -> ServiceFactory.create(definition));
 		} finally {
-			loadInProgress = false;
+			factoryCache.remove(inprogressKey);
 		}
+	}
 
+	static <T> ServiceFactory<T> create(ServiceDefinition<T> definition) {
+		List<T> services = ServiceFactory.doLoad(definition);
+		return new ServiceFactory<>(services, definition);
+	}
+
+	private ServiceFactory(List<T> services, ServiceDefinition<T> definition) {
+		if (services.isEmpty()) {
+			throw new IllegalArgumentException("cannot find services for " + definition.getServiceType());
+		}
+		this.services = Collections.unmodifiableList(services);
+	}
+
+	public T getFirst() {
+		return getAll().get(0);
+	}
+
+	public List<T> getAll() {
+		return services;
+	}
+	
+	private static synchronized <T> List<T> doLoad(ServiceDefinition<T> serviceDefinition) {
+		ServiceLoader<T> loader = new ServiceLoader<>(serviceDefinition.getServiceType(),
+				serviceDefinition.getConstructorTypes());
+		List<T> services = loader.createAll(serviceDefinition.getConstructorArgs());
+		Collections.sort(services, Comparator.comparingInt(ServiceFactory::getOrder));
 		return services;
 	}
 
-	private int getOrder(T obj) {
+	private static <T> int getOrder(T obj) {
 		Order order = obj.getClass().getAnnotation(Order.class);
 		if (order == null) {
 			return Order.LOWEST_PRECEDENCE;

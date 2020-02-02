@@ -12,8 +12,7 @@ public class ServiceFactoryTest {
 
 	@Test
 	public void loadSingleImplementor() throws Exception {
-		List<BeanInformationFactory> services = ServiceFactory.getInstance(BeanInformationFactory.class)
-				.load();
+		List<BeanInformationFactory> services = getAll();
 
 		assertThat(services)
 				.hasOnlyElementsOfType(JavaBeanInformationFactory.class)
@@ -22,19 +21,17 @@ public class ServiceFactoryTest {
 
 	@Test
 	public void getInstanceCaches() throws Exception {
-		List<BeanInformationFactory> services1 = ServiceFactory.getInstance(BeanInformationFactory.class)
-				.load();
-		List<BeanInformationFactory> services2 = ServiceFactory.getInstance(BeanInformationFactory.class)
-				.load();
-
-		List<BeanInformationFactory> services3 = ServiceFactory.newInstance(BeanInformationFactory.class)
-				.load();
+		List<BeanInformationFactory> services1 = getAll();
+		List<BeanInformationFactory> services2 = getAll();
 
 		assertThat(services1)
 				.isSameAs(services2);
+	}
 
-		assertThat(services1)
-				.isNotSameAs(services3);
+	private List<BeanInformationFactory> getAll() {
+		return BeanInformationFactory.getServiceDefinition()
+				.getServiceFactory()
+				.getAll();
 	}
 
 }

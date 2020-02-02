@@ -82,7 +82,8 @@ public final class ServiceLoader<T> {
 			try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), UTF_8))) {
 				reader.lines()
 						.map(String::trim)
-						.filter(line -> !line.isEmpty() && line.charAt(0) != '#')
+						.filter(line -> !line.isEmpty())
+						.filter(line -> line.charAt(0) != '#')
 						.forEach(classNames::add);
 			}
 		}

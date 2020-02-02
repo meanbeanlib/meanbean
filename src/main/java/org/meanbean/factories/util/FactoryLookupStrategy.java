@@ -7,7 +7,7 @@ import org.meanbean.lang.Factory;
 import org.meanbean.test.BeanTestException;
 import org.meanbean.test.Configuration;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.ServiceFactory;
+import org.meanbean.util.ServiceDefinition;
 
 /**
  * Defines a means of acquiring a Factory in the context of testing bean properties
@@ -16,13 +16,16 @@ import org.meanbean.util.ServiceFactory;
  */
 public interface FactoryLookupStrategy {
 
-	public static FactoryLookupStrategy getInstance() {
-		return ServiceFactory.getInstance(FactoryLookupStrategy.class)
-				.constructorArgs(FactoryCollection.getInstance(), RandomValueGenerator.getInstance())
-				.constructorTypes(FactoryCollection.class, RandomValueGenerator.class)
-				.loadFirst();
+	public static ServiceDefinition<FactoryLookupStrategy> getServiceDefinition() {
+		return new ServiceDefinition<>(FactoryLookupStrategy.class,
+				new Class<?>[] { FactoryCollection.class, RandomValueGenerator.class },
+				new Object[] { FactoryCollection.getInstance(), RandomValueGenerator.getInstance() });
 	}
-	
+
+	public static FactoryLookupStrategy getInstance() {
+		return getServiceDefinition().getServiceFactory().getFirst();
+	}
+
 	/**
 	 * <p>
 	 * Get a factory for the specified property that is of the specified type. <br/>
@@ -52,5 +55,5 @@ public interface FactoryLookupStrategy {
 	 *             Factory.
 	 */
 	Factory<?> getFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
-	        Configuration configuration) throws IllegalArgumentException, BeanTestException;
+			Configuration configuration) throws IllegalArgumentException, BeanTestException;
 }

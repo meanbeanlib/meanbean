@@ -7,9 +7,13 @@ package org.meanbean.util;
  */
 public interface RandomValueGenerator {
 
+	public static ServiceDefinition<RandomValueGenerator> getServiceDefinition() {
+		return new ServiceDefinition<>(RandomValueGenerator.class);
+	}
+
 	public static RandomValueGenerator getInstance() {
-		return ServiceFactory.getInstance(RandomValueGenerator.class)
-				.loadFirst();
+		return getServiceDefinition().getServiceFactory()
+				.getFirst();
 	}
 	
 	/**

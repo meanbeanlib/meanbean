@@ -1,7 +1,7 @@
 package org.meanbean.factories;
 
 import org.meanbean.lang.Factory;
-import org.meanbean.util.ServiceFactory;
+import org.meanbean.util.ServiceDefinition;
 
 /**
  * Defines a collection factories of different types of objects.
@@ -10,9 +10,13 @@ import org.meanbean.util.ServiceFactory;
  */
 public interface FactoryCollection {
 
+	public static ServiceDefinition<FactoryCollection> getServiceDefinition() {
+		return new ServiceDefinition<>(FactoryCollection.class);
+	}
+
 	public static FactoryCollection getInstance() {
-		return ServiceFactory.getInstance(FactoryCollection.class)
-				.loadFirst();
+		return getServiceDefinition().getServiceFactory()
+				.getFirst();
 	}
 	
 	/**

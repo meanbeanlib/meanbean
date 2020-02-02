@@ -1,6 +1,6 @@
 package org.meanbean.bean.info;
 
-import org.meanbean.util.ServiceFactory;
+import org.meanbean.util.ServiceDefinition;
 
 /**
  * Defines an object that creates BeanInformation objects.
@@ -9,9 +9,13 @@ import org.meanbean.util.ServiceFactory;
  */
 public interface BeanInformationFactory {
 
+	public static ServiceDefinition<BeanInformationFactory> getServiceDefinition() {
+		return new ServiceDefinition<>(BeanInformationFactory.class);
+	}
+
 	public static BeanInformationFactory getInstance() {
-		return ServiceFactory.getInstance(BeanInformationFactory.class)
-				.loadFirst();
+		return getServiceDefinition().getServiceFactory()
+				.getFirst();
 	}
 	
 	/**
