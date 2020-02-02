@@ -13,7 +13,6 @@ import org.meanbean.lang.Factory;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.StringUtils;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.ArrayList;
@@ -277,7 +276,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 		unrecognisedPropertyNames.removeAll(beanInformation.getPropertyNames());
 		if (!unrecognisedPropertyNames.isEmpty()) {
 			String message =
-			        "Insignificant properties [" + StringUtils.join(unrecognisedPropertyNames, ",")
+			        "Insignificant properties [" + String.join(",", unrecognisedPropertyNames)
 			                + "] do not exist on " + beanInformation.getBeanClass().getName() + ".";
 			throw new IllegalArgumentException(message);
 		}
