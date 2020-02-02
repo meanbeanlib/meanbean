@@ -5,7 +5,6 @@ import org.meanbean.factories.net.NetFactoryPlugin;
 import org.meanbean.factories.time.TimePlugin;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.RandomValueGeneratorProvider;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Map;
@@ -17,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Graham Williamson
  */
 @MetaInfServices(FactoryCollection.class)
-public final class FactoryRepository implements FactoryCollection, RandomValueGeneratorProvider {
+public final class FactoryRepository implements FactoryCollection {
 
 	/** A Map of Factory objects keyed by a unique ID. */
 	private final Map<String, Factory<?>> factories = new ConcurrentHashMap<>();
@@ -34,7 +33,6 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * 
 	 * @return A RandomNumberGenerator.
 	 */
-	@Override
 	public RandomValueGenerator getRandomValueGenerator() {
 		return randomValueGenerator;
 	}
@@ -43,12 +41,12 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 * Initialize the repository prior to public use.
 	 */
 	private void initialize() {
-		new PrimitiveFactoryPlugin().initialize(this, this);
-		new ObjectFactoryPlugin().initialize(this, this);
-		new CollectionFactoryPlugin().initialize(this, this);
-		new ConcurrentFactoryPlugin().initialize(this, this);
-		new NetFactoryPlugin().initialize(this, this);
-		new TimePlugin().initialize(this, this);
+		new PrimitiveFactoryPlugin().initialize(this, randomValueGenerator);
+		new ObjectFactoryPlugin().initialize(this, randomValueGenerator);
+		new CollectionFactoryPlugin().initialize(this, randomValueGenerator);
+		new ConcurrentFactoryPlugin().initialize(this, randomValueGenerator);
+		new NetFactoryPlugin().initialize(this, randomValueGenerator);
+		new TimePlugin().initialize(this, randomValueGenerator);
 	}
 
 	/**

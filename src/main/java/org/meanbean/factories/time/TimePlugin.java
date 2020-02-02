@@ -5,7 +5,6 @@ import org.meanbean.factories.FactoryCollectionPlugin;
 import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.RandomValueGeneratorProvider;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -26,7 +25,7 @@ import java.util.function.Function;
 
 public class TimePlugin implements FactoryCollectionPlugin {
 
-	private RandomValueGeneratorProvider randomValueGeneratorProvider;
+	private RandomValueGenerator randomValueGenerator;
 	private FactoryCollection factoryCollection;
 	private Clock clock;
 
@@ -39,13 +38,12 @@ public class TimePlugin implements FactoryCollectionPlugin {
 	}
 
 	@Override
-	public void initialize(FactoryCollection factoryCollection,
-			RandomValueGeneratorProvider randomValueGeneratorProvider) {
+	public void initialize(FactoryCollection factoryCollection, RandomValueGenerator randomValueGenerator) {
 
-		this.randomValueGeneratorProvider = randomValueGeneratorProvider;
+		this.randomValueGenerator = randomValueGenerator;
 		this.factoryCollection = factoryCollection;
 		if (this.clock == null) {
-			this.clock = new RandomClock(randomValueGeneratorProvider.getRandomValueGenerator());
+			this.clock = new RandomClock(randomValueGenerator);
 		}
 
 		addFactory(Clock.class, () -> clock);
@@ -67,7 +65,6 @@ public class TimePlugin implements FactoryCollectionPlugin {
 	}
 
 	private Factory<ZoneOffset> newZoneOffsetFactory() {
-		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
 		return () -> {
 			int sign = randomValueGenerator.nextBoolean() ? 1 : -1;
 			int hours = randomValueGenerator.nextInt(19);

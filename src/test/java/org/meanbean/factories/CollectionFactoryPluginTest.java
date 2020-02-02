@@ -1,8 +1,13 @@
 package org.meanbean.factories;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.meanbean.factories.basic.LongFactory;
+import org.meanbean.factories.basic.StringFactory;
+import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.SimpleRandomValueGenerator;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,16 +26,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.meanbean.factories.basic.LongFactory;
-import org.meanbean.factories.basic.StringFactory;
-import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.RandomValueGeneratorProvider;
-import org.meanbean.util.SimpleRandomValueGenerator;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CollectionFactoryPluginTest {
@@ -39,16 +36,12 @@ public class CollectionFactoryPluginTest {
 	        HashMap.class, IdentityHashMap.class, LinkedHashMap.class, TreeMap.class, WeakHashMap.class, Set.class,
 	        HashSet.class, LinkedHashSet.class, TreeSet.class, Collection.class, Queue.class, Deque.class };
 
-	@Mock
-	private RandomValueGeneratorProvider randomValueGeneratorProvider;
-
 	private final RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
 
 	private FactoryCollection factoryCollection;
 
 	@Before
 	public void before() {
-		when(randomValueGeneratorProvider.getRandomValueGenerator()).thenReturn(randomValueGenerator);
 		factoryCollection = new SimpleFactoryCollection();
 		factoryCollection.addFactory(String.class, new StringFactory(randomValueGenerator));
 		factoryCollection.addFactory(Long.class, new LongFactory(randomValueGenerator));
@@ -61,7 +54,7 @@ public class CollectionFactoryPluginTest {
 			assertThat("Factory for class [" + clazz + "] should not be registered prior to plugin initialization.",
 			        factoryCollection.hasFactory(clazz), is(false));
 		}
-		plugin.initialize(factoryCollection, randomValueGeneratorProvider);
+		plugin.initialize(factoryCollection, randomValueGenerator);
 		for (Class<?> clazz : FACTORY_CLASSES) {
 			assertThat("Plugin did not register Factory for class [" + clazz + "].",
 			        factoryCollection.hasFactory(clazz), is(true));

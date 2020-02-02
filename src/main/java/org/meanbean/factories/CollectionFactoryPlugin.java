@@ -13,7 +13,6 @@ import org.meanbean.factories.collections.TreeMapFactory;
 import org.meanbean.factories.collections.TreeSetFactory;
 import org.meanbean.factories.collections.WeakHashMapFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.RandomValueGeneratorProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,9 +48,7 @@ public class CollectionFactoryPlugin implements FactoryCollectionPlugin {
 	 *            Factory objects.
 	 */
 	@Override
-    public void initialize(FactoryCollection factoryCollection,
-	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
-		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
+    public void initialize(FactoryCollection factoryCollection, RandomValueGenerator randomValueGenerator) {
 		StringFactory stringFactory = (StringFactory) factoryCollection.getFactory(String.class);
 		LongFactory longFactory = (LongFactory) factoryCollection.getFactory(Long.class);
 		// Lists

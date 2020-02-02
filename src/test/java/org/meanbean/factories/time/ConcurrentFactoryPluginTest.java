@@ -7,9 +7,7 @@ import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.SimpleFactoryCollection;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.RandomValueGeneratorProvider;
 import org.meanbean.util.SimpleRandomValueGenerator;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.Clock;
@@ -31,7 +29,6 @@ import java.time.ZonedDateTime;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConcurrentFactoryPluginTest {
@@ -41,9 +38,6 @@ public class ConcurrentFactoryPluginTest {
             Year.class, YearMonth.class, ZonedDateTime.class, ZoneId.class, ZoneOffset.class,
     };
 
-    @Mock
-    private RandomValueGeneratorProvider randomValueGeneratorProvider;
-
     private RandomValueGenerator randomValueGenerator = new SimpleRandomValueGenerator();
 
     private FactoryCollection factoryCollection;
@@ -51,8 +45,6 @@ public class ConcurrentFactoryPluginTest {
 
     @Before
     public void before() {
-        when(randomValueGeneratorProvider.getRandomValueGenerator())
-                .thenReturn(randomValueGenerator);
         factoryCollection = new SimpleFactoryCollection();
     }
 
@@ -62,7 +54,7 @@ public class ConcurrentFactoryPluginTest {
             assertThat("Factory for class [" + clazz + "] should not be registered prior to plugin initialization.",
                     factoryCollection.hasFactory(clazz), is(false));
         }
-        plugin.initialize(factoryCollection, randomValueGeneratorProvider);
+        plugin.initialize(factoryCollection, randomValueGenerator);
         for (Class<?> clazz : FACTORY_CLASSES) {
             assertThat("Plugin did not register Factory for class [" + clazz + "].",
                     factoryCollection.hasFactory(clazz), is(true));
@@ -71,7 +63,7 @@ public class ConcurrentFactoryPluginTest {
 
     @Test
     public void testLocalDateTime() {
-        plugin.initialize(factoryCollection, randomValueGeneratorProvider);
+        plugin.initialize(factoryCollection, randomValueGenerator);
         
         Factory<?> factory = factoryCollection.getFactory(LocalDateTime.class);
         LocalDateTime val1 = (LocalDateTime) factory.create();
@@ -81,7 +73,7 @@ public class ConcurrentFactoryPluginTest {
 
     @Test
     public void testDuration() {
-        plugin.initialize(factoryCollection, randomValueGeneratorProvider);
+        plugin.initialize(factoryCollection, randomValueGenerator);
         
         Factory<?> factory = factoryCollection.getFactory(Duration.class);
         Duration val1 = (Duration) factory.create();
@@ -91,7 +83,7 @@ public class ConcurrentFactoryPluginTest {
 
     @Test
     public void testPeriod() {
-        plugin.initialize(factoryCollection, randomValueGeneratorProvider);
+        plugin.initialize(factoryCollection, randomValueGenerator);
 
         Factory<?> factory = factoryCollection.getFactory(Period.class);
         Period val1 = (Period) factory.create();
@@ -101,7 +93,7 @@ public class ConcurrentFactoryPluginTest {
 
     @Test
     public void testZoneOffset() {
-        plugin.initialize(factoryCollection, randomValueGeneratorProvider);
+        plugin.initialize(factoryCollection, randomValueGenerator);
 
         Factory<?> factory = factoryCollection.getFactory(ZoneOffset.class);
         ZoneOffset val1 = (ZoneOffset) factory.create();

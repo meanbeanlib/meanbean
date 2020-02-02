@@ -2,7 +2,6 @@ package org.meanbean.factories.basic;
 
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.RandomValueGeneratorProvider;
 import org.meanbean.util.ValidationHelper;
 
 /**
@@ -12,7 +11,7 @@ import org.meanbean.util.ValidationHelper;
  * @param <T>
  *            The data type of the object this Factory creates.
  */
-public abstract class RandomFactoryBase<T> implements Factory<T>, RandomValueGeneratorProvider {
+public abstract class RandomFactoryBase<T> implements Factory<T> {
 
 	/** Random number generator used by the factory to generate random values. */
 	private final RandomValueGenerator randomValueGenerator;
@@ -36,7 +35,6 @@ public abstract class RandomFactoryBase<T> implements Factory<T>, RandomValueGen
 	 * 
 	 * @return A random value generator.
 	 */
-	@Override
     public final RandomValueGenerator getRandomValueGenerator() {
 		return randomValueGenerator;
 	}

@@ -9,7 +9,6 @@ import org.meanbean.factories.basic.IntegerFactory;
 import org.meanbean.factories.basic.LongFactory;
 import org.meanbean.factories.basic.ShortFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.RandomValueGeneratorProvider;
 
 /**
  * Concrete FactoryCollectionPlugin that registers Factories that create Java primitives.
@@ -18,19 +17,8 @@ import org.meanbean.util.RandomValueGeneratorProvider;
  */
 public class PrimitiveFactoryPlugin implements FactoryCollectionPlugin {
 
-	/**
-	 * Initialize the plugin, adding Factories to the FactoryCollection.
-	 * 
-	 * @param factoryCollection
-	 *            A FactoryCollection that Factory objects can be added to.
-	 * @param randomValueGeneratorProvider
-	 *            A RandomValueGeneratorProvider that provides access to a RandomValueGenerator that can be used by
-	 *            Factory objects.
-	 */
 	@Override
-    public void initialize(FactoryCollection factoryCollection,
-	        RandomValueGeneratorProvider randomValueGeneratorProvider) {
-		RandomValueGenerator randomValueGenerator = randomValueGeneratorProvider.getRandomValueGenerator();
+	public void initialize(FactoryCollection factoryCollection, RandomValueGenerator randomValueGenerator) {
 		factoryCollection.addFactory(boolean.class, new BooleanFactory(randomValueGenerator));
 		factoryCollection.addFactory(byte.class, new ByteFactory(randomValueGenerator));
 		factoryCollection.addFactory(short.class, new ShortFactory(randomValueGenerator));
