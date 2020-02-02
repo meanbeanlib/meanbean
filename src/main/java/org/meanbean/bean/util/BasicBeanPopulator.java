@@ -3,10 +3,9 @@ package org.meanbean.bean.util;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
-import org.meanbean.util.SimpleValidationHelper;
-import org.meanbean.util.ValidationHelper;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
+import org.meanbean.util.ValidationHelper;
 
 import java.util.Collection;
 import java.util.Map;
@@ -20,9 +19,6 @@ public class BasicBeanPopulator implements BeanPopulator {
 
 	/** Logging mechanism. */
 	private static final $Logger logger = $LoggerFactory.getLogger(BasicBeanPopulator.class);
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * Populate the specified bean with the specified values. Values are keyed by property name (e.g. "firstName") and
@@ -45,9 +41,9 @@ public class BasicBeanPopulator implements BeanPopulator {
 	@Override
     public void populate(Object bean, BeanInformation beanInformation, Map<String, Object> values)
 	        throws IllegalArgumentException, BeanPopulationException {
-		validationHelper.ensureExists("bean", "populate bean", bean);
-		validationHelper.ensureExists("beanInformation", "populate bean", beanInformation);
-		validationHelper.ensureExists("values", "populate bean", values);
+		ValidationHelper.ensureExists("bean", "populate bean", bean);
+		ValidationHelper.ensureExists("beanInformation", "populate bean", beanInformation);
+		ValidationHelper.ensureExists("values", "populate bean", values);
 		Collection<PropertyInformation> writableProperties =
 		        PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
 		for (PropertyInformation property : writableProperties) {

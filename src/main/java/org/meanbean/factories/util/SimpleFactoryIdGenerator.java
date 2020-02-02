@@ -1,6 +1,5 @@
 package org.meanbean.factories.util;
 
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
@@ -9,9 +8,6 @@ import org.meanbean.util.ValidationHelper;
  * @author Graham Williamson
  */
 public class SimpleFactoryIdGenerator implements FactoryIdGenerator {
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper();
 
 	/**
 	 * Create an ID for the specified class.
@@ -26,7 +22,7 @@ public class SimpleFactoryIdGenerator implements FactoryIdGenerator {
 	 */
 	@Override
     public String createIdFromClass(Class<?> clazz) throws IllegalArgumentException {
-		validationHelper.ensureExists("clazz", "create a key", clazz);
+		ValidationHelper.ensureExists("clazz", "create a key", clazz);
 		return clazz.getName();
 	}
 }

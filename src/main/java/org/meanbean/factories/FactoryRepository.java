@@ -6,11 +6,8 @@ import org.meanbean.factories.time.TimePlugin;
 import org.meanbean.factories.util.FactoryIdGenerator;
 import org.meanbean.factories.util.SimpleFactoryIdGenerator;
 import org.meanbean.lang.Factory;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.RandomValueGeneratorProvider;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Map;
@@ -24,9 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @MetaInfServices(FactoryCollection.class)
 public final class FactoryRepository implements FactoryCollection, RandomValueGeneratorProvider {
 
-    /** Logging mechanism. */
-    private static final $Logger logger = $LoggerFactory.getLogger(FactoryRepository.class);
-
 	/** A Map of Factory objects keyed by a unique ID. */
 	private final Map<String, Factory<?>> factories = new ConcurrentHashMap<>();
 
@@ -35,9 +29,6 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 
 	/** Helper that generates keys that are used to key Factories in the factories Map. */
 	private final FactoryIdGenerator keyGenerator = new SimpleFactoryIdGenerator();
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	public FactoryRepository() throws IllegalArgumentException {
 		initialize();
@@ -86,8 +77,8 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 */
 	@Override
 	public void addFactory(Class<?> clazz, Factory<?> factory) throws IllegalArgumentException {
-		validationHelper.ensureExists("clazz", "add Factory", clazz);
-		validationHelper.ensureExists("factory", "add Factory", factory);
+		ValidationHelper.ensureExists("clazz", "add Factory", clazz);
+		ValidationHelper.ensureExists("factory", "add Factory", factory);
 		String key = keyGenerator.createIdFromClass(clazz);// Should have prevented Exceptions in Validation above
 		factories.put(key, factory);
 	}
@@ -115,7 +106,7 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 */
 	@Override
 	public Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException {
-		validationHelper.ensureExists("clazz", "get Factory", clazz);
+		ValidationHelper.ensureExists("clazz", "get Factory", clazz);
 		String key = keyGenerator.createIdFromClass(clazz);// Should have prevented Exceptions in Validation above
 		Factory<?> factory = factories.get(key);
 		if (factory == null) {
@@ -140,7 +131,7 @@ public final class FactoryRepository implements FactoryCollection, RandomValueGe
 	 */
 	@Override
 	public boolean hasFactory(Class<?> clazz) throws IllegalArgumentException {
-		validationHelper.ensureExists("clazz", "check collection for Factory", clazz);
+		ValidationHelper.ensureExists("clazz", "check collection for Factory", clazz);
 		String key = keyGenerator.createIdFromClass(clazz);// Should have prevented Exceptions in Validation above
 		boolean result = factories.containsKey(key);
 		return result;

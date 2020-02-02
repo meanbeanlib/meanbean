@@ -6,10 +6,9 @@ import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
-import org.meanbean.util.SimpleValidationHelper;
-import org.meanbean.util.ValidationHelper;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
+import org.meanbean.util.ValidationHelper;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,9 +25,6 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 
 	/** Logging mechanism. */
 	private static final $Logger logger = $LoggerFactory.getLogger(BeanPropertyValuesFactory.class);
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** Information of the object to create. */
 	private final BeanInformation beanInformation;
@@ -50,8 +46,8 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 	 */
 	public BeanPropertyValuesFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy)
 	        throws IllegalArgumentException {
-		validationHelper.ensureExists("beanInformation", "populate bean", beanInformation);
-		validationHelper.ensureExists("factoryLookupStrategy", "populate bean", factoryLookupStrategy);
+		ValidationHelper.ensureExists("beanInformation", "populate bean", beanInformation);
+		ValidationHelper.ensureExists("factoryLookupStrategy", "populate bean", factoryLookupStrategy);
 		this.beanInformation = beanInformation;
 		this.factoryLookupStrategy = factoryLookupStrategy;
 	}

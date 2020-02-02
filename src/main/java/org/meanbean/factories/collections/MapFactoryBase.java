@@ -3,6 +3,7 @@ package org.meanbean.factories.collections;
 import org.meanbean.factories.basic.RandomFactoryBase;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ValidationHelper;
 
 import java.util.Map;
 
@@ -34,8 +35,8 @@ public abstract class MapFactoryBase<K, V> extends RandomFactoryBase<Map<K, V>> 
 	 */
 	public MapFactoryBase(RandomValueGenerator randomValueGenerator, Factory<K> keyFactory, Factory<V> valueFactory) {
 		super(randomValueGenerator);
-		validationHelper.ensureExists("keyFactory", "construct MapFactory", keyFactory);
-		validationHelper.ensureExists("valueFactory", "construct MapFactory", valueFactory);
+		ValidationHelper.ensureExists("keyFactory", "construct MapFactory", keyFactory);
+		ValidationHelper.ensureExists("valueFactory", "construct MapFactory", valueFactory);
 		this.keyFactory = keyFactory;
 		this.valueFactory = valueFactory;
 	}

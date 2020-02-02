@@ -1,7 +1,6 @@
 package org.meanbean.test;
 
 import org.meanbean.lang.Factory;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Collections;
@@ -50,9 +49,6 @@ public class Configuration {
 	 * name.
 	 */
 	private final Map<String, Factory<?>> overrideFactories;
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper();
 
 	/**
 	 * Construct a new Configuration.
@@ -105,7 +101,7 @@ public class Configuration {
 	 *             If the property parameter is deemed illegal. For example, if it is null.
 	 */
 	public boolean isIgnoredProperty(String property) throws IllegalArgumentException {
-		validationHelper.ensureExists("property", "check whether a property is ignored", property);
+		ValidationHelper.ensureExists("property", "check whether a property is ignored", property);
 		return ignoredProperties.contains(property);
 	}
 
@@ -128,7 +124,7 @@ public class Configuration {
 	 *             If the property parameter is deemed illegal. For example, if it is null.
 	 */
 	public boolean hasOverrideFactory(String property) throws IllegalArgumentException {
-		validationHelper.ensureExists("property", "check whether a property has an override Factory", property);
+		ValidationHelper.ensureExists("property", "check whether a property has an override Factory", property);
 		return overrideFactories.containsKey(property);
 	}
 
@@ -151,7 +147,7 @@ public class Configuration {
 	 *             If the property parameter is deemed illegal. For example, if it is null.
 	 */
 	public Factory<? extends Object> getOverrideFactory(String property) throws IllegalArgumentException {
-		validationHelper.ensureExists("property", "get override Factory", property);
+		ValidationHelper.ensureExists("property", "get override Factory", property);
 		return overrideFactories.get(property);
 	}
 

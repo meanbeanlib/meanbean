@@ -1,10 +1,7 @@
 package org.meanbean.factories;
 
 import org.meanbean.lang.Factory;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,12 +14,6 @@ import java.lang.reflect.InvocationTargetException;
  * @author Graham Williamson
  */
 public class BasicNewObjectInstanceFactory implements Factory<Object> {
-
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(BasicNewObjectInstanceFactory.class);
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** The type of Object this Factory should create new instances of. */
 	private final Class<?> clazz;
@@ -37,7 +28,7 @@ public class BasicNewObjectInstanceFactory implements Factory<Object> {
 	 *             If the specified clazz is deemed illegal. For example, if it is null.
 	 */
 	public BasicNewObjectInstanceFactory(Class<?> clazz) throws IllegalArgumentException {
-		validationHelper.ensureExists("clazz", "construct Factory", clazz);
+		ValidationHelper.ensureExists("clazz", "construct Factory", clazz);
 		this.clazz = clazz;
 	}
 

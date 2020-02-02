@@ -2,10 +2,7 @@ package org.meanbean.test;
 
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.AssertionUtils;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 
 /**
  * <p>
@@ -43,12 +40,6 @@ import org.meanbean.logging.$LoggerFactory;
  * @author Graham Williamson
  */
 class EqualsMethodContractVerifier {
-
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(EqualsMethodContractVerifier.class);
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** Null value */
 	private static final Object NULL = null;
@@ -94,7 +85,7 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals", factory);
+		ValidationHelper.ensureExists("factory", "test equals", factory);
 		verifyEqualsReflexive(factory);
 		verifyEqualsSymmetric(factory);
 		verifyEqualsTransitive(factory);
@@ -126,9 +117,9 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsReflexive(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals reflexive item", factory);
+		ValidationHelper.ensureExists("factory", "test equals reflexive item", factory);
 		Object x = factory.create();
-		validationHelper.ensureExists("factory-created object", "test equals reflexive item", x);
+		ValidationHelper.ensureExists("factory-created object", "test equals reflexive item", x);
 		if (!x.equals(x)) {
 			AssertionUtils.fail("equals is not reflexive.");
 		}
@@ -157,11 +148,11 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsSymmetric(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals symmetric item", factory);
+		ValidationHelper.ensureExists("factory", "test equals symmetric item", factory);
 		Object x = factory.create();
 		Object y = factory.create();
-		validationHelper.ensureExists("factory-created object", "test equals symmetric item", x);
-		validationHelper.ensureExists("factory-created object", "test equals symmetric item", y);
+		ValidationHelper.ensureExists("factory-created object", "test equals symmetric item", x);
+		ValidationHelper.ensureExists("factory-created object", "test equals symmetric item", y);
 		if (!x.equals(y)) {
 			String message =
 			        "Cannot test equals symmetric item if factory does not create logically equivalent "
@@ -197,13 +188,13 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsTransitive(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals transitive item", factory);
+		ValidationHelper.ensureExists("factory", "test equals transitive item", factory);
 		Object x = factory.create();
 		Object y = factory.create();
 		Object z = factory.create();
-		validationHelper.ensureExists("factory-created object", "test equals transitive item", x);
-		validationHelper.ensureExists("factory-created object", "test equals transitive item", y);
-		validationHelper.ensureExists("factory-created object", "test equals transitive item", z);
+		ValidationHelper.ensureExists("factory-created object", "test equals transitive item", x);
+		ValidationHelper.ensureExists("factory-created object", "test equals transitive item", y);
+		ValidationHelper.ensureExists("factory-created object", "test equals transitive item", z);
 		if (!(x.equals(y) && y.equals(z))) {
 			String message =
 			        "Cannot test equals transitive item if factory does not create logically equivalent objects.";
@@ -237,11 +228,11 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsConsistent(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals consistent item", factory);
+		ValidationHelper.ensureExists("factory", "test equals consistent item", factory);
 		Object x = factory.create();
 		Object y = factory.create();
-		validationHelper.ensureExists("factory-created object", "test equals consistent item", x);
-		validationHelper.ensureExists("factory-created object", "test equals consistent item", y);
+		ValidationHelper.ensureExists("factory-created object", "test equals consistent item", x);
+		ValidationHelper.ensureExists("factory-created object", "test equals consistent item", y);
 		for (int idx = 0; idx < 100; idx++) {
 			if (!x.equals(y)) {
 				AssertionUtils.fail("equals is not consistent on invocation [" + idx + "].");
@@ -273,9 +264,9 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsNull(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals null item", factory);
+		ValidationHelper.ensureExists("factory", "test equals null item", factory);
 		Object x = factory.create();
-		validationHelper.ensureExists("factory-created object", "test equals null item", x);
+		ValidationHelper.ensureExists("factory-created object", "test equals null item", x);
 		if (x.equals(NULL)) {
 			AssertionUtils.fail("equals is incorrect with respect to null comparison.");
 		}
@@ -305,10 +296,10 @@ class EqualsMethodContractVerifier {
 	 *             If the test fails.
 	 */
 	public void verifyEqualsDifferentType(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals for different types", factory);
+		ValidationHelper.ensureExists("factory", "test equals for different types", factory);
 		Object x = factory.create();
 		Object differentObject = new Object();
-		validationHelper.ensureExists("factory-created object", "test equals for different types", x);
+		ValidationHelper.ensureExists("factory-created object", "test equals for different types", x);
 		if (x.equals(differentObject)) {
 			AssertionUtils.fail("equals should not find objects of different type to be equal.");
 		}

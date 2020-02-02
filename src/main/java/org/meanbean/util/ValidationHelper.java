@@ -1,21 +1,12 @@
 package org.meanbean.util;
 
-import org.meanbean.logging.$Logger;
-
 /**
  * Defines an object that affords helpful input validation functionality.
  * 
  * @author Graham Williamson
  */
-public interface ValidationHelper {
+public final class ValidationHelper {
 
-	public static ValidationHelper getInstance($Logger logger) {
-		return ServiceFactory.getInstance(ValidationHelper.class)
-				.constructorArgs(logger)
-				.constructorTypes($Logger.class)
-				.loadFirst();
-	}
-	
 	/**
 	 * <p>
 	 * Ensure that the specified value exists, conditionally throwing an IllegalArgumentException if it does not. <br/>
@@ -33,7 +24,11 @@ public interface ValidationHelper {
 	 * @throws IllegalArgumentException
 	 *             If the specified value does not exist.
 	 */
-	void ensureExists(String name, Object value) throws IllegalArgumentException;
+	public static void ensureExists(String name, Object value) throws IllegalArgumentException {
+        if (value == null) {
+            throw new IllegalArgumentException("Object [" + name + "] must be provided.");
+        }
+    }
 
 	/**
 	 * <p>
@@ -55,5 +50,9 @@ public interface ValidationHelper {
 	 * @throws IllegalArgumentException
 	 *             If the specified value does not exist.
 	 */
-	void ensureExists(String name, String operation, Object value) throws IllegalArgumentException;
+    public static void ensureExists(String name, String operation, Object value) throws IllegalArgumentException {
+        if (value == null) {
+            throw new IllegalArgumentException("Cannot " + operation + " with null " + name + ".");
+        }
+    }
 }

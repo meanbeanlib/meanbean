@@ -5,8 +5,6 @@ import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ValidationHelper;
@@ -71,12 +69,6 @@ import org.meanbean.util.ValidationHelper;
  */
 public class HashCodeMethodTester {
 
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(HashCodeMethodTester.class);
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = ValidationHelper.getInstance(logger);
-
 	/** Random number generator used by factories to randomly generate values. */
 	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 
@@ -118,7 +110,7 @@ public class HashCodeMethodTester {
 	 *             If the test fails.
 	 */
 	public void testHashCodeMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test hash code method", factory);
+		ValidationHelper.ensureExists("factory", "test hash code method", factory);
 		testHashCodesEqual(factory);
 		testHashCodeConsistent(factory);
 	}
@@ -148,7 +140,7 @@ public class HashCodeMethodTester {
 	 *             If the test fails.
 	 */
 	public void testHashCodeMethod(Class<?> clazz) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("clazz", "test hash code method", clazz);
+		ValidationHelper.ensureExists("clazz", "test hash code method", clazz);
 		EquivalentPopulatedBeanFactory factory =
 		        new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz), getFactoryLookupStrategy());
 		testHashCodeMethod(factory);
@@ -177,11 +169,11 @@ public class HashCodeMethodTester {
 	 *             If the test fails.
 	 */
 	protected void testHashCodesEqual(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test hash codes equal for equal objects", factory);
+		ValidationHelper.ensureExists("factory", "test hash codes equal for equal objects", factory);
 		Object x = factory.create();
 		Object y = factory.create();
-		validationHelper.ensureExists("factory-created object", "test hash codes equal for equal objects", x);
-		validationHelper.ensureExists("factory-created object", "test hash codes equal for equal objects", y);
+		ValidationHelper.ensureExists("factory-created object", "test hash codes equal for equal objects", x);
+		ValidationHelper.ensureExists("factory-created object", "test hash codes equal for equal objects", y);
 		if (!x.equals(y)) {
 			String message =
 			        "Cannot test hash codes equal for equal objects if objects that should be equal are not considered logically equivalent.";
@@ -215,9 +207,9 @@ public class HashCodeMethodTester {
 	 *             If the test fails.
 	 */
 	protected void testHashCodeConsistent(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("factory", "test hash code consistent item", factory);
+		ValidationHelper.ensureExists("factory", "test hash code consistent item", factory);
 		Object x = factory.create();
-		validationHelper.ensureExists("factory-created object", "test hash code consistent item", x);
+		ValidationHelper.ensureExists("factory-created object", "test hash code consistent item", x);
 		int hashCode = x.hashCode();
 		for (int idx = 0; idx < 100; idx++) {
 			if (x.hashCode() != hashCode) {

@@ -1,8 +1,5 @@
 package org.meanbean.bean.info;
 
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 import java.beans.BeanInfo;
@@ -20,9 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 class JavaBeanInformation implements BeanInformation {
 
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(JavaBeanInformation.class);
-
 	/** The type of object this object contains information about. */
 	private final Class<?> beanClass;
 
@@ -31,9 +25,6 @@ class JavaBeanInformation implements BeanInformation {
 
 	/** Information about each property of the type, keyed by property name. */
 	private final Map<String, PropertyInformation> properties = new ConcurrentHashMap<>();
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * Construct a new JavaBean Information object for the specified type.
@@ -49,7 +40,7 @@ class JavaBeanInformation implements BeanInformation {
 	 *             specified type is not a valid JavaBean.
 	 */
 	JavaBeanInformation(Class<?> beanClass) throws IllegalArgumentException, BeanInformationException {
-		validationHelper.ensureExists("beanClass", "gather JavaBean information", beanClass);
+		ValidationHelper.ensureExists("beanClass", "gather JavaBean information", beanClass);
 		this.beanClass = beanClass;
 		try {
 			beanInfo = Introspector.getBeanInfo(beanClass);

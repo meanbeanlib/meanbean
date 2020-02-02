@@ -3,6 +3,7 @@ package org.meanbean.factories.collections;
 import org.meanbean.factories.basic.RandomFactoryBase;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ValidationHelper;
 
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public abstract class SetFactoryBase<T> extends RandomFactoryBase<Set<T>> {
 	 */
 	public SetFactoryBase(RandomValueGenerator randomValueGenerator, Factory<T> itemFactory) {
 		super(randomValueGenerator);
-		validationHelper.ensureExists("itemFactory", "construct SetFactory", itemFactory);
+		ValidationHelper.ensureExists("itemFactory", "construct SetFactory", itemFactory);
 		this.itemFactory = itemFactory;
 	}
 

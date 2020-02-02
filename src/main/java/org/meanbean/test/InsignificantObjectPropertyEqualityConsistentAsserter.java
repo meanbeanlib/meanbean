@@ -1,10 +1,7 @@
 package org.meanbean.test;
 
 import org.meanbean.util.AssertionUtils;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 
 /**
  * <p>
@@ -26,12 +23,6 @@ import org.meanbean.logging.$LoggerFactory;
  * @author Graham Williamson
  */
 class InsignificantObjectPropertyEqualityConsistentAsserter implements ObjectPropertyEqualityConsistentAsserter {
-
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(InsignificantObjectPropertyEqualityConsistentAsserter.class);
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * <p>
@@ -66,11 +57,11 @@ class InsignificantObjectPropertyEqualityConsistentAsserter implements ObjectPro
 	@Override
     public void assertConsistent(String propertyName, Object originalObject, Object modifiedObject,
 	        Object originalPropertyValue, Object newPropertyValue) throws IllegalArgumentException, AssertionError {
-		validationHelper.ensureExists("propertyName", "assert consistency of equals", propertyName);
-		validationHelper.ensureExists("originalObject", "assert consistency of equals", originalObject);
-		validationHelper.ensureExists("modifiedObject", "assert consistency of equals", modifiedObject);
-		validationHelper.ensureExists("originalPropertyValue", "assert consistency of equals", originalPropertyValue);
-		validationHelper.ensureExists("newPropertyValue", "assert consistency of equals", newPropertyValue);
+		ValidationHelper.ensureExists("propertyName", "assert consistency of equals", propertyName);
+		ValidationHelper.ensureExists("originalObject", "assert consistency of equals", originalObject);
+		ValidationHelper.ensureExists("modifiedObject", "assert consistency of equals", modifiedObject);
+		ValidationHelper.ensureExists("originalPropertyValue", "assert consistency of equals", originalPropertyValue);
+		ValidationHelper.ensureExists("newPropertyValue", "assert consistency of equals", newPropertyValue);
 		boolean newPropertyValueEqualsOriginalPropertyValue = newPropertyValue.equals(originalPropertyValue);
 		boolean originalObjectEqualsModifiedObject = originalObject.equals(modifiedObject);
 		String variableString =

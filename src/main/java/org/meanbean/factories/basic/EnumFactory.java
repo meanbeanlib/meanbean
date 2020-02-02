@@ -1,7 +1,6 @@
 package org.meanbean.factories.basic;
 
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
@@ -10,9 +9,6 @@ import org.meanbean.util.ValidationHelper;
  * @author Graham Williamson
  */
 public class EnumFactory extends RandomFactoryBase<Enum<?>> {
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper();
 
 	/** Enum constants of the specified Enum type. */
 	private final Enum<?>[] enumConstants;
@@ -30,7 +26,7 @@ public class EnumFactory extends RandomFactoryBase<Enum<?>> {
 	 */
 	public EnumFactory(Class<?> enumClass, RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
 		super(randomValueGenerator);
-		validationHelper.ensureExists("enumClass", "construct EnumFactory", enumClass);
+		ValidationHelper.ensureExists("enumClass", "construct EnumFactory", enumClass);
 		if (!enumClass.isEnum()) {
 			throw new IllegalArgumentException("Cannot create EnumFactory for non-Enum class.");
 		}

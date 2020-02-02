@@ -1,11 +1,10 @@
 package org.meanbean.test;
 
 import org.meanbean.bean.info.PropertyInformation;
-import org.meanbean.util.AssertionUtils;
-import org.meanbean.util.SimpleValidationHelper;
-import org.meanbean.util.ValidationHelper;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
+import org.meanbean.util.AssertionUtils;
+import org.meanbean.util.ValidationHelper;
 
 /**
  * An object that tests a Bean's property methods.
@@ -16,9 +15,6 @@ public class BeanPropertyTester {
 
 	/** Logging mechanism. */
 	private static final $Logger logger = $LoggerFactory.getLogger(BeanPropertyTester.class);
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * <p>
@@ -53,10 +49,10 @@ public class BeanPropertyTester {
 	 */
 	public void testProperty(Object bean, PropertyInformation property, Object testValue, EqualityTest equalityTest)
 	        throws IllegalArgumentException, AssertionError, BeanTestException {
-		validationHelper.ensureExists("bean", "test property", bean);
-		validationHelper.ensureExists("property", "test property", property);
-		validationHelper.ensureExists("testValue", "test property", testValue);
-		validationHelper.ensureExists("equalityTest", "test property", equalityTest);
+		ValidationHelper.ensureExists("bean", "test property", bean);
+		ValidationHelper.ensureExists("property", "test property", property);
+		ValidationHelper.ensureExists("testValue", "test property", testValue);
+		ValidationHelper.ensureExists("equalityTest", "test property", equalityTest);
 		String propertyName = property.getName();
 		if (!property.isReadableWritable()) {
 			throw new IllegalArgumentException("Cannot test property [" + propertyName

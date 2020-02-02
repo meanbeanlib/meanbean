@@ -3,7 +3,6 @@ package org.meanbean.factories.basic;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.RandomValueGeneratorProvider;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
@@ -14,9 +13,6 @@ import org.meanbean.util.ValidationHelper;
  *            The data type of the object this Factory creates.
  */
 public abstract class RandomFactoryBase<T> implements Factory<T>, RandomValueGeneratorProvider {
-
-	/** Input validation helper. */
-	protected final ValidationHelper validationHelper = new SimpleValidationHelper();
 
 	/** Random number generator used by the factory to generate random values. */
 	private final RandomValueGenerator randomValueGenerator;
@@ -31,7 +27,7 @@ public abstract class RandomFactoryBase<T> implements Factory<T>, RandomValueGen
 	 *             If the specified randomValueGenerator is deemed illegal. For example, if it is null.
 	 */
 	public RandomFactoryBase(RandomValueGenerator randomValueGenerator) throws IllegalArgumentException {
-		validationHelper.ensureExists("randomValueGenerator", "construct Factory", randomValueGenerator);
+		ValidationHelper.ensureExists("randomValueGenerator", "construct Factory", randomValueGenerator);
 		this.randomValueGenerator = randomValueGenerator;
 	}
 

@@ -104,9 +104,6 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	/** Logging mechanism. */
 	private static final $Logger logger = $LoggerFactory.getLogger(PropertyBasedEqualsMethodPropertySignificanceVerifier.class);
 
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = ValidationHelper.getInstance(logger);
-
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
@@ -245,11 +242,11 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
     public void verifyEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
 	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
             BeanTestException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals", factory);
-		validationHelper.ensureExists("insignificantProperties", "test equals", insignificantProperties);
+		ValidationHelper.ensureExists("factory", "test equals", factory);
+		ValidationHelper.ensureExists("insignificantProperties", "test equals", insignificantProperties);
 		List<String> insignificantPropertyNames = Arrays.asList(insignificantProperties);
 		Object prototype = factory.create();
-		validationHelper.ensureExists("factory-created object", "test equals", prototype);
+		ValidationHelper.ensureExists("factory-created object", "test equals", prototype);
 		BeanInformation beanInformation = beanInformationFactory.create(prototype.getClass());
 		ensureInsignificantPropertiesExist(beanInformation, insignificantPropertyNames);
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
@@ -358,8 +355,8 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 		try {
 			Object xOriginalValue = property.getReadMethod().invoke(originalObj);
 			Object originalVal = property.getReadMethod().invoke(modifiedObj);
-			validationHelper.ensureExists("factory-created object." + propertyName, "test equals", xOriginalValue);
-			validationHelper.ensureExists("factory-created object." + propertyName, "test equals", originalVal);
+			ValidationHelper.ensureExists("factory-created object." + propertyName, "test equals", xOriginalValue);
+			ValidationHelper.ensureExists("factory-created object." + propertyName, "test equals", originalVal);
 			if (!originalVal.equals(xOriginalValue)) {
 				String message = "Cannot test equals if factory does not create objects with same property values.";
 				throw new IllegalArgumentException(message);

@@ -13,7 +13,6 @@ import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.test.Configuration;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.LinkedHashSet;
@@ -50,9 +49,6 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	/** Logging mechanism. */
 	private static final $Logger logger = $LoggerFactory.getLogger(BasicFactoryLookupStrategy.class);
 
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
-
 	/** Random number generator used by factories to randomly generate values. */
 	private final RandomValueGenerator randomValueGenerator;
 
@@ -75,8 +71,8 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	 */
 	public BasicFactoryLookupStrategy(FactoryCollection factoryCollection, RandomValueGenerator randomValueGenerator)
 	        throws IllegalArgumentException {
-		validationHelper.ensureExists("factoryCollection", "construct FactoryLookupStrategy", factoryCollection);
-		validationHelper.ensureExists("randomValueGenerator", "construct FactoryLookupStrategy", randomValueGenerator);
+		ValidationHelper.ensureExists("factoryCollection", "construct FactoryLookupStrategy", factoryCollection);
+		ValidationHelper.ensureExists("randomValueGenerator", "construct FactoryLookupStrategy", randomValueGenerator);
 		this.factoryCollection = factoryCollection;
 		this.randomValueGenerator = randomValueGenerator;
 	}
@@ -136,9 +132,9 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	@Override
     public Factory<?> getFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
 	        Configuration configuration) throws IllegalArgumentException, NoSuchFactoryException {
-		validationHelper.ensureExists("beanInformation", "get factory", beanInformation);
-		validationHelper.ensureExists("propertyName", "get factory", propertyName);
-		validationHelper.ensureExists("propertyType", "get factory", propertyType);
+		ValidationHelper.ensureExists("beanInformation", "get factory", beanInformation);
+		ValidationHelper.ensureExists("propertyName", "get factory", propertyName);
+		ValidationHelper.ensureExists("propertyType", "get factory", propertyType);
 		Factory<?> factory = doGetFactory(beanInformation, propertyName, propertyType, configuration);
 		return factory;
 	}

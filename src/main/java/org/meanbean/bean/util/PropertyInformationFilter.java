@@ -1,7 +1,6 @@
 package org.meanbean.bean.util;
 
 import org.meanbean.bean.info.PropertyInformation;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.ArrayList;
@@ -14,9 +13,6 @@ import java.util.Collection;
  * @author Graham Williamson
  */
 public final class PropertyInformationFilter {
-
-	/** Input validation helper. */
-	private static final ValidationHelper VALIDATION_HELPER = new SimpleValidationHelper();
 
 	/**
 	 * Filter criteria based on a property's public visibility: readable, writable or both.
@@ -92,8 +88,8 @@ public final class PropertyInformationFilter {
 	 */
 	public static Collection<PropertyInformation> filter(Collection<PropertyInformation> properties,
 	        PropertyVisibility filter) throws IllegalArgumentException {
-		VALIDATION_HELPER.ensureExists("properties", "filter Collection of properties", properties);
-		VALIDATION_HELPER.ensureExists("filter", "filter Collection of properties", filter);
+		ValidationHelper.ensureExists("properties", "filter Collection of properties", properties);
+		ValidationHelper.ensureExists("filter", "filter Collection of properties", filter);
 		Collection<PropertyInformation> result = new ArrayList<PropertyInformation>();
 		for (PropertyInformation propertyInformation : properties) {
 			if (filter.isRelevant(propertyInformation)) {

@@ -1,7 +1,6 @@
 package org.meanbean.factories.equivalent;
 
 import org.meanbean.lang.EquivalentFactory;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 /**
@@ -10,9 +9,6 @@ import org.meanbean.util.ValidationHelper;
  * @author Graham Williamson
  */
 public class EquivalentEnumFactory implements EquivalentFactory<Enum<?>> {
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper();
 
 	/** Enum constants of the specified Enum type. */
 	private final Enum<?>[] enumConstants;
@@ -27,7 +23,7 @@ public class EquivalentEnumFactory implements EquivalentFactory<Enum<?>> {
 	 *             If enumClass is deemed illegal. For example, if it is null.
 	 */
 	public EquivalentEnumFactory(Class<?> enumClass) throws IllegalArgumentException {
-		validationHelper.ensureExists("enumClass", "construct EnumFactory", enumClass);
+		ValidationHelper.ensureExists("enumClass", "construct EnumFactory", enumClass);
 		if (!enumClass.isEnum()) {
 			throw new IllegalArgumentException("Cannot create EnumFactory for non-Enum class.");
 		}

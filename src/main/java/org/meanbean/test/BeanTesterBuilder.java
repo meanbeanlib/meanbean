@@ -3,9 +3,7 @@ package org.meanbean.test;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.util.FactoryLookupStrategy;
-import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.ValidationHelper;
 
 public class BeanTesterBuilder {
 
@@ -20,8 +18,6 @@ public class BeanTesterBuilder {
 	private BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	private BeanPropertyTester beanPropertyTester = new BeanPropertyTester();
-
-	private ValidationHelper validationHelper = ValidationHelper.getInstance($LoggerFactory.getLogger(BeanTester.class));
 
 	public int getIterations() {
 		return iterations;
@@ -77,21 +73,12 @@ public class BeanTesterBuilder {
 		return this;
 	}
 
-	public ValidationHelper getValidationHelper() {
-		return validationHelper;
-	}
-
-	public BeanTesterBuilder setValidationHelper(ValidationHelper validationHelper) {
-		this.validationHelper = validationHelper;
-		return this;
-	}
-
 	public BeanTester build() {
 		return new BeanTester(iterations,
 				randomValueGenerator,
 				factoryCollection,
 				factoryLookupStrategy,
 				beanInformationFactory,
-				beanPropertyTester, validationHelper);
+				beanPropertyTester);
 	}
 }

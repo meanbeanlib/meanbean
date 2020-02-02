@@ -12,7 +12,6 @@ import org.meanbean.lang.Factory;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Collection;
@@ -129,29 +128,24 @@ public class BeanTester {
 	/** Object that tests the getters and setters of a Bean's property. */
 	private final BeanPropertyTester beanPropertyTester;
 
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper;
-
 	public BeanTester() {
 		this(TEST_ITERATIONS_PER_BEAN, 
 				RandomValueGenerator.getInstance(),
 				FactoryCollection.getInstance(),
 				FactoryLookupStrategy.getInstance(),
 				BeanInformationFactory.getInstance(),
-				new BeanPropertyTester(),
-				new SimpleValidationHelper(logger));
+				new BeanPropertyTester());
 	}
 
 	BeanTester(int iterations, RandomValueGenerator randomValueGenerator, FactoryCollection factoryCollection,
 			FactoryLookupStrategy factoryLookupStrategy, BeanInformationFactory beanInformationFactory,
-			BeanPropertyTester beanPropertyTester, ValidationHelper validationHelper) {
+			BeanPropertyTester beanPropertyTester) {
 		this.iterations = iterations;
 		this.randomValueGenerator = randomValueGenerator;
 		this.factoryCollection = factoryCollection;
 		this.factoryLookupStrategy = factoryLookupStrategy;
 		this.beanInformationFactory = beanInformationFactory;
 		this.beanPropertyTester = beanPropertyTester;
-		this.validationHelper = validationHelper;
 
 		if (iterations < 1) {
 			throw new IllegalArgumentException("Iterations must be at least 1.");
@@ -204,8 +198,8 @@ public class BeanTester {
 	 *             If either parameter is deemed illegal. For example, if either parameter is null.
 	 */
 	public void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException {
-		validationHelper.ensureExists("beanClass", "add custom configuration", beanClass);
-		validationHelper.ensureExists("configuration", "add custom configuration", configuration);
+		ValidationHelper.ensureExists("beanClass", "add custom configuration", beanClass);
+		ValidationHelper.ensureExists("configuration", "add custom configuration", configuration);
 		customConfigurations.put(beanClass, configuration);
 	}
 
@@ -222,7 +216,7 @@ public class BeanTester {
 	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
 	 */
 	protected boolean hasCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
-		validationHelper.ensureExists("beanClass", "check for custom configuration", beanClass);
+		ValidationHelper.ensureExists("beanClass", "check for custom configuration", beanClass);
 		boolean result = customConfigurations.containsKey(beanClass);
 		return result;
 	}
@@ -240,7 +234,7 @@ public class BeanTester {
 	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
 	 */
 	protected Configuration getCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
-		validationHelper.ensureExists("beanClass", "get custom configuration", beanClass);
+		ValidationHelper.ensureExists("beanClass", "get custom configuration", beanClass);
 		Configuration result = customConfigurations.get(beanClass);
 		return result;
 	}
@@ -274,7 +268,7 @@ public class BeanTester {
 	 *             If an unexpected exception occurs during testing.
 	 */
 	public void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException {
-		validationHelper.ensureExists("beanClass", "test bean", beanClass);
+		ValidationHelper.ensureExists("beanClass", "test bean", beanClass);
 		Configuration customConfiguration = null;
 		if (hasCustomConfiguration(beanClass)) {
 			customConfiguration = getCustomConfiguration(beanClass);
@@ -319,7 +313,7 @@ public class BeanTester {
 	 */
 	public void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
 	        AssertionError, BeanTestException {
-		validationHelper.ensureExists("beanClass", "test bean", beanClass);
+		ValidationHelper.ensureExists("beanClass", "test bean", beanClass);
 		// Override the standard number of iterations if need be
 		int iterations = this.iterations;
 		if ((customConfiguration != null) && (customConfiguration.hasIterationsOverride())) {
@@ -366,7 +360,7 @@ public class BeanTester {
 	 */
 	protected void testBean(BeanInformation beanInformation, Configuration configuration)
 	        throws IllegalArgumentException, AssertionError, BeanTestException {
-		validationHelper.ensureExists("beanInformation", "test bean", beanInformation);
+		ValidationHelper.ensureExists("beanInformation", "test bean", beanInformation);
 		// Get all properties of the bean
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
 		// Get just the properties of the bean that are readable and writable

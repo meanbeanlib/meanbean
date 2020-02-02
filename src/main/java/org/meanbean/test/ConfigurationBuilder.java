@@ -1,9 +1,6 @@
 package org.meanbean.test;
 
 import org.meanbean.lang.Factory;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Collections;
@@ -20,9 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConfigurationBuilder {
 
-    /** Logging mechanism. */
-    private static final $Logger logger = $LoggerFactory.getLogger(ConfigurationBuilder.class);
-
 	/** The number of times a type should be tested. */
 	private Integer iterations;
 
@@ -34,9 +28,6 @@ public class ConfigurationBuilder {
 	 * name.
 	 */
 	private final Map<String, Factory<?>> overrideFactories = new ConcurrentHashMap<>();
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/**
 	 * Construct a new Configuration Builder.
@@ -75,7 +66,7 @@ public class ConfigurationBuilder {
 	 * @return A Configuration Builder.
 	 */
 	public ConfigurationBuilder ignoreProperty(String property) throws IllegalArgumentException {
-		validationHelper.ensureExists("property", "add property to ignored properties collection", property);
+		ValidationHelper.ensureExists("property", "add property to ignored properties collection", property);
 		ignoredProperties.add(property);
 		return this;
 	}
@@ -95,8 +86,8 @@ public class ConfigurationBuilder {
 	 * @return A Configuration Builder.
 	 */
 	public ConfigurationBuilder overrideFactory(String property, Factory<?> factory) throws IllegalArgumentException {
-		validationHelper.ensureExists("property", "add override Factory", property);
-		validationHelper.ensureExists("factory", "add override Factory", factory);
+		ValidationHelper.ensureExists("property", "add override Factory", property);
+		ValidationHelper.ensureExists("factory", "add override Factory", factory);
 		overrideFactories.put(property, factory);
 		return this;
 	}

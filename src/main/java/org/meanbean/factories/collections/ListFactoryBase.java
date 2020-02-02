@@ -3,6 +3,7 @@ package org.meanbean.factories.collections;
 import org.meanbean.factories.basic.RandomFactoryBase;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ValidationHelper;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public abstract class ListFactoryBase<T> extends RandomFactoryBase<List<T>> {
 	 */
 	public ListFactoryBase(RandomValueGenerator randomValueGenerator, Factory<T> itemFactory) {
 		super(randomValueGenerator);
-		validationHelper.ensureExists("itemFactory", "construct ListFactory", itemFactory);
+		ValidationHelper.ensureExists("itemFactory", "construct ListFactory", itemFactory);
 		this.itemFactory = itemFactory;
 	}
 

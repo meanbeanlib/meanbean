@@ -9,10 +9,7 @@ import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 
 /**
  * <p>
@@ -128,12 +125,6 @@ public class EqualsMethodTester {
 
 	/** The number of times each type is tested, unless a custom Configuration overrides this global setting. */
 	private final int iterations = DEFAULT_TEST_ITERATIONS_PER_TYPE;
-
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(EqualsMethodTester.class);
-
-	/** Input validation helper. */
-	private final ValidationHelper validationHelper = new SimpleValidationHelper(logger);
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
@@ -262,7 +253,7 @@ public class EqualsMethodTester {
 	 */
 	public void testEqualsMethod(Class<?> clazz, Configuration customConfiguration, String... insignificantProperties)
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
-		validationHelper.ensureExists("clazz", "test equals method", clazz);
+		ValidationHelper.ensureExists("clazz", "test equals method", clazz);
 		EquivalentFactory<?> factory = createEquivalentFactory(clazz);
 		testEqualsMethod(factory, customConfiguration, insignificantProperties);
 	}
@@ -391,8 +382,8 @@ public class EqualsMethodTester {
 	public void testEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
 	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
 	        BeanTestException, AssertionError {
-		validationHelper.ensureExists("factory", "test equals method", factory);
-		validationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
+		ValidationHelper.ensureExists("factory", "test equals method", factory);
+		ValidationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
 		contractVerifier.verifyEqualsReflexive(factory);
 		contractVerifier.verifyEqualsSymmetric(factory);
 		contractVerifier.verifyEqualsTransitive(factory);
