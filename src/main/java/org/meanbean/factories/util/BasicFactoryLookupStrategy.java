@@ -9,12 +9,12 @@ import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.basic.EnumFactory;
 import org.meanbean.factories.beans.PopulatedBeanFactory;
 import org.meanbean.lang.Factory;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.test.Configuration;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleValidationHelper;
 import org.meanbean.util.ValidationHelper;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -203,7 +203,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType);
 			testPopulatedBeanFactory(populatedBeanFactory);
 			
-            if (addDynamicallyCreatedFactoryType(beanInformation, propertyType)) {
+            if (isLikelyNewDynamicallyCreatedFactoryType(beanInformation, propertyType)) {
                 // TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
                 logger.warn("Using dynamically created factory for [{}] of type [{}]. Do you need to register a custom Factory?",
                         propertyName, propertyType.getName());
@@ -219,7 +219,8 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 		}
 	}
 
-    private boolean addDynamicallyCreatedFactoryType(BeanInformation beanInformation, Class<?> propertyType) {
+	// cache the info so that warning logs don't appear repeatedly
+    private boolean isLikelyNewDynamicallyCreatedFactoryType(BeanInformation beanInformation, Class<?> propertyType) {
         if (dynamicallyCreatedFactories.size() > 1000) {
             synchronized (dynamicallyCreatedFactories) {
                 // trim the cache size
