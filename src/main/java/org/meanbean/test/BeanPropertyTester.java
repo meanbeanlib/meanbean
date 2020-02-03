@@ -1,8 +1,6 @@
 package org.meanbean.test;
 
 import org.meanbean.bean.info.PropertyInformation;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.ValidationHelper;
 
@@ -14,9 +12,6 @@ import java.lang.reflect.Type;
  * @author Graham Williamson
  */
 public class BeanPropertyTester {
-
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(BeanPropertyTester.class);
 
 	/**
 	 * <p>
@@ -71,7 +66,6 @@ public class BeanPropertyTester {
 				String message =
 				        "Property [" + propertyName + "] getter did not return test value. Expected [" + testValue
 				                + "] but getter returned [" + readMethodOutput + "].";
-				logger.info("testProperty: {}", message);
 				AssertionUtils.fail(message);
 			} else {
 			}
@@ -79,7 +73,6 @@ public class BeanPropertyTester {
 			String message =
 			        "Failed to test property [" + propertyName + "] due to Exception [" + e.getClass().getName()
 			                + "]: [" + e.getMessage() + "].";
-			logger.error("testProperty: {} Throw BeanTestException.", message, e);
 			throw new BeanTestException(message, e);
 		}
 	}

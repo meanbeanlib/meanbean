@@ -6,8 +6,6 @@ import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Collection;
@@ -22,9 +20,6 @@ import java.util.Map;
  * @author Graham Williamson
  */
 public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
-
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(BeanPropertyValuesFactory.class);
 
 	/** Information of the object to create. */
 	private final BeanInformation beanInformation;
@@ -66,18 +61,15 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
     public Map<String, Object> create() throws ObjectCreationException {
 		Map<String, Object> propertyValues = new HashMap<String, Object>();
 		Collection<PropertyInformation> writableProperties =
-		        PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
+				PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
 		for (PropertyInformation property : writableProperties) {
 			String propertyName = property.getName();
-			Factory<?> valueFactory;
 			try {
-				valueFactory =
-				        factoryLookupStrategy.getFactory(beanInformation, property, null);
+				Factory<?> valueFactory = factoryLookupStrategy.getFactory(beanInformation, property, null);
 				Object value = valueFactory.create();
 				propertyValues.put(propertyName, value);
 			} catch (Exception e) {
 				String message = "Failed to create a value for property [" + propertyName + "].";
-				logger.error("create:{} Throw ObjectCreationException.", message, e);
 				throw new ObjectCreationException(message, e);
 			}
 		}

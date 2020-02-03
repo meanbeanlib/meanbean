@@ -44,7 +44,6 @@ public final class FactoryRepository implements FactoryCollection {
 	private void initialize() {
 		new PrimitiveFactoryPlugin().initialize(this, randomValueGenerator);
 		new ObjectFactoryPlugin().initialize(this, randomValueGenerator);
-		new CollectionFactoryPlugin().initialize(this, randomValueGenerator);
 		new ConcurrentFactoryPlugin().initialize(this, randomValueGenerator);
 		new NetFactoryPlugin().initialize(this, randomValueGenerator);
 		new TimePlugin().initialize(this, randomValueGenerator);

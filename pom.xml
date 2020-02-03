@@ -63,6 +63,7 @@
 					<source>1.8</source>
 					<target>1.8</target>
 					<parameters>true</parameters>
+					<debug>true</debug>
 				</configuration>
 			</plugin>
 			<plugin>

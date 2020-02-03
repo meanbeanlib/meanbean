@@ -1,5 +1,25 @@
 package org.meanbean.bean.util;
 
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.meanbean.bean.info.BeanInformation;
+import org.meanbean.bean.info.BeanInformationFactory;
+import org.meanbean.bean.info.JavaBeanInformationFactory;
+import org.meanbean.factories.ObjectCreationException;
+import org.meanbean.factories.basic.LongFactory;
+import org.meanbean.factories.util.BasicFactoryLookupStrategy;
+import org.meanbean.factories.util.FactoryLookupStrategy;
+import org.meanbean.lang.Factory;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.beans.ComplexBean;
+import org.meanbean.test.beans.NonBean;
+import org.meanbean.util.RandomValueGenerator;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Map;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -8,23 +28,6 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doThrow;
-
-import java.util.Map;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.meanbean.bean.info.BeanInformation;
-import org.meanbean.bean.info.BeanInformationFactory;
-import org.meanbean.bean.info.JavaBeanInformationFactory;
-import org.meanbean.factories.ObjectCreationException;
-import org.meanbean.factories.util.BasicFactoryLookupStrategy;
-import org.meanbean.factories.util.FactoryLookupStrategy;
-import org.meanbean.lang.Factory;
-import org.meanbean.test.BeanTester;
-import org.meanbean.test.beans.ComplexBean;
-import org.meanbean.test.beans.NonBean;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BeanPropertyValuesFactoryTest {
@@ -47,6 +50,11 @@ public class BeanPropertyValuesFactoryTest {
 	@Mock
 	private Factory<Long> longFactoryMock;
 
+	@After
+	public void after() {
+		beanTesterReal.getFactoryCollection().addFactory(long.class, new LongFactory(RandomValueGenerator.getInstance()));
+	}
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorShouldPreventNullBeanInformation() throws Exception {
 		new BeanPropertyValuesFactory(null, factoryLookupStrategyMock);

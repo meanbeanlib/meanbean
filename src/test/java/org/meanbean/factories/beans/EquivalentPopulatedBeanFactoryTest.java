@@ -29,7 +29,7 @@ public class EquivalentPopulatedBeanFactoryTest {
 
 	@Mock
 	private BeanInformation beanInformationMock;
-
+	
 	@Mock
 	private FactoryLookupStrategy factoryLookupStrategyMock;
 

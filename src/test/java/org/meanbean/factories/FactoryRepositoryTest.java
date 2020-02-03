@@ -45,14 +45,6 @@ public class FactoryRepositoryTest {
 		}
 	}
 
-	@Test
-	public void constructorShouldRegisterCollectionFactoriesWithFactoryRepository() throws Exception {
-		for (Class<?> clazz : CollectionFactoryPluginTest.FACTORY_CLASSES) {
-			assertThat("FactoryRepository did not register collection Factory for class [" + clazz + "].",
-			        factoryRepository.hasFactory(clazz), is(true));
-		}
-	}
-
 	@Test(expected = IllegalArgumentException.class)
 	public void addFactoryShouldPreventNullClass() throws Exception {
 		factoryRepository.addFactory(null, mockFactory);

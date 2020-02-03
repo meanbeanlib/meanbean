@@ -6,13 +6,9 @@ import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
-import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.lang.Factory;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
-import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.ArrayList;
@@ -100,17 +96,8 @@ import java.util.List;
  */
 class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMethodPropertySignificanceVerifier {
 
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(PropertyBasedEqualsMethodPropertySignificanceVerifier.class);
-
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
-
-	/** Random number generator used by factories to randomly generate values. */
-	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
-
-	/** The collection of test data Factories. */
-	private final FactoryCollection factoryCollection = FactoryCollection.getInstance();
 
 	/** Provides a means of acquiring a suitable Factory. */
 	private final FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
@@ -375,7 +362,6 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 			String message =
 			        "Failed to test property [" + property.getName() + "] due to Exception [" + e.getClass().getName()
 			                + "]: [" + e.getMessage() + "].";
-			logger.error("verifyEqualsMethodForProperty: {} Throw BeanTestException.", message, e);
 			throw new BeanTestException(message, e);
 		}
 	}

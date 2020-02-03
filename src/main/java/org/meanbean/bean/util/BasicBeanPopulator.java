@@ -3,8 +3,6 @@ package org.meanbean.bean.util;
 import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Collection;
@@ -16,9 +14,6 @@ import java.util.Map;
  * @author Graham Williamson
  */
 public class BasicBeanPopulator implements BeanPopulator {
-
-	/** Logging mechanism. */
-	private static final $Logger logger = $LoggerFactory.getLogger(BasicBeanPopulator.class);
 
 	/**
 	 * Populate the specified bean with the specified values. Values are keyed by property name (e.g. "firstName") and
@@ -55,7 +50,6 @@ public class BasicBeanPopulator implements BeanPopulator {
 					String message =
 					        "Failed to populate property [" + propertyName + "] due to Exception ["
 					                + e.getClass().getName() + "]: [" + e.getMessage() + "].";
-					logger.error("populate: {} Throw BeanTestException.", message, e);
 					throw new BeanPopulationException(message, e);
 				}
 			}

@@ -9,8 +9,6 @@ import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
-import org.meanbean.logging.$Logger;
-import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ValidationHelper;
 
@@ -103,9 +101,6 @@ public class BeanTester {
 
 	/** Default number of times a bean should be tested. */
 	public static final int TEST_ITERATIONS_PER_BEAN = 100;
-
-    /** Logging mechanism. */
-    private static final $Logger logger = $LoggerFactory.getLogger(BeanTester.class);
 
 	/** The number of times each bean is tested, unless a custom Configuration overrides this global setting. */
 	private int iterations = TEST_ITERATIONS_PER_BEAN;
@@ -375,7 +370,6 @@ public class BeanTester {
 			String message =
 			        "Cannot test bean [" + beanInformation.getBeanClass().getName()
 			                + "]. Failed to instantiate an instance of the bean.";
-			logger.error("testBean:{} Throw BeanTestException.", message, e);
 			throw new BeanTestException(message, e);
 		}
 		// Test each property
@@ -396,7 +390,6 @@ public class BeanTester {
 					        "Cannot test bean [" + beanInformation.getBeanClass().getName()
 					                + "]. Failed to instantiate a test value for property [" + property.getName()
 					                + "].";
-					logger.error("testBean:{} Throw BeanTestException.", message, e);
 					throw new BeanTestException(message, e);
 				}
 				beanPropertyTester.testProperty(bean, property, testValue, equalityTest);
