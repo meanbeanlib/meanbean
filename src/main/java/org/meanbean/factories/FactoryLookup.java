@@ -38,12 +38,12 @@ public interface FactoryLookup {
 	 * @throws IllegalArgumentException
 	 *             If the class is deemed illegal.
 	 * @throws NoSuchFactoryException
-	 *             If the collection does not contain a Factory registered against the specified class.
+	 *             If this does not contain a Factory registered against the specified class.
 	 */
 	 <T> Factory<T> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException;
 
 	/**
-	 * Does the collection contain a Factory registered against the specified class?
+	 * Does this contain a Factory registered against the specified class?
 	 * 
 	 * @param type
 	 *            The type a Factory could be registered against. This should be the type of object that the Factory

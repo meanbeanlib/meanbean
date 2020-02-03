@@ -2,8 +2,13 @@ package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
+import org.meanbean.factories.FactoryLookup;
+import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.util.FactoryLookupStrategy;
+import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.lang.reflect.Type;
 
 public class BeanTesterBuilder {
 
@@ -70,6 +75,34 @@ public class BeanTesterBuilder {
 
 	public BeanTesterBuilder setBeanPropertyTester(BeanPropertyTester beanPropertyTester) {
 		this.beanPropertyTester = beanPropertyTester;
+		return this;
+	}
+
+	public <T> BeanTesterBuilder registerFactory(Class<T> clazz, Factory<? extends T> factory) {
+		getFactoryCollection().addFactory(clazz, factory);
+		return this;
+	}
+
+	/**
+	 * Register factory for an inheritance type hierarchy
+	 */
+	public <T> BeanTesterBuilder registerTypeHierarchyFactory(Class<T> baseType, Factory<T> factory) {
+		getFactoryCollection().addFactoryLookup(new FactoryLookup() {
+
+			@Override
+			public boolean hasFactory(Type clazz) throws IllegalArgumentException {
+				return clazz instanceof Class && baseType.isAssignableFrom((Class<?>) clazz);
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public <E> Factory<E> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException {
+				if (hasFactory(type)) {
+					return (Factory<E>) factory;
+				}
+				throw new NoSuchFactoryException("No factory for " + type);
+			}
+		});
 		return this;
 	}
 
