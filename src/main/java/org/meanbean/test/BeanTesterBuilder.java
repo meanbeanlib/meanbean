@@ -9,10 +9,10 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 
 import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BeanTesterBuilder {
-
-	private int iterations = BeanTester.TEST_ITERATIONS_PER_BEAN;
 
 	private RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 
@@ -24,14 +24,9 @@ public class BeanTesterBuilder {
 
 	private BeanPropertyTester beanPropertyTester = new BeanPropertyTester();
 
-	public int getIterations() {
-		return iterations;
-	}
+	private Map<Class<?>, Configuration> customConfigurations = new ConcurrentHashMap<>();
 
-	public BeanTesterBuilder setIterations(int iterations) {
-		this.iterations = iterations;
-		return this;
-	}
+	private Configuration defaultConfiguration;
 
 	public RandomValueGenerator getRandomValueGenerator() {
 		return randomValueGenerator;
@@ -78,8 +73,22 @@ public class BeanTesterBuilder {
 		return this;
 	}
 
+	public Configuration getDefaultConfiguration() {
+		return defaultConfiguration;
+	}
+
+	public BeanTesterBuilder setDefaultConfiguration(Configuration defaultConfiguration) {
+		this.defaultConfiguration = defaultConfiguration;
+		return this;
+	}
+
 	public <T> BeanTesterBuilder registerFactory(Class<T> clazz, Factory<? extends T> factory) {
 		getFactoryCollection().addFactory(clazz, factory);
+		return this;
+	}
+
+	public BeanTesterBuilder registerCustomConfiguration(Class<?> beanClass, Configuration configuration) {
+		customConfigurations.put(beanClass, configuration);
 		return this;
 	}
 
@@ -107,11 +116,22 @@ public class BeanTesterBuilder {
 	}
 
 	public BeanTester build() {
-		return new BeanTester(iterations,
+		BeanTester beanTester = new BeanTester(
 				randomValueGenerator,
 				factoryCollection,
 				factoryLookupStrategy,
 				beanInformationFactory,
-				beanPropertyTester);
+				beanPropertyTester,
+				customConfigurations,
+				defaultConfiguration);
+
+		randomValueGenerator = null;
+		factoryCollection = null;
+		factoryLookupStrategy = null;
+		beanInformationFactory = null;
+		beanPropertyTester = null;
+		customConfigurations = null;
+		defaultConfiguration = null;
+		return beanTester;
 	}
 }

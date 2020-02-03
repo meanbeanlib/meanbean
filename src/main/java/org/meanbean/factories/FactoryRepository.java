@@ -1,9 +1,8 @@
 package org.meanbean.factories;
 
 import org.kohsuke.MetaInfServices;
-import org.meanbean.factories.net.NetFactoryPlugin;
-import org.meanbean.factories.time.TimePlugin;
 import org.meanbean.lang.Factory;
+import org.meanbean.util.Order;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ValidationHelper;
 
@@ -16,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @author Graham Williamson
  */
+@Order(8000)
 @MetaInfServices
 public final class FactoryRepository implements FactoryCollection {
 
@@ -42,11 +42,8 @@ public final class FactoryRepository implements FactoryCollection {
 	 * Initialize the repository prior to public use.
 	 */
 	private void initialize() {
-		new PrimitiveFactoryPlugin().initialize(this, randomValueGenerator);
-		new ObjectFactoryPlugin().initialize(this, randomValueGenerator);
-		new ConcurrentFactoryPlugin().initialize(this, randomValueGenerator);
-		new NetFactoryPlugin().initialize(this, randomValueGenerator);
-		new TimePlugin().initialize(this, randomValueGenerator);
+		FactoryCollectionPlugin.getInstances()
+				.forEach(plugin -> plugin.initialize(this, randomValueGenerator));
 	}
 
 	/**

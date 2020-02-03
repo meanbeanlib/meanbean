@@ -8,6 +8,7 @@ import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.beans.BeanCreationException;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
+import org.meanbean.lang.Factory;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Map;
@@ -65,7 +66,7 @@ public class EquivalentPopulatedBeanFactory implements EquivalentFactory<Object>
 		if (propertyValues == null) {
 			propertyValues = beanPropertyValuesFactory.create();
 		}
-		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
+		Factory<Object> beanFactory = BasicNewObjectInstanceFactory.findBeanFactory(beanInformation.getBeanClass());
 		Object result = beanFactory.create();
 		beanPopulator.populate(result, beanInformation, propertyValues);
 		return result;

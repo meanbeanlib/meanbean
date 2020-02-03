@@ -1,5 +1,6 @@
 package org.meanbean.factories;
 
+import org.kohsuke.MetaInfServices;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 
@@ -8,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
+@MetaInfServices
 public class ConcurrentFactoryPlugin implements FactoryCollectionPlugin {
 
 	@Override

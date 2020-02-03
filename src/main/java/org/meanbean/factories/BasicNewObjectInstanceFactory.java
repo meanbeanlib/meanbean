@@ -18,6 +18,14 @@ public class BasicNewObjectInstanceFactory implements Factory<Object> {
 	/** The type of Object this Factory should create new instances of. */
 	private final Class<?> clazz;
 
+	public static Factory<Object> findBeanFactory(Class<?> clazz) {
+		FactoryCollection factoryCollection = FactoryCollection.getInstance();
+		if (factoryCollection.hasFactory(clazz)) {
+			return factoryCollection.getFactory(clazz);
+		}
+		return new BasicNewObjectInstanceFactory(clazz);
+	}
+
 	/**
 	 * Construct a basic new object instance Factory.
 	 * 

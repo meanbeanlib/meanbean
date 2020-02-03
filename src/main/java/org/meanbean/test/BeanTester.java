@@ -102,9 +102,6 @@ public class BeanTester {
 	/** Default number of times a bean should be tested. */
 	public static final int TEST_ITERATIONS_PER_BEAN = 100;
 
-	/** The number of times each bean is tested, unless a custom Configuration overrides this global setting. */
-	private int iterations = TEST_ITERATIONS_PER_BEAN;
-
 	/** Random number generator used by factories to randomly generate values. */
 	private final RandomValueGenerator randomValueGenerator;
 
@@ -115,7 +112,9 @@ public class BeanTester {
 	private final FactoryLookupStrategy factoryLookupStrategy;
 
 	/** Custom Configurations that override standard testing behaviour on a per-type basis across all tests. */
-	private final Map<Class<?>, Configuration> customConfigurations = new ConcurrentHashMap<>();
+	private final Map<Class<?>, Configuration> customConfigurations;
+
+	private final Configuration defaultConfiguration;
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory;
@@ -124,27 +123,26 @@ public class BeanTester {
 	private final BeanPropertyTester beanPropertyTester;
 
 	public BeanTester() {
-		this(TEST_ITERATIONS_PER_BEAN, 
+		this(
 				RandomValueGenerator.getInstance(),
 				FactoryCollection.getInstance(),
 				FactoryLookupStrategy.getInstance(),
 				BeanInformationFactory.getInstance(),
-				new BeanPropertyTester());
+				new BeanPropertyTester(),
+				new ConcurrentHashMap<>(),
+				null);
 	}
 
-	BeanTester(int iterations, RandomValueGenerator randomValueGenerator, FactoryCollection factoryCollection,
+	BeanTester(RandomValueGenerator randomValueGenerator, FactoryCollection factoryCollection,
 			FactoryLookupStrategy factoryLookupStrategy, BeanInformationFactory beanInformationFactory,
-			BeanPropertyTester beanPropertyTester) {
-		this.iterations = iterations;
+			BeanPropertyTester beanPropertyTester, Map<Class<?>, Configuration> configs, Configuration defaultConfiguration) {
 		this.randomValueGenerator = randomValueGenerator;
 		this.factoryCollection = factoryCollection;
 		this.factoryLookupStrategy = factoryLookupStrategy;
 		this.beanInformationFactory = beanInformationFactory;
 		this.beanPropertyTester = beanPropertyTester;
-
-		if (iterations < 1) {
-			throw new IllegalArgumentException("Iterations must be at least 1.");
-		}
+		this.defaultConfiguration = defaultConfiguration;
+		this.customConfigurations = configs;
 	}
 
 	/**
@@ -177,7 +175,7 @@ public class BeanTester {
 	 * @return The number of times each bean should be tested. This value will be at least 1.
 	 */
 	public int getIterations() {
-		return iterations;
+		return TEST_ITERATIONS_PER_BEAN;
 	}
 
 	/**
@@ -192,7 +190,7 @@ public class BeanTester {
 	 * @throws IllegalArgumentException
 	 *             If either parameter is deemed illegal. For example, if either parameter is null.
 	 */
-	public void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException {
+	void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException {
 		ValidationHelper.ensureExists("beanClass", "add custom configuration", beanClass);
 		ValidationHelper.ensureExists("configuration", "add custom configuration", configuration);
 		customConfigurations.put(beanClass, configuration);
@@ -264,7 +262,7 @@ public class BeanTester {
 	 */
 	public void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException {
 		ValidationHelper.ensureExists("beanClass", "test bean", beanClass);
-		Configuration customConfiguration = null;
+		Configuration customConfiguration = defaultConfiguration;
 		if (hasCustomConfiguration(beanClass)) {
 			customConfiguration = getCustomConfiguration(beanClass);
 		}
@@ -307,13 +305,18 @@ public class BeanTester {
 	 *             If an unexpected exception occurs during testing.
 	 */
 	public void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
-	        AssertionError, BeanTestException {
+			AssertionError, BeanTestException {
 		ValidationHelper.ensureExists("beanClass", "test bean", beanClass);
 		// Override the standard number of iterations if need be
-		int iterations = this.iterations;
+		int iterations = TEST_ITERATIONS_PER_BEAN;
 		if ((customConfiguration != null) && (customConfiguration.hasIterationsOverride())) {
 			iterations = customConfiguration.getIterations();
 		}
+
+		if (iterations < 1) {
+			throw new IllegalArgumentException("Iterations must be at least 1.");
+		}
+
 		// Get all information about a potential JavaBean class
 		BeanInformation beanInformation = beanInformationFactory.create(beanClass);
 		// Test the JavaBean 'iterations' times
@@ -354,22 +357,21 @@ public class BeanTester {
 	 *             If an unexpected exception occurs during testing.
 	 */
 	protected void testBean(BeanInformation beanInformation, Configuration configuration)
-	        throws IllegalArgumentException, AssertionError, BeanTestException {
+			throws IllegalArgumentException, AssertionError, BeanTestException {
 		ValidationHelper.ensureExists("beanInformation", "test bean", beanInformation);
 		// Get all properties of the bean
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
 		// Get just the properties of the bean that are readable and writable
-		Collection<PropertyInformation> readableWritableProperties =
-		        PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
+		Collection<PropertyInformation> readableWritableProperties = PropertyInformationFilter.filter(properties,
+				PropertyVisibility.READABLE_WRITABLE);
 		// Instantiate
-		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
+		Factory<Object> beanFactory = BasicNewObjectInstanceFactory.findBeanFactory(beanInformation.getBeanClass());
 		Object bean;
 		try {
 			bean = beanFactory.create();
 		} catch (Exception e) {
-			String message =
-			        "Cannot test bean [" + beanInformation.getBeanClass().getName()
-			                + "]. Failed to instantiate an instance of the bean.";
+			String message = "Cannot test bean [" + beanInformation.getBeanClass().getName()
+					+ "]. Failed to instantiate an instance of the bean.";
 			throw new BeanTestException(message, e);
 		}
 		// Test each property
@@ -379,17 +381,15 @@ public class BeanTester {
 				EqualityTest equalityTest = EqualityTest.LOGICAL;
 				Object testValue = null;
 				try {
-					Factory<?> valueFactory =
-					        factoryLookupStrategy.getFactory(beanInformation, property, configuration);
+					Factory<?> valueFactory = factoryLookupStrategy.getFactory(beanInformation, property, configuration);
 					testValue = valueFactory.create();
 					if (valueFactory instanceof BasicNewObjectInstanceFactory) {
 						equalityTest = EqualityTest.ABSOLUTE;
 					}
 				} catch (Exception e) {
-					String message =
-					        "Cannot test bean [" + beanInformation.getBeanClass().getName()
-					                + "]. Failed to instantiate a test value for property [" + property.getName()
-					                + "].";
+					String message = "Cannot test bean [" + beanInformation.getBeanClass().getName()
+							+ "]. Failed to instantiate a test value for property [" + property.getName()
+							+ "].";
 					throw new BeanTestException(message, e);
 				}
 				beanPropertyTester.testProperty(bean, property, testValue, equalityTest);

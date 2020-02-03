@@ -1,5 +1,6 @@
 package org.meanbean.factories;
 
+import org.kohsuke.MetaInfServices;
 import org.meanbean.factories.basic.BigDecimalFactory;
 import org.meanbean.factories.basic.BigIntegerFactory;
 import org.meanbean.factories.basic.BooleanFactory;
@@ -24,6 +25,7 @@ import java.util.UUID;
  * 
  * @author Graham Williamson
  */
+@MetaInfServices
 public class ObjectFactoryPlugin implements FactoryCollectionPlugin {
 
 	@Override

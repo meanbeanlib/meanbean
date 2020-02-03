@@ -38,22 +38,6 @@ public class BeanTesterTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void setIterationsShouldPreventIterationsLessThanOne() throws Exception {
-		beanTester = new BeanTesterBuilder()
-				.setIterations(0)
-				.build();
-	}
-
-	@Test
-	public void setIterationsShouldSetIterations() throws Exception {
-		int iterations = 234;
-		beanTester = new BeanTesterBuilder()
-				.setIterations(234)
-				.build();
-		assertThat("Incorrect iterations.", beanTester.getIterations(), is(iterations));
-	}
-
-	@Test(expected = IllegalArgumentException.class)
 	public void addCustomConfigurationShouldPreventNullBeanClass() throws Exception {
 		beanTester.addCustomConfiguration(null, configuration);
 	}

@@ -57,7 +57,7 @@ public class PopulatedBeanFactory implements Factory<Object> {
 	@Override
     public Object create() throws BeanCreationException {
 		Map<String, Object> propertyValues = beanPropertyValuesFactory.create();
-		BasicNewObjectInstanceFactory beanFactory = new BasicNewObjectInstanceFactory(beanInformation.getBeanClass());
+		Factory<Object> beanFactory = BasicNewObjectInstanceFactory.findBeanFactory(beanInformation.getBeanClass());
 		Object result = beanFactory.create();
 		beanPopulator.populate(result, beanInformation, propertyValues);
 		return result;

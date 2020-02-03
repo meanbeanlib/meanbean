@@ -13,8 +13,8 @@ import org.meanbean.lang.Factory;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.test.Configuration;
-import org.meanbean.util.Types;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.Types;
 import org.meanbean.util.ValidationHelper;
 
 import java.lang.reflect.Type;
@@ -262,7 +262,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	}
 
 	private Factory<?> createUnpopulatedBeanFactory(Class<?> propertyType) {
-		return new BasicNewObjectInstanceFactory(propertyType);
+		return BasicNewObjectInstanceFactory.findBeanFactory(propertyType);
 	}
 
 	private void testUnpopulatedBeanFactory(Factory<?> basicFactory) {

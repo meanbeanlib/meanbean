@@ -1,5 +1,6 @@
 package org.meanbean.factories;
 
+import org.kohsuke.MetaInfServices;
 import org.meanbean.factories.basic.BooleanFactory;
 import org.meanbean.factories.basic.ByteFactory;
 import org.meanbean.factories.basic.CharacterFactory;
@@ -15,6 +16,7 @@ import org.meanbean.util.RandomValueGenerator;
  * 
  * @author Graham Williamson
  */
+@MetaInfServices
 public class PrimitiveFactoryPlugin implements FactoryCollectionPlugin {
 
 	@Override

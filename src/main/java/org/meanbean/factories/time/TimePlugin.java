@@ -1,5 +1,6 @@
 package org.meanbean.factories.time;
 
+import org.kohsuke.MetaInfServices;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryCollectionPlugin;
 import org.meanbean.factories.NoSuchFactoryException;
@@ -23,6 +24,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 
+@MetaInfServices
 public class TimePlugin implements FactoryCollectionPlugin {
 
 	private RandomValueGenerator randomValueGenerator;

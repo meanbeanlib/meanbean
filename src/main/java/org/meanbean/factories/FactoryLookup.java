@@ -4,6 +4,7 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.ServiceDefinition;
 
 import java.lang.reflect.Type;
+import java.util.function.Supplier;
 
 /**
  * For looking up Factory instances
@@ -55,6 +56,12 @@ public interface FactoryLookup {
 	 * @throws IllegalArgumentException
 	 *             If the clazz is deemed illegal.
 	 */
-	boolean hasFactory(Type clazz) throws IllegalArgumentException;
+	boolean hasFactory(Type type) throws IllegalArgumentException;
 	
+	default <T> Factory<T> getFactoryIfAvailable(Type type, Supplier<Factory<T>> fallback) {
+		if (hasFactory(type)) {
+			return getFactory(type);
+		}
+		return fallback.get();
+	}
 }
