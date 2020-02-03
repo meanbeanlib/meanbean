@@ -40,4 +40,13 @@ public interface FactoryCollection extends FactoryLookup {
 	 */
 	void addFactory(Class<?> clazz, Factory<?> factory) throws IllegalArgumentException;
 	
+	/**
+	 * <p>
+	 * Add the specified FactoryLookup
+	 * </p>
+	 * 
+	 * The factoryLookup will be first consulted when looking for a Factory  
+	 */
+	void addFactoryLookup(FactoryLookup factoryLookup);
+
 }

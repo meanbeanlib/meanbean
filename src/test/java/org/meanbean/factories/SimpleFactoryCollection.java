@@ -20,13 +20,19 @@ public class SimpleFactoryCollection implements FactoryCollection {
 		return factories.containsKey(type);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-    public Factory<?> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException {
-		return factories.get(type);
+    public <T> Factory<T> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException {
+		return (Factory<T>) factories.get(type);
 	}
 
 	@Override
     public void addFactory(Class<?> clazz, Factory<?> factory) throws IllegalArgumentException {
 		factories.put(clazz, factory);
+	}
+
+	@Override
+	public void addFactoryLookup(FactoryLookup factoryLookup) {
+		throw new UnsupportedOperationException();
 	}
 }

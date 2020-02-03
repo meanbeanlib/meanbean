@@ -67,8 +67,10 @@ public class TimePlugin implements FactoryCollectionPlugin {
 	private Factory<ZoneOffset> newZoneOffsetFactory() {
 		return () -> {
 			int sign = randomValueGenerator.nextBoolean() ? 1 : -1;
-			int hours = randomValueGenerator.nextInt(19);
-			return ZoneOffset.ofHours(sign * hours);
+			int hours = randomValueGenerator.nextInt(18);
+			int minutes = randomValueGenerator.nextInt(59);
+			int seconds = randomValueGenerator.nextInt(59);
+			return ZoneOffset.ofHoursMinutesSeconds(sign * hours, sign * minutes, sign * seconds);
 		};
 	}
 

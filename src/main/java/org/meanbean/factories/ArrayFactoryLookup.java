@@ -4,6 +4,7 @@ import org.kohsuke.MetaInfServices;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.Order;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.Types;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
@@ -28,9 +29,10 @@ public class ArrayFactoryLookup implements FactoryLookup {
 		this.maxSize = maxArrayLength;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Factory<?> getFactory(Type clazz) {
-		return () -> randomArray((Class<?>) clazz);
+	public <T> Factory<T> getFactory(Type typeToken) throws IllegalArgumentException, NoSuchFactoryException {
+		return () -> (T) randomArray(typeToken);
 	}
 
 	@Override
@@ -38,14 +40,15 @@ public class ArrayFactoryLookup implements FactoryLookup {
 		return getRawType(type).isArray();
 	}
 
-	private Object randomArray(Class<?> clazz) {
+	private Object randomArray(Type typeToken) {
+		Class<?> clazz = Types.getRawType(typeToken);
 		int length = randomValueGenerator.nextInt(maxSize);
 		Factory<?> componentFactory = getComponentFactory(clazz);
 		Object array = Array.newInstance(clazz.getComponentType(), length);
 		for (int i = 0; i < length; i++) {
 			Array.set(array, i, componentFactory.create());
 		}
-		return array;
+		return  array;
 	}
 
 	private Factory<?> getComponentFactory(Class<?> clazz) {

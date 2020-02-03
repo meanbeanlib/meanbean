@@ -9,7 +9,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-public class ArraySupportingFactoryCollectionTest {
+public class ArrayFactoryLookupTest {
 
 	private ArrayFactoryLookup arrayFactoryCollection = new ArrayFactoryLookup();
 
@@ -21,8 +21,7 @@ public class ArraySupportingFactoryCollectionTest {
 
 	@Test
 	public void getFactory() throws Exception {
-		@SuppressWarnings("unchecked")
-		Factory<UUID[][]> factory = (Factory<UUID[][]>) arrayFactoryCollection.getFactory(UUID[][].class);
+		Factory<UUID[][]> factory = arrayFactoryCollection.getFactory(UUID[][].class);
 		UUID[][] matrix = factory.create();
 
 		assertThat(matrix)

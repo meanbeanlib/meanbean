@@ -84,8 +84,7 @@ public class BeanTesterTest {
 	public void shouldGetFactoryRepository() throws Exception {
 		FactoryCollection factoryRepository = beanTester.getFactoryCollection();
 		assertThat("Failed to get FactoryRepository.", factoryRepository, is(not(nullValue())));
-		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryRepository.getFactory(String.class);
+		Factory<String> stringFactory = factoryRepository.getFactory(String.class);
 		String randomString = stringFactory.create();
 		assertThat("Failed to get random String from FactoryRepository.", randomString, is(not(nullValue())));
 	}

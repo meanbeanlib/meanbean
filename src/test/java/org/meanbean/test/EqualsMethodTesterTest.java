@@ -188,8 +188,7 @@ public class EqualsMethodTesterTest {
 
 	@Test
 	public void testEqualsMethodShouldUseOverrideFactory() throws Exception {
-		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryCollection.getFactory(String.class);
+		Factory<String> stringFactory = factoryCollection.getFactory(String.class);
 		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(new BeanFactory(), configuration);
@@ -199,8 +198,7 @@ public class EqualsMethodTesterTest {
 
 	@Test
 	public void testEqualsShouldTestPropertySignificanceConfigurationIterationsTimes() throws Exception {
-		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryCollection.getFactory(String.class);
+		Factory<String> stringFactory = factoryCollection.getFactory(String.class);
 		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).iterations(5).build();
 		equalsTester.testEqualsMethod(new BeanFactory(), configuration);
@@ -209,8 +207,7 @@ public class EqualsMethodTesterTest {
 
 	@Test
 	public void testEqualsShouldTestPropertySignificanceGlobalIterationsTimes() throws Exception {
-		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryCollection.getFactory(String.class);
+		Factory<String> stringFactory = factoryCollection.getFactory(String.class);
 		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(new BeanFactory(), configuration);
@@ -345,8 +342,7 @@ public class EqualsMethodTesterTest {
 
 	@Test
 	public void testEqualsMethodByClassShouldUseOverrideFactory() throws Exception {
-		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryCollection.getFactory(String.class);
+		Factory<String> stringFactory = factoryCollection.getFactory(String.class);
 		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(Bean.class, configuration);
@@ -356,8 +352,7 @@ public class EqualsMethodTesterTest {
 
 	@Test
 	public void testEqualsMethodByClassShouldTestPropertySignificanceConfigurationIterationsTimes() throws Exception {
-		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryCollection.getFactory(String.class);
+		Factory<String> stringFactory = factoryCollection.getFactory(String.class);
 		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).iterations(5).build();
 		equalsTester.testEqualsMethod(Bean.class, configuration);
@@ -366,8 +361,7 @@ public class EqualsMethodTesterTest {
 
 	@Test
 	public void testEqualsMethodByClassShouldTestPropertySignificanceGlobalIterationsTimes() throws Exception {
-		@SuppressWarnings("unchecked")
-		Factory<String> stringFactory = (Factory<String>) factoryCollection.getFactory(String.class);
+		Factory<String> stringFactory = factoryCollection.getFactory(String.class);
 		InvocationCountingFactoryWrapper<String> factory = new InvocationCountingFactoryWrapper<String>(stringFactory);
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(Bean.class, configuration);

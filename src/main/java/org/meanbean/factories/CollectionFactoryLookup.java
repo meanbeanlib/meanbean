@@ -10,6 +10,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.meanbean.util.Types.getRawType;
 
@@ -28,7 +31,7 @@ import static org.meanbean.util.Types.getRawType;
 public class CollectionFactoryLookup implements FactoryLookup {
 
 	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
-	
+
 	private Map<Class<?>, Factory<?>> collectionFactories = buildDefaultCollectionFactories();
 	private int maxSize = 8;
 
@@ -40,9 +43,10 @@ public class CollectionFactoryLookup implements FactoryLookup {
 		this.maxSize = maxArrayLength;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Factory<?> getFactory(Type typeToken) throws IllegalArgumentException, NoSuchFactoryException {
-		return createCollectionPopulatingFactory(typeToken);
+	public <T> Factory<T> getFactory(Type typeToken) throws IllegalArgumentException, NoSuchFactoryException {
+		return (Factory<T>) createCollectionPopulatingFactory(typeToken);
 	}
 
 	private Factory<?> findItemFactory(Type itemType) {
@@ -70,7 +74,7 @@ public class CollectionFactoryLookup implements FactoryLookup {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Factory<?> createCollectionPopulatingFactory(Type typeToken) {
 		Class<?> rawType = getRawType(typeToken);
-		Factory<Object> instanceFactory = findCollectionInstanceFactory(rawType);
+		Factory<Object> instanceFactory = findCollectionInstanceFactory(typeToken, rawType);
 
 		Type itemType = findElementType(typeToken, 0);
 		Factory<?> itemFactory = findItemFactory(itemType);
@@ -111,8 +115,18 @@ public class CollectionFactoryLookup implements FactoryLookup {
 		return populatingFactory;
 	}
 
-	@SuppressWarnings("unchecked")
-	private <T> Factory<T> findCollectionInstanceFactory(Class<?> rawType) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private <T> Factory<T> findCollectionInstanceFactory(Type type, Class<?> rawType) {
+		if (isEnumMap(type, rawType)) {
+			Type keyType = findElementType(type, 0);
+			return () -> (T) new EnumMap((Class) keyType);
+		}
+
+		if (isEnumSet(type, rawType)) {
+			Type keyType = findElementType(type, 0);
+			return () -> (T) EnumSet.noneOf((Class) keyType);
+		}
+
 		Factory<?> factory = collectionFactories.get(rawType);
 		if (factory == null) {
 			factory = () -> {
@@ -122,12 +136,37 @@ public class CollectionFactoryLookup implements FactoryLookup {
 					throw new IllegalStateException("cannot create instance for " + rawType, e);
 				}
 			};
+			collectionFactories.put(rawType, factory);
 		}
 		return (Factory<T>) factory;
 	}
 
+	@SuppressWarnings("rawtypes")
+	private boolean isEnumSet(Type type, Class<?> rawType) {
+		if (rawType.equals(EnumSet.class)) {
+			return true;
+		}
+		Type keyType = findElementType(type, 0);
+		if (rawType.equals(Set.class) && keyType instanceof Class) {
+			return ((Class) keyType).isEnum();
+		}
+		return false;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private boolean isEnumMap(Type type, Class<?> rawType) {
+		if (rawType.equals(EnumMap.class)) {
+			return true;
+		}
+		Type keyType = findElementType(type, 0);
+		if (rawType.equals(Map.class) && keyType instanceof Class) {
+			return ((Class) keyType).isEnum();
+		}
+		return false;
+	}
+
 	private static Map<Class<?>, Factory<?>> buildDefaultCollectionFactories() {
-		Map<Class<?>, Factory<?>> collectionFactories = new HashMap<>();
+		Map<Class<?>, Factory<?>> collectionFactories = new ConcurrentHashMap<>();
 
 		// Lists
 		collectionFactories.put(List.class, ArrayList::new);
@@ -137,7 +176,7 @@ public class CollectionFactoryLookup implements FactoryLookup {
 
 		// Sets
 		collectionFactories.put(Set.class, HashSet::new);
-		
+
 		// Other
 		collectionFactories.put(Collection.class, ArrayList::new);
 		collectionFactories.put(Queue.class, LinkedList::new);

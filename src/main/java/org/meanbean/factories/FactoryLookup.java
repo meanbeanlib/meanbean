@@ -40,7 +40,7 @@ public interface FactoryLookup {
 	 * @throws NoSuchFactoryException
 	 *             If the collection does not contain a Factory registered against the specified class.
 	 */
-	 Factory<?> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException;
+	 <T> Factory<T> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException;
 
 	/**
 	 * Does the collection contain a Factory registered against the specified class?

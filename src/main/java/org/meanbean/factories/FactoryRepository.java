@@ -76,6 +76,11 @@ public final class FactoryRepository implements FactoryCollection {
 		factories.put(key, factory);
 	}
 
+	@Override
+	public void addFactoryLookup(FactoryLookup factoryLookup) {
+		throw new UnsupportedOperationException();
+	}
+
 	/**
 	 * <p>
 	 * Get the Factory registered for the specified class.
@@ -98,10 +103,11 @@ public final class FactoryRepository implements FactoryCollection {
 	 *             If the collection does not contain a Factory registered against the specified class.
 	 */
 	@Override
-	public Factory<?> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException {
+	public <T> Factory<T> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException {
 		ValidationHelper.ensureExists("type", "get Factory", type);
 		String key = createId(type);// Should have prevented Exceptions in Validation above
-		Factory<?> factory = factories.get(key);
+		@SuppressWarnings("unchecked")
+		Factory<T> factory = (Factory<T>) factories.get(key);
 		if (factory == null) {
             String message = "Failed to find a Factory registered against [" + key + "] in the Repository.";
 			throw new NoSuchFactoryException(message);
@@ -133,4 +139,5 @@ public final class FactoryRepository implements FactoryCollection {
 	private String createId(Type type) {
 		return type.getTypeName();
 	}
+
 }
