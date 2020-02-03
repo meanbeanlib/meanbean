@@ -7,6 +7,7 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ValidationHelper;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -98,9 +99,9 @@ public final class FactoryRepository implements FactoryCollection {
 	 *             If the collection does not contain a Factory registered against the specified class.
 	 */
 	@Override
-	public Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException {
-		ValidationHelper.ensureExists("clazz", "get Factory", clazz);
-		String key = createId(clazz);// Should have prevented Exceptions in Validation above
+	public Factory<?> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException {
+		ValidationHelper.ensureExists("type", "get Factory", type);
+		String key = createId(type);// Should have prevented Exceptions in Validation above
 		Factory<?> factory = factories.get(key);
 		if (factory == null) {
             String message = "Failed to find a Factory registered against [" + key + "] in the Repository.";
@@ -123,14 +124,14 @@ public final class FactoryRepository implements FactoryCollection {
 	 *             If the clazz is deemed illegal.
 	 */
 	@Override
-	public boolean hasFactory(Class<?> clazz) throws IllegalArgumentException {
-		ValidationHelper.ensureExists("clazz", "check collection for Factory", clazz);
-		String key = createId(clazz);// Should have prevented Exceptions in Validation above
+	public boolean hasFactory(Type type) throws IllegalArgumentException {
+		ValidationHelper.ensureExists("type", "check collection for Factory", type);
+		String key = createId(type);// Should have prevented Exceptions in Validation above
 		boolean result = factories.containsKey(key);
 		return result;
 	}
 
-	private String createId(Class<?> clazz) {
-		return clazz.getName();
+	private String createId(Type type) {
+		return type.getTypeName();
 	}
 }

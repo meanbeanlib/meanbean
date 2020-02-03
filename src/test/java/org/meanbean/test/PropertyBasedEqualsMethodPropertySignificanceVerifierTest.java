@@ -177,7 +177,7 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 	@Test
 	public void verifyEqualsMethodShouldNotThrowAssertionErrorWhenTestPassesWithComplexBean() throws Exception {
 		// This tests whether the verifier can cope with non-readable/non-writable properties, etc.
-		verifier.verifyEqualsMethod(new ComplexBeanFactory());
+		verifier.verifyEqualsMethod(new ComplexBeanFactory(), "id");
 	}
 
 	@Test

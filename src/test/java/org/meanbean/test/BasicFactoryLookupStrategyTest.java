@@ -77,7 +77,7 @@ public class BasicFactoryLookupStrategyTest {
 	public void getFactoryShouldReturnRegisteredFactoryForRegisteredTypes() throws Exception {
 		PropertyInformationBean propertyInformationBean = new PropertyInformationBean();
 		propertyInformationBean.setName(IRRELEVANT_PROPERTY_NAME);
-		propertyInformationBean.setWriteMethodParameterType(String.class);
+		propertyInformationBean.setReadMethodReturnType(String.class);
 		Factory<?> factory = factoryLookupStrategy.getFactory(beanInformationMock, propertyInformationBean, null);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(StringFactory.class.getName()));
 	}
@@ -86,7 +86,7 @@ public class BasicFactoryLookupStrategyTest {
 	public void getFactoryShouldReturnEnumFactoryForEnumTypes() throws Exception {
 		PropertyInformationBean propertyInformationBean = new PropertyInformationBean();
 		propertyInformationBean.setName(IRRELEVANT_PROPERTY_NAME);
-		propertyInformationBean.setWriteMethodParameterType(Color.class);
+		propertyInformationBean.setReadMethodReturnType(Color.class);
 		Factory<?> factory = factoryLookupStrategy.getFactory(beanInformationMock, propertyInformationBean, null);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(EnumFactory.class.getName()));
 	}
@@ -98,7 +98,7 @@ public class BasicFactoryLookupStrategyTest {
 	        throws Exception {
 		PropertyInformationBean propertyInformationBean = new PropertyInformationBean();
 		propertyInformationBean.setName(IRRELEVANT_PROPERTY_NAME);
-		propertyInformationBean.setWriteMethodParameterType(BasicBean.class);
+		propertyInformationBean.setReadMethodReturnType(BasicBean.class);
 		Factory<?> factory = factoryLookupStrategy.getFactory(beanInformationReal, propertyInformationBean, null);
 		assertThat("Incorrect factory.", factory.getClass().getName(),
 		        is(BasicNewObjectInstanceFactory.class.getName()));
@@ -108,7 +108,7 @@ public class BasicFactoryLookupStrategyTest {
 	public void getFactoryShouldThrowNoSuchFactoryExceptionForUnsupportedTypes() throws Exception {
 		PropertyInformationBean propertyInformationBean = new PropertyInformationBean();
 		propertyInformationBean.setName(IRRELEVANT_PROPERTY_NAME);
-		propertyInformationBean.setWriteMethodParameterType(NonBean.class);
+		propertyInformationBean.setReadMethodReturnType(NonBean.class);
 		factoryLookupStrategy.getFactory(beanInformationReal, propertyInformationBean, null);
 	}
 
@@ -119,7 +119,7 @@ public class BasicFactoryLookupStrategyTest {
 				.build();
 		PropertyInformationBean propertyInformationBean = new PropertyInformationBean();
 		propertyInformationBean.setName(PROPERTY_NAME);
-		propertyInformationBean.setWriteMethodParameterType(String.class);
+		propertyInformationBean.setReadMethodReturnType(String.class);
 		Factory<?> factory = factoryLookupStrategy.getFactory(beanInformationMock, propertyInformationBean, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
@@ -131,7 +131,7 @@ public class BasicFactoryLookupStrategyTest {
 				.build();
 		PropertyInformationBean propertyInformationBean = new PropertyInformationBean();
 		propertyInformationBean.setName(PROPERTY_NAME);
-		propertyInformationBean.setWriteMethodParameterType(Color.class);
+		propertyInformationBean.setReadMethodReturnType(Color.class);
 		Factory<?> factory = factoryLookupStrategy.getFactory(beanInformationMock, propertyInformationBean, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}
@@ -143,7 +143,7 @@ public class BasicFactoryLookupStrategyTest {
 				.build();
 		PropertyInformationBean propertyInformationBean = new PropertyInformationBean();
 		propertyInformationBean.setName(PROPERTY_NAME);
-		propertyInformationBean.setWriteMethodParameterType(BasicBean.class);
+		propertyInformationBean.setReadMethodReturnType(BasicBean.class);
 		Factory<?> factory = factoryLookupStrategy.getFactory(beanInformationMock, propertyInformationBean, configuration);
 		assertThat("Incorrect factory.", factory.getClass().getName(), is(NullFactory.class.getName()));
 	}

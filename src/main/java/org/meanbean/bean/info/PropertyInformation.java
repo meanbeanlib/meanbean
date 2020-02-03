@@ -1,6 +1,7 @@
 package org.meanbean.bean.info;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 /**
  * Defines an object that provides information about a JavaBean property.
@@ -66,7 +67,7 @@ public interface PropertyInformation {
 	 * @return The return type of the read method. If the property does not have a read method, returns
 	 *         <code>null</code>
 	 */
-	Class<?> getReadMethodReturnType();
+	Type getReadMethodReturnType();
 
 	/**
 	 * Get the parameter type of the write method (setter method) of the property.
@@ -77,5 +78,5 @@ public interface PropertyInformation {
 	 * @throws IllegalArgumentException
 	 *             If the write method takes more than one parameter, or zero parameters.
 	 */
-	Class<?> getWriteMethodParameterType() throws IllegalArgumentException;
+	Type getWriteMethodParameterType() throws IllegalArgumentException;
 }

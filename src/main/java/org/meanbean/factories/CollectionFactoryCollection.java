@@ -4,7 +4,6 @@ import org.kohsuke.MetaInfServices;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.Order;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.TypeToken;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -18,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+
+import static org.meanbean.util.Types.getRawType;
 
 /**
  * FactoryCollection for java.util.Collection types
@@ -43,31 +44,26 @@ public class CollectionFactoryCollection implements FactoryCollection {
 	}
 
 	@Override
-	public Factory<?> getFactory(Class<?> clazz) {
-		return getFactory(TypeToken.get(clazz));
-	}
-
-	@Override
-	public <T> Factory<?> getFactory(TypeToken<?> typeToken) throws IllegalArgumentException, NoSuchFactoryException {
+	public Factory<?> getFactory(Type typeToken) throws IllegalArgumentException, NoSuchFactoryException {
 		return createCollectionPopulatingFactory(typeToken);
 	}
 
 	private Factory<?> findItemFactory(Type itemType) {
 		FactoryCollection factoryCollection = FactoryCollection.getInstance();
 		try {
-			return factoryCollection.getFactory(TypeToken.get(itemType));
+			return factoryCollection.getFactory(itemType);
 		} catch (NoSuchFactoryException e) {
 			return factoryCollection.getFactory(void.class);
 		}
 	}
 
 	@Override
-	public boolean hasFactory(Class<?> clazz) {
+	public boolean hasFactory(Type type) {
+		Class<?> clazz = org.meanbean.util.Types.getRawType(type);
 		return !clazz.equals(void.class) && (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz));
 	}
 
-	private Type findElementType(TypeToken<?> typeToken, int index) {
-		Type type = typeToken.getType();
+	private Type findElementType(Type type, int index) {
 		if (type instanceof ParameterizedType) {
 			return ((ParameterizedType) type).getActualTypeArguments()[index];
 		}
@@ -75,8 +71,8 @@ public class CollectionFactoryCollection implements FactoryCollection {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private Factory<?> createCollectionPopulatingFactory(TypeToken<?> typeToken) {
-		Class<?> rawType = typeToken.getRawType();
+	private Factory<?> createCollectionPopulatingFactory(Type typeToken) {
+		Class<?> rawType = getRawType(typeToken);
 		Factory<Object> instanceFactory = findCollectionInstanceFactory(rawType);
 
 		Type itemType = findElementType(typeToken, 0);

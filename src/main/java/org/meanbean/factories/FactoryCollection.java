@@ -2,9 +2,8 @@ package org.meanbean.factories;
 
 import org.meanbean.lang.Factory;
 import org.meanbean.util.ServiceDefinition;
-import org.meanbean.util.TypeToken;
 
-import java.util.Objects;
+import java.lang.reflect.Type;
 
 /**
  * Defines a collection factories of different types of objects.
@@ -53,8 +52,8 @@ public interface FactoryCollection {
 	 * <code>hasFactory(Class<?> clazz);</code>.
 	 * </p>
 	 * 
-	 * @param clazz
-	 *            The class the Factory is registered against. This should be the type of object that the Factory
+	 * @param type
+	 *            The type the Factory is registered against. This should be the type of object that the Factory
 	 *            creates.
 	 * 
 	 * @return The requested Factory.
@@ -64,18 +63,13 @@ public interface FactoryCollection {
 	 * @throws NoSuchFactoryException
 	 *             If the collection does not contain a Factory registered against the specified class.
 	 */
-	Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException;
-	
-	default <T> Factory<?> getFactory(TypeToken<?> typeToken) throws IllegalArgumentException, NoSuchFactoryException {
-		Objects.requireNonNull(typeToken);
-		return getFactory(typeToken.getRawType());
-	}
+	 Factory<?> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException;
 
 	/**
 	 * Does the collection contain a Factory registered against the specified class?
 	 * 
-	 * @param clazz
-	 *            The class a Factory could be registered against. This should be the type of object that the Factory
+	 * @param type
+	 *            The type a Factory could be registered against. This should be the type of object that the Factory
 	 *            creates.
 	 * 
 	 * @return <code>true</code> if the collection contains a Factory registered for the specified class;
@@ -84,11 +78,6 @@ public interface FactoryCollection {
 	 * @throws IllegalArgumentException
 	 *             If the clazz is deemed illegal.
 	 */
-	boolean hasFactory(Class<?> clazz) throws IllegalArgumentException;
-
-	default boolean hasFactory(TypeToken<?> typeToken) {
-		Objects.requireNonNull(typeToken);
-		return hasFactory(typeToken.getRawType());
-	}
+	boolean hasFactory(Type clazz) throws IllegalArgumentException;
 	
 }

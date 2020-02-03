@@ -6,6 +6,8 @@ import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.ValidationHelper;
 
+import java.lang.reflect.Type;
+
 /**
  * An object that tests a Bean's property methods.
  * 
@@ -93,7 +95,8 @@ public class BeanPropertyTester {
 	 * 
 	 * @return <code>true</code> if the specified types are compatible; <code>false</code> otherwise.
 	 */
-	protected boolean typesAreCompatible(Class<?> classA, Class<?> superClass) {
+	protected boolean typesAreCompatible(Class<?> classA, Type superType) {
+		Class<?> superClass = org.meanbean.util.Types.getRawType(superType);
 		if ((!classA.isPrimitive()) && (!superClass.isPrimitive())) {
 			return superClass.isAssignableFrom(classA);
 		}

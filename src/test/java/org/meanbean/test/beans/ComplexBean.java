@@ -54,6 +54,10 @@ public class ComplexBean {
 	public void setFavouriteNumber(long favouriteNumber) {
 		this.favouriteNumber = favouriteNumber;
 	}
+	
+	public long getId() {
+		return id;
+	}
 
 	public void setId(long id) {
 		this.id = id;

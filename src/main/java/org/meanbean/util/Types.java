@@ -16,19 +16,16 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import static org.meanbean.util.$MeanBean$Preconditions.checkArgument;
-import static org.meanbean.util.$MeanBean$Preconditions.checkNotNull;
-
 /**
  * Static methods for working with types.
  *
  * @author Bob Lee
  * @author Jesse Wilson
  */
-public final class $MeanBean$Types {
+public final class Types {
   static final Type[] EMPTY_TYPE_ARRAY = new Type[] {};
 
-  private $MeanBean$Types() {
+  private Types() {
     throw new UnsupportedOperationException();
   }
 
@@ -270,7 +267,7 @@ public final class $MeanBean$Types {
     }
     checkArgument(supertype.isAssignableFrom(contextRawType));
     return resolve(context, contextRawType,
-        $MeanBean$Types.getGenericSupertype(context, contextRawType, supertype));
+        Types.getGenericSupertype(context, contextRawType, supertype));
   }
 
   /**
@@ -488,7 +485,7 @@ public final class $MeanBean$Types {
 
     @Override public boolean equals(Object other) {
       return other instanceof ParameterizedType
-          && $MeanBean$Types.equals(this, (ParameterizedType) other);
+          && Types.equals(this, (ParameterizedType) other);
     }
 
     @Override public int hashCode() {
@@ -528,7 +525,7 @@ public final class $MeanBean$Types {
 
     @Override public boolean equals(Object o) {
       return o instanceof GenericArrayType
-          && $MeanBean$Types.equals(this, (GenericArrayType) o);
+          && Types.equals(this, (GenericArrayType) o);
     }
 
     @Override public int hashCode() {
@@ -582,7 +579,7 @@ public final class $MeanBean$Types {
 
     @Override public boolean equals(Object other) {
       return other instanceof WildcardType
-          && $MeanBean$Types.equals(this, (WildcardType) other);
+          && Types.equals(this, (WildcardType) other);
     }
 
     @Override public int hashCode() {
@@ -602,5 +599,18 @@ public final class $MeanBean$Types {
     }
 
     private static final long serialVersionUID = 0;
+  }
+
+  public static <T> T checkNotNull(T obj) {
+    if (obj == null) {
+      throw new NullPointerException();
+    }
+    return obj;
+  }
+
+  public static void checkArgument(boolean condition) {
+    if (!condition) {
+      throw new IllegalArgumentException();
+    }
   }
 }

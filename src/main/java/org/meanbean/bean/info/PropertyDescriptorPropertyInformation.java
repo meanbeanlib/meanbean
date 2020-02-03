@@ -2,6 +2,7 @@ package org.meanbean.bean.info;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 /**
  * Concrete implementation of PropertyInformation that provides information about a JavaBean property based on a
@@ -104,9 +105,9 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 *         <code>null</code>
 	 */
 	@Override
-    public Class<?> getReadMethodReturnType() {
+    public Type getReadMethodReturnType() {
 		if (isReadable()) {
-			return getReadMethod().getReturnType();
+			return getReadMethod().getGenericReturnType();
 		}
 		return null;
 	}
@@ -121,14 +122,13 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 *             If the write method takes more than one parameter, or zero parameters.
 	 */
 	@Override
-    public Class<?> getWriteMethodParameterType() throws IllegalArgumentException {
-		Class<?> parameterType = null;
+    public Type getWriteMethodParameterType() throws IllegalArgumentException {
 		Method writeMethod = getWriteMethod();
 		if (writeMethod != null) {
-			Class<?>[] parameterTypes = writeMethod.getParameterTypes();
-			parameterType = parameterTypes[0];
+			Type[] parameterTypes = writeMethod.getGenericParameterTypes();;
+			return parameterTypes[0];
 		}
-		return parameterType;
+		return null;
 	}
 
 	/**

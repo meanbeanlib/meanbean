@@ -6,6 +6,9 @@ import org.meanbean.util.Order;
 import org.meanbean.util.RandomValueGenerator;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
+
+import static org.meanbean.util.Types.getRawType;
 
 /**
  * FactoryCollection for array types
@@ -31,13 +34,13 @@ public class ArrayFactoryCollection implements FactoryCollection {
 	}
 
 	@Override
-	public Factory<?> getFactory(Class<?> clazz) {
-		return () -> randomArray(clazz);
+	public Factory<?> getFactory(Type clazz) {
+		return () -> randomArray((Class<?>) clazz);
 	}
 
 	@Override
-	public boolean hasFactory(Class<?> clazz) {
-		return clazz.isArray();
+	public boolean hasFactory(Type type) {
+		return getRawType(type).isArray();
 	}
 
 	private Object randomArray(Class<?> clazz) {

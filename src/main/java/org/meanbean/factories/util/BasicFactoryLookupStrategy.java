@@ -13,8 +13,8 @@ import org.meanbean.lang.Factory;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.test.Configuration;
+import org.meanbean.util.Types;
 import org.meanbean.util.RandomValueGenerator;
-import org.meanbean.util.TypeToken;
 import org.meanbean.util.ValidationHelper;
 
 import java.lang.reflect.Type;
@@ -144,7 +144,8 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			Configuration configuration) {
 
 		String propertyName = propertyInformation.getName();
-		Class<?> propertyType = propertyInformation.getWriteMethodParameterType();
+		Type genericType = propertyInformation.getReadMethodReturnType();
+		Class<?> propertyType = Types.getRawType(genericType);
 
 		if (propertyHasOverrideFactoryInConfiguration(propertyName, configuration)) {
 			return getPropertyOverrideFactoryFromConfiguration(propertyName, configuration);
@@ -172,15 +173,13 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	}
 
 	private boolean propertyTypeHasRegisteredFactory(PropertyInformation propertyType) {
-		Type genericPropertyType = propertyType.getReadMethod().getGenericReturnType();
-		TypeToken<?> typeToken = TypeToken.get(genericPropertyType);
-		return factoryCollection.hasFactory(typeToken);
+		Type genericPropertyType = propertyType.getReadMethodReturnType();
+		return factoryCollection.hasFactory(genericPropertyType);
 	}
 
 	private Factory<?> getPropertyTypeRegisteredFactory(PropertyInformation propertyType) {
-		Type genericPropertyType = propertyType.getReadMethod().getGenericReturnType();
-		TypeToken<?> typeToken = TypeToken.get(genericPropertyType);
-		return factoryCollection.getFactory(typeToken);
+		Type genericPropertyType = propertyType.getReadMethodReturnType();
+		return factoryCollection.getFactory(genericPropertyType);
 	}
 
 	private boolean propertyIsAnEnum(Class<?> propertyType) {
