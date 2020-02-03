@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.meanbean.test.BeanTester;
 import org.meanbean.test.beans.CollectionPropertyBean;
 
-public class CollectionFactoryCollectionTest {
+public class CollectionSupportingFactoryCollectionTest {
 
 	@Test
 	public void test() throws Exception {

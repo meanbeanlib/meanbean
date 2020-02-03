@@ -15,7 +15,7 @@ import static org.meanbean.util.Types.getRawType;
  */
 @Order(5000)
 @MetaInfServices
-public class ArrayFactoryCollection implements FactoryCollection {
+public class ArraySupportingFactoryCollection implements FactoryCollection {
 
 	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 	private int maxSize = 8;

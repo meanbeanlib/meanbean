@@ -9,9 +9,9 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-public class ArrayFactoryCollectionTest {
+public class ArraySupportingFactoryCollectionTest {
 
-	private ArrayFactoryCollection arrayFactoryCollection = new ArrayFactoryCollection();
+	private ArraySupportingFactoryCollection arrayFactoryCollection = new ArraySupportingFactoryCollection();
 
 	@Test
 	public void hasFactory() throws Exception {

@@ -25,9 +25,11 @@ import static org.meanbean.util.Types.getRawType;
  */
 @Order(4000)
 @MetaInfServices
-public class CollectionFactoryCollection implements FactoryCollection {
+public class CollectionSupportingFactoryCollection implements FactoryCollection {
 
 	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
+	
+	private Map<Class<?>, Factory<?>> collectionFactories = buildDefaultCollectionFactories();
 	private int maxSize = 8;
 
 	public int getMaxSize() {
@@ -79,20 +81,7 @@ public class CollectionFactoryCollection implements FactoryCollection {
 		Factory<?> itemFactory = findItemFactory(itemType);
 
 		if (Map.class.isAssignableFrom(rawType)) {
-			Type valueType = findElementType(typeToken, 1);
-			Factory<?> valueFactory = findItemFactory(valueType);
-
-			Factory<Object> populatingFactory = () -> {
-				Map map = (Map) instanceFactory.create();
-
-				int size = randomValueGenerator.nextInt(maxSize);
-				for (int idx = 0; idx < size; idx++) {
-					map.put(itemFactory.create(), valueFactory.create());
-				}
-				return map;
-			};
-
-			return populatingFactory;
+			return createMapPopulatingFactory(typeToken, instanceFactory, itemFactory);
 
 		} else {
 			Factory<Object> populatingFactory = () -> {
@@ -109,9 +98,40 @@ public class CollectionFactoryCollection implements FactoryCollection {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private Factory<?> createMapPopulatingFactory(Type typeToken, Factory<Object> instanceFactory, Factory<?> itemFactory) {
+		Type valueType = findElementType(typeToken, 1);
+		Factory<?> valueFactory = findItemFactory(valueType);
+
+		Factory<Object> populatingFactory = () -> {
+			Map map = (Map) instanceFactory.create();
+
+			int size = randomValueGenerator.nextInt(maxSize);
+			for (int idx = 0; idx < size; idx++) {
+				map.put(itemFactory.create(), valueFactory.create());
+			}
+			return map;
+		};
+
+		return populatingFactory;
+	}
+
 	@SuppressWarnings("unchecked")
 	private <T> Factory<T> findCollectionInstanceFactory(Class<?> rawType) {
+		Factory<?> factory = collectionFactories.get(rawType);
+		if (factory == null) {
+			factory = () -> {
+				try {
+					return rawType.getConstructor().newInstance();
+				} catch (Exception e) {
+					throw new IllegalStateException("cannot create instance for " + rawType, e);
+				}
+			};
+		}
+		return (Factory<T>) factory;
+	}
 
+	private static Map<Class<?>, Factory<?>> buildDefaultCollectionFactories() {
 		Map<Class<?>, Factory<?>> collectionFactories = new HashMap<>();
 
 		// Lists
@@ -127,17 +147,6 @@ public class CollectionFactoryCollection implements FactoryCollection {
 		collectionFactories.put(Collection.class, ArrayList::new);
 		collectionFactories.put(Queue.class, LinkedList::new);
 		collectionFactories.put(Deque.class, LinkedList::new);
-
-		Factory<?> factory = collectionFactories.get(rawType);
-		if (factory == null) {
-			factory = () -> {
-				try {
-					return rawType.getConstructor().newInstance();
-				} catch (Exception e) {
-					throw new IllegalStateException("cannot create instance for " + rawType, e);
-				}
-			};
-		}
-		return (Factory<T>) factory;
+		return collectionFactories;
 	}
 }
