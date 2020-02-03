@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @author Graham Williamson
  */
-@MetaInfServices(FactoryCollection.class)
+@MetaInfServices
 public final class FactoryRepository implements FactoryCollection {
 
 	/** A Map of Factory objects keyed by a unique ID. */

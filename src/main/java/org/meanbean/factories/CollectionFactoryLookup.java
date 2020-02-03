@@ -25,7 +25,7 @@ import static org.meanbean.util.Types.getRawType;
  */
 @Order(4000)
 @MetaInfServices
-public class CollectionSupportingFactoryCollection implements FactoryCollection {
+public class CollectionFactoryLookup implements FactoryLookup {
 
 	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 	
@@ -38,11 +38,6 @@ public class CollectionSupportingFactoryCollection implements FactoryCollection 
 
 	public void setMaxSize(int maxArrayLength) {
 		this.maxSize = maxArrayLength;
-	}
-
-	@Override
-	public void addFactory(Class<?> clazz, Factory<?> factory) {
-
 	}
 
 	@Override

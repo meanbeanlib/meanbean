@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class ArraySupportingFactoryCollectionTest {
 
-	private ArraySupportingFactoryCollection arrayFactoryCollection = new ArraySupportingFactoryCollection();
+	private ArrayFactoryLookup arrayFactoryCollection = new ArrayFactoryLookup();
 
 	@Test
 	public void hasFactory() throws Exception {

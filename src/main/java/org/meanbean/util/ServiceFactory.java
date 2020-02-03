@@ -56,8 +56,12 @@ public class ServiceFactory<T> {
 		ServiceLoader<T> loader = new ServiceLoader<>(serviceDefinition.getServiceType(),
 				serviceDefinition.getConstructorTypes());
 		List<T> services = loader.createAll(serviceDefinition.getConstructorArgs());
-		Collections.sort(services, Comparator.comparingInt(ServiceFactory::getOrder));
+		Collections.sort(services, getComparator());
 		return services;
+	}
+
+	public static <T> Comparator<T> getComparator() {
+		return Comparator.comparingInt(ServiceFactory::getOrder);
 	}
 
 	private static <T> int getOrder(T obj) {

@@ -3,6 +3,8 @@ package org.meanbean.factories;
 import org.kohsuke.MetaInfServices;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.Order;
+import org.meanbean.util.ServiceDefinition;
+import org.meanbean.util.ServiceFactory;
 
 import java.lang.reflect.Type;
 import java.util.Optional;
@@ -22,7 +24,7 @@ public class FactoryCollectionRepository implements FactoryCollection {
 
 	@Override
 	public Factory<?> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException {
-		Optional<Factory<?>> resultOptional = factoryCollections()
+		Optional<Factory<?>> resultOptional = factoryLookups()
 				.filter(factoryCollection -> factoryCollection.hasFactory(type))
 				.findFirst()
 				.map(factoryCollection -> factoryCollection.getFactory(type));
@@ -36,12 +38,21 @@ public class FactoryCollectionRepository implements FactoryCollection {
 
 	@Override
 	public boolean hasFactory(Type type) throws IllegalArgumentException {
-		return factoryCollections().anyMatch(factoryCollection -> factoryCollection.hasFactory(type));
+		return factoryLookups().anyMatch(factoryCollection -> factoryCollection.hasFactory(type));
+	}
+
+	protected Stream<FactoryLookup> factoryLookups() {
+		Stream<FactoryLookup> stream = stream(FactoryLookup.getServiceDefinition());
+		return Stream.concat(stream, factoryCollections())
+				.sorted(ServiceFactory.getComparator());
 	}
 
 	protected Stream<FactoryCollection> factoryCollections() {
-		return FactoryCollection.getServiceDefinition()
-				.getServiceFactory()
+		return stream(FactoryCollection.getServiceDefinition());
+	}
+
+	private <T> Stream<T> stream(ServiceDefinition<T> definition) {
+		return definition.getServiceFactory()
 				.getAll()
 				.stream()
 				.filter(factoryCollection -> factoryCollection != this);

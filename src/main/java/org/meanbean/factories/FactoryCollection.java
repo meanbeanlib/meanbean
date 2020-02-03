@@ -3,14 +3,12 @@ package org.meanbean.factories;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.ServiceDefinition;
 
-import java.lang.reflect.Type;
-
 /**
  * Defines a collection factories of different types of objects.
  * 
  * @author Graham Williamson
  */
-public interface FactoryCollection {
+public interface FactoryCollection extends FactoryLookup {
 
 	public static ServiceDefinition<FactoryCollection> getServiceDefinition() {
 		return new ServiceDefinition<>(FactoryCollection.class);
@@ -41,43 +39,5 @@ public interface FactoryCollection {
 	 *             If either of the required parameters are deemed illegal.
 	 */
 	void addFactory(Class<?> clazz, Factory<?> factory) throws IllegalArgumentException;
-
-	/**
-	 * <p>
-	 * Get the Factory registered for the specified class.
-	 * </p>
-	 * 
-	 * <p>
-	 * To check whether a Factory is registered for a specified class, please refer to
-	 * <code>hasFactory(Class<?> clazz);</code>.
-	 * </p>
-	 * 
-	 * @param type
-	 *            The type the Factory is registered against. This should be the type of object that the Factory
-	 *            creates.
-	 * 
-	 * @return The requested Factory.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the class is deemed illegal.
-	 * @throws NoSuchFactoryException
-	 *             If the collection does not contain a Factory registered against the specified class.
-	 */
-	 Factory<?> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException;
-
-	/**
-	 * Does the collection contain a Factory registered against the specified class?
-	 * 
-	 * @param type
-	 *            The type a Factory could be registered against. This should be the type of object that the Factory
-	 *            creates.
-	 * 
-	 * @return <code>true</code> if the collection contains a Factory registered for the specified class;
-	 *         <code>false</code> otherwise.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the clazz is deemed illegal.
-	 */
-	boolean hasFactory(Type clazz) throws IllegalArgumentException;
 	
 }
