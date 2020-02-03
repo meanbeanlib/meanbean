@@ -17,9 +17,22 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Queue;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.TransferQueue;
 
 import static org.meanbean.util.Types.getRawType;
 
@@ -173,14 +186,22 @@ public class CollectionFactoryLookup implements FactoryLookup {
 
 		// Maps
 		collectionFactories.put(Map.class, HashMap::new);
+		collectionFactories.put(ConcurrentMap.class, ConcurrentHashMap::new);
+		collectionFactories.put(SortedMap.class, TreeMap::new);
+		collectionFactories.put(NavigableMap.class, TreeMap::new);
 
 		// Sets
 		collectionFactories.put(Set.class, HashSet::new);
+		collectionFactories.put(SortedSet.class, TreeSet::new);
+		collectionFactories.put(NavigableSet.class, TreeSet::new);
 
 		// Other
 		collectionFactories.put(Collection.class, ArrayList::new);
 		collectionFactories.put(Queue.class, LinkedList::new);
 		collectionFactories.put(Deque.class, LinkedList::new);
+		collectionFactories.put(BlockingQueue.class, LinkedBlockingQueue::new);
+		collectionFactories.put(BlockingDeque.class, LinkedBlockingDeque::new);
+		collectionFactories.put(TransferQueue.class, LinkedTransferQueue::new);
 		return collectionFactories;
 	}
 }
