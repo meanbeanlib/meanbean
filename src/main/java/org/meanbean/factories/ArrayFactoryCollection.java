@@ -15,14 +15,14 @@ import java.lang.reflect.Array;
 public class ArrayFactoryCollection implements FactoryCollection {
 
 	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
-	private int maxArrayLength = 8;
+	private int maxSize = 8;
 
-	public int getMaxArrayLength() {
-		return maxArrayLength;
+	public int getMaxSize() {
+		return maxSize;
 	}
 
-	public void setMaxArrayLength(int maxArrayLength) {
-		this.maxArrayLength = maxArrayLength;
+	public void setMaxSize(int maxArrayLength) {
+		this.maxSize = maxArrayLength;
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class ArrayFactoryCollection implements FactoryCollection {
 	}
 
 	private Object randomArray(Class<?> clazz) {
-		int length = randomValueGenerator.nextInt(maxArrayLength);
+		int length = randomValueGenerator.nextInt(maxSize);
 		Factory<?> componentFactory = getComponentFactory(clazz);
 		Object array = Array.newInstance(clazz.getComponentType(), length);
 		for (int i = 0; i < length; i++) {

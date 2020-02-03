@@ -1,6 +1,7 @@
 package org.meanbean.factories.util;
 
 import org.meanbean.bean.info.BeanInformation;
+import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.lang.Factory;
@@ -38,8 +39,8 @@ public interface FactoryLookupStrategy {
 	 * 
 	 * @param beanInformation
 	 *            Information about the bean the property belongs to.
-	 * @param propertyName
-	 *            The name of the property.
+	 * @param propertyInformation
+	 *            Information about the property.
 	 * @param propertyType
 	 *            The type of the property.
 	 * @param configuration
@@ -54,6 +55,6 @@ public interface FactoryLookupStrategy {
 	 *             If an unexpected exception occurs when getting the Factory, including failing to find a suitable
 	 *             Factory.
 	 */
-	Factory<?> getFactory(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
+	Factory<?> getFactory(BeanInformation beanInformation, PropertyInformation propertyInformation,
 			Configuration configuration) throws IllegalArgumentException, BeanTestException;
 }

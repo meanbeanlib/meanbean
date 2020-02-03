@@ -360,9 +360,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 				String message = "Cannot test equals if factory does not create objects with same property values.";
 				throw new IllegalArgumentException(message);
 			}
-			Factory<?> propertyFactory =
-			        factoryLookupStrategy.getFactory(beanInformation, propertyName,
-			                property.getWriteMethodParameterType(), configuration);
+			Factory<?> propertyFactory = factoryLookupStrategy.getFactory(beanInformation, property, configuration);
 			Object newVal = propertyFactory.create();
 			property.getWriteMethod().invoke(modifiedObj, newVal);
 			if (significant) {

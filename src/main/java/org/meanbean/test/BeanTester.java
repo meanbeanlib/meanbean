@@ -386,8 +386,7 @@ public class BeanTester {
 				Object testValue = null;
 				try {
 					Factory<?> valueFactory =
-					        factoryLookupStrategy.getFactory(beanInformation, property.getName(),
-					                property.getWriteMethodParameterType(), configuration);
+					        factoryLookupStrategy.getFactory(beanInformation, property, configuration);
 					testValue = valueFactory.create();
 					if (valueFactory instanceof BasicNewObjectInstanceFactory) {
 						equalityTest = EqualityTest.ABSOLUTE;

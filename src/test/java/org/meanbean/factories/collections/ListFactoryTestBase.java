@@ -1,13 +1,5 @@
 package org.meanbean.factories.collections;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.sameInstance;
-
-import java.util.Collections;
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.factories.basic.ArrayBasedRandomValueGenerator;
@@ -16,6 +8,15 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.LongStream;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class ListFactoryTestBase {
@@ -27,6 +28,9 @@ public abstract class ListFactoryTestBase {
 	protected Factory<String> itemFactory;
 
 	private static final long[] RANDOM_LONGS = new long[] { 1, -3, 5, -7, 9, 10 };
+	private static final int[] RANDOM_INTS = LongStream.of(RANDOM_LONGS)
+			.mapToInt(longValue -> (int) longValue)
+			.toArray();
 
 	@Test
 	public void createListShouldReturnCorrectListType() throws Exception {
@@ -61,22 +65,21 @@ public abstract class ListFactoryTestBase {
 	@Test
 	public void createShouldReturnExpectedSizeOfList() throws Exception {
 		RandomValueGenerator randomValueGenerator =
-		        new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS, null, new double[] { 0.0421 }, null);
+		        new ArrayBasedRandomValueGenerator(null, RANDOM_INTS, RANDOM_LONGS, null, new double[] { 0.0421 }, null);
 		Factory<String> itemFactory = new StringFactory(randomValueGenerator);
 		ListFactoryBase<String> factory = getListFactory(randomValueGenerator, itemFactory);
-		assertThat("Incorrect List created.", factory.create().size(), is(4));
+		assertThat("Incorrect List created.", factory.create().size(), is(2));
 	}
 
 	@Test
 	public void createShouldReturnExpectedListContents() throws Exception {
 		RandomValueGenerator randomValueGenerator =
-		        new ArrayBasedRandomValueGenerator(null, null, RANDOM_LONGS, null, new double[] { 0.06 }, null);
+		        new ArrayBasedRandomValueGenerator(null, RANDOM_INTS, RANDOM_LONGS, null, new double[] { 0.06 }, null);
 		Factory<String> itemFactory = new StringFactory(randomValueGenerator);
 		ListFactoryBase<String> factory = getListFactory(randomValueGenerator, itemFactory);
 		List<String> expectedList = factory.createList();
-		for (int idx = 0; idx < RANDOM_LONGS.length;) {
-			expectedList.add("TestString:[" + RANDOM_LONGS[idx++] + "]");
-		}
+		expectedList.add("TestString:[-3]");
+		expectedList.add("TestString:[1]");
 		List<String> createdList = factory.create();
 		Collections.sort(createdList);
 		Collections.sort(expectedList);

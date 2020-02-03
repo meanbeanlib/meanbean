@@ -2,6 +2,9 @@ package org.meanbean.factories;
 
 import org.meanbean.lang.Factory;
 import org.meanbean.util.ServiceDefinition;
+import org.meanbean.util.TypeToken;
+
+import java.util.Objects;
 
 /**
  * Defines a collection factories of different types of objects.
@@ -62,6 +65,11 @@ public interface FactoryCollection {
 	 *             If the collection does not contain a Factory registered against the specified class.
 	 */
 	Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException;
+	
+	default <T> Factory<?> getFactory(TypeToken<?> typeToken) throws IllegalArgumentException, NoSuchFactoryException {
+		Objects.requireNonNull(typeToken);
+		return getFactory(typeToken.getRawType());
+	}
 
 	/**
 	 * Does the collection contain a Factory registered against the specified class?
@@ -77,4 +85,10 @@ public interface FactoryCollection {
 	 *             If the clazz is deemed illegal.
 	 */
 	boolean hasFactory(Class<?> clazz) throws IllegalArgumentException;
+
+	default boolean hasFactory(TypeToken<?> typeToken) {
+		Objects.requireNonNull(typeToken);
+		return hasFactory(typeToken.getRawType());
+	}
+	
 }

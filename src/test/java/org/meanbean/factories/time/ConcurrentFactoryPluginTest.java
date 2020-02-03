@@ -25,8 +25,12 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
@@ -95,9 +99,11 @@ public class ConcurrentFactoryPluginTest {
     public void testZoneOffset() {
         plugin.initialize(factoryCollection, randomValueGenerator);
 
-        Factory<?> factory = factoryCollection.getFactory(ZoneOffset.class);
-        ZoneOffset val1 = (ZoneOffset) factory.create();
-        ZoneOffset val2 = (ZoneOffset) factory.create();
-        assertThat(val1, is(not(val2)));
+		Factory<?> factory = factoryCollection.getFactory(ZoneOffset.class);
+		List<ZoneOffset> zoneOffsets = IntStream.range(0, 10)
+				.mapToObj(num -> (ZoneOffset) factory.create())
+				.distinct()
+				.collect(Collectors.toList());
+		assertThat(zoneOffsets.size(), is(greaterThan(7)));
     }
 }

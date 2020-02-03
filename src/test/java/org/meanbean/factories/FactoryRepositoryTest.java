@@ -75,7 +75,7 @@ public class FactoryRepositoryTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void getFactoryShouldPreventNullClass() throws Exception {
-		factoryRepository.getFactory(null);
+		factoryRepository.getFactory((Class<?>) null);
 	}
 
 	@Test(expected = NoSuchFactoryException.class)
@@ -91,7 +91,7 @@ public class FactoryRepositoryTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void hasFactoryShouldPreventNullClass() throws Exception {
-		factoryRepository.hasFactory(null);
+		factoryRepository.hasFactory((Class<?>) null);
 	}
 
 	@Test

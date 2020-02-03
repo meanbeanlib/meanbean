@@ -26,16 +26,16 @@ public class ArrayFactoryCollectionTest {
 		UUID[][] matrix = factory.create();
 
 		assertThat(matrix)
-				.hasSizeLessThanOrEqualTo(arrayFactoryCollection.getMaxArrayLength());
+				.hasSizeLessThanOrEqualTo(arrayFactoryCollection.getMaxSize());
 		for (UUID[] array : matrix) {
 			assertThat(array)
-					.hasSizeLessThanOrEqualTo(arrayFactoryCollection.getMaxArrayLength());
+					.hasSizeLessThanOrEqualTo(arrayFactoryCollection.getMaxSize());
 		}
 	}
 
 	@Test
 	public void maxArrayLength() {
-		assertThat(arrayFactoryCollection.getMaxArrayLength())
+		assertThat(arrayFactoryCollection.getMaxSize())
 				.isLessThanOrEqualTo(8);
 	}
 

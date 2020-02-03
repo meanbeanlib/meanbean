@@ -3,6 +3,8 @@ package org.meanbean.test.beans.domain;
 import java.util.Collection;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class Customer extends Person {
 
@@ -15,6 +17,7 @@ public class Customer extends Person {
 	}
 
 	public void setAddresses(Set<Address> addresses) {
+		assertThat(addresses).hasOnlyElementsOfType(Address.class);
 		this.addresses = addresses;
 	}
 

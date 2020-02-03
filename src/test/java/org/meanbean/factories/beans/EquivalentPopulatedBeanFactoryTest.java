@@ -4,7 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.bean.info.BeanInformation;
+import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
+import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
@@ -61,42 +63,26 @@ public class EquivalentPopulatedBeanFactoryTest {
 		BeanTester tester = new BeanTester();
 		factoryLookupStrategyReal =
 		        new BasicFactoryLookupStrategy(tester.getFactoryCollection(), tester.getRandomValueGenerator());
-		beanInformationReal = new JavaBeanInformationFactory().create(ComplexBean.class);
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, ID_KEY, long.class, null)).thenReturn(
-		        (Factory) new Factory<Long>() {
-			        @Override
-                    public Long create() {
-				        return TEST_ID;
-			        }
-		        });
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, FIRST_NAME_KEY, String.class, null)).thenReturn(
-		        (Factory) new Factory<String>() {
-			        @Override
-                    public String create() {
-				        return TEST_FIRST_NAME;
-			        }
-		        });
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, LAST_NAME_KEY, String.class, null)).thenReturn(
-		        (Factory) new Factory<String>() {
-			        @Override
-                    public String create() {
-				        return TEST_LAST_NAME;
-			        }
-		        });
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, DATE_OF_BIRTH_KEY, Date.class, null))
-		        .thenReturn((Factory) new Factory<Date>() {
-			        @Override
-                    public Date create() {
-				        return TEST_DATE_OF_BIRTH;
-			        }
-		        });
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, FAVOURITE_NUMBER_KEY, long.class, null))
-		        .thenReturn((Factory) new Factory<Long>() {
-			        @Override
-                    public Long create() {
-				        return TEST_FAVOURITE_NUMBER;
-			        }
-		        });
+		BeanInformationFactory javaBeanInformationFactory = new JavaBeanInformationFactory();
+		beanInformationReal = javaBeanInformationFactory.create(ComplexBean.class);
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(ID_KEY), null))
+				.thenReturn((Factory) () -> TEST_ID);
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(FIRST_NAME_KEY), null))
+				.thenReturn((Factory) () -> TEST_FIRST_NAME);
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(LAST_NAME_KEY), null))
+				.thenReturn((Factory) () -> TEST_LAST_NAME);
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(DATE_OF_BIRTH_KEY), null))
+				.thenReturn((Factory) () -> TEST_DATE_OF_BIRTH);
+		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(FAVOURITE_NUMBER_KEY), null))
+				.thenReturn((Factory) () -> TEST_FAVOURITE_NUMBER);
+	}
+
+	private PropertyInformation getProperty(String name) {
+		return beanInformationReal.getProperties()
+				.stream()
+				.filter(property -> property.getName().equals(name))
+				.findFirst()
+				.get();
 	}
 
 	@Test(expected = IllegalArgumentException.class)

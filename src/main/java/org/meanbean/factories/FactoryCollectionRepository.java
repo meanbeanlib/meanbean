@@ -3,6 +3,7 @@ package org.meanbean.factories;
 import org.kohsuke.MetaInfServices;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.Order;
+import org.meanbean.util.TypeToken;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -21,18 +22,21 @@ public class FactoryCollectionRepository implements FactoryCollection {
 
 	@Override
 	public Factory<?> getFactory(Class<?> clazz) throws IllegalArgumentException, NoSuchFactoryException {
+		return getFactory(TypeToken.get(clazz));
+	}
+
+	@Override
+	public <T> Factory<?> getFactory(TypeToken<?> typeToken) throws IllegalArgumentException, NoSuchFactoryException {
 		Optional<Factory<?>> resultOptional = factoryCollections()
-				.filter(factoryCollection -> factoryCollection.hasFactory(clazz))
+				.filter(factoryCollection -> factoryCollection.hasFactory(typeToken))
 				.findFirst()
-				.map(factoryCollection -> factoryCollection.getFactory(clazz));
+				.map(factoryCollection -> factoryCollection.getFactory(typeToken));
 
 		if (resultOptional.isPresent()) {
 			return resultOptional.get();
 		}
 
-		return factoryCollections().findFirst()
-				.get()
-				.getFactory(clazz);
+		throw new NoSuchFactoryException("No factory found for " + typeToken);
 	}
 
 	@Override
@@ -40,7 +44,7 @@ public class FactoryCollectionRepository implements FactoryCollection {
 		return factoryCollections().anyMatch(factoryCollection -> factoryCollection.hasFactory(clazz));
 	}
 
-	private synchronized Stream<FactoryCollection> factoryCollections() {
+	protected Stream<FactoryCollection> factoryCollections() {
 		return FactoryCollection.getServiceDefinition()
 				.getServiceFactory()
 				.getAll()

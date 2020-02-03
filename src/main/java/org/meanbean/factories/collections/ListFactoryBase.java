@@ -42,8 +42,7 @@ public abstract class ListFactoryBase<T> extends RandomFactoryBase<List<T>> {
 	@Override
     public List<T> create() {
 		// Basis to randomly decide size of List
-		double randomSize = getRandomValueGenerator().nextDouble();
-		int size = (int) (100.0 * randomSize);
+		int size = getRandomValueGenerator().nextInt(16) + 1;
 		List<T> result = createList();
 		for (int idx = 0; idx < size; idx++) {
 			result.add(itemFactory.create());

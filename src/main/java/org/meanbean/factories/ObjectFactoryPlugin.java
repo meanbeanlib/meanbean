@@ -39,7 +39,9 @@ public class ObjectFactoryPlugin implements FactoryCollectionPlugin {
 		factoryCollection.addFactory(BigInteger.class, new BigIntegerFactory(randomValueGenerator));
 		factoryCollection.addFactory(Character.class, new CharacterFactory(randomValueGenerator));
 		factoryCollection.addFactory(String.class, new StringFactory(randomValueGenerator));
+		factoryCollection.addFactory(Void.TYPE, () -> null);
 		factoryCollection.addFactory(Date.class, new DateFactory(randomValueGenerator));
 		factoryCollection.addFactory(UUID.class, UUID::randomUUID);
+		
 	}
 }

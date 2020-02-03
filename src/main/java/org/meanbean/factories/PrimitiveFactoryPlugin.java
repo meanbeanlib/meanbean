@@ -27,5 +27,6 @@ public class PrimitiveFactoryPlugin implements FactoryCollectionPlugin {
 		factoryCollection.addFactory(float.class, new FloatFactory(randomValueGenerator));
 		factoryCollection.addFactory(double.class, new DoubleFactory(randomValueGenerator));
 		factoryCollection.addFactory(char.class, new CharacterFactory(randomValueGenerator));
+		factoryCollection.addFactory(void.class, () -> null);
 	}
 }

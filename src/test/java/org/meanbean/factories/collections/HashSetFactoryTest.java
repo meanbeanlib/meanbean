@@ -1,10 +1,13 @@
 package org.meanbean.factories.collections;
 
+import org.junit.Test;
+import org.meanbean.lang.Factory;
+import org.meanbean.test.BeanTester;
+import org.meanbean.test.beans.domain.Customer;
+import org.meanbean.util.RandomValueGenerator;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import org.meanbean.lang.Factory;
-import org.meanbean.util.RandomValueGenerator;
 
 public class HashSetFactoryTest extends SetFactoryTestBase {
 
@@ -17,5 +20,11 @@ public class HashSetFactoryTest extends SetFactoryTestBase {
 	@Override
 	protected Set<String> getSetOfExpectedType() {
 		return new HashSet<String>();
+	}
+	
+	@Test
+	public void set() {
+		BeanTester beanTester = new BeanTester();
+		beanTester.testBean(Customer.class);
 	}
 }

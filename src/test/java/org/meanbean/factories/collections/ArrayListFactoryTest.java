@@ -1,10 +1,10 @@
 package org.meanbean.factories.collections;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArrayListFactoryTest extends ListFactoryTestBase {
 
@@ -18,4 +18,5 @@ public class ArrayListFactoryTest extends ListFactoryTestBase {
 	protected List<String> getListOfExpectedType() {
 		return new ArrayList<String>();
 	}
+	
 }
