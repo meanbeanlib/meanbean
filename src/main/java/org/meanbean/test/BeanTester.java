@@ -269,6 +269,12 @@ public class BeanTester {
 		testBean(beanClass, customConfiguration);
 	}
 
+	public void testBeans(Class<?>... beanClasses) throws IllegalArgumentException, AssertionError, BeanTestException {
+		for (Class<?> beanClass : beanClasses) {
+			testBean(beanClass);
+		}
+	}
+
 	/**
 	 * <p>
 	 * Test the type specified by the beanClass parameter, using the custom Configuration provided as an override to any
