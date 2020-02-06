@@ -6,13 +6,13 @@ import org.meanbean.util.ValidationHelper;
 /**
  * <p>
  * Concrete ObjectPropertyEqualityConsistentAsserter that provides a means of verifying whether the equality of an
- * object and its property is consistent. <br/>
+ * object and its property is consistent. <br>
  * </p>
  * 
  * <p>
  * This object is specific to testing properties that are "significant" in the implemented equals logic of a given
  * object. Significant properties are those considered by the equals logic. Whether a property is significant or not
- * changes the test's expectation of whether the property will affect the equality of an object. <br/>
+ * changes the test's expectation of whether the property will affect the equality of an object. <br>
  * </p>
  * 
  * <p>
@@ -27,7 +27,7 @@ class SignificantObjectPropertyEqualityConsistentAsserter implements ObjectPrope
 	/**
 	 * <p>
 	 * Assert that the equality of two logically equivalent objects is consistent when a change is made to a property of
-	 * one of the objects. <br/>
+	 * one of the objects. <br>
 	 * </p>
 	 * 
 	 * <p>

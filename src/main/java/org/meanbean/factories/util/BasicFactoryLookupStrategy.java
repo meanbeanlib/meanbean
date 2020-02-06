@@ -82,16 +82,16 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/**
 	 * <p>
-	 * Get a factory for the specified property that is of the specified type. <br/>
+	 * Get a factory for the specified property that is of the specified type. <br>
 	 * </p>
 	 * 
 	 * <p>
-	 * If a Configuration is provided, this is first inspected for a property-specific Factory. <br/>
+	 * If a Configuration is provided, this is first inspected for a property-specific Factory. <br>
 	 * </p>
 	 * 
 	 * <p>
 	 * If no Configuration is provided or there is no property-specific Factory in the Configuration, the
-	 * FactoryCollection is then searched for a Factory suitable for the type of the property. <br/>
+	 * FactoryCollection is then searched for a Factory suitable for the type of the property. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -101,12 +101,12 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	 * 
 	 * <p>
 	 * For example, if the type is an Enum, then a generic Enum Factory will be created for the Enum's constants,
-	 * registered in the Factory Collection for future use, and returned from this method. <br/>
+	 * registered in the Factory Collection for future use, and returned from this method. <br>
 	 * </p>
 	 * 
 	 * <p>
 	 * As a last resort, an attempt is made create a Factory that creates objects of the custom data type. If
-	 * successful, this Factory is registered in the Factory Collection for future use, and return from this method. <br/>
+	 * successful, this Factory is registered in the Factory Collection for future use, and return from this method. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -116,10 +116,8 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	 * 
 	 * @param beanInformation
 	 *            Information about the bean the property belongs to.
-	 * @param propertyName
-	 *            The name of the property.
-	 * @param propertyType
-	 *            The type of the property.
+	 * @param propertyInformation
+	 *            The information of the property.
 	 * @param configuration
 	 *            An optional Configuration object that may contain an override Factory for the specified property. Pass
 	 *            <code>null</code> if no Configuration exists.

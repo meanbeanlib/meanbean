@@ -29,7 +29,7 @@ public interface FactoryLookupStrategy {
 
 	/**
 	 * <p>
-	 * Get a factory for the specified property that is of the specified type. <br/>
+	 * Get a factory for the specified property that is of the specified type. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -41,8 +41,6 @@ public interface FactoryLookupStrategy {
 	 *            Information about the bean the property belongs to.
 	 * @param propertyInformation
 	 *            Information about the property.
-	 * @param propertyType
-	 *            The type of the property.
 	 * @param configuration
 	 *            An optional Configuration object that may contain an override Factory for the specified property. Pass
 	 *            <code>null</code> if no Configuration exists.

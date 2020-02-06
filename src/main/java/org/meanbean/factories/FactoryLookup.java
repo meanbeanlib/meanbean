@@ -27,7 +27,7 @@ public interface FactoryLookup {
 	 * 
 	 * <p>
 	 * To check whether a Factory is registered for a specified class, please refer to
-	 * <code>hasFactory(Class<?> clazz);</code>.
+	 * <code>hasFactory(Class&lt;?&gt; clazz);</code>.
 	 * </p>
 	 * 
 	 * @param type

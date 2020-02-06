@@ -10,7 +10,7 @@ interface ObjectPropertyEqualityConsistentAsserter {
 	/**
 	 * <p>
 	 * Assert that the equality of two logically equivalent objects is consistent when a change is made to a property of
-	 * one of the objects. <br/>
+	 * one of the objects. <br>
 	 * </p>
 	 * 
 	 * <p>

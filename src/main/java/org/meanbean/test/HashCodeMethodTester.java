@@ -149,7 +149,7 @@ public class HashCodeMethodTester {
 	/**
 	 * <p>
 	 * Test that the hashCode logic implemented by the type the specified factory creates returns equal hashCodes for
-	 * logically equivalent objects. <br/>
+	 * logically equivalent objects. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -187,7 +187,7 @@ public class HashCodeMethodTester {
 	/**
 	 * <p>
 	 * Test that the hashCode logic implemented by the type the specified factory creates is consistent with the
-	 * <strong>consistent</strong> item of the hashCode contract. <br/>
+	 * <strong>consistent</strong> item of the hashCode contract. <br>
 	 * </p>
 	 * 
 	 * <p>

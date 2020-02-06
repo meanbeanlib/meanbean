@@ -82,7 +82,7 @@ public class BeanPropertyTester {
 	 * 
 	 * @param classA
 	 *            A type to compare.
-	 * @param superClass
+	 * @param superType
 	 *            Another type to compare. If it is possible that one of the types might be a superclass of the other,
 	 *            specify that type here.
 	 * 

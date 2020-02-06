@@ -6,13 +6,13 @@ import org.meanbean.util.ValidationHelper;
 
 /**
  * <p>
- * Class that affords functionality to test the equals logic implemented by objects. <br/>
+ * Class that affords functionality to test the equals logic implemented by objects. <br>
  * </p>
  * 
  * <p>
  * Use the tests provided by this class (namely, <code>verifyEqualsMethod()</code>) to test a class that overrides
  * <code>equals()</code>. <code>verifyEqualsMethod()</code> invokes all other tests. However, you can invoke each test
- * individually instead. <br/>
+ * individually instead. <br>
  * </p>
  * 
  * <p>
@@ -97,7 +97,7 @@ class EqualsMethodContractVerifier {
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is consistent with the
-	 * <strong>reflexive</strong> item of the equals contract. <br/>
+	 * <strong>reflexive</strong> item of the equals contract. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -128,7 +128,7 @@ class EqualsMethodContractVerifier {
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is consistent with the
-	 * <strong>symmetric</strong> item of the equals contract. <br/>
+	 * <strong>symmetric</strong> item of the equals contract. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -168,7 +168,7 @@ class EqualsMethodContractVerifier {
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is consistent with the
-	 * <strong>transitive</strong> item of the equals contract. <br/>
+	 * <strong>transitive</strong> item of the equals contract. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -208,7 +208,7 @@ class EqualsMethodContractVerifier {
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is consistent with the
-	 * <strong>consistent</strong> item of the equals contract. <br/>
+	 * <strong>consistent</strong> item of the equals contract. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -244,7 +244,7 @@ class EqualsMethodContractVerifier {
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is consistent with the
 	 * <strong>null</strong> item of the equals contract. That is, that the non-null object created by the specified
-	 * factory should never be equal to a <code>null</code> object.<br/>
+	 * factory should never be equal to a <code>null</code> object.<br>
 	 * </p>
 	 * 
 	 * <p>
@@ -276,7 +276,7 @@ class EqualsMethodContractVerifier {
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is correct when comparing an
 	 * instance of that type with an instance of an entirely different type. Two entirely different objects should never
-	 * be equal to one another. <br/>
+	 * be equal to one another. <br>
 	 * </p>
 	 * 
 	 * <p>

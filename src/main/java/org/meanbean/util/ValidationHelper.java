@@ -9,7 +9,7 @@ public final class ValidationHelper {
 
 	/**
 	 * <p>
-	 * Ensure that the specified value exists, conditionally throwing an IllegalArgumentException if it does not. <br/>
+	 * Ensure that the specified value exists, conditionally throwing an IllegalArgumentException if it does not. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -32,7 +32,7 @@ public final class ValidationHelper {
 
 	/**
 	 * <p>
-	 * Ensure that the specified value exists, conditionally throwing an IllegalArgumentException if it does not. <br/>
+	 * Ensure that the specified value exists, conditionally throwing an IllegalArgumentException if it does not. <br>
 	 * </p>
 	 * 
 	 * <p>

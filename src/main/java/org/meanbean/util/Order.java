@@ -42,7 +42,6 @@ public @interface Order {
 	/**
 	 * The order value.
 	 * <p>Default is {@link LOWEST_PRECEDENCE}.
-	 * @see Ordered#getOrder()
 	 */
 	int value() default LOWEST_PRECEDENCE;
 

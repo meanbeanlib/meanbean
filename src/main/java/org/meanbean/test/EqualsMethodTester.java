@@ -232,7 +232,7 @@ public class EqualsMethodTester {
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
 	 *            individual test and will not be retained for future testing of this or any other type. If no custom
 	 *            Configuration is required, pass <code>null</code> or use
-	 *            <code>testEqualsMethod(Class<?>,String...)</code> instead.
+	 *            <code>testEqualsMethod(Class&lt;?&gt;,String...)</code> instead.
 	 * @param insignificantProperties
 	 *            The names of properties that are not used when deciding whether objects are logically equivalent. For
 	 *            example, "lastName".
@@ -360,7 +360,7 @@ public class EqualsMethodTester {
 	 *            custom test data Factory when testing a named property. This Configuration is only used for this
 	 *            individual test and will not be retained for future testing of this or any other type. If no custom
 	 *            Configuration is required, pass <code>null</code> or use
-	 *            <code>testEqualsMethod(Factory<?>,String...)</code> instead.
+	 *            <code>testEqualsMethod(Factory&lt;?&gt;,String...)</code> instead.
 	 * @param insignificantProperties
 	 *            The names of properties that are not used when deciding whether objects are logically equivalent. For
 	 *            example, "lastName".

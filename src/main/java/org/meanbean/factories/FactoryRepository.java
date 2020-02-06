@@ -85,11 +85,11 @@ public final class FactoryRepository implements FactoryCollection {
 	 * 
 	 * <p>
 	 * To check whether a Factory is registered for a specified class, please refer to
-	 * <code>hasFactory(Class<?> clazz);</code>.
+	 * <code>hasFactory(Class&lt;?&gt; clazz);</code>.
 	 * </p>
 	 * 
-	 * @param clazz
-	 *            The class the Factory is registered against. This should be the type of object that the Factory
+	 * @param type
+	 *            The type Factory is registered against. This should be the type of object that the Factory
 	 *            creates.
 	 * 
 	 * @return The requested Factory.
@@ -115,8 +115,8 @@ public final class FactoryRepository implements FactoryCollection {
 	/**
 	 * Does the collection contain a Factory registered against the specified class?
 	 * 
-	 * @param clazz
-	 *            The class a Factory could be registered against. This should be the type of object that the Factory
+	 * @param type
+	 *            The type a Factory could be registered against. This should be the type of object that the Factory
 	 *            creates.
 	 * 
 	 * @return <code>true</code> if the collection contains a Factory registered for the specified class;

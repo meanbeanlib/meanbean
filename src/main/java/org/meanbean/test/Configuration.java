@@ -11,17 +11,17 @@ import java.util.Set;
  * <p>
  * Type-specific (i.e. JavaBean-specific) test configuration used to customize testing for a single type. Configuration
  * objects are only required when you want to customize the testing behaviour. Most often the standard testing behaviour
- * will be sufficient. <br/>
+ * will be sufficient. <br>
  * </p>
  * 
  * <p>
- * Configuration objects should be created using a <code>ConfigurationBuilder</code>. <br/>
+ * Configuration objects should be created using a <code>ConfigurationBuilder</code>. <br>
  * </p>
  * 
  * <p>
- * Configuration objects can be passed to <code>BeanTester.test(Class<?>,Configuration);</code> for use as a one-off, or
+ * Configuration objects can be passed to <code>BeanTester.test(Class&lt;?&gt;,Configuration);</code> for use as a one-off, or
  * registered with the BeanTester for use thereafter:
- * <code>BeanTester.addCustomConfiguration(Class<?>,Configuration);</code>. <br/>
+ * <code>BeanTester.addCustomConfiguration(Class&lt;?&gt;,Configuration);</code>. <br>
  * </p>
  * 
  * <p>

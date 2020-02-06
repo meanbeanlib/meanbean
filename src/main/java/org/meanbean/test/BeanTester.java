@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * <p>
  * Each property of a type is tested in turn. Each type is tested multiple times to reduce the risk of hard-coded values
- * within a getter or setter matching the random test values generated and the test failing to detect a bug. <br/>
+ * within a getter or setter matching the random test values generated and the test failing to detect a bug. <br>
  * </p>
  * 
  * <p>
@@ -63,12 +63,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * <ul>
  * <li><code>setIterations(int)</code> to set the number of times any type is tested</li>
  * 
- * <li><code>addCustomConfiguration(Class<?>,Configuration)</code> to add a custom Configuration across all testing of
+ * <li><code>addCustomConfiguration(Class&lt;?&gt;,Configuration)</code> to add a custom Configuration across all testing of
  * the specified type</li>
  * 
- * <li><code>testBean(Class<?>,Configuration)</code> to specify a custom Configuration for a single test scenario</li>
+ * <li><code>testBean(Class&lt;?&gt;,Configuration)</code> to specify a custom Configuration for a single test scenario</li>
  * 
- * <li><code>getFactoryCollection().addFactory(Class<?>,Factory<?>)</code> to add a custom Factory for a type across all
+ * <li><code>getFactoryCollection().addFactory(Class&lt;?&gt;,Factory&lt;?&gt;)</code> to add a custom Factory for a type across all
  * testing</li>
  * </ul>
  * 
@@ -82,7 +82,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * </pre>
  * 
  * <p>
- * If the test fails, an AssertionError is thrown. <br/>
+ * If the test fails, an AssertionError is thrown. <br>
  * </p>
  * 
  * <p>
@@ -165,7 +165,7 @@ public class BeanTester {
 
 	/**
 	 * <p>
-	 * Get the number of times each bean should be tested. <br/>
+	 * Get the number of times each bean should be tested. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -278,16 +278,16 @@ public class BeanTester {
 	/**
 	 * <p>
 	 * Test the type specified by the beanClass parameter, using the custom Configuration provided as an override to any
-	 * global configuration settings. <br />
+	 * global configuration settings. <br>
 	 * </p>
 	 * 
 	 * <p>
 	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
-	 * getters and setters function correctly. <br />
+	 * getters and setters function correctly. <br>
 	 * </p>
 	 * 
 	 * <p>
-	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -301,7 +301,7 @@ public class BeanTester {
 	 *            only used for this individual test and will not be retained for future testing of this or any other
 	 *            type. To register a custom Configuration across multiple tests, use
 	 *            <code>addCustomConfiguration()</code>. If no custom Configuration is required, pass <code>null</code>
-	 *            or use <code>testBean(Class<?>)</code> instead.
+	 *            or use <code>testBean(Class&lt;?&gt;)</code> instead.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the beanClass is deemed illegal. For example, if it is null.
@@ -333,16 +333,16 @@ public class BeanTester {
 
 	/**
 	 * <p>
-	 * Test the type specified by the beanInformation parameter using the specified Configuration. <br />
+	 * Test the type specified by the beanInformation parameter using the specified Configuration. <br>
 	 * </p>
 	 * 
 	 * <p>
 	 * Testing will test each publicly readable and writable property of the specified beanClass to ensure that the
-	 * getters and setters function correctly. <br />
+	 * getters and setters function correctly. <br>
 	 * </p>
 	 * 
 	 * <p>
-	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br />
+	 * The test is performed repeatedly using random data for each scenario to prevent salient getter/setter failures. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -353,7 +353,7 @@ public class BeanTester {
 	 *            Information about the type to be tested.
 	 * @param configuration
 	 *            The custom Configuration to be used when testing the specified beanClass type. If no custom
-	 *            Configuration is required, pass <code>null</code> or use <code>testBean(Class<?>)</code> instead.
+	 *            Configuration is required, pass <code>null</code> or use <code>testBean(Class&lt;?&gt;)</code> instead.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If the beanInformation is deemed illegal. For example, if it is null.

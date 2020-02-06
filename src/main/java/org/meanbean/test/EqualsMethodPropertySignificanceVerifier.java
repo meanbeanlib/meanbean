@@ -6,7 +6,7 @@ import org.meanbean.lang.EquivalentFactory;
 /**
  * <p>
  * Defines a means of verifying that the equals logic implemented by a type is affected in the expected manner when
- * changes are made to the property values of instances of the type. <br/>
+ * changes are made to the property values of instances of the type. <br>
  * </p>
  * 
  * <p>
@@ -28,7 +28,7 @@ interface EqualsMethodPropertySignificanceVerifier {
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
-	 * manner when changes are made to the property values of instances of the type. <br/>
+	 * manner when changes are made to the property values of instances of the type. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -45,11 +45,11 @@ interface EqualsMethodPropertySignificanceVerifier {
 	 * 
 	 * <p>
 	 * To do this, instances of the type are created using the specified factory, their properties are manipulated
-	 * individually and the equality is reassessed. <br/>
+	 * individually and the equality is reassessed. <br>
 	 * </p>
 	 * 
 	 * <p>
-	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -82,7 +82,7 @@ interface EqualsMethodPropertySignificanceVerifier {
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
-	 * manner when changes are made to the property values of instances of the type. <br/>
+	 * manner when changes are made to the property values of instances of the type. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -99,11 +99,11 @@ interface EqualsMethodPropertySignificanceVerifier {
 	 * 
 	 * <p>
 	 * To do this, instances of the type are created using the specified factory, their properties are manipulated
-	 * individually and the equality is reassessed. <br/>
+	 * individually and the equality is reassessed. <br>
 	 * </p>
 	 * 
 	 * <p>
-	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br>
 	 * </p>
 	 * 
 	 * <p>

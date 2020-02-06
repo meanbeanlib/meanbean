@@ -20,7 +20,7 @@ import java.util.List;
  * <p>
  * Concrete EqualsMethodPropertySignificanceVerifier implementation that affords functionality to verify that the equals
  * logic implemented by a type is affected in the expected manner when changes are made to the property values of
- * instances of the type. <br/>
+ * instances of the type. <br>
  * </p>
  * 
  * <p>
@@ -37,16 +37,16 @@ import java.util.List;
  * 
  * <p>
  * To do this, instances of the type are created using a specified factory, their properties are manipulated
- * individually and the equality is reassessed. <br/>
+ * individually and the equality is reassessed. <br>
  * </p>
  * 
  * <p>
  * For the test to function correctly, you must specify all properties that are not used in the equals logic
- * (<quote>insignificant</quote>). <br/>
+ * (<quote>insignificant</quote>). <br>
  * </p>
  * 
  * <p>
- * Use <code>verifyEquals()</code> to test a class that overrides <code>equals()</code>. <br/>
+ * Use <code>verifyEquals()</code> to test a class that overrides <code>equals()</code>. <br>
  * </p>
  * 
  * <p>
@@ -69,7 +69,7 @@ import java.util.List;
  * <p>
  * The Factory creates <strong>new logically equivalent</strong> instances of MyClass. MyClass has overridden
  * <code>equals()</code> and <code>hashCode()</code>. In the above example, there is only one property, name, which is
- * considered by MyClass's equals logic. <br/>
+ * considered by MyClass's equals logic. <br>
  * </p>
  * 
  * <p>
@@ -113,7 +113,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
-	 * manner when changes are made to the property values of instances of the type. <br/>
+	 * manner when changes are made to the property values of instances of the type. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -130,11 +130,11 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * 
 	 * <p>
 	 * To do this, instances of the type are created using the specified factory, their properties are manipulated
-	 * individually and the equality is reassessed. <br/>
+	 * individually and the equality is reassessed. <br>
 	 * </p>
 	 * 
 	 * <p>
-	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -170,7 +170,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
-	 * manner when changes are made to the property values of instances of the type. <br/>
+	 * manner when changes are made to the property values of instances of the type. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -187,11 +187,11 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * 
 	 * <p>
 	 * To do this, instances of the type are created using the specified factory, their properties are manipulated
-	 * individually and the equality is reassessed. <br/>
+	 * individually and the equality is reassessed. <br>
 	 * </p>
 	 * 
 	 * <p>
-	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br/>
+	 * For the test to function correctly, you must specify all properties that are not used in the equals logic. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -272,7 +272,7 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	/**
 	 * <p>
 	 * Verify that the equals logic implemented by the type the specified factory creates is affected in the expected
-	 * manner when changes are made to the value of the specified property. <br/>
+	 * manner when changes are made to the value of the specified property. <br>
 	 * </p>
 	 * 
 	 * <p>
@@ -289,11 +289,11 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 	 * 
 	 * <p>
 	 * To do this, instances of the type are created using the specified factory, the specified property is manipulated
-	 * and the equality is reassessed. <br/>
+	 * and the equality is reassessed. <br>
 	 * </p>
 	 * 
 	 * <p>
-	 * For the test to function correctly, you must specify whether the property is used in the equals logic. <br/>
+	 * For the test to function correctly, you must specify whether the property is used in the equals logic. <br>
 	 * </p>
 	 * 
 	 * <p>
