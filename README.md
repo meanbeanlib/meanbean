@@ -25,8 +25,8 @@ With just a single line of code, you can be confident that your beans are well b
 Mean Bean can be acquired from the Maven Central repo.
 
     <dependency>
-        <groupId>org.meanbean</groupId>
+        <groupId>com.github.meanbeanlib</groupId>
         <artifactId>meanbean</artifactId>
-        <version>2.0.3</version>
+        <version>3.0.0-M1</version>
     </dependency>
 
