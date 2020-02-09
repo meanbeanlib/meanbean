@@ -11,15 +11,14 @@
 		Mean Bean is an open source Java test library that tests equals and hashCode contract compliance, as well as 
 		JavaBean/POJO getter and setter methods.
 	</description>
-	<url>http://meanbean.org</url>
-
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>9</version>
-	</parent>
+	<url>http://github.com/meanbeanlib/meanbean/</url>
+	<inceptionYear>2010</inceptionYear>
+	<organization>
+		<name>meanbean</name>
+	</organization>
 
 	<properties>
+		<gpg.skip>true</gpg.skip>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -31,7 +30,7 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
-
+	
 	<scm>
 		<connection>scm:git:git://github.com/meanbeanlib/meanbean.git</connection>
 		<developerConnection>scm:git:ssh://github.com/meanbeanlib/meanbean.git</developerConnection>
@@ -117,6 +116,32 @@
 						<goals>
 							<goal>sign</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.0.0</version>
+				<configuration>
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+					<copyrightOwners>the original author or authors.</copyrightOwners>
+					<emptyLineAfterHeader>true</emptyLineAfterHeader>
+					<licenseName>apache_v2</licenseName>
+					<processStartTag>&#x200b;&#x200b;&#x200b;</processStartTag>
+					<processEndTag>&#xfeff;&#xfeff;&#xfeff;&#xfeff;&#xfeff;</processEndTag>
+					<sectionDelimiter>&#x2063;&#x2063;&#x2063;</sectionDelimiter>
+				</configuration>
+				<executions>
+					<execution>
+						<id>license</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+						<configuration>
+							<licenseName>apache_v2</licenseName>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
