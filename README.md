@@ -31,6 +31,6 @@ Mean Bean can be acquired from the Maven Central repo.
     <dependency>
         <groupId>com.github.meanbeanlib</groupId>
         <artifactId>meanbean</artifactId>
-        <version>3.0.0-M1</version>
+        <version>3.0.0-M2</version>
     </dependency>
 
