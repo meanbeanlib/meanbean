@@ -1,10 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.meanbean</groupId>
 	<artifactId>meanbean</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0-M2</version>
 	<packaging>jar</packaging>
 	<name>meanbean</name>
 	<description>
@@ -36,7 +34,7 @@
 		<connection>scm:git:git://github.com/meanbeanlib/meanbean.git</connection>
 		<developerConnection>scm:git:https://github.com/meanbeanlib/meanbean.git</developerConnection>
 		<url>http://github.com/meanbeanlib/meanbean/tree/master</url>
-		<tag>HEAD</tag>
+		<tag>meanbean-3.0.0-M2</tag>
 	</scm>
 
 	<developers>
@@ -127,9 +125,9 @@
 					<copyrightOwners>the original author or authors.</copyrightOwners>
 					<emptyLineAfterHeader>true</emptyLineAfterHeader>
 					<licenseName>apache_v2</licenseName>
-					<processStartTag>&#x200b;&#x200b;&#x200b;</processStartTag>
-					<processEndTag>&#xfeff;&#xfeff;&#xfeff;&#xfeff;&#xfeff;</processEndTag>
-					<sectionDelimiter>&#x2063;&#x2063;&#x2063;</sectionDelimiter>
+					<processStartTag>​​​</processStartTag>
+					<processEndTag>﻿﻿﻿﻿﻿</processEndTag>
+					<sectionDelimiter>⁣⁣⁣</sectionDelimiter>
 				</configuration>
 				<executions>
 					<execution>
