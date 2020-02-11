@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.meanbean</groupId>
 	<artifactId>meanbean</artifactId>
-	<version>3.0.0-M2</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>meanbean</name>
 	<description>
@@ -34,7 +34,7 @@
 		<connection>scm:git:git://github.com/meanbeanlib/meanbean.git</connection>
 		<developerConnection>scm:git:https://github.com/meanbeanlib/meanbean.git</developerConnection>
 		<url>http://github.com/meanbeanlib/meanbean/tree/master</url>
-		<tag>meanbean-3.0.0-M2</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
