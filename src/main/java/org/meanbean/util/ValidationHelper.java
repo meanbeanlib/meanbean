@@ -75,4 +75,10 @@ public final class ValidationHelper {
             throw new IllegalArgumentException("Cannot " + operation + " with null " + name + ".");
         }
     }
+    
+    public static void ensure(boolean expr, String msg) {
+    	if (!expr) {
+    		throw new IllegalArgumentException(msg);
+    	}
+    }
 }

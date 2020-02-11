@@ -23,7 +23,6 @@ package org.meanbean.test;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.ValidationHelper;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,22 +52,24 @@ import java.util.Set;
  * <li>Whether a property is tested or not, by specifying properties of a type that should be ignored.</li>
  * <li>The Factory that should be used when generating test data for a given property.</li>
  * </ul>
- * 
+ * <br>
+ * <b>Prefer {@link BeanTesterBuilder}</b>
+ * <br>
  * @author Graham Williamson
  */
 public class Configuration {
 
 	/** The number of times a type should be tested. This will be null if it has not been overriden. */
-	private final Integer iterations;
+	private Integer iterations;
 
 	/** Any properties of a type that should not be tested. Contains property names. */
-	private final Set<String> ignoredProperties;
+	private Set<String> ignoredProperties;
 
 	/**
 	 * Factories that should be used for specific properties, overriding standard Factory selection. Keyed by property
 	 * name.
 	 */
-	private final Map<String, Factory<?>> overrideFactories;
+	private Map<String, Factory<?>> overrideFactories;
 
 	/**
 	 * Construct a new Configuration.
@@ -82,8 +83,8 @@ public class Configuration {
 	 */
 	Configuration(Integer iterations, Set<String> ignoredProperties, Map<String, Factory<?>> overrideFactories) {
 		this.iterations = iterations;
-		this.ignoredProperties = Collections.unmodifiableSet(ignoredProperties);
-		this.overrideFactories = Collections.unmodifiableMap(overrideFactories);
+		this.ignoredProperties = ignoredProperties;
+		this.overrideFactories = overrideFactories;
 	}
 
 	/**
@@ -169,6 +170,27 @@ public class Configuration {
 	public Factory<? extends Object> getOverrideFactory(String property) throws IllegalArgumentException {
 		ValidationHelper.ensureExists("property", "get override Factory", property);
 		return overrideFactories.get(property);
+	}
+
+	Set<String> getIgnoredProperties() {
+		return ignoredProperties;
+	}
+
+	void setIgnoredProperties(Set<String> ignoredProperties) {
+		this.ignoredProperties = ignoredProperties;
+	}
+
+	Map<String, Factory<?>> getOverrideFactories() {
+		return overrideFactories;
+	}
+
+	void setOverrideFactories(Map<String, Factory<?>> overrideFactories) {
+		this.overrideFactories = overrideFactories;
+	}
+
+	void setIterations(Integer iterations) {
+		ValidationHelper.ensure(iterations >= 1, "Iterations must be at least 1.");
+		this.iterations = iterations;
 	}
 
 	/**

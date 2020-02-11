@@ -31,7 +31,9 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Builder object that makes creating Configuration objects easier.
+ * Builder object that makes creating Configuration objects easier. <br>
+ * 
+ * <b>Prefer {@link BeanTesterBuilder}</b>
  * 
  * @author Graham Williamson
  */

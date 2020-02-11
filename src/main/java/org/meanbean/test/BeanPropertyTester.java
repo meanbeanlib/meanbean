@@ -21,10 +21,14 @@
 package org.meanbean.test;
 
 import org.meanbean.bean.info.PropertyInformation;
+import org.meanbean.logging.$Logger;
+import org.meanbean.logging.$LoggerFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.ValidationHelper;
 
 import java.lang.reflect.Type;
+import java.net.URL;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * An object that tests a Bean's property methods.
@@ -82,6 +86,10 @@ public class BeanPropertyTester {
 		try {
 			property.getWriteMethod().invoke(bean, testValue);
 			Object readMethodOutput = property.getReadMethod().invoke(bean);
+			
+			UrlEqualityTestWarning.ifNeeded(bean, propertyName, testValue);
+			UrlEqualityTestWarning.ifNeeded(bean, propertyName, readMethodOutput);
+			
 			if (!equalityTest.test(testValue, readMethodOutput)) {
 				String message =
 				        "Property [" + propertyName + "] getter did not return test value. Expected [" + testValue
@@ -114,5 +122,18 @@ public class BeanPropertyTester {
 			return superClass.isAssignableFrom(classA);
 		}
 		return (classA.getSimpleName().equals(classA.getSimpleName()));
+	}
+	
+	private static class UrlEqualityTestWarning {
+
+		private static final AtomicBoolean printed = new AtomicBoolean();
+		
+		private static void ifNeeded(Object bean, String propertyName, Object propertyValue) {
+			if (propertyValue instanceof URL && !printed.getAndSet(true)) {
+				$Logger logger = $LoggerFactory.getLogger(BeanPropertyTester.class);
+				logger.warn("Bean '{}' has URL property '{}'. Equality tests on URL can be slow. Consider ignoring the property.",
+						bean.getClass().getName(), propertyName);
+			}
+		}
 	}
 }

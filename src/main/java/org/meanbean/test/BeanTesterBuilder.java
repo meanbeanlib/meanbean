@@ -20,6 +20,8 @@
 
 package org.meanbean.test;
 
+import com.github.meanbeanlib.mirror.Executables;
+import com.github.meanbeanlib.mirror.SerializableLambdas.SerializableFunction1;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.FactoryLookup;
@@ -27,12 +29,22 @@ import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ValidationHelper;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 public class BeanTesterBuilder {
+
+	private int defaultIterations = BeanTester.TEST_ITERATIONS_PER_BEAN;
 
 	private RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 
@@ -93,22 +105,11 @@ public class BeanTesterBuilder {
 		return this;
 	}
 
-	public Configuration getDefaultConfiguration() {
-		return defaultConfiguration;
-	}
-
-	public BeanTesterBuilder setDefaultConfiguration(Configuration defaultConfiguration) {
-		this.defaultConfiguration = defaultConfiguration;
-		return this;
-	}
-
+	/**
+	 * Register a custom factory for given class
+	 */
 	public <T> BeanTesterBuilder registerFactory(Class<T> clazz, Factory<? extends T> factory) {
 		getFactoryCollection().addFactory(clazz, factory);
-		return this;
-	}
-
-	public BeanTesterBuilder registerCustomConfiguration(Class<?> beanClass, Configuration configuration) {
-		customConfigurations.put(beanClass, configuration);
 		return this;
 	}
 
@@ -119,8 +120,8 @@ public class BeanTesterBuilder {
 		getFactoryCollection().addFactoryLookup(new FactoryLookup() {
 
 			@Override
-			public boolean hasFactory(Type clazz) throws IllegalArgumentException {
-				return clazz instanceof Class && baseType.isAssignableFrom((Class<?>) clazz);
+			public boolean hasFactory(Type type) throws IllegalArgumentException {
+				return type instanceof Class && baseType.isAssignableFrom((Class<?>) type);
 			}
 
 			@SuppressWarnings("unchecked")
@@ -135,6 +136,104 @@ public class BeanTesterBuilder {
 		return this;
 	}
 
+	public int getDefaultIterations() {
+		return defaultIterations;
+	}
+
+	/**
+	 * Set the number of times a type should be tested by default
+	 */
+	public BeanTesterBuilder setDefaultIterations(int iterations) {
+		ValidationHelper.ensure(iterations >= 1, "Iterations must be at least 1.");
+		this.defaultIterations = iterations;
+		return this;
+	}
+
+	public int getIterations(Class<?> beanClass) {
+		return getConfigurationFor(beanClass).getIterations();
+	}
+
+	public BeanTesterBuilder setIterations(Class<?> beanClass, int num) {
+		getConfigurationFor(beanClass).setIterations(num);
+		return this;
+	}
+
+	/**
+	 * Mark the specified property as one to be disregarded/ignored during testing.
+	 */
+	public BeanTesterBuilder addIgnoredPropertyName(Class<?> beanClass, String property) throws IllegalArgumentException {
+		ValidationHelper.ensureExists("property", "add property to ignored properties collection", property);
+		getConfigurationFor(beanClass).getIgnoredProperties().add(property);
+		return this;
+	}
+
+	/**
+	 * Mark the specified property as one to be disregarded/ignored during testing.
+	 * <pre>
+	 *     addIgnoredProperty(MyBean.class, MyBean::getPropertyValue);
+	 * </pre>
+	 */
+	public <T, S> BeanTesterBuilder addIgnoredProperty(Class<T> beanClass, SerializableFunction1<T, S> beanGetter)
+			throws IllegalArgumentException {
+		String propertyName = findPropertyName(beanClass, beanGetter);
+		return addIgnoredPropertyName(beanClass, propertyName);
+	}
+
+	/**
+	 * Register the specified Factory as an override Factory for the specified property. This means that the specified
+	 * Factory will be used over the standard Factory for the property.
+	 */
+	public <T> BeanTesterBuilder addOverrideFactory(Class<T> beanClass, String property, Factory<T> factory)
+			throws IllegalArgumentException {
+		ValidationHelper.ensureExists("beanClass", "add override Factory", beanClass);
+		ValidationHelper.ensureExists("property", "add override Factory", property);
+		ValidationHelper.ensureExists("factory", "add override Factory", factory);
+		getConfigurationFor(beanClass).getOverrideFactories().put(property, factory);
+		return this;
+	}
+
+	/**
+	 * Register the specified Factory as an override Factory for the specified property. This means that the specified
+	 * Factory will be used over the standard Factory for the property.
+	 * <pre>
+	 *     addOverridePropertyFactory(MyBean.class, MyBean::getPropertyValue, () -&gt; createPropertyValue());
+	 * </pre>		
+	 */
+	public <T, S> BeanTesterBuilder addOverridePropertyFactory(Class<T> beanClass, SerializableFunction1<T, S> beanGetter,
+			Factory<S> factory)
+			throws IllegalArgumentException {
+		ValidationHelper.ensureExists("beanClass", "add override Factory", beanClass);
+		ValidationHelper.ensureExists("beanGetter", "add override Factory", beanGetter);
+		ValidationHelper.ensureExists("factory", "add override Factory", factory);
+
+		String propertyName = findPropertyName(beanClass, beanGetter);
+
+		getConfigurationFor(beanClass).getOverrideFactories().put(propertyName, factory);
+		return this;
+	}
+
+	private <T, S> String findPropertyName(Class<T> beanClass, SerializableFunction1<T, S> beanGetter) {
+		Method method = Executables.findGetter(beanGetter);
+		try {
+			BeanInfo beanInfo = Introspector.getBeanInfo(beanClass);
+			PropertyDescriptor property = Stream.of(beanInfo.getPropertyDescriptors())
+					.filter(pd -> method.equals(pd.getReadMethod()))
+					.findFirst()
+					.orElseThrow(() -> new IllegalArgumentException("invalid bean getter method:" + method));
+			return property.getName();
+		} catch (Exception e) {
+			if (e instanceof IllegalArgumentException) {
+				throw (IllegalArgumentException) e;
+			}
+			throw new IllegalArgumentException("invalid bean getter method: " + method, e);
+		}
+	}
+
+	private Configuration getConfigurationFor(Class<?> clazz) {
+		return customConfigurations.computeIfAbsent(clazz,
+				key -> new Configuration(defaultIterations, new HashSet<>(), new HashMap<>()));
+	}
+
 	public BeanTester build() {
 		BeanTester beanTester = new BeanTester(
 				randomValueGenerator,
@@ -143,7 +242,8 @@ public class BeanTesterBuilder {
 				beanInformationFactory,
 				beanPropertyTester,
 				customConfigurations,
-				defaultConfiguration);
+				defaultConfiguration,
+				defaultIterations);
 
 		randomValueGenerator = null;
 		factoryCollection = null;
