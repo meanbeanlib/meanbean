@@ -34,8 +34,9 @@
 	
 	<scm>
 		<connection>scm:git:git://github.com/meanbeanlib/meanbean.git</connection>
-		<developerConnection>scm:git:ssh://github.com/meanbeanlib/meanbean.git</developerConnection>
+		<developerConnection>scm:git:https://github.com/meanbeanlib/meanbean.git</developerConnection>
 		<url>http://github.com/meanbeanlib/meanbean/tree/master</url>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>

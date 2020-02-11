@@ -2,6 +2,10 @@
 
 Automated JavaBean Testing
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.meanbeanlib/meanbean/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.meanbeanlib/meanbean)
+![Java CI](https://github.com/meanbeanlib/meanbean/workflows/Java%20CI/badge.svg)
+
+
 ## Welcome
 
 ### What is it?
