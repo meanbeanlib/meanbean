@@ -20,6 +20,7 @@
 
 package org.meanbean.factories;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,9 +30,13 @@ import org.meanbean.util.RandomValueGenerator;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.lang.reflect.Type;
+import java.util.Map;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FactoryRepositoryTest {
@@ -114,6 +119,27 @@ public class FactoryRepositoryTest {
 	@Test
 	public void hasFactoryShouldReturnTrueForRegisteredFactory() throws Exception {
 		assertThat("Should find factory.", factoryRepository.hasFactory(String.class), is(true));
+	}
+
+	@Test
+	public void factoriesCreateTypeMatchingInstances() {
+		Map<Type, Factory<?>> factories = factoryRepository.getFactories();
+		for (Map.Entry<Type, Factory<?>> entry : factories.entrySet()) {
+			Class<?> key = (Class<?>) entry.getKey();
+			Factory<?> factory = entry.getValue();
+
+			if (key.equals(void.class)) {
+				assertThat(factory.create(), is(nullValue()));
+				continue;
+			}
+			
+			if (ClassUtils.isPrimitiveOrWrapper(key) && !ClassUtils.isPrimitiveWrapper(key)) {
+				key = (Class<?>) ClassUtils.primitiveToWrapper(key);
+			}
+
+			Object instance = factory.create();
+			assertThat(instance, instanceOf(key));
+		}
 	}
 
 	static class RegisteredTestClass {

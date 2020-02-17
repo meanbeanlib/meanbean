@@ -39,8 +39,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @MetaInfServices
 public final class FactoryRepository implements FactoryCollection {
 
-	/** A Map of Factory objects keyed by a unique ID. */
-	private final Map<String, Factory<?>> factories = new ConcurrentHashMap<>();
+	/** A Map of Factory objects */
+	private final Map<Type, Factory<?>> factories = new ConcurrentHashMap<>();
 
 	/** Random number generator used by factories to randomly generate values. */
 	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
@@ -89,8 +89,7 @@ public final class FactoryRepository implements FactoryCollection {
 	public void addFactory(Class<?> clazz, Factory<?> factory) throws IllegalArgumentException {
 		ValidationHelper.ensureExists("clazz", "add Factory", clazz);
 		ValidationHelper.ensureExists("factory", "add Factory", factory);
-		String key = createId(clazz);// Should have prevented Exceptions in Validation above
-		factories.put(key, factory);
+		factories.put(clazz, factory);
 	}
 
 	@Override
@@ -122,11 +121,10 @@ public final class FactoryRepository implements FactoryCollection {
 	@Override
 	public <T> Factory<T> getFactory(Type type) throws IllegalArgumentException, NoSuchFactoryException {
 		ValidationHelper.ensureExists("type", "get Factory", type);
-		String key = createId(type);// Should have prevented Exceptions in Validation above
 		@SuppressWarnings("unchecked")
-		Factory<T> factory = (Factory<T>) factories.get(key);
+		Factory<T> factory = (Factory<T>) factories.get(type);
 		if (factory == null) {
-            String message = "Failed to find a Factory registered against [" + key + "] in the Repository.";
+            String message = "Failed to find a Factory registered against [" + type + "] in the Repository.";
 			throw new NoSuchFactoryException(message);
 		}
 		return factory;
@@ -148,13 +146,11 @@ public final class FactoryRepository implements FactoryCollection {
 	@Override
 	public boolean hasFactory(Type type) throws IllegalArgumentException {
 		ValidationHelper.ensureExists("type", "check collection for Factory", type);
-		String key = createId(type);// Should have prevented Exceptions in Validation above
-		boolean result = factories.containsKey(key);
-		return result;
+		return factories.containsKey(type);
 	}
 
-	private String createId(Type type) {
-		return type.getTypeName();
+	Map<Type, Factory<?>> getFactories() {
+		return factories;
 	}
 
 }

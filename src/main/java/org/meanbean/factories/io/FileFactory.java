@@ -37,7 +37,7 @@ public class FileFactory implements FactoryCollectionPlugin {
 	@Override
 	public void initialize(FactoryCollection factoryCollection, RandomValueGenerator randomValueGenerator) {
 		factoryCollection.addFactory(File.class, this::generateTempFile);
-		factoryCollection.addFactory(File.class, this::generateTempPath);
+		factoryCollection.addFactory(Path.class, this::generateTempPath);
 	}
 
 	private File generateTempFile() {

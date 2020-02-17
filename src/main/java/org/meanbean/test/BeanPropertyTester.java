@@ -80,27 +80,26 @@ public class BeanPropertyTester {
 			        + "] - property must be readable and writable.");
 		}
 		if (!typesAreCompatible(testValue.getClass(), property.getWriteMethodParameterType())) {
-			throw new IllegalArgumentException("Cannot test property [" + propertyName
-			        + "] - testValue must be same type as property.");
+			String msg = String.format("Cannot test property [%s] - testValue must be same type as property. Expected %s but found %s",
+					propertyName, testValue.getClass(), property.getWriteMethodParameterType());
+			throw new IllegalArgumentException(msg);
 		}
 		try {
 			property.getWriteMethod().invoke(bean, testValue);
 			Object readMethodOutput = property.getReadMethod().invoke(bean);
 			
-			UrlEqualityTestWarning.ifNeeded(bean, propertyName, testValue);
-			UrlEqualityTestWarning.ifNeeded(bean, propertyName, readMethodOutput);
+			UrlEqualityTestWarning.ifNeeded(equalityTest, bean, propertyName, testValue);
+			UrlEqualityTestWarning.ifNeeded(equalityTest, bean, propertyName, readMethodOutput);
 			
 			if (!equalityTest.test(testValue, readMethodOutput)) {
-				String message =
-				        "Property [" + propertyName + "] getter did not return test value. Expected [" + testValue
-				                + "] but getter returned [" + readMethodOutput + "].";
+				String message = "Property [" + propertyName + "] getter did not return test value. Expected [" + testValue
+						+ "] but getter returned [" + readMethodOutput + "].";
 				AssertionUtils.fail(message);
 			} else {
 			}
 		} catch (Exception e) {
-			String message =
-			        "Failed to test property [" + propertyName + "] due to Exception [" + e.getClass().getName()
-			                + "]: [" + e.getMessage() + "].";
+			String message = "Failed to test property [" + propertyName + "] due to Exception [" + e.getClass().getName()
+					+ "]: [" + e.getMessage() + "].";
 			throw new BeanTestException(message, e);
 		}
 	}
@@ -128,7 +127,11 @@ public class BeanPropertyTester {
 
 		private static final AtomicBoolean printed = new AtomicBoolean();
 		
-		private static void ifNeeded(Object bean, String propertyName, Object propertyValue) {
+		private static void ifNeeded(EqualityTest equalityTest, Object bean, String propertyName, Object propertyValue) {
+			if (equalityTest != EqualityTest.LOGICAL) {
+				return;
+			}
+			
 			if (propertyValue instanceof URL && !printed.getAndSet(true)) {
 				$Logger logger = $LoggerFactory.getLogger(BeanPropertyTester.class);
 				logger.warn("Bean '{}' has URL property '{}'. Equality tests on URL can be slow. Consider ignoring the property.",
