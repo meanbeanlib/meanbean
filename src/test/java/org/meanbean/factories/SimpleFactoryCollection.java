@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class SimpleFactoryCollection implements FactoryCollection {
 
-	private final Map<Class<?>, Factory<?>> factories = new HashMap<Class<?>, Factory<?>>();
+	private final Map<Type, Factory<?>> factories = new HashMap<>();
 
 	@Override
     public boolean hasFactory(Type type) throws IllegalArgumentException {

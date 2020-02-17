@@ -154,18 +154,8 @@ public class BeanTesterTest {
 	public void testBeanThatTakesBeanClassAndConfigurationShouldNotThrowAssertionErrorWhenGettersAndSettersFunctionCorrectly()
 	        throws Exception {
 		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-		configurationBuilder.overrideFactory("lastName", new Factory<String>() {
-			@Override
-            public String create() {
-				return "LastName" + System.currentTimeMillis();
-			}
-		});
-		configurationBuilder.overrideFactory("dateOfBirth", new Factory<Date>() {
-			@Override
-            public Date create() {
-				return new Date();
-			}
-		});
+		configurationBuilder.overrideFactory("lastName", () -> "LastName" + System.currentTimeMillis());
+		configurationBuilder.overrideFactory("dateOfBirth", Date::new);
 		beanTester.testBean(ComplexBean.class, configurationBuilder.build());
 	}
 
@@ -173,7 +163,7 @@ public class BeanTesterTest {
 	public void testBeanThatTakesBeanClassAndConfigurationShouldIgnoreBadPropertyWhenToldTo() throws Exception {
 		beanTester.testBean(BadComplexBean.class, new ConfigurationBuilder().ignoreProperty("lastName").build());
 	}
-
+	
 	// TODO TEST COMBINATIONS WITH CONFIGURATIONS AND BEAN INFORMATIONS ETC
 
 	public static class BeanWithBadGetterMethod extends Bean {

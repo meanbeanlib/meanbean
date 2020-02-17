@@ -144,6 +144,9 @@ public class BeanTester {
 	/** Object that tests the getters and setters of a Bean's property. */
 	private final BeanPropertyTester beanPropertyTester;
 
+	/**
+	 * Prefer {@link BeanTesterBuilder#newBeanTester()}
+	 */
 	public BeanTester() {
 		this(RandomValueGenerator.getInstance(),
 				FactoryCollection.getInstance(),

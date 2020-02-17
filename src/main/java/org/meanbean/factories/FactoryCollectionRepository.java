@@ -70,14 +70,14 @@ public class FactoryCollectionRepository implements FactoryCollection {
 		return factoryLookups().anyMatch(factoryCollection -> factoryCollection.hasFactory(type));
 	}
 
-	protected Stream<FactoryLookup> factoryLookups() {
+	Stream<FactoryLookup> factoryLookups() {
 		Stream<FactoryLookup> lookups = servicesFrom(FactoryLookup.getServiceDefinition());
 		Stream<FactoryLookup> services = Stream.concat(lookups, factoryCollections())
 				.sorted(ServiceFactory.getComparator());
 		return Stream.concat(factoryLookups.stream(), services);
 	}
 
-	protected Stream<FactoryCollection> factoryCollections() {
+	private Stream<FactoryCollection> factoryCollections() {
 		return servicesFrom(FactoryCollection.getServiceDefinition());
 	}
 

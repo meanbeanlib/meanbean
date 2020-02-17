@@ -60,6 +60,14 @@ public class BeanTesterBuilder {
 
 	private Configuration defaultConfiguration;
 
+	public static BeanTesterBuilder newBeanTesterBuilder() {
+		return new BeanTesterBuilder();
+	}
+
+	public static BeanTester newBeanTester() {
+		return new BeanTesterBuilder().build();
+	}
+
 	public RandomValueGenerator getRandomValueGenerator() {
 		return randomValueGenerator;
 	}
