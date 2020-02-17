@@ -122,8 +122,6 @@ public class BeanTester {
 	/** Default number of times a bean should be tested. */
 	public static final int TEST_ITERATIONS_PER_BEAN = 100;
 
-	private final int defaultIterations;
-	
 	/** Random number generator used by factories to randomly generate values. */
 	private final RandomValueGenerator randomValueGenerator;
 
@@ -145,7 +143,7 @@ public class BeanTester {
 	private final BeanPropertyTester beanPropertyTester;
 
 	/**
-	 * Prefer {@link BeanTesterBuilder#newBeanTester()}
+	 * Prefer {@link BeanVerifications} or {@link BeanTesterBuilder#newBeanTester()}
 	 */
 	public BeanTester() {
 		this(RandomValueGenerator.getInstance(),
@@ -154,14 +152,12 @@ public class BeanTester {
 				BeanInformationFactory.getInstance(),
 				new BeanPropertyTester(),
 				new ConcurrentHashMap<>(),
-				null, 
-				TEST_ITERATIONS_PER_BEAN);
+				Configuration.defaultConfiguration());
 	}
 
 	BeanTester(RandomValueGenerator randomValueGenerator, FactoryCollection factoryCollection,
 			FactoryLookupStrategy factoryLookupStrategy, BeanInformationFactory beanInformationFactory,
-			BeanPropertyTester beanPropertyTester, Map<Class<?>, Configuration> configs, Configuration defaultConfiguration,
-			int defaultIterations) {
+			BeanPropertyTester beanPropertyTester, Map<Class<?>, Configuration> configs, Configuration defaultConfiguration) {
 		this.randomValueGenerator = randomValueGenerator;
 		this.factoryCollection = factoryCollection;
 		this.factoryLookupStrategy = factoryLookupStrategy;
@@ -169,7 +165,6 @@ public class BeanTester {
 		this.beanPropertyTester = beanPropertyTester;
 		this.customConfigurations = configs;
 		this.defaultConfiguration = defaultConfiguration;
-		this.defaultIterations = defaultIterations;
 	}
 
 	/**
@@ -202,7 +197,7 @@ public class BeanTester {
 	 * @return The number of times each bean should be tested. This value will be at least 1.
 	 */
 	public int getIterations() {
-		return defaultIterations;
+		return defaultConfiguration.getIterations();
 	}
 
 	/**
@@ -341,7 +336,7 @@ public class BeanTester {
 			AssertionError, BeanTestException {
 		ValidationHelper.ensureExists("beanClass", "test bean", beanClass);
 		// Override the standard number of iterations if need be
-		int iterations = defaultIterations;
+		int iterations = getIterations();
 		if ((customConfiguration != null) && (customConfiguration.hasIterationsOverride())) {
 			iterations = customConfiguration.getIterations();
 		}

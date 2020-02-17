@@ -250,7 +250,13 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
             BeanTestException, AssertionError {
 		ValidationHelper.ensureExists("factory", "test equals", factory);
 		ValidationHelper.ensureExists("insignificantProperties", "test equals", insignificantProperties);
-		List<String> insignificantPropertyNames = Arrays.asList(insignificantProperties);
+		
+		List<String> insignificantPropertyNames = new ArrayList<>();
+		insignificantPropertyNames.addAll(Arrays.asList(insignificantProperties));
+		if (customConfiguration != null) {
+			insignificantPropertyNames.addAll(customConfiguration.getEqualsInsignificantProperties());
+		}
+
 		Object prototype = factory.create();
 		ValidationHelper.ensureExists("factory-created object", "test equals", prototype);
 		BeanInformation beanInformation = beanInformationFactory.create(prototype.getClass());

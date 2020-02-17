@@ -102,6 +102,13 @@ public class HashCodeMethodTester {
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/**
+	 * Prefer {@link BeanVerifications}
+	 */
+	public HashCodeMethodTester() {
+		
+	}
+	
+	/**
 	 * <p>
 	 * Test that the hashCode logic implemented by the type the specified factory creates is correct by testing:
 	 * </p>

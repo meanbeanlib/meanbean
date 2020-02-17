@@ -20,7 +20,6 @@
 
 package org.meanbean.test;
 
-import com.github.meanbeanlib.mirror.Executables;
 import com.github.meanbeanlib.mirror.SerializableLambdas.SerializableFunction1;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
@@ -31,20 +30,16 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ValidationHelper;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
+
+import static org.meanbean.util.PropertyNameFinder.findPropertyName;
 
 public class BeanTesterBuilder {
-
-	private int defaultIterations = BeanTester.TEST_ITERATIONS_PER_BEAN;
 
 	private RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 
@@ -58,7 +53,8 @@ public class BeanTesterBuilder {
 
 	private Map<Class<?>, Configuration> customConfigurations = new ConcurrentHashMap<>();
 
-	private Configuration defaultConfiguration;
+	private Configuration defaultConfiguration = new Configuration(BeanTester.TEST_ITERATIONS_PER_BEAN,
+			Collections.emptySet(), Collections.emptyMap());
 
 	public static BeanTesterBuilder newBeanTesterBuilder() {
 		return new BeanTesterBuilder();
@@ -66,6 +62,18 @@ public class BeanTesterBuilder {
 
 	public static BeanTester newBeanTester() {
 		return new BeanTesterBuilder().build();
+	}
+
+	public static EqualsMethodTester newEqualsMethodTester() {
+		return new BeanTesterBuilder().buildEqualsMethodTester();
+	}
+
+	public static HashCodeMethodTester newHashCodeMethodTester() {
+		return new HashCodeMethodTester();
+	}
+
+	public static ToStringMethodTester newToStringMethodTester() {
+		return new ToStringMethodTester();
 	}
 
 	public RandomValueGenerator getRandomValueGenerator() {
@@ -145,15 +153,14 @@ public class BeanTesterBuilder {
 	}
 
 	public int getDefaultIterations() {
-		return defaultIterations;
+		return defaultConfiguration.getIterations();
 	}
 
 	/**
 	 * Set the number of times a type should be tested by default
 	 */
 	public BeanTesterBuilder setDefaultIterations(int iterations) {
-		ValidationHelper.ensure(iterations >= 1, "Iterations must be at least 1.");
-		this.defaultIterations = iterations;
+		this.defaultConfiguration.setIterations(iterations);
 		return this;
 	}
 
@@ -215,51 +222,61 @@ public class BeanTesterBuilder {
 		ValidationHelper.ensureExists("factory", "add override Factory", factory);
 
 		String propertyName = findPropertyName(beanClass, beanGetter);
-
 		getConfigurationFor(beanClass).getOverrideFactories().put(propertyName, factory);
 		return this;
 	}
 
-	private <T, S> String findPropertyName(Class<T> beanClass, SerializableFunction1<T, S> beanGetter) {
-		Method method = Executables.findGetter(beanGetter);
-		try {
-			BeanInfo beanInfo = Introspector.getBeanInfo(beanClass);
-			PropertyDescriptor property = Stream.of(beanInfo.getPropertyDescriptors())
-					.filter(pd -> method.equals(pd.getReadMethod()))
-					.findFirst()
-					.orElseThrow(() -> new IllegalArgumentException("invalid bean getter method:" + method));
-			return property.getName();
-		} catch (Exception e) {
-			if (e instanceof IllegalArgumentException) {
-				throw (IllegalArgumentException) e;
-			}
-			throw new IllegalArgumentException("invalid bean getter method: " + method, e);
-		}
+	/**
+	 * Add a property that is insignificant for EqualsMethodTester
+	 */
+	public <T, S> BeanTesterBuilder addEqualsInsignificantProperty(Class<T> beanClass, String propertyName) {
+		ValidationHelper.ensureExists("beanClass", "add equals insignificantProperty", beanClass);
+		ValidationHelper.ensureExists("propertyName", "add equals insignificantProperty", propertyName);
+		getConfigurationFor(beanClass).getEqualsInsignificantProperties().add(propertyName);
+		return this;
+	}
+
+	/**
+	 * Add a property that is insignificant for EqualsMethodTester
+	 * 
+	 * <pre>
+	 *     addEqualsInsignificantProperty(MyBean.class, MyBean::getPropertyValue);
+	 * </pre>		
+	 */
+	public <T, S> BeanTesterBuilder addEqualsInsignificantProperty(Class<T> beanClass, SerializableFunction1<T, S> beanGetter) {
+		ValidationHelper.ensureExists("beanClass", "add equals insignificantProperty", beanClass);
+		ValidationHelper.ensureExists("beanGetter", "add equals insignificantProperty", beanGetter);
+
+		String propertyName = findPropertyName(beanClass, beanGetter);
+		return addEqualsInsignificantProperty(beanClass, propertyName);
 	}
 
 	private Configuration getConfigurationFor(Class<?> clazz) {
 		return customConfigurations.computeIfAbsent(clazz,
-				key -> new Configuration(defaultIterations, new HashSet<>(), new HashMap<>()));
+				key -> new Configuration(defaultConfiguration.getIterations(), new HashSet<>(), new HashMap<>()));
 	}
 
 	public BeanTester build() {
-		BeanTester beanTester = new BeanTester(
+		return new BeanTester(
 				randomValueGenerator,
 				factoryCollection,
 				factoryLookupStrategy,
 				beanInformationFactory,
 				beanPropertyTester,
 				customConfigurations,
-				defaultConfiguration,
-				defaultIterations);
-
-		randomValueGenerator = null;
-		factoryCollection = null;
-		factoryLookupStrategy = null;
-		beanInformationFactory = null;
-		beanPropertyTester = null;
-		customConfigurations = null;
-		defaultConfiguration = null;
-		return beanTester;
+				defaultConfiguration);
 	}
+
+	public EqualsMethodTester buildEqualsMethodTester() {
+		return new EqualsMethodTester(customConfigurations, defaultConfiguration);
+	}
+
+	public HashCodeMethodTester buildHashCodeMethodTester() {
+		return newHashCodeMethodTester();
+	}
+
+	public ToStringMethodTester buildToStringMethodTester() {
+		return newToStringMethodTester();
+	}
+
 }

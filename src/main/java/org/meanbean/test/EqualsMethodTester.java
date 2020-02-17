@@ -28,6 +28,9 @@ import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.ValidationHelper;
 
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * <p>
  * Provides a means of testing the correctness of the equals logic implemented by a type, based solely on the type, with
@@ -138,11 +141,6 @@ import org.meanbean.util.ValidationHelper;
  */
 public class EqualsMethodTester {
 
-	public static final int DEFAULT_TEST_ITERATIONS_PER_TYPE = 100;
-
-	/** The number of times each type is tested, unless a custom Configuration overrides this global setting. */
-	private final int iterations = DEFAULT_TEST_ITERATIONS_PER_TYPE;
-
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
@@ -152,6 +150,21 @@ public class EqualsMethodTester {
 	/** The verifier to which property significance verification is delegated. */
 	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier =
 	        new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+
+	private final Configuration defaultConfiguration;
+	private final Map<Class<?>, Configuration> customConfigurations;
+
+	/**
+	 * Prefer {@link BeanVerifications}
+	 */
+	public EqualsMethodTester() {
+		this(Collections.emptyMap(), Configuration.defaultConfiguration());
+	}
+
+	EqualsMethodTester(Map<Class<?>, Configuration> customConfigurations, Configuration defaultConfiguration) {
+		this.customConfigurations = customConfigurations;
+		this.defaultConfiguration = defaultConfiguration;
+	}
 
 	/**
 	 * <p>
@@ -272,6 +285,7 @@ public class EqualsMethodTester {
 	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
 		ValidationHelper.ensureExists("clazz", "test equals method", clazz);
 		EquivalentFactory<?> factory = createEquivalentFactory(clazz);
+		customConfiguration = getEffectiveConfiguration(clazz, customConfiguration);
 		testEqualsMethod(factory, customConfiguration, insignificantProperties);
 	}
 
@@ -401,21 +415,38 @@ public class EqualsMethodTester {
 	        BeanTestException, AssertionError {
 		ValidationHelper.ensureExists("factory", "test equals method", factory);
 		ValidationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
+		insignificantProperties = insignificantProperties == null || insignificantProperties.length == 0
+				? defaultConfiguration.getEqualsInsignificantProperties().toArray(new String[0])
+				: insignificantProperties;
+
 		contractVerifier.verifyEqualsReflexive(factory);
 		contractVerifier.verifyEqualsSymmetric(factory);
 		contractVerifier.verifyEqualsTransitive(factory);
 		contractVerifier.verifyEqualsConsistent(factory);
 		contractVerifier.verifyEqualsNull(factory);
 		contractVerifier.verifyEqualsDifferentType(factory);
+
+		customConfiguration = getEffectiveConfiguration(null, customConfiguration);
 		// Override the standard number of iterations if need be
-		int iterations = this.iterations;
-		if ((customConfiguration != null) && (customConfiguration.hasIterationsOverride())) {
+		int iterations = defaultConfiguration.getIterations();
+		if (customConfiguration.hasIterationsOverride()) {
 			iterations = customConfiguration.getIterations();
 		}
+		
 		// Test property significance 'iterations' times
 		for (int idx = 0; idx < iterations; idx++) {
 			propertySignificanceVerifier.verifyEqualsMethod(factory, customConfiguration, insignificantProperties);
 		}
+	}
+	
+	private Configuration getEffectiveConfiguration(Class<?> beanClass, Configuration configuration) {
+		if (configuration != null) {
+			return configuration;
+		}
+		if (beanClass != null && customConfigurations.containsKey(beanClass)) {
+			return customConfigurations.get(beanClass);
+		}
+		return defaultConfiguration;
 	}
 
 	private EquivalentFactory<?> createEquivalentFactory(Class<?> clazz) {

@@ -20,6 +20,7 @@
 
 package org.meanbean.test.beans.domain;
 
+import java.util.Objects;
 
 public class Company {
 
@@ -75,44 +76,19 @@ public class Company {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		result = prime * result + ((companyNumber == null) ? 0 : companyNumber.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((vatNumber == null) ? 0 : vatNumber.hashCode());
-		return result;
+		return Objects.hash(address, companyNumber, name, vatNumber);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Company other = (Company) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		} else if (!address.equals(other.address))
-			return false;
-		if (companyNumber == null) {
-			if (other.companyNumber != null)
-				return false;
-		} else if (!companyNumber.equals(other.companyNumber))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (vatNumber == null) {
-			if (other.vatNumber != null)
-				return false;
-		} else if (!vatNumber.equals(other.vatNumber))
-			return false;
-		return true;
+		return Objects.equals(address, other.address)
+				&& Objects.equals(companyNumber, other.companyNumber)
+				&& Objects.equals(name, other.name)
+				&& Objects.equals(vatNumber, other.vatNumber);
 	}
 }

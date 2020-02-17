@@ -33,6 +33,13 @@ public class ToStringMethodTester {
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/**
+	 * Prefer {@link BeanVerifications}
+	 */
+	ToStringMethodTester() {
+
+	}
+
+	/**
 	 * Simple toString() test to verify that the bean overrides toString() method and that it does not throw exception.
 	 */
 	public void testToStringMethod(Class<?> clazz) {

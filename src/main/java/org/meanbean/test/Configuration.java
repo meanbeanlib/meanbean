@@ -23,6 +23,9 @@ package org.meanbean.test;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.ValidationHelper;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,6 +74,8 @@ public class Configuration {
 	 */
 	private Map<String, Factory<?>> overrideFactories;
 
+	private List<String> equalsInsignificantProperties = new ArrayList<>();
+	
 	/**
 	 * Construct a new Configuration.
 	 * 
@@ -85,6 +90,10 @@ public class Configuration {
 		this.iterations = iterations;
 		this.ignoredProperties = ignoredProperties;
 		this.overrideFactories = overrideFactories;
+	}
+	
+	static Configuration defaultConfiguration() {
+		return new Configuration(BeanTester.TEST_ITERATIONS_PER_BEAN, Collections.emptySet(), Collections.emptyMap());
 	}
 
 	/**
@@ -191,6 +200,14 @@ public class Configuration {
 	void setIterations(Integer iterations) {
 		ValidationHelper.ensure(iterations >= 1, "Iterations must be at least 1.");
 		this.iterations = iterations;
+	}
+
+	List<String> getEqualsInsignificantProperties() {
+		return equalsInsignificantProperties;
+	}
+
+	void setEqualsInsignificantProperties(List<String> equalsInsignificantProperties) {
+		this.equalsInsignificantProperties = equalsInsignificantProperties;
 	}
 
 	/**

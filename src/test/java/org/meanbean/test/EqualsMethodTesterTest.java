@@ -213,7 +213,7 @@ public class EqualsMethodTesterTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(new BeanFactory(), configuration);
 		assertThat("custom factory was not used", factory.getInvocationCount(),
-		        is(EqualsMethodTester.DEFAULT_TEST_ITERATIONS_PER_TYPE));
+		        is(BeanTester.TEST_ITERATIONS_PER_BEAN));
 	}
 
 	@Test
@@ -232,7 +232,7 @@ public class EqualsMethodTesterTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(new BeanFactory(), configuration);
 		assertThat("global iterations was not used", factory.getInvocationCount(),
-		        is(EqualsMethodTester.DEFAULT_TEST_ITERATIONS_PER_TYPE));
+		        is(BeanTester.TEST_ITERATIONS_PER_BEAN));
 	}
 
 	@Test
@@ -338,14 +338,12 @@ public class EqualsMethodTesterTest {
 	}
 
 	@Test(expected = AssertionError.class)
-	public void testEqualsMethodByClassShouldThrowAssertionErrorWhenEqualityShouldNotHaveChangedButDid()
-	        throws Exception {
+	public void testEqualsMethodByClassShouldThrowAssertionErrorWhenEqualityShouldNotHaveChangedButDid() {
 		equalsTester.testEqualsMethod(MultiPropertyBean.class, "lastName");
 	}
 
 	@Test(expected = AssertionError.class)
-	public void testEqualsMethodByClassShouldThrowAssertionErrorWhenEqualityShouldHaveChangedButDidNot()
-	        throws Exception {
+	public void testEqualsMethodByClassShouldThrowAssertionErrorWhenEqualityShouldHaveChangedButDidNot() {
 		equalsTester.testEqualsMethod(BrokenEqualsMultiPropertyBean.class);
 	}
 
@@ -367,7 +365,7 @@ public class EqualsMethodTesterTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(Bean.class, configuration);
 		assertThat("custom factory was not used", factory.getInvocationCount(),
-		        is(EqualsMethodTester.DEFAULT_TEST_ITERATIONS_PER_TYPE));
+		        is(BeanTester.TEST_ITERATIONS_PER_BEAN));
 	}
 
 	@Test
@@ -386,7 +384,7 @@ public class EqualsMethodTesterTest {
 		Configuration configuration = new ConfigurationBuilder().overrideFactory("name", factory).build();
 		equalsTester.testEqualsMethod(Bean.class, configuration);
 		assertThat("global iterations was not used", factory.getInvocationCount(),
-		        is(EqualsMethodTester.DEFAULT_TEST_ITERATIONS_PER_TYPE));
+		        is(BeanTester.TEST_ITERATIONS_PER_BEAN));
 	}
 
 	@Test
