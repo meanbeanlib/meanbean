@@ -20,6 +20,8 @@
 
 package org.meanbean.lang;
 
+import org.meanbean.util.ServiceDefinition;
+
 /**
  * Defines an object that creates logically equivalent objects of a specified type.
  * 
@@ -35,4 +37,14 @@ public interface EquivalentFactory<T extends Object> {
 	 * @return A new object of the specified type.
 	 */
 	T create();
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static ServiceDefinition<EquivalentFactory<?>> getServiceDefinition() {
+		return new ServiceDefinition<>((Class) EquivalentFactory.class);
+	}
+
+	public static EquivalentFactory<?> getInstance() {
+		return getServiceDefinition().getServiceFactory()
+				.getFirst();
+	}
 }

@@ -22,7 +22,6 @@ package org.meanbean.test;
 
 import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.bean.info.BeanInformationFactory;
-import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.equivalent.EquivalentEnumFactory;
 import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
@@ -145,7 +144,7 @@ public class EqualsMethodTester {
 	private final int iterations = DEFAULT_TEST_ITERATIONS_PER_TYPE;
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory = new JavaBeanInformationFactory();
+	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/** The verifier to which general contract verification is delegated. */
 	private final EqualsMethodContractVerifier contractVerifier = new EqualsMethodContractVerifier();

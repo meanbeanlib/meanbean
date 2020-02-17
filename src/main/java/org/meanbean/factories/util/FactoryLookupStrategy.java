@@ -37,16 +37,6 @@ import org.meanbean.util.ServiceDefinition;
  */
 public interface FactoryLookupStrategy {
 
-	public static ServiceDefinition<FactoryLookupStrategy> getServiceDefinition() {
-		return new ServiceDefinition<>(FactoryLookupStrategy.class,
-				new Class<?>[] { FactoryCollection.class, RandomValueGenerator.class },
-				new Object[] { FactoryCollection.getInstance(), RandomValueGenerator.getInstance() });
-	}
-
-	public static FactoryLookupStrategy getInstance() {
-		return getServiceDefinition().getServiceFactory().getFirst();
-	}
-
 	/**
 	 * <p>
 	 * Get a factory for the specified property that is of the specified type. <br>
@@ -75,4 +65,15 @@ public interface FactoryLookupStrategy {
 	 */
 	Factory<?> getFactory(BeanInformation beanInformation, PropertyInformation propertyInformation,
 			Configuration configuration) throws IllegalArgumentException, BeanTestException;
+
+	public static ServiceDefinition<FactoryLookupStrategy> getServiceDefinition() {
+		return new ServiceDefinition<>(FactoryLookupStrategy.class,
+				new Class<?>[] { FactoryCollection.class, RandomValueGenerator.class },
+				new Object[] { FactoryCollection.getInstance(), RandomValueGenerator.getInstance() });
+	}
+
+	public static FactoryLookupStrategy getInstance() {
+		return getServiceDefinition().getServiceFactory().getFirst();
+	}
+
 }

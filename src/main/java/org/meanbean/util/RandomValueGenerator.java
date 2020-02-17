@@ -27,15 +27,6 @@ package org.meanbean.util;
  */
 public interface RandomValueGenerator {
 
-	public static ServiceDefinition<RandomValueGenerator> getServiceDefinition() {
-		return new ServiceDefinition<>(RandomValueGenerator.class);
-	}
-
-	public static RandomValueGenerator getInstance() {
-		return getServiceDefinition().getServiceFactory()
-				.getFirst();
-	}
-	
 	/**
 	 * Generate a random byte.
 	 * 
@@ -92,4 +83,15 @@ public interface RandomValueGenerator {
 	 * @return A randomly generated boolean.
 	 */
 	boolean nextBoolean();
+	
+
+	public static ServiceDefinition<RandomValueGenerator> getServiceDefinition() {
+		return new ServiceDefinition<>(RandomValueGenerator.class);
+	}
+
+	public static RandomValueGenerator getInstance() {
+		return getServiceDefinition().getServiceFactory()
+				.getFirst();
+	}
+
 }

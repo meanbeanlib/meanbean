@@ -29,15 +29,6 @@ import org.meanbean.util.ServiceDefinition;
  */
 public interface BeanInformationFactory {
 
-	public static ServiceDefinition<BeanInformationFactory> getServiceDefinition() {
-		return new ServiceDefinition<>(BeanInformationFactory.class);
-	}
-
-	public static BeanInformationFactory getInstance() {
-		return getServiceDefinition().getServiceFactory()
-				.getFirst();
-	}
-	
 	/**
 	 * Create a BeanInformation object from/based on the specified beanClass.
 	 * 
@@ -55,4 +46,12 @@ public interface BeanInformationFactory {
 	 */
 	BeanInformation create(Class<?> beanClass) throws IllegalArgumentException, BeanInformationException;
 
+	public static ServiceDefinition<BeanInformationFactory> getServiceDefinition() {
+		return new ServiceDefinition<>(BeanInformationFactory.class);
+	}
+
+	public static BeanInformationFactory getInstance() {
+		return getServiceDefinition().getServiceFactory()
+				.getFirst();
+	}
 }

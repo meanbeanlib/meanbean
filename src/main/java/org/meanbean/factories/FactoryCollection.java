@@ -30,15 +30,6 @@ import org.meanbean.util.ServiceDefinition;
  */
 public interface FactoryCollection extends FactoryLookup {
 
-	public static ServiceDefinition<FactoryCollection> getServiceDefinition() {
-		return new ServiceDefinition<>(FactoryCollection.class);
-	}
-
-	public static FactoryCollection getInstance() {
-		return getServiceDefinition().getServiceFactory()
-				.getFirst();
-	}
-	
 	/**
 	 * <p>
 	 * Add the specified Factory to the collection.
@@ -68,5 +59,14 @@ public interface FactoryCollection extends FactoryLookup {
 	 * The factoryLookup will be first consulted when looking for a Factory  
 	 */
 	void addFactoryLookup(FactoryLookup factoryLookup);
+
+	public static ServiceDefinition<FactoryCollection> getServiceDefinition() {
+		return new ServiceDefinition<>(FactoryCollection.class);
+	}
+
+	public static FactoryCollection getInstance() {
+		return getServiceDefinition().getServiceFactory()
+				.getFirst();
+	}
 
 }

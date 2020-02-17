@@ -31,15 +31,6 @@ import java.util.function.Supplier;
  */
 public interface FactoryLookup {
 
-	public static ServiceDefinition<FactoryLookup> getServiceDefinition() {
-		return new ServiceDefinition<>(FactoryLookup.class);
-	}
-
-	public static FactoryLookup getInstance() {
-		return getServiceDefinition().getServiceFactory()
-				.getFirst();
-	}
-	
 	/**
 	 * <p>
 	 * Get the Factory registered for the specified class.
@@ -83,5 +74,14 @@ public interface FactoryLookup {
 			return getFactory(type);
 		}
 		return fallback.get();
+	}
+
+	public static ServiceDefinition<FactoryLookup> getServiceDefinition() {
+		return new ServiceDefinition<>(FactoryLookup.class);
+	}
+
+	public static FactoryLookup getInstance() {
+		return getServiceDefinition().getServiceFactory()
+				.getFirst();
 	}
 }

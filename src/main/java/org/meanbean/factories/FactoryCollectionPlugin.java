@@ -32,15 +32,6 @@ import java.util.List;
  */
 public interface FactoryCollectionPlugin {
 
-	public static ServiceDefinition<FactoryCollectionPlugin> getServiceDefinition() {
-		return new ServiceDefinition<>(FactoryCollectionPlugin.class);
-	}
-
-	public static List<FactoryCollectionPlugin> getInstances() {
-		return getServiceDefinition().getServiceFactory()
-				.getAll();
-	}
-	
 	/**
 	 * Initialize the plugin, adding Factories to the FactoryCollection.
 	 * 
@@ -49,4 +40,13 @@ public interface FactoryCollectionPlugin {
 	 * @param randomValueGenerator RandomValueGenerator that can be used by Factory objects.
 	 */
 	void initialize(FactoryCollection factoryCollection, RandomValueGenerator randomValueGenerator);
+
+	public static ServiceDefinition<FactoryCollectionPlugin> getServiceDefinition() {
+		return new ServiceDefinition<>(FactoryCollectionPlugin.class);
+	}
+
+	public static List<FactoryCollectionPlugin> getInstances() {
+		return getServiceDefinition().getServiceFactory()
+				.getAll();
+	}
 }
