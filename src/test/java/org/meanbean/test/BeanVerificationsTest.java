@@ -25,6 +25,7 @@ import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.domain.Company;
 import org.meanbean.test.beans.domain.EmployeeId;
+import org.meanbean.test.beans.scan.ScanBean;
 
 public class BeanVerificationsTest {
 
@@ -67,5 +68,10 @@ public class BeanVerificationsTest {
 				.isValidJavaBean()
 				.hasValidEqualsMethod()
 				.hasValidHashCodeMethod();
+	}
+
+	@Test
+	public void verifyPackage() {
+		BeanVerifications.verifyBeansIn(ScanBean.class.getPackage());
 	}
 }

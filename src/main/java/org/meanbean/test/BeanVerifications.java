@@ -20,6 +20,12 @@
 
 package org.meanbean.test;
 
+import org.meanbean.util.ClassPath;
+import org.meanbean.util.ClassPath.ClassInfo;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class BeanVerifications {
@@ -36,6 +42,19 @@ public class BeanVerifications {
 				throw new AssertionError("Cannot verify bean type " + beanClass.getName(), e);
 			}
 		}
+	}
+
+	public static void verifyBeansIn(String packageName) {
+		ClassPath classPath = buildClassPath();
+		Set<ClassInfo> classInfoSet = classPath.getTopLevelClassesRecursive(packageName);
+		Class<?>[] beanClasses = classInfoSet.stream()
+				.map(ClassInfo::load)
+				.toArray(Class<?>[]::new);
+		verifyBeans(beanClasses);
+	}
+
+	public static void verifyBeansIn(Package packageMarker) {
+		verifyBeansIn(packageMarker.getName());
 	}
 
 	public static void verifyBean(Class<?> beanClass) {
@@ -76,6 +95,18 @@ public class BeanVerifications {
 		public BeanVerifier hasValidToStringMethod() {
 			builder.buildToStringMethodTester().testToStringMethod(beanClass);
 			return this;
+		}
+	}
+
+	private static ClassPath buildClassPath() {
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			if (classLoader == null) {
+				classLoader = BeanVerifications.class.getClassLoader();
+			}
+			return ClassPath.from(classLoader);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
 		}
 	}
 
