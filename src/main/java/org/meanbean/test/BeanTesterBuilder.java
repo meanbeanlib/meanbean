@@ -39,6 +39,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static org.meanbean.util.PropertyNameFinder.findPropertyName;
 
+/**
+ * Builder for {@link BeanTester} or other tester classes.
+ */
 public class BeanTesterBuilder {
 
 	private RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();

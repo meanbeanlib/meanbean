@@ -27,6 +27,9 @@ import org.meanbean.util.ValidationHelper;
 
 import java.util.Objects;
 
+/**
+ * For testing toString method
+ */
 public class ToStringMethodTester {
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */

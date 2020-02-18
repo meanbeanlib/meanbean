@@ -25,13 +25,24 @@ import org.meanbean.util.ClassPath.ClassInfo;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * For one-shot or fluent assertions
+ */
 public class BeanVerifications {
 
 	public static BeanVerifier verifyThat(Class<?> beanClass) {
 		return new BeanVerifier(beanClass);
+	}
+
+	public static void verifyBean(Class<?> beanClass) {
+		verifyThat(beanClass).isValidJavaBean()
+				.hasValidEqualsMethod()
+				.hasValidHashCodeMethod()
+				.hasValidToStringMethod();
 	}
 
 	public static void verifyBeans(Class<?>... beanClasses) {
@@ -49,19 +60,13 @@ public class BeanVerifications {
 		Set<ClassInfo> classInfoSet = classPath.getTopLevelClassesRecursive(packageName);
 		Class<?>[] beanClasses = classInfoSet.stream()
 				.map(ClassInfo::load)
+				.filter(clazz -> !clazz.isInterface() && !Modifier.isAbstract(clazz.getModifiers()))
 				.toArray(Class<?>[]::new);
 		verifyBeans(beanClasses);
 	}
 
 	public static void verifyBeansIn(Package packageMarker) {
 		verifyBeansIn(packageMarker.getName());
-	}
-
-	public static void verifyBean(Class<?> beanClass) {
-		verifyThat(beanClass).isValidJavaBean()
-				.hasValidEqualsMethod()
-				.hasValidHashCodeMethod()
-				.hasValidToStringMethod();
 	}
 
 	public static class BeanVerifier {

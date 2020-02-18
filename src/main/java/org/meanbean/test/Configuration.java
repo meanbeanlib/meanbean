@@ -31,7 +31,7 @@ import java.util.Set;
 
 /**
  * <p>
- * Type-specific (i.e. JavaBean-specific) test configuration used to customize testing for a single type. Configuration
+ * Test configuration used to customize testing for a single JavaBean type. Configuration
  * objects are only required when you want to customize the testing behaviour. Most often the standard testing behaviour
  * will be sufficient. <br>
  * </p>
