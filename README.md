@@ -41,3 +41,6 @@ Mean Bean can be acquired from the <a href="https://maven-badges.herokuapp.com/m
         <version>[latest version]</version>
     </dependency>
 
+### More info?
+
+See [User Guide in wiki](https://github.com/meanbeanlib/meanbean/wiki)
