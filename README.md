@@ -22,15 +22,22 @@ software system, namely your domain and data objects. Mean Bean:
 Mean Bean helps you rapidly and reliably test fundamental objects within your project, namely your domain and data objects.
 With just a single line of code, you can be confident that your beans are well behaved…
 
-    new BeanTester().testBean(MyDomainObject.class);
+	// verify bean getters/setters, equals, hashCode and toString for a single bean type
+	BeanVerifications.verifyBean(MyBean.class);
+		
+	// verify beans defined in the same package
+	BeanVerifications.verifyBeansIn(MyBean.class.getPackage());
+	
+	// directly verify only bean getters/setters for a single bean type
+	new BeanTester().testBean(MyDomainObject.class);
 
 ### Where do I get it?
 
-Mean Bean can be acquired from the Maven Central repo.
+Mean Bean can be acquired from the <a href="https://maven-badges.herokuapp.com/maven-central/com.github.meanbeanlib/meanbean">Maven Central repo</a>:
 
     <dependency>
         <groupId>com.github.meanbeanlib</groupId>
         <artifactId>meanbean</artifactId>
-        <version>3.0.0-M2</version>
+        <version>[latest version]</version>
     </dependency>
 
