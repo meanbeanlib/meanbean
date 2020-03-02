@@ -79,16 +79,20 @@ public class Company {
 		return Objects.hash(address, companyNumber, name, vatNumber);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Company)) {
+            return false;
+        }
 		Company other = (Company) obj;
 		return Objects.equals(address, other.address)
 				&& Objects.equals(companyNumber, other.companyNumber)
 				&& Objects.equals(name, other.name)
 				&& Objects.equals(vatNumber, other.vatNumber);
-	}
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[" + name + "]";
+    }
 }

@@ -20,11 +20,6 @@
 
 package org.meanbean.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.meanbean.factories.ObjectCreationException;
@@ -43,6 +38,12 @@ import org.meanbean.test.beans.domain.Review;
 import org.meanbean.test.beans.domain.ShippingCompany;
 import org.meanbean.test.beans.domain.Status;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.fail;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EqualsMethodTesterDomainTest {
@@ -167,9 +168,8 @@ public class EqualsMethodTesterDomainTest {
 		try {
 			equalsTester.testEqualsMethod(clazz);
 		} catch (AssertionError e) {
-			assertTrue(e.getMessage().startsWith(
-			        "objects that differ due to supposedly significant property [id] where considered equal."));
-			assertTrue(e.getMessage().endsWith("is property [id] actually insignificant?"));
+		    assertThat(e.getMessage(), startsWith("objects that differ due to supposedly significant property [id] were considered equal."));
+            assertThat(e.getMessage(), endsWith("is property [id] actually insignificant?"));
 			return;
 		}
 		fail("AssertionError should have been thrown for [" + clazz.getSimpleName()

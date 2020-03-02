@@ -4,6 +4,7 @@
 	<artifactId>meanbean</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
+	
 	<name>meanbean</name>
 	<description>
 		Mean Bean is an open source Java test library that tests equals and hashCode contract compliance, as well as 

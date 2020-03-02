@@ -20,6 +20,7 @@
 
 package org.meanbean.test.beans.domain;
 
+import java.util.Objects;
 
 public class Address {
 
@@ -104,15 +105,7 @@ public class Address {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
-		result = prime * result + ((county == null) ? 0 : county.hashCode());
-		result = prime * result + ((line1 == null) ? 0 : line1.hashCode());
-		result = prime * result + ((line2 == null) ? 0 : line2.hashCode());
-		result = prime * result + ((line3 == null) ? 0 : line3.hashCode());
-		result = prime * result + ((postCode == null) ? 0 : postCode.hashCode());
-		return result;
+	    return Objects.hash(country, county, line1, line2, line3, postCode);
 	}
 
 	@Override
@@ -124,30 +117,11 @@ public class Address {
 		if (getClass() != obj.getClass())
 			return false;
 		Address other = (Address) obj;
-		if (country != other.country)
-			return false;
-		if (county != other.county)
-			return false;
-		if (line1 == null) {
-			if (other.line1 != null)
-				return false;
-		} else if (!line1.equals(other.line1))
-			return false;
-		if (line2 == null) {
-			if (other.line2 != null)
-				return false;
-		} else if (!line2.equals(other.line2))
-			return false;
-		if (line3 == null) {
-			if (other.line3 != null)
-				return false;
-		} else if (!line3.equals(other.line3))
-			return false;
-		if (postCode == null) {
-			if (other.postCode != null)
-				return false;
-		} else if (!postCode.equals(other.postCode))
-			return false;
-		return true;
+		return Objects.equals(country, other.country)
+		        && Objects.equals(county, other.county)
+                && Objects.equals(line1, other.line1)
+                && Objects.equals(line2, other.line2)
+                && Objects.equals(line3, other.line3)
+                && Objects.equals(postCode, other.postCode);
 	}
 }

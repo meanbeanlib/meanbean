@@ -16,6 +16,7 @@ package org.meanbean.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -98,6 +99,18 @@ public final class ClassPath {
 		scanner.scan(classloader);
 		return new ClassPath(scanner.getResources());
 	}
+
+    public static ClassPath from(Class<?> clazz) {
+        try {
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            if (classLoader == null) {
+                classLoader = clazz.getClassLoader();
+            }
+            return ClassPath.from(classLoader);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
 	/**
 	 * Returns all resources loadable from the current class path, including the class files of all

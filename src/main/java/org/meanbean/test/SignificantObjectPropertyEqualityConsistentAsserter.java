@@ -85,12 +85,12 @@ class SignificantObjectPropertyEqualityConsistentAsserter implements ObjectPrope
 		boolean newPropertyValueEqualsOriginalPropertyValue = newPropertyValue.equals(originalPropertyValue);
 		boolean originalObjectEqualsModifiedObject = originalObject.equals(modifiedObject);
 		String variableString =
-		        "(x." + propertyName + "=[" + originalPropertyValue + "] vs y." + propertyName + "=["
-		                + newPropertyValue + "])";
+		        "(\nx." + propertyName + "=[" + originalPropertyValue + "]\nvs\ny." + propertyName + "=["
+		                + newPropertyValue + "]\n)";
 		if (originalObjectEqualsModifiedObject && !newPropertyValueEqualsOriginalPropertyValue) {
 			String message =
 			        "objects that differ due to supposedly significant property [" + propertyName
-			                + "] where considered equal. " + variableString + ". is property [" + propertyName
+			                + "] were considered equal. " + variableString + ". is property [" + propertyName
 			                + "] actually insignificant?";
 			AssertionUtils.fail(message);
 		} else if (!originalObjectEqualsModifiedObject && newPropertyValueEqualsOriginalPropertyValue) {

@@ -26,6 +26,7 @@ import org.meanbean.factories.equivalent.EquivalentEnumFactory;
 import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
+import org.meanbean.util.ServiceFactory;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Collections;
@@ -155,7 +156,7 @@ public class EqualsMethodTester {
 	private final Map<Class<?>, Configuration> customConfigurations;
 
 	/**
-	 * Prefer {@link BeanVerifications}
+	 * Prefer {@link BeanVerification}
 	 */
 	public EqualsMethodTester() {
 		this(Collections.emptyMap(), Configuration.defaultConfiguration());
@@ -410,9 +411,15 @@ public class EqualsMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-	public void testEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
-	        String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
-	        BeanTestException, AssertionError {
+    public void testEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
+            String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
+            BeanTestException, AssertionError {
+        ServiceFactory.inScope(() -> doTestEqualsMethod(factory, customConfiguration, insignificantProperties));
+    }
+
+    private void doTestEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
+            String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
+            BeanTestException, AssertionError {
 		ValidationHelper.ensureExists("factory", "test equals method", factory);
 		ValidationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
 		insignificantProperties = insignificantProperties == null || insignificantProperties.length == 0

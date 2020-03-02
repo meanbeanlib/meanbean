@@ -27,6 +27,7 @@ import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ServiceFactory;
 import org.meanbean.util.ValidationHelper;
 
 /**
@@ -102,7 +103,7 @@ public class HashCodeMethodTester {
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/**
-	 * Prefer {@link BeanVerifications}
+	 * Prefer {@link BeanVerification}
 	 */
 	public HashCodeMethodTester() {
 		
@@ -137,6 +138,10 @@ public class HashCodeMethodTester {
 	 *             If the test fails.
 	 */
 	public void testHashCodeMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
+        ServiceFactory.inScope(() -> doTestHashCodeMethod(factory));
+	}
+
+    private void doTestHashCodeMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		ValidationHelper.ensureExists("factory", "test hash code method", factory);
 		testHashCodesEqual(factory);
 		testHashCodeConsistent(factory);

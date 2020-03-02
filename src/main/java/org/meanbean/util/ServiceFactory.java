@@ -22,74 +22,92 @@ package org.meanbean.util;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Loads service through META-INF/services mechanism, additionally providing caching and ordering behavior
  */
 public class ServiceFactory<T> {
 
-	private static final Map<String, Object> factoryCache = new ConcurrentHashMap<>();
+    private static final ThreadLocal<Map<String, Object>> factoryCache = ThreadLocal.withInitial(HashMap::new);
+    private static final ThreadLocal<AtomicInteger> threadScope = ThreadLocal.withInitial(AtomicInteger::new);
 
-	private final List<T> services;
+    private final List<T> services;
 
-	@SuppressWarnings("unchecked")
-	static synchronized <T> ServiceFactory<T> getInstance(ServiceDefinition<T> definition) {
-		String inprogressKey = "Load of " + definition.getServiceType().getName() + " already in progress";
+    @SuppressWarnings("unchecked")
+    static synchronized <T> ServiceFactory<T> getInstance(ServiceDefinition<T> definition) {
+        String inprogressKey = "Load of " + definition.getServiceType().getName() + " already in progress";
 
-		if (factoryCache.containsKey(inprogressKey)) {
-			throw new IllegalStateException(inprogressKey);
-		}
+        if (factoryCache().containsKey(inprogressKey)) {
+            throw new IllegalStateException(inprogressKey);
+        }
 
-		factoryCache.put(inprogressKey, inprogressKey);
-		try {
-			return (ServiceFactory<T>) factoryCache.computeIfAbsent(definition.getServiceType().getName(),
-					key -> ServiceFactory.create(definition));
-		} finally {
-			factoryCache.remove(inprogressKey);
-		}
-	}
+        factoryCache().put(inprogressKey, inprogressKey);
+        try {
+            return (ServiceFactory<T>) factoryCache().computeIfAbsent(definition.getServiceType().getName(),
+                    key -> ServiceFactory.create(definition));
+        } finally {
+            factoryCache().remove(inprogressKey);
+        }
+    }
 
-	static <T> ServiceFactory<T> create(ServiceDefinition<T> definition) {
-		List<T> services = ServiceFactory.doLoad(definition);
-		return new ServiceFactory<>(services, definition);
-	}
+    public static void inScope(Runnable runnable) {
+        threadScope.get().incrementAndGet();
+        try {
+            runnable.run();
+        } finally {
+            int scope = threadScope.get().decrementAndGet();
+            if (scope == 0) {
+                factoryCache.remove();
+            }
+        }
+    }
 
-	private ServiceFactory(List<T> services, ServiceDefinition<T> definition) {
-		if (services.isEmpty()) {
-			throw new IllegalArgumentException("cannot find services for " + definition.getServiceType());
-		}
-		this.services = Collections.unmodifiableList(services);
-	}
+    private static Map<String, Object> factoryCache() {
+        return factoryCache.get();
+    }
 
-	public T getFirst() {
-		return getAll().get(0);
-	}
+    static <T> ServiceFactory<T> create(ServiceDefinition<T> definition) {
+        List<T> services = ServiceFactory.doLoad(definition);
+        return new ServiceFactory<>(services, definition);
+    }
 
-	public List<T> getAll() {
-		return services;
-	}
-	
-	private static synchronized <T> List<T> doLoad(ServiceDefinition<T> serviceDefinition) {
-		ServiceLoader<T> loader = new ServiceLoader<>(serviceDefinition.getServiceType(),
-				serviceDefinition.getConstructorTypes());
-		List<T> services = loader.createAll(serviceDefinition.getConstructorArgs());
-		Collections.sort(services, getComparator());
-		return services;
-	}
+    private ServiceFactory(List<T> services, ServiceDefinition<T> definition) {
+        if (services.isEmpty()) {
+            throw new IllegalArgumentException("cannot find services for " + definition.getServiceType());
+        }
+        this.services = Collections.unmodifiableList(services);
+    }
 
-	public static <T> Comparator<T> getComparator() {
-		return Comparator.comparingInt(ServiceFactory::getOrder);
-	}
+    public T getFirst() {
+        return getAll().get(0);
+    }
 
-	private static <T> int getOrder(T obj) {
-		Order order = obj.getClass().getAnnotation(Order.class);
-		if (order == null) {
-			return Order.LOWEST_PRECEDENCE;
-		}
-		return order.value();
-	}
+    public List<T> getAll() {
+        return services;
+    }
+
+    private static synchronized <T> List<T> doLoad(ServiceDefinition<T> serviceDefinition) {
+        ServiceLoader<T> loader = new ServiceLoader<>(serviceDefinition.getServiceType(),
+                serviceDefinition.getConstructorTypes());
+        List<T> services = loader.createAll(serviceDefinition.getConstructorArgs());
+        Collections.sort(services, getComparator());
+        return services;
+    }
+
+    public static <T> Comparator<T> getComparator() {
+        return Comparator.comparingInt(ServiceFactory::getOrder);
+    }
+
+    private static <T> int getOrder(T obj) {
+        Order order = obj.getClass().getAnnotation(Order.class);
+        if (order == null) {
+            return Order.LOWEST_PRECEDENCE;
+        }
+        return order.value();
+    }
 
 }

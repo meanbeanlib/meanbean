@@ -23,10 +23,10 @@ Mean Bean helps you rapidly and reliably test fundamental objects within your pr
 With just a single line of code, you can be confident that your beans are well behaved…
 
 	// verify bean getters/setters, equals, hashCode and toString for a single bean type
-	BeanVerifications.verifyBean(MyBean.class);
+	BeanVerification.verifyBean(MyBean.class);
 		
 	// verify beans defined in the same package
-	BeanVerifications.verifyBeansIn(MyBean.class.getPackage());
+	BeanVerification.verifyBeansIn(MyBean.class.getPackage());
 	
 	// directly verify only bean getters/setters for a single bean type
 	new BeanTester().testBean(MyDomainObject.class);
@@ -44,3 +44,23 @@ Mean Bean can be acquired from the <a href="https://maven-badges.herokuapp.com/m
 ### More info?
 
 See [User Guide in wiki](https://github.com/meanbeanlib/meanbean/wiki)
+
+### License
+
+MeanBean is released under the Apache 2.0 license.
+
+```
+Copyright 2010-2020.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
