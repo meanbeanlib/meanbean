@@ -75,7 +75,7 @@ public interface BeanVerification {
      * Customizes bean verification behavior. Example:
      * <pre>
      *   verifyThat(MyBean.class)
-     *       with(customizer -> customizer.
+     *       .with(customizer -&gt; customizer.registerFactory(MyOtherBean.class, () -&gt; createMyOtherBean())
      * </pre>
      */
     public BeanVerification with(Consumer<BeanVerificationCustomizer> beanVerificationCustomizer);
