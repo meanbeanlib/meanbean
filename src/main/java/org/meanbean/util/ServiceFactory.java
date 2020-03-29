@@ -22,9 +22,9 @@ package org.meanbean.util;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ServiceFactory<T> {
 
-    private static final ThreadLocal<Map<String, Object>> factoryCache = ThreadLocal.withInitial(HashMap::new);
+    private static final ThreadLocal<Map<String, Object>> factoryCache = ThreadLocal.withInitial(ConcurrentHashMap::new);
     private static final ThreadLocal<AtomicInteger> threadScope = ThreadLocal.withInitial(AtomicInteger::new);
 
     private final List<T> services;
