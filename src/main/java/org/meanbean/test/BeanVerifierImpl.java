@@ -40,8 +40,8 @@ class BeanVerifierImpl implements BeanVerifier, VerifierSettings, VerifierSettin
 	}
 
 	@Override
-	public BeanVerifier withSettings(Consumer<VerifierSettings> beanVerificationCustomizer) {
-		beanVerificationCustomizer.accept(this);
+	public BeanVerifier withSettings(Consumer<VerifierSettings> verifierSettingsEditor) {
+		verifierSettingsEditor.accept(this);
 		return this;
 	}
 

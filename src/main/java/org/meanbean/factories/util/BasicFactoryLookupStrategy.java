@@ -38,10 +38,10 @@ import org.meanbean.util.Types;
 import org.meanbean.util.ValidationHelper;
 
 import java.lang.reflect.Type;
-import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.Collections.synchronizedSet;
+import static org.meanbean.test.Warning.DYNAMICALLY_CREATED_FACTORY;
 
 /**
  * <p>
@@ -69,6 +69,8 @@ import static java.util.Collections.synchronizedSet;
 @MetaInfServices
 public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
+	private static final Set<String> dynamicallyCreatedFactories = ConcurrentHashMap.newKeySet();
+
 	/** Logging mechanism. */
 	private static final $Logger logger = $LoggerFactory.getLogger(BasicFactoryLookupStrategy.class);
 
@@ -77,8 +79,6 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 
 	/** The collection of test data Factories. */
 	private final FactoryCollection factoryCollection;
-
-	private final Set<String> dynamicallyCreatedFactories = synchronizedSet(new LinkedHashSet<>());
 
 	/**
 	 * Construct a new Factory Lookup Strategy.
@@ -175,7 +175,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			return getAndCachePropertyEnumFactory(propertyType);
 
 		} else if (propertyIsNotTheSameTypeAsItsParent(beanInformation, propertyType)) {
-			return createTestedPopulatedBeanFactory(beanInformation, propertyName, propertyType);
+			return createTestedPopulatedBeanFactory(beanInformation, propertyName, propertyType, configuration);
 
 		} else {
 			return createTestedUnpopulatedBeanFactory(propertyName, propertyType);
@@ -223,17 +223,21 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	}
 
 	private Factory<?> createTestedPopulatedBeanFactory(BeanInformation beanInformation, String propertyName,
-			Class<?> propertyType) {
+			Class<?> propertyType, Configuration configuration) {
 		try {
-			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType);
-			testPopulatedBeanFactory(populatedBeanFactory);
-
-			if (isLikelyNewDynamicallyCreatedFactoryType(beanInformation, propertyType)) {
+			if (isLikelyNewDynamicallyCreatedFactoryType(beanInformation, propertyType, configuration)) {
 				// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
+				
+				// To meanbean users, this can usually be ignored. When meanbean finds a property type that does not have built-in
+				// support for creating random values (like it does with String, Date, etc), then meanbean creates a dynamic factory
+				// hoping that the property type is a java bean. That dynamic factory is used to create random values of the property.
+				// To register a custom factory, call VerifierSettings::registerFactory or suppress with Warning.DYNAMICALLY_CREATED_FACTORY
 				logger.warn("Using dynamically created factory for [{}] of type [{}]. Do you need to register a custom Factory?",
 						propertyName, propertyType.getName());
 			}
 
+			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType);
+			testPopulatedBeanFactory(populatedBeanFactory);
 			return populatedBeanFactory;
 		} catch (Exception e) {
 			String message = "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
@@ -241,9 +245,13 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			throw new NoSuchFactoryException(message, e);
 		}
 	}
-
+	
 	// cache the info so that warning logs don't appear repeatedly
-	private boolean isLikelyNewDynamicallyCreatedFactoryType(BeanInformation beanInformation, Class<?> propertyType) {
+	private boolean isLikelyNewDynamicallyCreatedFactoryType(BeanInformation beanInformation, Class<?> propertyType, Configuration configuration) {
+		if (configuration != null && configuration.isSuppressedWarning(DYNAMICALLY_CREATED_FACTORY)) {
+			return false;
+		}
+		
 		if (dynamicallyCreatedFactories.size() > 1000) {
 			synchronized (dynamicallyCreatedFactories) {
 				// trim the cache size
