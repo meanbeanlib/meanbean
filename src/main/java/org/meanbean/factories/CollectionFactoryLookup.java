@@ -24,6 +24,7 @@ import org.kohsuke.MetaInfServices;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.Order;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.Types;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -93,7 +94,7 @@ public class CollectionFactoryLookup implements FactoryLookup {
 
 	@Override
 	public boolean hasFactory(Type type) {
-		Class<?> clazz = org.meanbean.util.Types.getRawType(type);
+		Class<?> clazz = Types.getRawType(type);
 		return !clazz.equals(void.class) && (Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz));
 	}
 
