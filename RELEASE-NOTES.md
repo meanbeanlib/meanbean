@@ -1,5 +1,14 @@
 # MeanBean Release Notes
 
+## 3.0.0-M6
+- Rename BeanVerification to BeanVerifier
+- Add mechanism for suppressing warnings.
+- Detect setter methods that have side-effects on other properties. e.g. a setter method that writes to two properties
+Use Warning.SETTER_SIDE_EFFECT to disable detection and resulting failure.
+- Add support for Optional, OptionalInt/Long/Double
+- Add ability to suppress warning about dynamically created factory logging
+- Build and test meanbean with Java 1.8 and 11
+
 ## 3.0.0-M5
 - Fix bug running meanbean in Java 11 due to ConcurrentHashMap changes
 

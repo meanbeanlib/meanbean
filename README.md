@@ -33,13 +33,15 @@ With just a single line of code, you can be confident that your beans are well b
 	
 	// configure settings
 	BeanVerifier.forClass(Company.class)
-		.withSettings(settings -> settings.setDefaultIterations(12)) // by default, the bean is tested with random values 100 times
-		.withSettings(settings -> settings.addIgnoredProperty(Company::getName)) // exclude name property in bean getter/setter test
+		// by default, the bean is tested with random values 100 times
+		.withSettings(settings -> settings.setDefaultIterations(12))
+		// exclude name property in bean getter/setter test
+		.withSettings(settings -> settings.addIgnoredProperty(Company::getName))
 		.verifyGettersAndSetters()
 
 ### Where do I get it?
 
-Mean Bean can be acquired from the <a href="https://maven-badges.herokuapp.com/maven-central/com.github.meanbeanlib/meanbean">Maven Central repo</a>:
+Mean Bean can be acquired from the <a href="https://maven-badges.herokuapp.com/maven-central/com.github.meanbeanlib/meanbean">Maven Central</a>:
 
     <dependency>
         <groupId>com.github.meanbeanlib</groupId>
