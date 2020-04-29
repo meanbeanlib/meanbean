@@ -149,14 +149,13 @@ public class EqualsMethodTester {
 	private final EqualsMethodContractVerifier contractVerifier = new EqualsMethodContractVerifier();
 
 	/** The verifier to which property significance verification is delegated. */
-	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier =
-	        new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
 
 	private final Configuration defaultConfiguration;
 	private final Map<Class<?>, Configuration> customConfigurations;
 
 	/**
-	 * Prefer {@link BeanVerification}
+	 * Prefer {@link BeanVerifier}
 	 */
 	public EqualsMethodTester() {
 		this(Collections.emptyMap(), Configuration.defaultConfiguration());
@@ -220,7 +219,7 @@ public class EqualsMethodTester {
 	 *             If the test fails.
 	 */
 	public void testEqualsMethod(Class<?> clazz, String... insignificantProperties) throws IllegalArgumentException,
-	        BeanInformationException, BeanTestException, AssertionError {
+			BeanInformationException, BeanTestException, AssertionError {
 		testEqualsMethod(clazz, null, insignificantProperties);
 	}
 
@@ -283,7 +282,7 @@ public class EqualsMethodTester {
 	 *             If the test fails.
 	 */
 	public void testEqualsMethod(Class<?> clazz, Configuration customConfiguration, String... insignificantProperties)
-	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
+			throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
 		ValidationHelper.ensureExists("clazz", "test equals method", clazz);
 		EquivalentFactory<?> factory = createEquivalentFactory(clazz);
 		customConfiguration = getEffectiveConfiguration(clazz, customConfiguration);
@@ -346,7 +345,7 @@ public class EqualsMethodTester {
 	 *             If the test fails.
 	 */
 	public void testEqualsMethod(EquivalentFactory<?> factory, String... insignificantProperties)
-	        throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
+			throws IllegalArgumentException, BeanInformationException, BeanTestException, AssertionError {
 		testEqualsMethod(factory, null, insignificantProperties);
 	}
 
@@ -411,15 +410,15 @@ public class EqualsMethodTester {
 	 * @throws AssertionError
 	 *             If the test fails.
 	 */
-    public void testEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
-            String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
-            BeanTestException, AssertionError {
-        ServiceFactory.inScope(() -> doTestEqualsMethod(factory, customConfiguration, insignificantProperties));
-    }
+	public void testEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
+			String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
+			BeanTestException, AssertionError {
+		ServiceFactory.inScope(() -> doTestEqualsMethod(factory, customConfiguration, insignificantProperties));
+	}
 
-    private void doTestEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
-            String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
-            BeanTestException, AssertionError {
+	private void doTestEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
+			String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
+			BeanTestException, AssertionError {
 		ValidationHelper.ensureExists("factory", "test equals method", factory);
 		ValidationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
 		insignificantProperties = insignificantProperties == null || insignificantProperties.length == 0
@@ -439,13 +438,13 @@ public class EqualsMethodTester {
 		if (customConfiguration.hasIterationsOverride()) {
 			iterations = customConfiguration.getIterations();
 		}
-		
+
 		// Test property significance 'iterations' times
 		for (int idx = 0; idx < iterations; idx++) {
 			propertySignificanceVerifier.verifyEqualsMethod(factory, customConfiguration, insignificantProperties);
 		}
 	}
-	
+
 	private Configuration getEffectiveConfiguration(Class<?> beanClass, Configuration configuration) {
 		if (configuration != null) {
 			return configuration;

@@ -144,7 +144,7 @@ public class BeanTester {
 	private final BeanPropertyTester beanPropertyTester;
 
 	/**
-	 * Prefer {@link BeanVerification} or {@link BeanTesterBuilder#newBeanTester()}
+	 * Prefer {@link BeanVerifier} or {@link BeanTesterBuilder#newBeanTester()}
 	 */
 	public BeanTester() {
 		this(RandomValueGenerator.getInstance(),
@@ -333,13 +333,13 @@ public class BeanTester {
 	 * @throws BeanTestException
 	 *             If an unexpected exception occurs during testing.
 	 */
-    public void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
-            AssertionError, BeanTestException {
-        ServiceFactory.inScope(() -> doTestBean(beanClass, customConfiguration));
-    }
+	public void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
+			AssertionError, BeanTestException {
+		ServiceFactory.inScope(() -> doTestBean(beanClass, customConfiguration));
+	}
 
-    private void doTestBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
-            AssertionError, BeanTestException {
+	private void doTestBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
+			AssertionError, BeanTestException {
 		ValidationHelper.ensureExists("beanClass", "test bean", beanClass);
 		// Override the standard number of iterations if need be
 		int iterations = getIterations();

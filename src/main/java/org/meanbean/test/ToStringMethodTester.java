@@ -29,7 +29,7 @@ import org.meanbean.util.ValidationHelper;
 import java.util.Objects;
 
 /**
- * For testing toString method
+ * For testing that the bean overrides the toString method
  */
 public class ToStringMethodTester {
 
@@ -37,7 +37,7 @@ public class ToStringMethodTester {
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/**
-	 * Prefer {@link BeanVerification}
+	 * Prefer {@link BeanVerifier}
 	 */
 	ToStringMethodTester() {
 
@@ -47,10 +47,10 @@ public class ToStringMethodTester {
 	 * Simple toString() test to verify that the bean overrides toString() method and that it does not throw exception.
 	 */
 	public void testToStringMethod(Class<?> clazz) {
-	    ServiceFactory.inScope(() -> doTestToStringMethod(clazz));
+		ServiceFactory.inScope(() -> doTestToStringMethod(clazz));
 	}
 
-    private void doTestToStringMethod(Class<?> clazz) {
+	private void doTestToStringMethod(Class<?> clazz) {
 		ValidationHelper.ensureExists("clazz", "test hash code method", clazz);
 		FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
 		EquivalentPopulatedBeanFactory factory = new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz),

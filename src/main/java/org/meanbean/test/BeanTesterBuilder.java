@@ -41,6 +41,8 @@ import static org.meanbean.util.PropertyNameFinder.findPropertyName;
 
 /**
  * Builder for {@link BeanTester} or other tester classes.
+ * <br>
+ * <b>Prefer {@link BeanVerifier}</b>
  */
 public class BeanTesterBuilder {
 

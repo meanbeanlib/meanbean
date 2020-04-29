@@ -103,7 +103,7 @@ public class HashCodeMethodTester {
 	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 
 	/**
-	 * Prefer {@link BeanVerification}
+	 * Prefer {@link BeanVerifier}
 	 */
 	public HashCodeMethodTester() {
 		
