@@ -33,7 +33,7 @@ With just a single line of code, you can be confident that your beans are well b
 	
 	// configure settings
 	BeanVerifier.forClass(Company.class)
-		// by default, the bean is tested with random values 100 times
+		// override default setting which tests the bean with random values 100 times
 		.withSettings(settings -> settings.setDefaultIterations(12))
 		// exclude name property in bean getter/setter test
 		.withSettings(settings -> settings.addIgnoredProperty(Company::getName))
