@@ -29,7 +29,7 @@ import org.meanbean.util.ValidationHelper;
 import java.util.Objects;
 
 /**
- * For testing that the bean overrides the toString method
+ * Simple tester for verifying that the bean overrides the toString method
  */
 public class ToStringMethodTester {
 
