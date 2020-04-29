@@ -18,14 +18,14 @@
  * ﻿﻿﻿﻿﻿
  */
 
-package org.meanbean.test;
+package org.meanbean.test.internal;
 
 /**
  * Equality test of two objects.
  * 
  * @author Graham Williamson
  */
-enum EqualityTest {
+public enum EqualityTest {
 
 	/**
 	 * Test the logical equality of two objects (x.equals(y)).

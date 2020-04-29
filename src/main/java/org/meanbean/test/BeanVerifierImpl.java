@@ -82,6 +82,12 @@ class BeanVerifierImpl implements BeanVerifier, VerifierSettings, VerifierSettin
 	}
 
 	@Override
+	public VerifierSettingsEditor suppressWarning(Warning warning) {
+		builder.getConfigurationFor(beanClass).suppress(warning);
+		return this;
+	}
+
+	@Override
 	public RandomValueGenerator getRandomValueGenerator() {
 		return builder.getRandomValueGenerator();
 	}
@@ -189,4 +195,5 @@ class BeanVerifierImpl implements BeanVerifier, VerifierSettings, VerifierSettin
 	private <T> Class<T> beanClass() {
 		return (Class) beanClass;
 	}
+
 }

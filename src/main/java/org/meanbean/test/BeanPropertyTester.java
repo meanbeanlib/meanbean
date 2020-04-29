@@ -23,6 +23,7 @@ package org.meanbean.test;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.logging.$Logger;
 import org.meanbean.logging.$LoggerFactory;
+import org.meanbean.test.internal.EqualityTest;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.ValidationHelper;
 
@@ -95,14 +96,18 @@ public class BeanPropertyTester {
 				String message = "Property [" + propertyName + "] getter did not return test value. Expected [" + testValue
 						+ "] but getter returned [" + readMethodOutput + "].";
 				AssertionUtils.fail(message);
-			} else {
 			}
 		} catch (Exception e) {
-			String message = "Failed to test property [" + propertyName + "] due to Exception [" + e.getClass().getName()
-					+ "]: [" + e.getMessage() + "].";
-			throw new BeanTestException(message, e);
+			throw throwException(property, e);
 		}
-	}
+    }
+
+    static BeanTestException throwException(PropertyInformation property, Exception e) {
+        String propertyName = property.getName();
+        String message = "Failed to test property [" + propertyName + "] due to Exception [" + e.getClass().getName()
+                + "]: [" + e.getMessage() + "].";
+        throw new BeanTestException(message, e);
+    }
 
 	/**
 	 * Are the specified compatible?

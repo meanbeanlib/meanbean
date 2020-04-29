@@ -76,6 +76,7 @@ public class $LoggerFactory {
 
 		@Override
 		public void debug(String format, Object... arguments) {
+		    logger.debug(format, arguments);
 		}
 
 		@Override
@@ -135,6 +136,7 @@ public class $LoggerFactory {
 
 		@Override
 		public void debug(String format, Object... arguments) {
+		    logger.debug(format, arguments);   
 		}
 
 		@Override

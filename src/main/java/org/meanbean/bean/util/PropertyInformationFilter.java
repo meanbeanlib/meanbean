@@ -21,10 +21,14 @@
 package org.meanbean.bean.util;
 
 import org.meanbean.bean.info.PropertyInformation;
+import org.meanbean.test.Configuration;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Affords functionality to filter PropertyInformation based on given criteria, such as a property's public visibility
@@ -39,7 +43,7 @@ public final class PropertyInformationFilter {
 	 * 
 	 * @author Graham Williamson
 	 */
-	public enum PropertyVisibility {
+	public enum PropertyVisibility implements Predicate<PropertyInformation> {
 
 		/**
 		 * Publicly readable property.
@@ -82,6 +86,10 @@ public final class PropertyInformationFilter {
 		 */
 		abstract boolean isRelevant(PropertyInformation propertyInformation);
 
+        @Override
+        public boolean test(PropertyInformation propertyInformation) {
+            return isRelevant(propertyInformation);
+        }
 	}
 
 	/**
@@ -106,17 +114,24 @@ public final class PropertyInformationFilter {
 	 * @throws IllegalArgumentException
 	 *             If either of the required parameters are deemed illegal. For example, if either is null.
 	 */
-	public static Collection<PropertyInformation> filter(Collection<PropertyInformation> properties,
-	        PropertyVisibility filter) throws IllegalArgumentException {
+	public static List<PropertyInformation> filter(Collection<PropertyInformation> properties,
+	        Predicate<PropertyInformation> filter) throws IllegalArgumentException {
 		ValidationHelper.ensureExists("properties", "filter Collection of properties", properties);
 		ValidationHelper.ensureExists("filter", "filter Collection of properties", filter);
-		Collection<PropertyInformation> result = new ArrayList<PropertyInformation>();
+		List<PropertyInformation> result = new ArrayList<PropertyInformation>();
 		for (PropertyInformation propertyInformation : properties) {
-			if (filter.isRelevant(propertyInformation)) {
+			if (filter.test(propertyInformation)) {
 				result.add(propertyInformation);
 			}
-		}
-		return result;
-	}
+        }
+        return result;
+    }
 
+    public static List<PropertyInformation> filter(Collection<PropertyInformation> properties, Configuration configuration) {
+        ValidationHelper.ensureExists("properties", "filter Collection of properties", properties);
+        return properties.stream()
+                .filter(PropertyVisibility.READABLE_WRITABLE)
+                .filter(property -> configuration == null || !configuration.isIgnoredProperty(property.getName()))
+                .collect(Collectors.toList());
+    }
 }

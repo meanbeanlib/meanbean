@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.is;
 import org.junit.Test;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.BeanFactory;
+import org.meanbean.test.internal.EqualityTest;
 
 public class EqualityTestTest {
 

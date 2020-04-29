@@ -25,7 +25,6 @@ import org.meanbean.bean.info.BeanInformationException;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter;
-import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.lang.Factory;
@@ -262,14 +261,12 @@ class PropertyBasedEqualsMethodPropertySignificanceVerifier implements EqualsMet
 		BeanInformation beanInformation = beanInformationFactory.create(prototype.getClass());
 		ensureInsignificantPropertiesExist(beanInformation, insignificantPropertyNames);
 		Collection<PropertyInformation> properties = beanInformation.getProperties();
-		properties = PropertyInformationFilter.filter(properties, PropertyVisibility.READABLE_WRITABLE);
-		for (PropertyInformation property : properties) {
-			if (customConfiguration == null || !customConfiguration.isIgnoredProperty(property.getName())) {
-				verifyEqualsMethodForProperty(beanInformation, factory, customConfiguration, property,
-				        !insignificantPropertyNames.contains(property.getName()));
-			}
-		}
-	}
+        properties = PropertyInformationFilter.filter(beanInformation.getProperties(), customConfiguration);
+        for (PropertyInformation property : properties) {
+            verifyEqualsMethodForProperty(beanInformation, factory, customConfiguration, property,
+                    !insignificantPropertyNames.contains(property.getName()));
+        }
+    }
 
 	/**
 	 * Ensure that all of the specified insignificant properties exist on the specified bean. If an insignificant

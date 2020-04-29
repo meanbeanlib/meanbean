@@ -20,17 +20,6 @@
 
 package org.meanbean.test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-
 import org.junit.Test;
 import org.meanbean.factories.basic.DateFactory;
 import org.meanbean.factories.basic.IntegerFactory;
@@ -38,6 +27,18 @@ import org.meanbean.factories.basic.StringFactory;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.SimpleRandomValueGenerator;
+
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
 
 public class ConfigurationTest {
 
@@ -69,38 +70,38 @@ public class ConfigurationTest {
 		}
 	};
 
-	@Test
-	public void configurationConstructedWithNonNullIterationsShouldHaveIterationsOverride() throws Exception {
-		Configuration configuration =
-		        new Configuration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES, POPULATED_OVERRIDE_FACTORIES);
-		assertThat("Incorrect iterations.", configuration.getIterations(), is(VALID_ITERATIONS));
-		assertThat("Should not have iterations override.", configuration.hasIterationsOverride(), is(true));
-	}
+    @Test
+    public void configurationConstructedWithNonNullIterationsShouldHaveIterationsOverride() throws Exception {
+        Configuration configuration = newConfiguration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES,
+                POPULATED_OVERRIDE_FACTORIES);
+        assertThat("Incorrect iterations.", configuration.getIterations(), is(VALID_ITERATIONS));
+        assertThat("Should not have iterations override.", configuration.hasIterationsOverride(), is(true));
+    }
 
 	@Test
-	public void configurationConstructedWithNullIterationsShouldNotHaveIterationsOverride() throws Exception {
-		Configuration configuration =
-		        new Configuration(NULL_ITERATIONS, POPULATED_IGNORED_PROPERTIES, POPULATED_OVERRIDE_FACTORIES);
-		assertThat("Incorrect iterations.", configuration.getIterations(), is(NULL_ITERATIONS));
-		assertThat("Should not have iterations override.", configuration.hasIterationsOverride(), is(false));
-	}
+    public void configurationConstructedWithNullIterationsShouldNotHaveIterationsOverride() throws Exception {
+        Configuration configuration = newConfiguration(NULL_ITERATIONS, POPULATED_IGNORED_PROPERTIES,
+                POPULATED_OVERRIDE_FACTORIES);
+        assertThat("Incorrect iterations.", configuration.getIterations(), is(NULL_ITERATIONS));
+        assertThat("Should not have iterations override.", configuration.hasIterationsOverride(), is(false));
+    }
 
-	@Test
-	public void configurationConstructedWithNonEmptyPropertiesShouldHaveIgnoredProperties() throws Exception {
-		Configuration configuration =
-		        new Configuration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES, POPULATED_OVERRIDE_FACTORIES);
-		for (String property : POPULATED_IGNORED_PROPERTIES) {
-			assertThat("Property [" + property + "] should be ignored.", configuration.isIgnoredProperty(property),
-			        is(true));
+    @Test
+    public void configurationConstructedWithNonEmptyPropertiesShouldHaveIgnoredProperties() throws Exception {
+        Configuration configuration = newConfiguration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES,
+                POPULATED_OVERRIDE_FACTORIES);
+        for (String property : POPULATED_IGNORED_PROPERTIES) {
+            assertThat("Property [" + property + "] should be ignored.", configuration.isIgnoredProperty(property),
+                    is(true));
 		}
 	}
 
-	@Test
-	public void configurationConstructedWithEmptyPropertiesShouldNotHaveIgnoredProperties() throws Exception {
-		Configuration configuration =
-		        new Configuration(VALID_ITERATIONS, EMPTY_IGNORED_PROPERTIES, POPULATED_OVERRIDE_FACTORIES);
-		for (String property : POPULATED_IGNORED_PROPERTIES) {
-			assertThat("Property [" + property + "] should not be ignored.", configuration.isIgnoredProperty(property),
+    @Test
+    public void configurationConstructedWithEmptyPropertiesShouldNotHaveIgnoredProperties() throws Exception {
+        Configuration configuration = newConfiguration(VALID_ITERATIONS, EMPTY_IGNORED_PROPERTIES, POPULATED_OVERRIDE_FACTORIES);
+        for (String property : POPULATED_IGNORED_PROPERTIES) {
+            assertThat("Property [" + property
+                    + "] should not be ignored.", configuration.isIgnoredProperty(property),
 			        is(false));
 		}
 	}
@@ -108,7 +109,7 @@ public class ConfigurationTest {
 	@Test
 	public void configurationConstructedWithEmptyOverideFactoriesShouldNotHaveOverrideFactories() throws Exception {
 		Configuration configuration =
-		        new Configuration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES, EMPTY_OVERRIDE_FACTORIES);
+		        newConfiguration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES, EMPTY_OVERRIDE_FACTORIES);
 		for (Map.Entry<String, Factory<? extends Object>> propertyToFactoryEntry : POPULATED_OVERRIDE_FACTORIES
 		        .entrySet()) {
 			String property = propertyToFactoryEntry.getKey();
@@ -117,14 +118,14 @@ public class ConfigurationTest {
 			assertThat("Property [" + property + "] should not have override factory.",
 			        configuration.getOverrideFactory(property), is(nullValue()));
 		}
-	}
+    }
 
-	@Test
-	public void configurationConstructedWithNonEmptyOverideFactoriesShouldHaveOverrideFactories() throws Exception {
-		Configuration configuration =
-		        new Configuration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES, POPULATED_OVERRIDE_FACTORIES);
-		for (Map.Entry<String, Factory<? extends Object>> propertyToFactoryEntry : POPULATED_OVERRIDE_FACTORIES
-		        .entrySet()) {
+    @Test
+    public void configurationConstructedWithNonEmptyOverideFactoriesShouldHaveOverrideFactories() throws Exception {
+        Configuration configuration = newConfiguration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES,
+                POPULATED_OVERRIDE_FACTORIES);
+        for (Map.Entry<String, Factory<? extends Object>> propertyToFactoryEntry : POPULATED_OVERRIDE_FACTORIES
+                .entrySet()) {
 			String property = propertyToFactoryEntry.getKey();
 			Factory<? extends Object> factory = propertyToFactoryEntry.getValue();
 			assertThat("Property [" + property + "] should not have override factory.",
@@ -134,15 +135,32 @@ public class ConfigurationTest {
 		}
 	}
 
-	@Test
-	public void testToString() throws Exception {
-		Configuration configuration =
-		        new Configuration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES, POPULATED_OVERRIDE_FACTORIES);
-		StringBuilder expectedStringBuilder = new StringBuilder();
-		expectedStringBuilder.append("Configuration[");
+    @Test
+    public void testToString() throws Exception {
+        Configuration configuration = newConfiguration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES,
+                POPULATED_OVERRIDE_FACTORIES);
+        StringBuilder expectedStringBuilder = new StringBuilder();
+        expectedStringBuilder.append("Configuration[");
 		expectedStringBuilder.append("iterations=").append(VALID_ITERATIONS).append(",");
 		expectedStringBuilder.append("ignoredProperties=").append(POPULATED_IGNORED_PROPERTIES).append(",");
 		expectedStringBuilder.append("overrideFactories=").append(POPULATED_OVERRIDE_FACTORIES).append("]");
-		assertThat("Incorrect toString.", configuration.toString(), is(expectedStringBuilder.toString()));
-	}
+        assertThat("Incorrect toString.", configuration.toString(), is(expectedStringBuilder.toString()));
+    }
+
+    @Test
+    public void testIsSuppressedWarning() throws Exception {
+        Configuration configuration = newConfiguration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES,
+                POPULATED_OVERRIDE_FACTORIES);
+        assertThat(configuration.isSuppressedWarning(Warning.SETTER_SIDE_EFFECT), is(false));
+
+        Set<Warning> warnings = EnumSet.of(Warning.SETTER_SIDE_EFFECT);
+        configuration = new Configuration(VALID_ITERATIONS, POPULATED_IGNORED_PROPERTIES,
+                POPULATED_OVERRIDE_FACTORIES, warnings);
+        assertThat(configuration.isSuppressedWarning(Warning.SETTER_SIDE_EFFECT), is(true));
+    }
+
+    private Configuration newConfiguration(Integer iterations, Set<String> ignoredProperties,
+            Map<String, Factory<?>> overrideFactories) {
+        return new Configuration(iterations, ignoredProperties, overrideFactories, EnumSet.noneOf(Warning.class));
+    }
 }

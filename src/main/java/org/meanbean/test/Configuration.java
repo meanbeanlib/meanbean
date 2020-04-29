@@ -24,10 +24,16 @@ import org.meanbean.lang.Factory;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
+import static java.util.EnumSet.noneOf;
 
 /**
  * <p>
@@ -76,25 +82,33 @@ public class Configuration {
 
 	private List<String> equalsInsignificantProperties = new ArrayList<>();
 	
+	private Set<Warning> suppressedWarnings = EnumSet.noneOf(Warning.class);
+	
 	/**
-	 * Construct a new Configuration.
-	 * 
-	 * @param iterations
-	 *            The number of times a type should be tested.
-	 * @param ignoredProperties
-	 *            Any properties of a type that should not be tested. Contains property names.
-	 * @param overrideFactories
-	 *            Factories that should be used for specific properties, overriding standard Factory selection.
-	 */
-	Configuration(Integer iterations, Set<String> ignoredProperties, Map<String, Factory<?>> overrideFactories) {
-		this.iterations = iterations;
+     * Construct a new Configuration.
+     * 
+     * @param iterations
+     *            The number of times a type should be tested.
+     * @param ignoredProperties
+     *            Any properties of a type that should not be tested. Contains property names.
+     * @param overrideFactories
+     *            Factories that should be used for specific properties, overriding standard Factory selection.
+     */
+    Configuration(Integer iterations, Set<String> ignoredProperties, Map<String, Factory<?>> overrideFactories,
+            Set<Warning> suppressedWarnings) {
+        this.iterations = iterations;
 		this.ignoredProperties = ignoredProperties;
 		this.overrideFactories = overrideFactories;
+		this.suppressedWarnings = suppressedWarnings;
 	}
-	
-	static Configuration defaultConfiguration() {
-		return new Configuration(BeanTester.TEST_ITERATIONS_PER_BEAN, Collections.emptySet(), Collections.emptyMap());
-	}
+
+    static Configuration defaultConfiguration() {
+        return new Configuration(BeanTester.TEST_ITERATIONS_PER_BEAN, emptySet(), emptyMap(), noneOf(Warning.class));
+    }
+
+    static Configuration defaultMutableConfiguration(int iterations) {
+        return new Configuration(iterations, new HashSet<>(), new HashMap<>(), EnumSet.noneOf(Warning.class));
+    }
 
 	/**
 	 * Does this Configuration contain an override for the number of times a type should be tested, or should the
@@ -134,6 +148,14 @@ public class Configuration {
 		ValidationHelper.ensureExists("property", "check whether a property is ignored", property);
 		return ignoredProperties.contains(property);
 	}
+	
+	public boolean isSuppressedWarning(Warning warning) {
+	    return suppressedWarnings.contains(warning);
+	}
+
+    void suppress(Warning warning) {
+        suppressedWarnings.add(warning);
+    }
 
 	/**
 	 * <p>

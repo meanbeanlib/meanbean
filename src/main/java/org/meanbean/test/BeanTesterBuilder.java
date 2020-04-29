@@ -31,9 +31,6 @@ import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ValidationHelper;
 
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -58,9 +55,8 @@ public class BeanTesterBuilder {
 
 	private Map<Class<?>, Configuration> customConfigurations = new ConcurrentHashMap<>();
 
-	private Configuration defaultConfiguration = new Configuration(BeanTester.TEST_ITERATIONS_PER_BEAN,
-			Collections.emptySet(), Collections.emptyMap());
-
+	private Configuration defaultConfiguration = Configuration.defaultConfiguration();
+    
 	public static BeanTesterBuilder newBeanTesterBuilder() {
 		return new BeanTesterBuilder();
 	}
@@ -254,12 +250,12 @@ public class BeanTesterBuilder {
 
 		String propertyName = findPropertyName(beanClass, beanGetter);
 		return addEqualsInsignificantProperty(beanClass, propertyName);
-	}
+    }
 
-	private Configuration getConfigurationFor(Class<?> clazz) {
-		return customConfigurations.computeIfAbsent(clazz,
-				key -> new Configuration(defaultConfiguration.getIterations(), new HashSet<>(), new HashMap<>()));
-	}
+    Configuration getConfigurationFor(Class<?> clazz) {
+        return customConfigurations.computeIfAbsent(clazz,
+                key -> Configuration.defaultMutableConfiguration(defaultConfiguration.getIterations()));
+    }
 
 	public BeanTester build() {
 		return new BeanTester(

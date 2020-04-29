@@ -87,6 +87,7 @@ public final class ServiceLoader<T> {
 			for (String className : classNames) {
 				services.add(createInstance(className, arguments));
 			}
+	        Collections.sort(services, ServiceFactory.getComparator());
 			return services;
 		} catch (Exception ex) {
 			throw new ServiceConfigurationError("Cannot create service instance for " + service.getName(), ex);

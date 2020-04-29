@@ -60,7 +60,7 @@ public class BasicBeanPopulator implements BeanPopulator {
 		ValidationHelper.ensureExists("beanInformation", "populate bean", beanInformation);
 		ValidationHelper.ensureExists("values", "populate bean", values);
 		Collection<PropertyInformation> writableProperties =
-		        PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
+		PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
 		for (PropertyInformation property : writableProperties) {
 			String propertyName = property.getName();
 			if (values.containsKey(propertyName)) {

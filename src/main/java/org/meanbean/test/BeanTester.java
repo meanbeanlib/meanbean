@@ -24,16 +24,19 @@ import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.PropertyInformation;
 import org.meanbean.bean.util.PropertyInformationFilter;
-import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.internal.EqualityTest;
+import org.meanbean.test.internal.NoopSideEffectDetector;
+import org.meanbean.test.internal.SideEffectDetector;
 import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ServiceFactory;
+import org.meanbean.util.ServiceLoader;
 import org.meanbean.util.ValidationHelper;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -393,11 +396,12 @@ public class BeanTester {
 	protected void testBean(BeanInformation beanInformation, Configuration configuration)
 			throws IllegalArgumentException, AssertionError, BeanTestException {
 		ValidationHelper.ensureExists("beanInformation", "test bean", beanInformation);
-		// Get all properties of the bean
-		Collection<PropertyInformation> properties = beanInformation.getProperties();
+
 		// Get just the properties of the bean that are readable and writable
-		Collection<PropertyInformation> readableWritableProperties = PropertyInformationFilter.filter(properties,
-				PropertyVisibility.READABLE_WRITABLE);
+		// Skip testing any 'ignored' properties
+		List<PropertyInformation> readableWritableProperties = PropertyInformationFilter.filter(beanInformation.getProperties(),
+				configuration);
+
 		// Instantiate
 		Factory<Object> beanFactory = BasicNewObjectInstanceFactory.findBeanFactory(beanInformation.getBeanClass());
 		Object bean;
@@ -408,26 +412,41 @@ public class BeanTester {
 					+ "]. Failed to instantiate an instance of the bean.";
 			throw new BeanTestException(message, e);
 		}
+
+		SideEffectDetector sideEffectDetector = createSideEffectDetector(configuration);
+		sideEffectDetector.init(bean, readableWritableProperties);
+
 		// Test each property
 		for (PropertyInformation property : readableWritableProperties) {
-			// Skip testing any 'ignored' properties
-			if ((configuration == null) || (!configuration.isIgnoredProperty(property.getName()))) {
-				EqualityTest equalityTest = EqualityTest.LOGICAL;
-				Object testValue = null;
-				try {
-					Factory<?> valueFactory = factoryLookupStrategy.getFactory(beanInformation, property, configuration);
-					testValue = valueFactory.create();
-					if (valueFactory instanceof BasicNewObjectInstanceFactory) {
-						equalityTest = EqualityTest.ABSOLUTE;
-					}
-				} catch (Exception e) {
-					String message = "Cannot test bean [" + beanInformation.getBeanClass().getName()
-							+ "]. Failed to instantiate a test value for property [" + property.getName()
-							+ "].";
-					throw new BeanTestException(message, e);
+			EqualityTest equalityTest = EqualityTest.LOGICAL;
+			Object testValue = null;
+			try {
+				Factory<?> valueFactory = factoryLookupStrategy.getFactory(beanInformation, property, configuration);
+				testValue = valueFactory.create();
+				if (valueFactory instanceof BasicNewObjectInstanceFactory) {
+					equalityTest = EqualityTest.ABSOLUTE;
 				}
-				beanPropertyTester.testProperty(bean, property, testValue, equalityTest);
+			} catch (Exception e) {
+				String message = "Cannot test bean [" + beanInformation.getBeanClass().getName()
+						+ "]. Failed to instantiate a test value for property [" + property.getName()
+						+ "].";
+				throw new BeanTestException(message, e);
 			}
+
+			sideEffectDetector.beforeTestProperty(property, equalityTest);
+			beanPropertyTester.testProperty(bean, property, testValue, equalityTest);
+			sideEffectDetector.detectAfterTestProperty();
 		}
+	}
+
+	/**
+	 * @see VerifierSettings#suppressWarning(Warning)
+	 */
+	private SideEffectDetector createSideEffectDetector(Configuration configuration) {
+		if (configuration != null && configuration.isSuppressedWarning(Warning.SETTER_SIDE_EFFECT)) {
+			return NoopSideEffectDetector.INSTANCE;
+		}
+		ServiceLoader<SideEffectDetector> serviceLoader = new ServiceLoader<>(SideEffectDetector.class);
+		return serviceLoader.createAll().get(0);
 	}
 }

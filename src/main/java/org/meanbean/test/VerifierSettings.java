@@ -47,10 +47,12 @@ public interface VerifierSettings {
 	 */
 	VerifierSettings setDefaultIterations(int iterations);
 
-	/**
-	 * Mark the specified property as one to be disregarded/ignored during testing.
-	 */
-	VerifierSettings addIgnoredPropertyName(String property) throws IllegalArgumentException;
+    VerifierSettingsEditor suppressWarning(Warning warning);
+
+    /**
+     * Mark the specified property as one to be disregarded/ignored during testing.
+     */
+    VerifierSettings addIgnoredPropertyName(String property) throws IllegalArgumentException;
 
 	/**
 	 * Mark the specified property as one to be disregarded/ignored during testing.

@@ -23,12 +23,15 @@ package org.meanbean.test;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.ValidationHelper;
 
-import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.Collections.unmodifiableMap;
+import static java.util.Collections.unmodifiableSet;
 
 /**
  * Builder object that makes creating Configuration objects easier. <br>
@@ -51,6 +54,8 @@ public class ConfigurationBuilder {
 	 */
 	private final Map<String, Factory<?>> overrideFactories = new ConcurrentHashMap<>();
 
+    private Set<Warning> suppressedWarnings = EnumSet.noneOf(Warning.class);
+    
 	/**
 	 * Construct a new Configuration Builder.
 	 */
@@ -115,17 +120,14 @@ public class ConfigurationBuilder {
 	}
 
 	/**
-	 * Build a Configuration.
-	 * 
-	 * @return A Configuration object.
-	 */
-	public Configuration build() {
-		Configuration configuration =
-		        new Configuration(iterations, Collections.unmodifiableSet(ignoredProperties),
-		                Collections.unmodifiableMap(overrideFactories));
-		Configuration result = configuration;
-		return result;
-	}
+     * Build a Configuration.
+     * 
+     * @return A Configuration object.
+     */
+    public Configuration build() {
+        return new Configuration(iterations, unmodifiableSet(ignoredProperties), unmodifiableMap(overrideFactories),
+                unmodifiableSet(suppressedWarnings));
+    }
 
 	/**
 	 * Get a human-readable String representation of this object.
