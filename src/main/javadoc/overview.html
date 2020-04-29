@@ -1,20 +1,20 @@
 <body>
 	<h1>MeanBean - Automated JavaBean Testing</h1>
 
-	<a href="https://github.com/meanbeanlib/meanbean">https://github.com/meanbeanlib/meanbean</a>
+	<b><a target="_blank" href="https://github.com/meanbeanlib/meanbean">https://github.com/meanbeanlib/meanbean</a></b>
 	<br>
 	<br>
-	see {@link	org.meanbean.test.BeanVerification} or {@link org.meanbean.test.BeanTester}
+	see {@link org.meanbean.test.BeanVerifier} or {@link org.meanbean.test.BeanTester}
 	<br>
 	<p>
 	Examples:
 	
 	<pre>
 	// verify java-bean getters/setters, equals, hashCode and toString for a single bean type
-	BeanVerification.verifyBean(MyBean.class);
+	BeanVerifier.verifyBean(MyBean.class);
 		
 	// verify beans defined in the same package
-	BeanVerification.verifyBeansIn(MyBean.class.getPackage());
+	BeanVerifier.verifyBeansIn(MyBean.class.getPackage());
 	</pre>
 	
 	</p>

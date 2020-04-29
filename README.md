@@ -23,13 +23,19 @@ Mean Bean helps you rapidly and reliably test fundamental objects within your pr
 With just a single line of code, you can be confident that your beans are well behaved…
 
 	// verify bean getters/setters, equals, hashCode and toString for a single bean type
-	BeanVerification.verifyBean(MyBean.class);
-		
-	// verify beans defined in the same package
-	BeanVerification.verifyBeansIn(MyBean.class.getPackage());
+	BeanVerifier.verifyBean(Company.class);
 	
-	// directly verify only bean getters/setters for a single bean type
-	new BeanTester().testBean(MyDomainObject.class);
+	// verify multiple beans
+	BeanVerifier.verifyBeans(Company.class, Employee.class);
+	
+	// verify beans in the same package
+	BeanVerifier.verifyBeansIn(Company.class.getPackage())
+	
+	// configure settings
+	BeanVerifier.forClass(Company.class)
+		.withSettings(settings -> settings.setDefaultIterations(12)) // by default, the bean is tested with random values 100 times
+		.withSettings(settings -> settings.addIgnoredProperty(Company::getName)) // exclude name property in bean getter/setter test
+		.verifyGettersAndSetters()
 
 ### Where do I get it?
 
@@ -38,13 +44,54 @@ Mean Bean can be acquired from the <a href="https://maven-badges.herokuapp.com/m
     <dependency>
         <groupId>com.github.meanbeanlib</groupId>
         <artifactId>meanbean</artifactId>
-        <version>[latest version]</version>
+        <version>3.0.0-M6</version>
     </dependency>
 
 ### More info?
 
 See [User Guide in wiki](https://github.com/meanbeanlib/meanbean/wiki)
 
+The following shows more usage examples:
+
+	// alternative way to configure settings
+	BeanVerifier.forClass(Company.class)
+			.editSettings()
+			.setDefaultIterations(12)
+			.addIgnoredProperty(Company::getId)
+			.edited()
+			.verifyGettersAndSetters()
+			.verifyEqualsAndHashCode();
+	
+	// ignore Company's Id property from equals and hashCode test
+	BeanVerifier.forClass(Company.class)
+			.withSettings(settings -> settings.addEqualsInsignificantProperty(Company::getId))
+			.verifyEqualsAndHashCode();
+	
+	// ignore Company's Address property from getter/setter test
+	BeanVerifier.forClass(Company.class)
+			.withSettings(settings -> settings.addIgnoredProperty(Company::getAddress))
+			.verifyEqualsAndHashCode();
+	
+	// ignore Company's Id property from equals and hashCode test
+	BeanVerifier.forClass(Company.class)
+			.withSettings(settings -> settings.addEqualsInsignificantProperty(Company::getId))
+			.verifyEqualsAndHashCode();
+			
+	// how to register factory for a non-bean type (e.g. one without zero-arg constructor) 
+	BeanVerifier.forClass(Company.class)
+			.withSettings(settings -> settings.registerFactory(NonBean.class, nonBeanFactory))
+			.verifyGettersAndSetters();
+	
+	// how to re-use the same settings across your team
+	BeanVerifier.forClass(Company.class)
+			.withSettings(myTeamsSharedSettings()) // use the team's shared settings
+			.verify();
+
+Users familiar with meanbean v2 may continue using that api:
+
+	// meanbean v2 api to verify bean getters/setters
+	new BeanTester().testBean(User.class);
+	
 ### License
 
 MeanBean is released under the Apache 2.0 license.
