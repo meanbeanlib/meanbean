@@ -3,7 +3,7 @@
 Automated JavaBean Testing
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.meanbeanlib/meanbean/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.meanbeanlib/meanbean)
- [![javadoc](https://javadoc.io/badge2/com.github.meanbeanlib/meanbean/javadoc.svg)](https://javadoc.io/doc/com.github.meanbeanlib/meanbean) 
+ [![javadoc](https://javadoc.io/badge2/com.github.meanbeanlib/meanbean/javadoc.svg)](https://javadoc.io/doc/com.github.meanbeanlib/meanbean) [![Join the chat at https://gitter.im/meanbeanhq/community](https://badges.gitter.im/meanbeanhq/community.svg)](https://gitter.im/meanbeanhq/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
 ![Java CI](https://github.com/meanbeanlib/meanbean/workflows/Java%20CI/badge.svg)
 
 ## Welcome
