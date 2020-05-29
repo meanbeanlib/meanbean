@@ -1,5 +1,8 @@
 # MeanBean Release Notes
 
+## 3.0.0-M7
+- Fix bug not being able to test Collection with Enum element types. #4
+
 ## 3.0.0-M6
 - Rename BeanVerification to BeanVerifier
 - Add mechanism for suppressing warnings.
