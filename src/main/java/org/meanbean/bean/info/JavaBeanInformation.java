@@ -21,11 +21,13 @@
 package org.meanbean.bean.info;
 
 import org.meanbean.util.ValidationHelper;
+import org.meanbean.util.reflect.ReflectionAccessor;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -78,7 +80,17 @@ class JavaBeanInformation implements BeanInformation {
 			if ("class".equals(propertyDescriptor.getName()))
 				continue;
 			PropertyInformation propertyInformation = new PropertyDescriptorPropertyInformation(propertyDescriptor);
+			if (propertyInformation.isReadableWritable()) {
+				makeAccessible(propertyDescriptor.getReadMethod());
+				makeAccessible(propertyDescriptor.getWriteMethod());
+			}
 			properties.put(propertyInformation.getName(), propertyInformation);
+		}
+	}
+
+	private void makeAccessible(Method method) {
+		if (!method.isAccessible()) {
+			ReflectionAccessor.getInstance().makeAccessible(method);
 		}
 	}
 

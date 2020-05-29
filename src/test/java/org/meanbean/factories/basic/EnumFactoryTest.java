@@ -20,12 +20,16 @@
 
 package org.meanbean.factories.basic;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+
+import java.util.Map;
+import java.util.Set;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.meanbean.test.BeanVerifier.forClass;
 
 public class EnumFactoryTest extends BasicFactoryTestBase<Enum<?>> {
 
@@ -66,8 +70,34 @@ public class EnumFactoryTest extends BasicFactoryTestBase<Enum<?>> {
 		assertThat("Incorrect enum.", (Color) enumFactory.create(), is(Color.GREEN));
 		assertThat("Incorrect enum.", (Color) enumFactory.create(), is(Color.BLUE));
 	}
+	
+	@Test
+	public void verifyBean() {
+		forClass(ColorModel.class).verifyGettersAndSetters();
+	}
 
 	static enum Color {
 		RED, GREEN, BLUE
+	}
+
+	static class ColorModel {
+		private Set<Color> supportedColors;
+		private Map<Color, Integer> range;
+
+		public Map<Color, Integer> getRange() {
+			return range;
+		}
+
+		public void setRange(Map<Color, Integer> range) {
+			this.range = range;
+		}
+
+		public Set<Color> getSupportedColors() {
+			return supportedColors;
+		}
+
+		public void setSupportedColors(Set<Color> supportedColors) {
+			this.supportedColors = supportedColors;
+		}
 	}
 }

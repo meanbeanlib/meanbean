@@ -22,6 +22,7 @@ package org.meanbean.factories;
 
 import org.meanbean.lang.Factory;
 import org.meanbean.util.ValidationHelper;
+import org.meanbean.util.reflect.ReflectionAccessor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -74,7 +75,7 @@ public class BasicNewObjectInstanceFactory implements Factory<Object> {
 		Object result = null;
 		try {
 			Constructor<?> declaredConstructor = clazz.getDeclaredConstructor();
-			declaredConstructor.setAccessible(true);
+			ReflectionAccessor.getInstance().makeAccessible(declaredConstructor);
 			result = declaredConstructor.newInstance();
 		} catch (InstantiationException e) {
 			wrapAndRethrowException(e);
