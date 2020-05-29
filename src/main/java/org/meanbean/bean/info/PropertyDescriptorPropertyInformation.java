@@ -45,7 +45,7 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 *            The PropertyDescriptor this object will wrap.
 	 */
 	PropertyDescriptorPropertyInformation(PropertyDescriptor propertyDescriptor) {
-		name = propertyDescriptor.getName();
+		this.name = propertyDescriptor.getName();
 		this.propertyDescriptor = propertyDescriptor;
 	}
 
