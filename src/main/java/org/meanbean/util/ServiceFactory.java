@@ -33,7 +33,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ServiceFactory<T> {
 
     private static final ThreadLocal<Map<String, Object>> factoryCache = ThreadLocal.withInitial(ConcurrentHashMap::new);
-    private static final ThreadLocal<AtomicInteger> threadScope = ThreadLocal.withInitial(AtomicInteger::new);
+    
+    @SuppressWarnings("unused")
+	private static final ThreadLocal<AtomicInteger> threadScope = ThreadLocal.withInitial(AtomicInteger::new);
 
     private final List<T> services;
 
@@ -47,7 +49,8 @@ public class ServiceFactory<T> {
 
         factoryCache().put(inprogressKey, inprogressKey);
         try {
-            return (ServiceFactory<T>) factoryCache().computeIfAbsent(definition.getServiceType().getName(),
+            return (ServiceFactory<T>) factoryCache().computeIfAbsent(
+            		definition.getServiceType().getName(),
                     key -> ServiceFactory.create(definition));
         } finally {
             factoryCache().remove(inprogressKey);
@@ -55,15 +58,20 @@ public class ServiceFactory<T> {
     }
 
     public static void inScope(Runnable runnable) {
-        threadScope.get().incrementAndGet();
+    	// disabled for now. see issue #8 and test for ArrayPropertyBeanWithConstructor
+//        threadScope.get().incrementAndGet();
         try {
             runnable.run();
         } finally {
-            int scope = threadScope.get().decrementAndGet();
-            if (scope == 0) {
-                factoryCache.remove();
-            }
+//            int scope = threadScope.get().decrementAndGet();
+//            if (scope == 0) {
+//                factoryCache.remove();
+//            }
         }
+    }
+    
+    public static void remove() {
+    	factoryCache.remove();
     }
 
     private static Map<String, Object> factoryCache() {
