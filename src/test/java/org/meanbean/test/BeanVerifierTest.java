@@ -21,11 +21,13 @@
 package org.meanbean.test;
 
 import org.junit.Test;
+import org.meanbean.test.beans.ArrayPropertyBeanWithConstructor;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.domain.Company;
 import org.meanbean.test.beans.domain.EmployeeId;
 import org.meanbean.test.beans.scan.ScanBean;
+import org.meanbean.util.RandomValueGenerator;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
@@ -111,6 +113,20 @@ public class BeanVerifierTest {
 
 		BeanVerifier.forClass(Company.class)
 				.withSettings(settings -> settings.addEqualsInsignificantProperty(Company::getId))
+				.verifyGettersAndSetters()
+				.verifyEqualsAndHashCode();
+	}
+
+	@Test
+	public void verifyCustomFactories() {
+		BeanVerifier.forClass(ArrayPropertyBeanWithConstructor.class)
+				.editSettings()
+				.registerFactory(ArrayPropertyBeanWithConstructor.class, () -> {
+					RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
+					byte[] randomBytes = randomValueGenerator.nextBytes(8);
+					return new ArrayPropertyBeanWithConstructor(randomBytes);
+				})
+				.edited()
 				.verifyGettersAndSetters()
 				.verifyEqualsAndHashCode();
 	}
