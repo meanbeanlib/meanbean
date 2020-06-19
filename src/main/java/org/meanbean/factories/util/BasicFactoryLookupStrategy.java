@@ -178,7 +178,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			return createTestedPopulatedBeanFactory(beanInformation, propertyName, propertyType, configuration);
 
 		} else {
-			return createTestedUnpopulatedBeanFactory(propertyName, propertyType);
+			return createTestedUnpopulatedBeanFactory(beanInformation, propertyName, propertyType, configuration);
 		}
 	}
 
@@ -225,16 +225,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 	private Factory<?> createTestedPopulatedBeanFactory(BeanInformation beanInformation, String propertyName,
 			Class<?> propertyType, Configuration configuration) {
 		try {
-			if (isLikelyNewDynamicallyCreatedFactoryType(beanInformation, propertyType, configuration)) {
-				// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
-				
-				// To meanbean users, this can usually be ignored. When meanbean finds a property type that does not have built-in
-				// support for creating random values (like it does with String, Date, etc), then meanbean creates a dynamic factory
-				// hoping that the property type is a java bean. That dynamic factory is used to create random values of the property.
-				// To register a custom factory, call VerifierSettings::registerFactory or suppress with Warning.DYNAMICALLY_CREATED_FACTORY
-				logger.warn("Using dynamically created factory for [{}] of type [{}]. Do you need to register a custom Factory?",
-						propertyName, propertyType.getName());
-			}
+			onDynamicFactoryCreation(beanInformation, propertyName, propertyType, configuration);
 
 			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType);
 			testPopulatedBeanFactory(populatedBeanFactory);
@@ -243,6 +234,21 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			String message = "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType
 					+ "]. Please register a custom Factory.";
 			throw new NoSuchFactoryException(message, e);
+		}
+	}
+
+	private void onDynamicFactoryCreation(BeanInformation beanInformation, String propertyName, Class<?> propertyType,
+			Configuration configuration) {
+		if (isLikelyNewDynamicallyCreatedFactoryType(beanInformation, propertyType, configuration)) {
+			// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
+
+			// To meanbean users, this can usually be ignored. When meanbean finds a property type that does not have built-in
+			// support for creating random values (like it does with String, Date, etc), then meanbean creates a dynamic factory
+			// hoping that the property type is a java bean. That dynamic factory is used to create random values of the property.
+			//
+			// To register a custom factory, call VerifierSettings::registerFactory or suppress with Warning.DYNAMICALLY_CREATED_FACTORY
+			logger.info("Cannot find a custom Factory. Using dynamically created factory for [{}] of type [{}]",
+					propertyName, propertyType.getName());
 		}
 	}
 	
@@ -272,13 +278,13 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 		equivalentPopulatedBeanFactory.create();
 	}
 
-	private Factory<?> createTestedUnpopulatedBeanFactory(String propertyName, Class<?> propertyType) {
+	private Factory<?> createTestedUnpopulatedBeanFactory(BeanInformation beanInformation, String propertyName,
+			Class<?> propertyType, Configuration configuration) {
 		try {
+			onDynamicFactoryCreation(beanInformation, propertyName, propertyType, configuration);
+			
 			Factory<?> unpopulatedBeanFactory = createUnpopulatedBeanFactory(propertyType);
 			testUnpopulatedBeanFactory(unpopulatedBeanFactory);
-			// TODO THIS IS WHERE A STRICTER VERSION COULD THROW AN EXCEPTION
-			logger.warn("Using dynamically created factory for [{}] of type [{}]. Do you need to register a custom Factory?",
-					propertyName, propertyType.getName());
 			return unpopulatedBeanFactory;
 		} catch (Exception e) {
 			String message = "Failed to find suitable Factory for property=[" + propertyName + "] of type=[" + propertyType

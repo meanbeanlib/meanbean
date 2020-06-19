@@ -38,6 +38,8 @@ import static org.meanbean.util.Types.getRawType;
 @MetaInfServices
 public class ArrayFactoryLookup implements FactoryLookup {
 
+	// TODO is there a way to bias so that 50% of the time matching values are produced
+	// and 50% of the time, non-matching values are produced?
 	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
 	private int maxSize = 8;
 

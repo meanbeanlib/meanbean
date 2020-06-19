@@ -286,27 +286,6 @@ public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 		fail("exception was not thrown");
 	}
 
-	// TODO
-	// @Test(expected = AssertionError.class)
-	// public void verifyEqualsMethodShouldUseOverrideFactory() throws Exception {
-	// final String lastName = "MY_SPECIAL_TEST_STRING";
-	// Configuration configuration = new ConfigurationBuilder().overrideFactory("lastName", new Factory<String>() {
-	// @Override
-	// public String create() {
-	// return lastName;
-	// }
-	// }).build();
-	// verifier.verifyEqualsMethod(new Factory<MultiPropertyBean>() {
-	// @Override
-	// public MultiPropertyBean create() {
-	// MultiPropertyBean bean = new MultiPropertyBean();
-	// bean.setFirstName("FIRST_NAME");
-	// bean.setLastName(lastName);
-	// return bean;
-	// }
-	// }, configuration);
-	// }
-
 	@Test(expected = AssertionError.class)
 	public void verifyEqualsShouldThrowAssertionErrorWhenValuesDifferButObjectsStillEqualForSignificantProperty()
 	        throws Exception {
