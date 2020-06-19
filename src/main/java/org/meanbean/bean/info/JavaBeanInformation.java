@@ -26,11 +26,18 @@ import org.meanbean.util.reflect.ReflectionAccessor;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
+import java.beans.MethodDescriptor;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.lang.Character.toLowerCase;
 
 /**
  * Concrete BeanInformation that gathers and contains information about a JavaBean by using java.beans.BeanInfo.
@@ -76,16 +83,59 @@ class JavaBeanInformation implements BeanInformation {
 	 * Initialize this object ready for public use. This involves acquiring information about each property of the type.
 	 */
 	private void initialize() {
+		Map<String, Method> fluentWriteMethods = findFluentWriteMethods(beanInfo);
 		for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
-			if ("class".equals(propertyDescriptor.getName()))
+			if ("class".equals(propertyDescriptor.getName())) {
 				continue;
-			PropertyInformation propertyInformation = new PropertyDescriptorPropertyInformation(propertyDescriptor);
+			}
+			PropertyDescriptorPropertyInformation propertyInformation = new PropertyDescriptorPropertyInformation(propertyDescriptor);
+			Method fluentWriteMethod = fluentWriteMethods.get(propertyDescriptor.getName());
+			if (!propertyInformation.isWritable() && fluentWriteMethod != null) {
+				propertyInformation.setWriteMethodOverride(fluentWriteMethod);
+			}
+
 			if (propertyInformation.isReadableWritable()) {
-				makeAccessible(propertyDescriptor.getReadMethod());
-				makeAccessible(propertyDescriptor.getWriteMethod());
+				makeAccessible(propertyInformation.getReadMethod());
+				makeAccessible(propertyInformation.getWriteMethod());
 			}
 			properties.put(propertyInformation.getName(), propertyInformation);
 		}
+	}
+
+	private Map<String, Method> findFluentWriteMethods(BeanInfo beanInfo) {
+		List<Method> methods = findCandidateWriteMethods(beanInfo.getMethodDescriptors());
+		Map<String, Method> fluentMethods = new HashMap<>();
+		for (Method method : methods) {
+			String propertyName = method.getName().substring(3);
+			propertyName = toLowerCase(propertyName.charAt(0)) + propertyName.substring(1);
+			fluentMethods.put(propertyName, method);
+		}
+		return fluentMethods;
+	}
+
+	// based spring 5
+	private List<Method> findCandidateWriteMethods(MethodDescriptor[] methodDescriptors) {
+		List<Method> matches = new ArrayList<>();
+		for (MethodDescriptor methodDescriptor : methodDescriptors) {
+			Method method = methodDescriptor.getMethod();
+			if (isCandidateWriteMethod(method)) {
+				matches.add(method);
+			}
+		}
+		// Sort non-void returning write methods to guard against the ill effects of
+		// non-deterministic sorting of methods returned from Class#getDeclaredMethods
+		// under JDK 7. See https://bugs.java.com/view_bug.do?bug_id=7023180
+		matches.sort((m1, m2) -> m2.toString().compareTo(m1.toString()));
+		return matches;
+	}
+
+	// based spring 5
+	private static boolean isCandidateWriteMethod(Method method) {
+		String methodName = method.getName();
+		int nParams = method.getParameterCount();
+		return methodName.length() > 3 && methodName.startsWith("set") && Modifier.isPublic(method.getModifiers()) &&
+				!void.class.isAssignableFrom(method.getReturnType()) &&
+				nParams == 1;
 	}
 
 	private void makeAccessible(Method method) {
