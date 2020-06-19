@@ -91,9 +91,6 @@ import java.util.List;
  * }
  * </pre>
  *
- * <p>The {@link EqualsExclude} annotation can be used to exclude fields from being
- * used by the <code>reflectionEquals</code> methods.</p>
- *
  * @since 1.0
  */
 public class $EqualsBuilder {
@@ -162,17 +159,6 @@ public class $EqualsBuilder {
 
 	//-------------------------------------------------------------------------
 
-	/**
-	 * <p>Test if two <code>Object</code>s are equal using either
-	 * #{@link #reflectionAppend(Object, Object)}, if object are non
-	 * primitives (or wrapper of primitives) or if field <code>testRecursive</code>
-	 * is set to <code>false</code>. Otherwise, using their
-	 * <code>equals</code> method.</p>
-	 *
-	 * @param lhs  the left hand object
-	 * @param rhs  the right hand object
-	 * @return EqualsBuilder - used to chain calls.
-	 */
 	public $EqualsBuilder append(final Object lhs, final Object rhs) {
 		if (!isEquals) {
 			return this;
