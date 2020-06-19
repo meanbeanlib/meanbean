@@ -37,6 +37,8 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 
 	/** The underlying/wrapped PropertyDescriptor. */
 	private final PropertyDescriptor propertyDescriptor;
+	
+	private Method writeMethodOverride;
 
 	/**
 	 * Construct a new Property Descriptor Property Information based on the specified Property Descriptor.
@@ -115,7 +117,18 @@ class PropertyDescriptorPropertyInformation implements PropertyInformation {
 	 */
 	@Override
     public Method getWriteMethod() {
+		if (writeMethodOverride != null) {
+			return writeMethodOverride;
+		}
 		return propertyDescriptor.getWriteMethod();
+	}
+
+	public Method getWriteMethodOverride() {
+		return writeMethodOverride;
+	}
+
+	public void setWriteMethodOverride(Method writeMethodOverride) {
+		this.writeMethodOverride = writeMethodOverride;
 	}
 
 	/**
