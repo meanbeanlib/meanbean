@@ -23,6 +23,11 @@ package org.meanbean.test;
 import org.meanbean.util.AssertionUtils;
 import org.meanbean.util.ValidationHelper;
 
+import java.util.Arrays;
+import java.util.function.Supplier;
+
+import static org.meanbean.test.internal.$EqualsBuilder.objectsEqual;
+
 /**
  * <p>
  * Concrete ObjectPropertyEqualityConsistentAsserter that provides a means of verifying whether the equality of an
@@ -82,22 +87,40 @@ class SignificantObjectPropertyEqualityConsistentAsserter implements ObjectPrope
 		ValidationHelper.ensureExists("modifiedObject", "assert consistency of equals", modifiedObject);
 		ValidationHelper.ensureExists("originalPropertyValue", "assert consistency of equals", originalPropertyValue);
 		ValidationHelper.ensureExists("newPropertyValue", "assert consistency of equals", newPropertyValue);
-		boolean newPropertyValueEqualsOriginalPropertyValue = newPropertyValue.equals(originalPropertyValue);
-		boolean originalObjectEqualsModifiedObject = originalObject.equals(modifiedObject);
-		String variableString =
-		        "(\nx." + propertyName + "=[" + originalPropertyValue + "]\nvs\ny." + propertyName + "=["
-		                + newPropertyValue + "]\n)";
+
+		boolean newPropertyValueEqualsOriginalPropertyValue = objectsEqual(newPropertyValue, originalPropertyValue);
+		boolean originalObjectEqualsModifiedObject = objectsEqual(originalObject, modifiedObject);
+		Supplier<String> variableString = formatVariableString(propertyName, originalPropertyValue, newPropertyValue);
+
 		if (originalObjectEqualsModifiedObject && !newPropertyValueEqualsOriginalPropertyValue) {
-			String message =
-			        "objects that differ due to supposedly significant property [" + propertyName
-			                + "] were considered equal. " + variableString + ". is property [" + propertyName
-			                + "] actually insignificant?";
+			String message = "objects that differ due to supposedly significant property [" + propertyName
+					+ "] were considered equal. " + variableString.get() + ". is property [" + propertyName
+					+ "] actually insignificant?";
 			AssertionUtils.fail(message);
+
 		} else if (!originalObjectEqualsModifiedObject && newPropertyValueEqualsOriginalPropertyValue) {
-			String message =
-			        "objects that should be equal were considered unequal when testing significant " + "property ["
-			                + propertyName + "]. " + variableString + ". is equals incorrect?";
+			String message = "objects that should be equal were considered unequal when testing significant " + "property ["
+					+ propertyName + "]. " + variableString.get() + ". is equals incorrect?";
 			AssertionUtils.fail(message);
 		}
+	}
+
+	static Supplier<String> formatVariableString(String propertyName, Object originalPropertyValue, Object newPropertyValue) {
+		return () -> {
+			String originalPropertyString = buildToString(originalPropertyValue);
+			String newPropertyString = buildToString(newPropertyValue);
+			return "(\nx." + propertyName + "=[" + originalPropertyString
+					+ "]\nvs\ny." + propertyName + "=["
+					+ newPropertyString + "]\n)";
+		};
+	}
+
+	private static String buildToString(Object obj) {
+		if (obj != null && obj.getClass().isArray()) {
+			Object[] objectArray = { obj };
+			String str = Arrays.deepToString(objectArray);
+			return str.substring(1, str.length() - 1);
+		}
+		return String.valueOf(obj);
 	}
 }

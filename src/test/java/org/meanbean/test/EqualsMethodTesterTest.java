@@ -25,6 +25,7 @@ import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.beans.ArrayPropertyBean;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.BeanFactory;
 import org.meanbean.test.beans.BeanWithBadGetterMethod;
@@ -271,27 +272,6 @@ public class EqualsMethodTesterTest {
 		fail("exception was not thrown");
 	}
 
-	// TODO REVISIT
-	// @Test(expected = AssertionError.class)
-	// public void testEqualsMethodShouldUseOverrideFactory() throws Exception {
-	// final String lastName = "MY_SPECIAL_TEST_STRING";
-	// Configuration configuration = new ConfigurationBuilder().overrideFactory("lastName", new Factory<String>() {
-	// @Override
-	// public String create() {
-	// return lastName;
-	// }
-	// }).build();
-	// equalsTester.testEqualsMethod(new Factory<MultiPropertyBean>() {
-	// @Override
-	// public MultiPropertyBean create() {
-	// MultiPropertyBean bean = new MultiPropertyBean();
-	// bean.setFirstName("FIRST_NAME");
-	// bean.setLastName(lastName);
-	// return bean;
-	// }
-	// }, configuration);
-	// }
-
 	@Test(expected = IllegalArgumentException.class)
 	public void testEqualsMethodShouldPreventNullClass() throws Exception {
 		equalsTester.testEqualsMethod((Class<?>) null);
@@ -418,5 +398,13 @@ public class EqualsMethodTesterTest {
 			return;
 		}
 		fail("exception was not thrown");
+	}
+
+	@Test
+	public void testArrayPropertyBean() {
+		for (int i = 0; i < 10; i++) {
+			BeanVerifier.forClass(ArrayPropertyBean.class)
+					.verifyEqualsAndHashCode();
+		}
 	}
 }

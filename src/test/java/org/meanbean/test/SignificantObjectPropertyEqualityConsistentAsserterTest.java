@@ -20,12 +20,19 @@
 
 package org.meanbean.test;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.BeanFactory;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+
 public class SignificantObjectPropertyEqualityConsistentAsserterTest {
 
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
 	private final ObjectPropertyEqualityConsistentAsserter objectPropertyEqualityConsistentAsserter =
 	        new SignificantObjectPropertyEqualityConsistentAsserter();
 
@@ -61,14 +68,34 @@ public class SignificantObjectPropertyEqualityConsistentAsserterTest {
 		        new Object(), null);
 	}
 
-	@Test(expected = AssertionError.class)
+	@Test
 	public void assertConsistentShouldThrowAssertionErrorWhenValuesDifferButObjectsStillEqual() throws Exception {
 		Bean originalObject = beanFactory.create();
 		Bean modifiedObject = beanFactory.create();
 		Long originalPropertyValue = 2L;
 		Long newPropertyValue = 3L;
-		objectPropertyEqualityConsistentAsserter.assertConsistent("name", originalObject, modifiedObject,
-		        originalPropertyValue, newPropertyValue);
+
+		assertThatCode(() -> {
+			objectPropertyEqualityConsistentAsserter.assertConsistent("name", originalObject, modifiedObject,
+					originalPropertyValue, newPropertyValue);
+		}).isExactlyInstanceOf(AssertionError.class)
+				.hasMessageContaining("x.name=[2]")
+				.hasMessageContaining("y.name=[3]");
+	}
+
+	@Test
+	public void assertConsistentShouldThrowAssertionErrorWhenValuesDifferButObjectsStillEqualArrays() throws Exception {
+		Bean originalObject = beanFactory.create();
+		Bean modifiedObject = beanFactory.create();
+		Long[] originalPropertyValue = new Long[] { 2L };
+		Long[] newPropertyValue = new Long[] { 3L };
+
+		assertThatCode(() -> {
+			objectPropertyEqualityConsistentAsserter.assertConsistent("name", originalObject, modifiedObject,
+					originalPropertyValue, newPropertyValue);
+		}).isExactlyInstanceOf(AssertionError.class)
+				.hasMessageContaining("x.name=[[2]]")
+				.hasMessageContaining("y.name=[[3]]");
 	}
 
 	@Test
