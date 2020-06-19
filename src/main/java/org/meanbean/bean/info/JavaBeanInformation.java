@@ -113,8 +113,8 @@ class JavaBeanInformation implements BeanInformation {
 		return fluentMethods;
 	}
 
-	// based spring 5
-	private List<Method> findCandidateWriteMethods(MethodDescriptor[] methodDescriptors) {
+	// based on spring 5
+	private List<Method> findCandidateWriteMethods(MethodDescriptor... methodDescriptors) {
 		List<Method> matches = new ArrayList<>();
 		for (MethodDescriptor methodDescriptor : methodDescriptors) {
 			Method method = methodDescriptor.getMethod();
@@ -129,7 +129,7 @@ class JavaBeanInformation implements BeanInformation {
 		return matches;
 	}
 
-	// based spring 5
+	// based on spring 5
 	private static boolean isCandidateWriteMethod(Method method) {
 		String methodName = method.getName();
 		int nParams = method.getParameterCount();
