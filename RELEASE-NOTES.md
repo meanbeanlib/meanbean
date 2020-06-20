@@ -1,5 +1,10 @@
 # MeanBean Release Notes
 
+## 3.0.0-M8
+- Detect and enable testing for beans with fluent setters.
+- Fix factory caching that causes failures when chaining bean verifier calls. #8
+- Fix equals test sometimes failing on array properties.  #7
+
 ## 3.0.0-M7
 - Fix bug not being able to test Collection with Enum element types. #4
 
