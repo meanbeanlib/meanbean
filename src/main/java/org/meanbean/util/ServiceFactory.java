@@ -122,9 +122,9 @@ public class ServiceFactory<T> {
 
 		private static final ThreadLocal<WeakReference<Object>> currentKey = new ThreadLocal<>();
 		
-		private Map<Object, Map<String, Object>> contextMapByKeys = new WeakHashMap<>();
+		private final Map<Object, Map<String, Object>> contextMapByKeys = new WeakHashMap<>();
 		
-		private Set<Class<?>> keyTypes = Collections.newSetFromMap(new ConcurrentHashMap<>());
+		private final Set<Class<?>> keyTypes = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 		public synchronized Map<String, Object> getContextMap() {
 			WeakReference<Object> ref = currentKey.get();
@@ -140,7 +140,7 @@ public class ServiceFactory<T> {
 			return ref != null && ref.get() != null;
 		}
 
-		public void clear() {
+		public synchronized void clear() {
 			contextMapByKeys.clear();
 			keyTypes.clear();
 			currentKey.remove();
