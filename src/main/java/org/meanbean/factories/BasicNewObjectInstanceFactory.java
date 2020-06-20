@@ -106,6 +106,9 @@ public class BasicNewObjectInstanceFactory implements Factory<Object> {
 		String message =
 		        "Failed to instantiate object of type [" + clazz.getName() + "] due to "
 		                + exception.getClass().getSimpleName() + ".";
+		if (exception instanceof NoSuchMethodException) {
+			message = message + " Do you need to add a custom Factory?";
+		}
 		throw new ObjectCreationException(message, exception);
 	}
 }

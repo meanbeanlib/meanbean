@@ -150,18 +150,20 @@ public class BeanTester {
 	 * Prefer {@link BeanVerifier} or {@link BeanTesterBuilder#newBeanTester()}
 	 */
 	public BeanTester() {
-		this(RandomValueGenerator.getInstance(),
-				FactoryCollection.getInstance(),
-				FactoryLookupStrategy.getInstance(),
-				BeanInformationFactory.getInstance(),
-				new BeanPropertyTester(),
-				new ConcurrentHashMap<>(),
-				Configuration.defaultConfiguration());
+		ServiceFactory.createContext(this);
+		this.randomValueGenerator = RandomValueGenerator.getInstance();
+		this.factoryCollection = FactoryCollection.getInstance();
+		this.factoryLookupStrategy = FactoryLookupStrategy.getInstance();
+		this.beanInformationFactory = BeanInformationFactory.getInstance();
+		this.beanPropertyTester = new BeanPropertyTester();
+		this.customConfigurations = new ConcurrentHashMap<>();
+		this.defaultConfiguration = Configuration.defaultConfiguration();
 	}
 
 	BeanTester(RandomValueGenerator randomValueGenerator, FactoryCollection factoryCollection,
 			FactoryLookupStrategy factoryLookupStrategy, BeanInformationFactory beanInformationFactory,
 			BeanPropertyTester beanPropertyTester, Map<Class<?>, Configuration> configs, Configuration defaultConfiguration) {
+		ServiceFactory.createContextIfNeeded(this);
 		this.randomValueGenerator = randomValueGenerator;
 		this.factoryCollection = factoryCollection;
 		this.factoryLookupStrategy = factoryLookupStrategy;
@@ -337,11 +339,6 @@ public class BeanTester {
 	 *             If an unexpected exception occurs during testing.
 	 */
 	public void testBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
-			AssertionError, BeanTestException {
-		ServiceFactory.inScope(() -> doTestBean(beanClass, customConfiguration));
-	}
-
-	private void doTestBean(Class<?> beanClass, Configuration customConfiguration) throws IllegalArgumentException,
 			AssertionError, BeanTestException {
 		ValidationHelper.ensureExists("beanClass", "test bean", beanClass);
 		// Override the standard number of iterations if need be

@@ -28,11 +28,13 @@ import org.meanbean.factories.NoSuchFactoryException;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ServiceFactory;
 import org.meanbean.util.ValidationHelper;
 
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import static org.meanbean.util.PropertyNameFinder.findPropertyName;
 
@@ -43,22 +45,26 @@ import static org.meanbean.util.PropertyNameFinder.findPropertyName;
  */
 public class BeanTesterBuilder {
 
-	private RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
+	private RandomValueGenerator randomValueGenerator;
 
-	private FactoryCollection factoryCollection = FactoryCollection.getInstance();
+	private FactoryCollection factoryCollection;
 
-	private FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
+	private FactoryLookupStrategy factoryLookupStrategy;
 
-	private BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
+	private BeanInformationFactory beanInformationFactory;
 
-	private BeanPropertyTester beanPropertyTester = new BeanPropertyTester();
+	private BeanPropertyTester beanPropertyTester;
 
-	private Map<Class<?>, Configuration> customConfigurations = new ConcurrentHashMap<>();
+	private Map<Class<?>, Configuration> customConfigurations;
 
-	private Configuration defaultConfiguration = Configuration.defaultConfiguration();
-    
+	private Configuration defaultConfiguration;
+
 	public static BeanTesterBuilder newBeanTesterBuilder() {
 		return new BeanTesterBuilder();
+	}
+
+	static BeanTesterBuilder newBeanTesterBuilderWithInheritedContext() {
+		return new BeanTesterBuilder(ServiceFactory::createContextIfNeeded);
 	}
 
 	public static BeanTester newBeanTester() {
@@ -75,6 +81,21 @@ public class BeanTesterBuilder {
 
 	public static ToStringMethodTester newToStringMethodTester() {
 		return new ToStringMethodTester();
+	}
+
+	private BeanTesterBuilder() {
+		this(ServiceFactory::createContext);
+	}
+
+	private BeanTesterBuilder(Consumer<BeanTesterBuilder> contextCreator) {
+		contextCreator.accept(this);
+		randomValueGenerator = RandomValueGenerator.getInstance();
+		factoryCollection = FactoryCollection.getInstance();
+		factoryLookupStrategy = FactoryLookupStrategy.getInstance();
+		beanInformationFactory = BeanInformationFactory.getInstance();
+		beanPropertyTester = new BeanPropertyTester();
+		customConfigurations = new ConcurrentHashMap<>();
+		defaultConfiguration = Configuration.defaultConfiguration();
 	}
 
 	public RandomValueGenerator getRandomValueGenerator() {
@@ -269,15 +290,15 @@ public class BeanTesterBuilder {
 	}
 
 	public EqualsMethodTester buildEqualsMethodTester() {
-		return new EqualsMethodTester(customConfigurations, defaultConfiguration);
+		return EqualsMethodTester.createWithInheritedContext(customConfigurations, defaultConfiguration);
 	}
 
 	public HashCodeMethodTester buildHashCodeMethodTester() {
-		return newHashCodeMethodTester();
+		return HashCodeMethodTester.createWithInheritedContext();
 	}
 
 	public ToStringMethodTester buildToStringMethodTester() {
-		return newToStringMethodTester();
+		return ToStringMethodTester.createWithInheritedContext();
 	}
 
 }

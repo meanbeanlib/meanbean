@@ -20,9 +20,11 @@
 
 package org.meanbean.factories;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.BeanTester;
+import org.meanbean.util.ServiceFactory;
 
 import java.util.UUID;
 
@@ -31,7 +33,13 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class ArrayFactoryLookupTest {
 
-	private ArrayFactoryLookup arrayFactoryCollection = new ArrayFactoryLookup();
+	private ArrayFactoryLookup arrayFactoryCollection;
+
+	@Before
+	public void setUp() {
+		ServiceFactory.createContext(this);
+		arrayFactoryCollection = new ArrayFactoryLookup();
+	}
 
 	@Test
 	public void hasFactory() throws Exception {

@@ -29,6 +29,7 @@ import org.meanbean.test.beans.domain.EmployeeId;
 import org.meanbean.test.beans.scan.ScanBean;
 import org.meanbean.util.RandomValueGenerator;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
@@ -118,7 +119,27 @@ public class BeanVerifierTest {
 	}
 
 	@Test
-	public void verifyCustomFactories() {
+	public void verifyCustomFactoriesFirst() {
+		verifyCustomFactory();
+
+		verifyNoCustomFactory();
+	}
+
+	@Test
+	public void verifyCustomFactoriesLast() {
+		verifyNoCustomFactory();
+		
+		verifyCustomFactory();
+	}
+
+	private void verifyNoCustomFactory() {
+		assertThatCode(() -> {
+			BeanVerifier.forClass(ArrayPropertyBeanWithConstructor.class)
+					.verifyGettersAndSetters();
+		}).hasMessageContaining("Failed to instantiate");
+	}
+
+	private void verifyCustomFactory() {
 		BeanVerifier.forClass(ArrayPropertyBeanWithConstructor.class)
 				.editSettings()
 				.registerFactory(ArrayPropertyBeanWithConstructor.class, () -> {
@@ -129,7 +150,7 @@ public class BeanVerifierTest {
 				.edited()
 				.verifyGettersAndSetters()
 				.verifyEqualsAndHashCode();
-	}
+	};
 
 	@Test
 	public void verifyPackage() {

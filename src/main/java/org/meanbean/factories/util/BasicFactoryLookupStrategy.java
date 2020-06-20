@@ -247,7 +247,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 			// hoping that the property type is a java bean. That dynamic factory is used to create random values of the property.
 			//
 			// To register a custom factory, call VerifierSettings::registerFactory or suppress with Warning.DYNAMICALLY_CREATED_FACTORY
-			logger.info("Cannot find a custom Factory. Using dynamically created factory for [{}] of type [{}]",
+			logger.info("Using dynamically created factory for [{}] of type [{}] because a custom Factory cannot be found.",
 					propertyName, propertyType.getName());
 		}
 	}
