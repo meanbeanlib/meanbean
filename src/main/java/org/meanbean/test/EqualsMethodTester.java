@@ -143,13 +143,13 @@ import java.util.Map;
 public class EqualsMethodTester {
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
+	private final BeanInformationFactory beanInformationFactory;
 
 	/** The verifier to which general contract verification is delegated. */
-	private final EqualsMethodContractVerifier contractVerifier = new EqualsMethodContractVerifier();
+	private final EqualsMethodContractVerifier contractVerifier;
 
 	/** The verifier to which property significance verification is delegated. */
-	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier;
 
 	private final Configuration defaultConfiguration;
 	private final Map<Class<?>, Configuration> customConfigurations;
@@ -158,12 +158,26 @@ public class EqualsMethodTester {
 	 * Prefer {@link BeanVerifier}
 	 */
 	public EqualsMethodTester() {
-		this(Collections.emptyMap(), Configuration.defaultConfiguration());
+		ServiceFactory.createContext(this);
+		this.customConfigurations = Collections.emptyMap();
+		this.defaultConfiguration = Configuration.defaultConfiguration();
+		this.propertySignificanceVerifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+		this.contractVerifier = new EqualsMethodContractVerifier();
+		this.beanInformationFactory = BeanInformationFactory.getInstance();
 	}
 
-	EqualsMethodTester(Map<Class<?>, Configuration> customConfigurations, Configuration defaultConfiguration) {
+	static EqualsMethodTester createWithInheritedContext(Map<Class<?>, Configuration> customConfigurations,
+			Configuration defaultConfiguration) {
+		return new EqualsMethodTester(customConfigurations, defaultConfiguration);
+	}
+
+	private EqualsMethodTester(Map<Class<?>, Configuration> customConfigurations, Configuration defaultConfiguration) {
+		ValidationHelper.ensure(ServiceFactory.hasContext(), "context required");
 		this.customConfigurations = customConfigurations;
 		this.defaultConfiguration = defaultConfiguration;
+		this.propertySignificanceVerifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
+		this.beanInformationFactory = BeanInformationFactory.getInstance();
+		this.contractVerifier = new EqualsMethodContractVerifier();
 	}
 
 	/**
@@ -411,12 +425,6 @@ public class EqualsMethodTester {
 	 *             If the test fails.
 	 */
 	public void testEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
-			String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
-			BeanTestException, AssertionError {
-		ServiceFactory.inScope(() -> doTestEqualsMethod(factory, customConfiguration, insignificantProperties));
-	}
-
-	private void doTestEqualsMethod(EquivalentFactory<?> factory, Configuration customConfiguration,
 			String... insignificantProperties) throws IllegalArgumentException, BeanInformationException,
 			BeanTestException, AssertionError {
 		ValidationHelper.ensureExists("factory", "test equals method", factory);

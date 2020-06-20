@@ -27,6 +27,7 @@ import org.meanbean.util.ServiceFactory;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * Simple tester for verifying that the bean overrides the toString method
@@ -34,23 +35,28 @@ import java.util.Objects;
 public class ToStringMethodTester {
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
+	private final BeanInformationFactory beanInformationFactory;
 
+	static ToStringMethodTester createWithInheritedContext() {
+		return new ToStringMethodTester(ServiceFactory::createContextIfNeeded);
+	}
+	
 	/**
 	 * Prefer {@link BeanVerifier}
 	 */
 	ToStringMethodTester() {
+		this(ServiceFactory::createContext);
+	}
 
+	private ToStringMethodTester(Consumer<ToStringMethodTester> serviceCreator) {
+		serviceCreator.accept(this);
+		beanInformationFactory = BeanInformationFactory.getInstance();
 	}
 
 	/**
 	 * Simple toString() test to verify that the bean overrides toString() method and that it does not throw exception.
 	 */
 	public void testToStringMethod(Class<?> clazz) {
-		ServiceFactory.inScope(() -> doTestToStringMethod(clazz));
-	}
-
-	private void doTestToStringMethod(Class<?> clazz) {
 		ValidationHelper.ensureExists("clazz", "test hash code method", clazz);
 		FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
 		EquivalentPopulatedBeanFactory factory = new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz),

@@ -30,13 +30,17 @@ import org.meanbean.util.ServiceFactory;
 
 import java.util.function.Consumer;
 
+import static org.meanbean.test.BeanTesterBuilder.newBeanTesterBuilderWithInheritedContext;
+
 class BeanVerifierImpl implements BeanVerifier, VerifierSettings, VerifierSettingsEditor {
 
 	private Class<?> beanClass;
-	private BeanTesterBuilder builder = BeanTesterBuilder.newBeanTesterBuilder();
+	private final BeanTesterBuilder builder;
 
 	public BeanVerifierImpl(Class<?> beanClass) {
+		ServiceFactory.createContext(this);
 		this.beanClass = beanClass;
+		this.builder = newBeanTesterBuilderWithInheritedContext();
 	}
 
 	@Override
@@ -57,27 +61,20 @@ class BeanVerifierImpl implements BeanVerifier, VerifierSettings, VerifierSettin
 
 	@Override
 	public BeanVerifier verifyGettersAndSetters() {
-		ServiceFactory.inScope(() -> {
-			builder.build().testBean(beanClass);
-		});
+		builder.build().testBean(beanClass);
 		return this;
 	}
 
 	@Override
 	public BeanVerifier verifyEqualsAndHashCode() {
-		ServiceFactory.inScope(() -> {
-			builder.buildEqualsMethodTester().testEqualsMethod(beanClass);
-			builder.buildHashCodeMethodTester().testHashCodeMethod(beanClass);
-		});
-
+		builder.buildEqualsMethodTester().testEqualsMethod(beanClass);
+		builder.buildHashCodeMethodTester().testHashCodeMethod(beanClass);
 		return this;
 	}
 
 	@Override
 	public BeanVerifier verifyToString() {
-		ServiceFactory.inScope(() -> {
-			builder.buildToStringMethodTester().testToStringMethod(beanClass);
-		});
+		builder.buildToStringMethodTester().testToStringMethod(beanClass);
 		return this;
 	}
 

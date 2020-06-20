@@ -28,15 +28,18 @@ import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.bean.info.JavaBeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.beans.ArrayPropertyBeanWithConstructor;
 import org.meanbean.test.beans.Bean;
 import org.meanbean.test.beans.ComplexBean;
 import org.meanbean.test.beans.PackagePrivateConstructorObject;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ServiceFactory;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Date;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -54,6 +57,7 @@ public class BeanTesterTest {
 
 	@Before
 	public void before() {
+		ServiceFactory.clear();
 		beanTester = new BeanTester();
 	}
 
@@ -163,7 +167,38 @@ public class BeanTesterTest {
 	public void testBeanThatTakesBeanClassAndConfigurationShouldIgnoreBadPropertyWhenToldTo() throws Exception {
 		beanTester.testBean(BadComplexBean.class, new ConfigurationBuilder().ignoreProperty("lastName").build());
 	}
-	
+
+	@Test
+	public void verifyCustomFactoriesFirst() {
+		verifyCustomFactory();
+
+		verifyNoCustomFactory();
+	}
+
+	@Test
+	public void verifyCustomFactoriesLast() {
+		verifyNoCustomFactory();
+
+		verifyCustomFactory();
+	}
+
+	private void verifyNoCustomFactory() {
+		assertThatCode(() -> {
+			BeanTester beanTester = new BeanTester();
+			beanTester.testBean(ArrayPropertyBeanWithConstructor.class);
+		}).hasMessageContaining("Failed to instantiate");
+	}
+
+	private void verifyCustomFactory() {
+		BeanTester beanTester = new BeanTester();
+		beanTester.getFactoryCollection().addFactory(ArrayPropertyBeanWithConstructor.class, () -> {
+			RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
+			byte[] randomBytes = randomValueGenerator.nextBytes(8);
+			return new ArrayPropertyBeanWithConstructor(randomBytes);
+		});
+		beanTester.testBean(ArrayPropertyBeanWithConstructor.class);
+	};
+
 	// TODO TEST COMBINATIONS WITH CONFIGURATIONS AND BEAN INFORMATIONS ETC
 
 	public static class BeanWithBadGetterMethod extends Bean {

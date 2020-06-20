@@ -21,7 +21,6 @@
 package org.meanbean.test;
 
 import org.meanbean.util.ClassPathUtils;
-import org.meanbean.util.ServiceFactory;
 
 import java.util.function.Consumer;
 
@@ -154,9 +153,9 @@ public interface BeanVerifier {
 	 * Performs {@link #verifyGettersAndSetters()}, {@link #verifyEqualsAndHashCode()} and {@link #verifyToString()}
 	 */
 	default void verify() {
-		ServiceFactory.inScope(() -> verifyGettersAndSetters()
+		verifyGettersAndSetters()
 				.verifyEqualsAndHashCode()
-				.verifyToString());
+				.verifyToString();
 	}
 
 }

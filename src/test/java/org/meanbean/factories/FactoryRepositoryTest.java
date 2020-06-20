@@ -27,6 +27,7 @@ import org.junit.runner.RunWith;
 import org.meanbean.factories.basic.StringFactory;
 import org.meanbean.lang.Factory;
 import org.meanbean.util.RandomValueGenerator;
+import org.meanbean.util.ServiceFactory;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -51,6 +52,7 @@ public class FactoryRepositoryTest {
 
 	@Before
 	public void before() {
+		ServiceFactory.createContext(this);
 		factoryRepository = new FactoryRepository();
 	}
 

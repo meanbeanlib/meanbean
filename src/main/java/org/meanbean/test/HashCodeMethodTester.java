@@ -30,6 +30,8 @@ import org.meanbean.util.RandomValueGenerator;
 import org.meanbean.util.ServiceFactory;
 import org.meanbean.util.ValidationHelper;
 
+import java.util.function.Consumer;
+
 /**
  * <p>
  * Provides a means of testing the correctness of the hashCode logic implemented by a type, based solely on the
@@ -91,24 +93,36 @@ import org.meanbean.util.ValidationHelper;
 public class HashCodeMethodTester {
 
 	/** Random number generator used by factories to randomly generate values. */
-	private final RandomValueGenerator randomValueGenerator = RandomValueGenerator.getInstance();
+	private final RandomValueGenerator randomValueGenerator;
 
 	/** The collection of test data Factories. */
-	private final FactoryCollection factoryCollection = FactoryCollection.getInstance();
+	private final FactoryCollection factoryCollection;
 
 	/** Provides a means of acquiring a suitable Factory. */
-	private final FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
+	private final FactoryLookupStrategy factoryLookupStrategy;
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
+	private final BeanInformationFactory beanInformationFactory;
 
 	/**
 	 * Prefer {@link BeanVerifier}
 	 */
 	public HashCodeMethodTester() {
-		
+		this(ServiceFactory::createContext);
 	}
 	
+	static HashCodeMethodTester createWithInheritedContext() {
+		return new HashCodeMethodTester(ServiceFactory::createContextIfNeeded);
+	}
+
+	private HashCodeMethodTester(Consumer<HashCodeMethodTester> contextCreator) {
+		contextCreator.accept(this);
+		randomValueGenerator = RandomValueGenerator.getInstance();
+		factoryCollection = FactoryCollection.getInstance();
+		factoryLookupStrategy = FactoryLookupStrategy.getInstance();
+		beanInformationFactory = BeanInformationFactory.getInstance();
+	}
+
 	/**
 	 * <p>
 	 * Test that the hashCode logic implemented by the type the specified factory creates is correct by testing:
@@ -138,10 +152,6 @@ public class HashCodeMethodTester {
 	 *             If the test fails.
 	 */
 	public void testHashCodeMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
-        ServiceFactory.inScope(() -> doTestHashCodeMethod(factory));
-	}
-
-    private void doTestHashCodeMethod(EquivalentFactory<?> factory) throws IllegalArgumentException, AssertionError {
 		ValidationHelper.ensureExists("factory", "test hash code method", factory);
 		testHashCodesEqual(factory);
 		testHashCodeConsistent(factory);
