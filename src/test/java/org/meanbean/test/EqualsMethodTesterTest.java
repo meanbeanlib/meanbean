@@ -45,6 +45,7 @@ import org.meanbean.test.beans.NonReflexiveBeanFactory;
 import org.meanbean.test.beans.NullAcceptingBean;
 import org.meanbean.test.beans.NullAcceptingBeanFactory;
 import org.meanbean.test.beans.NullEquivalentFactory;
+import org.meanbean.util.ServiceFactory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -53,7 +54,11 @@ import static org.junit.Assert.fail;
 
 public class EqualsMethodTesterTest {
 
-	private FactoryCollection factoryCollection = FactoryCollection.getInstance();
+	{
+		ServiceFactory.createContext(this);
+	}
+	
+	private final FactoryCollection factoryCollection = FactoryCollection.getInstance();
 	private final EqualsMethodTester equalsTester = new EqualsMethodTester();
 
 	@Test(expected = IllegalArgumentException.class)
