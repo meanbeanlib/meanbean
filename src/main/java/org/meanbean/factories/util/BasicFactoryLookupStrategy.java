@@ -227,7 +227,7 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 		try {
 			onDynamicFactoryCreation(beanInformation, propertyName, propertyType, configuration);
 
-			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType);
+			Factory<?> populatedBeanFactory = createPopulatedBeanFactory(propertyType, configuration);
 			testPopulatedBeanFactory(populatedBeanFactory);
 			return populatedBeanFactory;
 		} catch (Exception e) {
@@ -268,10 +268,10 @@ public class BasicFactoryLookupStrategy implements FactoryLookupStrategy {
 		return dynamicallyCreatedFactories.add(key);
 	}
 
-	private Factory<?> createPopulatedBeanFactory(Class<?> propertyType) {
+	private Factory<?> createPopulatedBeanFactory(Class<?> propertyType, Configuration configuration) {
 		BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
 		BeanInformation propertyBeanInformation = beanInformationFactory.create(propertyType);
-		return new PopulatedBeanFactory(propertyBeanInformation, this);
+		return new PopulatedBeanFactory(propertyBeanInformation, this, configuration);
 	}
 
 	private void testPopulatedBeanFactory(Factory<?> equivalentPopulatedBeanFactory) {

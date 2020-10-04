@@ -37,8 +37,7 @@ import org.meanbean.util.ServiceLoader;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * <p>
@@ -135,10 +134,8 @@ public class BeanTester {
 	/** Provides a means of acquiring a suitable Factory. */
 	private final FactoryLookupStrategy factoryLookupStrategy;
 
-	/** Custom Configurations that override standard testing behaviour on a per-type basis across all tests. */
-	private final Map<Class<?>, Configuration> customConfigurations;
-
-	private final Configuration defaultConfiguration;
+	/** Provides Configuration that possibly override standard testing behaviour on a per-type basis across all tests. */
+	private final Function<Class<?>, Configuration> configurationProvider;
 
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory;
@@ -156,21 +153,19 @@ public class BeanTester {
 		this.factoryLookupStrategy = FactoryLookupStrategy.getInstance();
 		this.beanInformationFactory = BeanInformationFactory.getInstance();
 		this.beanPropertyTester = new BeanPropertyTester();
-		this.customConfigurations = new ConcurrentHashMap<>();
-		this.defaultConfiguration = Configuration.defaultConfiguration();
+		this.configurationProvider = Configuration.defaultConfigurationProvider();
 	}
 
 	BeanTester(RandomValueGenerator randomValueGenerator, FactoryCollection factoryCollection,
 			FactoryLookupStrategy factoryLookupStrategy, BeanInformationFactory beanInformationFactory,
-			BeanPropertyTester beanPropertyTester, Map<Class<?>, Configuration> configs, Configuration defaultConfiguration) {
+			BeanPropertyTester beanPropertyTester, Function<Class<?>, Configuration> configurationProvider) {
 		ServiceFactory.createContextIfNeeded(this);
 		this.randomValueGenerator = randomValueGenerator;
 		this.factoryCollection = factoryCollection;
 		this.factoryLookupStrategy = factoryLookupStrategy;
 		this.beanInformationFactory = beanInformationFactory;
 		this.beanPropertyTester = beanPropertyTester;
-		this.customConfigurations = configs;
-		this.defaultConfiguration = defaultConfiguration;
+		this.configurationProvider = configurationProvider;
 	}
 
 	/**
@@ -203,61 +198,8 @@ public class BeanTester {
 	 * @return The number of times each bean should be tested. This value will be at least 1.
 	 */
 	public int getIterations() {
-		return defaultConfiguration.getIterations();
-	}
-
-	/**
-	 * Add the specified Configuration as a custom Configuration to be used as an override to any global configuration
-	 * settings when testing the type specified by the beanClass parameter.
-	 * 
-	 * @param beanClass
-	 *            The type that the Configuration should be used for during testing.
-	 * @param configuration
-	 *            The custom Configuration, to be used only when testing the beanClass type.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If either parameter is deemed illegal. For example, if either parameter is null.
-	 */
-	void addCustomConfiguration(Class<?> beanClass, Configuration configuration) throws IllegalArgumentException {
-		ValidationHelper.ensureExists("beanClass", "add custom configuration", beanClass);
-		ValidationHelper.ensureExists("configuration", "add custom configuration", configuration);
-		customConfigurations.put(beanClass, configuration);
-	}
-
-	/**
-	 * Does the specified type have a custom Configuration registered?
-	 * 
-	 * @param beanClass
-	 *            The type for which a Configuration is sought.
-	 * 
-	 * @return <code>true</code> if a custom Configuration has been registered for the type specified by the beanClass
-	 *         parameter; <code>false</code> otherwise.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
-	 */
-	protected boolean hasCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
-		ValidationHelper.ensureExists("beanClass", "check for custom configuration", beanClass);
-		boolean result = customConfigurations.containsKey(beanClass);
-		return result;
-	}
-
-	/**
-	 * Get the custom Configuration registered against the specified type.
-	 * 
-	 * @param beanClass
-	 *            The type for which a Configuration is sought.
-	 * 
-	 * @return A custom Configuration registered against the type specified by the beanClass parameter, if one exists;
-	 *         <code>null</code> otherwise.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the beanClass parameter is deemed illegal. For example, if it is null.
-	 */
-	protected Configuration getCustomConfiguration(Class<?> beanClass) throws IllegalArgumentException {
-		ValidationHelper.ensureExists("beanClass", "get custom configuration", beanClass);
-		Configuration result = customConfigurations.get(beanClass);
-		return result;
+		Class<?> anonymousClass = (new Object() {}).getClass();
+        return configurationProvider.apply(anonymousClass).getIterations();
 	}
 
 	/**
@@ -290,10 +232,7 @@ public class BeanTester {
 	 */
 	public void testBean(Class<?> beanClass) throws IllegalArgumentException, AssertionError, BeanTestException {
 		ValidationHelper.ensureExists("beanClass", "test bean", beanClass);
-		Configuration customConfiguration = defaultConfiguration;
-		if (hasCustomConfiguration(beanClass)) {
-			customConfiguration = getCustomConfiguration(beanClass);
-		}
+		Configuration customConfiguration = configurationProvider.apply(beanClass);
 		testBean(beanClass, customConfiguration);
 	}
 

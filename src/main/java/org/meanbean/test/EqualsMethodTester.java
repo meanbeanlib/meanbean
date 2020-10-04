@@ -29,8 +29,7 @@ import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.util.ServiceFactory;
 import org.meanbean.util.ValidationHelper;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.function.Function;
 
 /**
  * <p>
@@ -151,30 +150,26 @@ public class EqualsMethodTester {
 	/** The verifier to which property significance verification is delegated. */
 	private final EqualsMethodPropertySignificanceVerifier propertySignificanceVerifier;
 
-	private final Configuration defaultConfiguration;
-	private final Map<Class<?>, Configuration> customConfigurations;
+	private final Function<Class<?>, Configuration> configurationProvider;
 
 	/**
 	 * Prefer {@link BeanVerifier}
 	 */
 	public EqualsMethodTester() {
 		ServiceFactory.createContext(this);
-		this.customConfigurations = Collections.emptyMap();
-		this.defaultConfiguration = Configuration.defaultConfiguration();
+		this.configurationProvider = Configuration.defaultConfigurationProvider();
 		this.propertySignificanceVerifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
 		this.contractVerifier = new EqualsMethodContractVerifier();
 		this.beanInformationFactory = BeanInformationFactory.getInstance();
 	}
 
-	static EqualsMethodTester createWithInheritedContext(Map<Class<?>, Configuration> customConfigurations,
-			Configuration defaultConfiguration) {
-		return new EqualsMethodTester(customConfigurations, defaultConfiguration);
+	static EqualsMethodTester createWithInheritedContext(Function<Class<?>, Configuration> configurationProvider) {
+		return new EqualsMethodTester(configurationProvider);
 	}
 
-	private EqualsMethodTester(Map<Class<?>, Configuration> customConfigurations, Configuration defaultConfiguration) {
+	private EqualsMethodTester(Function<Class<?>, Configuration> configurationProvider) {
 		ValidationHelper.ensure(ServiceFactory.hasContext(), "context required");
-		this.customConfigurations = customConfigurations;
-		this.defaultConfiguration = defaultConfiguration;
+        this.configurationProvider = configurationProvider;
 		this.propertySignificanceVerifier = new PropertyBasedEqualsMethodPropertySignificanceVerifier();
 		this.beanInformationFactory = BeanInformationFactory.getInstance();
 		this.contractVerifier = new EqualsMethodContractVerifier();
@@ -430,7 +425,7 @@ public class EqualsMethodTester {
 		ValidationHelper.ensureExists("factory", "test equals method", factory);
 		ValidationHelper.ensureExists("insignificantProperties", "test equals method", insignificantProperties);
 		insignificantProperties = insignificantProperties == null || insignificantProperties.length == 0
-				? defaultConfiguration.getEqualsInsignificantProperties().toArray(new String[0])
+				? defaultConfiguration().getEqualsInsignificantProperties().toArray(new String[0])
 				: insignificantProperties;
 
 		contractVerifier.verifyEqualsReflexive(factory);
@@ -442,7 +437,7 @@ public class EqualsMethodTester {
 
 		customConfiguration = getEffectiveConfiguration(null, customConfiguration);
 		// Override the standard number of iterations if need be
-		int iterations = defaultConfiguration.getIterations();
+		int iterations = defaultConfiguration().getIterations();
 		if (customConfiguration.hasIterationsOverride()) {
 			iterations = customConfiguration.getIterations();
 		}
@@ -452,15 +447,20 @@ public class EqualsMethodTester {
 			propertySignificanceVerifier.verifyEqualsMethod(factory, customConfiguration, insignificantProperties);
 		}
 	}
+	
+	private Configuration defaultConfiguration() {
+	    Class<?> anonymousClass = (new Object() {}).getClass();
+	    return configurationProvider.apply(anonymousClass);
+	}
 
 	private Configuration getEffectiveConfiguration(Class<?> beanClass, Configuration configuration) {
+	    if (beanClass == null) {
+	        beanClass = (new Object() {}).getClass();
+	    }
 		if (configuration != null) {
 			return configuration;
 		}
-		if (beanClass != null && customConfigurations.containsKey(beanClass)) {
-			return customConfigurations.get(beanClass);
-		}
-		return defaultConfiguration;
+		return configurationProvider.apply(beanClass);
 	}
 
 	private EquivalentFactory<?> createEquivalentFactory(Class<?> clazz) {
@@ -481,6 +481,7 @@ public class EqualsMethodTester {
 
 	private EquivalentPopulatedBeanFactory createPopulatedBeanFactory(Class<?> clazz) {
 		FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
-		return new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz), factoryLookupStrategy);
+		Configuration configuration = getEffectiveConfiguration(clazz, null);
+		return new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz), factoryLookupStrategy, configuration);
 	}
 }

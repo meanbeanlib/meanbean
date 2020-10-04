@@ -27,6 +27,7 @@ import org.meanbean.bean.util.BeanPropertyValuesFactory;
 import org.meanbean.factories.BasicNewObjectInstanceFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.Configuration;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Map;
@@ -60,12 +61,12 @@ public class PopulatedBeanFactory implements Factory<Object> {
 	 *             If either the specified BeanInformation or the FactoryLookupStrategy is deemed illegal. For example,
 	 *             if either is <code>null</code>.
 	 */
-	public PopulatedBeanFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy)
+	public PopulatedBeanFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy, Configuration configuration)
 	        throws IllegalArgumentException {
 		ValidationHelper.ensureExists("beanInformation", "construct Factory", beanInformation);
 		ValidationHelper.ensureExists("factoryLookupStrategy", "construct Factory", factoryLookupStrategy);
 		this.beanInformation = beanInformation;
-		beanPropertyValuesFactory = new BeanPropertyValuesFactory(beanInformation, factoryLookupStrategy);
+		beanPropertyValuesFactory = new BeanPropertyValuesFactory(beanInformation, factoryLookupStrategy, configuration);
 	}
 
 	/**

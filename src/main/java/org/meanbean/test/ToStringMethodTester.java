@@ -20,6 +20,7 @@
 
 package org.meanbean.test;
 
+import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
 import org.meanbean.factories.util.FactoryLookupStrategy;
@@ -28,46 +29,50 @@ import org.meanbean.util.ValidationHelper;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
- * Simple tester for verifying that the bean overrides the toString method
+ * Simple tester for verifying that the bean non-trivially overrides the toString method
  */
 public class ToStringMethodTester {
 
-	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
-	private final BeanInformationFactory beanInformationFactory;
-
-	static ToStringMethodTester createWithInheritedContext() {
-		return new ToStringMethodTester(ServiceFactory::createContextIfNeeded);
+	private final Function<Class<?>, Configuration> configurationProvider;
+	
+	static ToStringMethodTester createWithInheritedContext(Function<Class<?>, Configuration> configurationProvider) {
+		return new ToStringMethodTester(ServiceFactory::createContextIfNeeded, configurationProvider);
 	}
 	
 	/**
 	 * Prefer {@link BeanVerifier}
 	 */
-	ToStringMethodTester() {
-		this(ServiceFactory::createContext);
+	ToStringMethodTester(Function<Class<?>, Configuration> configurationProvider) {
+		this(ServiceFactory::createContext, configurationProvider);
 	}
 
-	private ToStringMethodTester(Consumer<ToStringMethodTester> serviceCreator) {
+	private ToStringMethodTester(Consumer<ToStringMethodTester> serviceCreator, Function<Class<?>, Configuration> configurationProvider) {
 		serviceCreator.accept(this);
-		beanInformationFactory = BeanInformationFactory.getInstance();
+		this.configurationProvider = configurationProvider;
 	}
 
 	/**
-	 * Simple toString() test to verify that the bean overrides toString() method and that it does not throw exception.
-	 */
-	public void testToStringMethod(Class<?> clazz) {
-		ValidationHelper.ensureExists("clazz", "test hash code method", clazz);
-		FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
-		EquivalentPopulatedBeanFactory factory = new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz),
-				factoryLookupStrategy);
+     * Simple toString() test to verify that the bean overrides toString() method and that it does not throw exception.
+     */
+    public void testToStringMethod(Class<?> beanClass) {
+        ValidationHelper.ensureExists("clazz", "test toString method", beanClass);
 
-		Object bean = factory.create();
-		String toString = bean.toString();
-		if (!overridesToString(bean, toString)) {
-			throw new AssertionError("Expected " + clazz.getName() + " class to override toString()");
-		}
-	}
+        FactoryLookupStrategy factoryLookupStrategy = FactoryLookupStrategy.getInstance();
+        BeanInformationFactory beanInformationFactory = BeanInformationFactory.getInstance();
+        BeanInformation beanInformation = beanInformationFactory.create(beanClass);
+        
+        Configuration configuration = configurationProvider.apply(beanClass);
+        EquivalentPopulatedBeanFactory factory = new EquivalentPopulatedBeanFactory(beanInformation, factoryLookupStrategy, configuration);
+
+        Object bean = factory.create();
+        String toString = bean.toString();
+        if (!overridesToString(bean, toString)) {
+            throw new AssertionError("Expected " + beanClass.getName() + " class to override toString()");
+        }
+    }
 
 	private boolean overridesToString(Object obj, String toString) {
 		String defaultToString = obj.getClass().getName() + "@" + Integer.toHexString(obj.hashCode());

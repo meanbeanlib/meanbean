@@ -20,6 +20,7 @@
 
 package org.meanbean.test;
 
+import org.meanbean.bean.info.BeanInformation;
 import org.meanbean.bean.info.BeanInformationFactory;
 import org.meanbean.factories.FactoryCollection;
 import org.meanbean.factories.equivalent.EquivalentPopulatedBeanFactory;
@@ -31,6 +32,7 @@ import org.meanbean.util.ServiceFactory;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * <p>
@@ -104,23 +106,26 @@ public class HashCodeMethodTester {
 	/** Factory used to gather information about a given bean and store it in a BeanInformation object. */
 	private final BeanInformationFactory beanInformationFactory;
 
+    private final Function<Class<?>, Configuration> configurationProvider;
+	
 	/**
 	 * Prefer {@link BeanVerifier}
 	 */
 	public HashCodeMethodTester() {
-		this(ServiceFactory::createContext);
+		this(ServiceFactory::createContext, Configuration.defaultConfigurationProvider());
 	}
 	
-	static HashCodeMethodTester createWithInheritedContext() {
-		return new HashCodeMethodTester(ServiceFactory::createContextIfNeeded);
+	static HashCodeMethodTester createWithInheritedContext(Function<Class<?>, Configuration> configurationProvider) {
+		return new HashCodeMethodTester(ServiceFactory::createContextIfNeeded, configurationProvider);
 	}
 
-	private HashCodeMethodTester(Consumer<HashCodeMethodTester> contextCreator) {
+	private HashCodeMethodTester(Consumer<HashCodeMethodTester> contextCreator, Function<Class<?>, Configuration> configurationProvider) {
 		contextCreator.accept(this);
 		randomValueGenerator = RandomValueGenerator.getInstance();
 		factoryCollection = FactoryCollection.getInstance();
 		factoryLookupStrategy = FactoryLookupStrategy.getInstance();
 		beanInformationFactory = BeanInformationFactory.getInstance();
+		this.configurationProvider = configurationProvider;
 	}
 
 	/**
@@ -183,10 +188,12 @@ public class HashCodeMethodTester {
 	 */
 	public void testHashCodeMethod(Class<?> clazz) throws IllegalArgumentException, AssertionError {
 		ValidationHelper.ensureExists("clazz", "test hash code method", clazz);
-		EquivalentPopulatedBeanFactory factory =
-		        new EquivalentPopulatedBeanFactory(beanInformationFactory.create(clazz), getFactoryLookupStrategy());
-		testHashCodeMethod(factory);
-	}
+		Configuration configuration = configurationProvider.apply(clazz);
+        BeanInformation beanInformation = beanInformationFactory.create(clazz);
+        EquivalentPopulatedBeanFactory factory = new EquivalentPopulatedBeanFactory(beanInformation, getFactoryLookupStrategy(),
+                configuration);
+        testHashCodeMethod(factory);
+    }
 
 	/**
 	 * <p>
