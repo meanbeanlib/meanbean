@@ -29,6 +29,7 @@ import org.meanbean.factories.beans.BeanCreationException;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.EquivalentFactory;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.Configuration;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Map;
@@ -62,16 +63,17 @@ public class EquivalentPopulatedBeanFactory implements EquivalentFactory<Object>
 	 * @param factoryLookupStrategy
 	 *            Provides a means of acquiring Factories that can be used to create values for the fields of new object
 	 *            instances.
+     * @param configuration Provides override configuration
 	 * @throws IllegalArgumentException
 	 *             If either the specified BeanInformation or the FactoryLookupStrategy is deemed illegal. For example,
 	 *             if either is <code>null</code>.
 	 */
-	public EquivalentPopulatedBeanFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy)
-	        throws IllegalArgumentException {
+    public EquivalentPopulatedBeanFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy, Configuration configuration)
+            throws IllegalArgumentException {
 		ValidationHelper.ensureExists("beanInformation", "construct Factory", beanInformation);
 		ValidationHelper.ensureExists("factoryLookupStrategy", "construct Factory", factoryLookupStrategy);
 		this.beanInformation = beanInformation;
-		beanPropertyValuesFactory = new BeanPropertyValuesFactory(beanInformation, factoryLookupStrategy);
+		beanPropertyValuesFactory = new BeanPropertyValuesFactory(beanInformation, factoryLookupStrategy, configuration);
 	}
 
 	/**

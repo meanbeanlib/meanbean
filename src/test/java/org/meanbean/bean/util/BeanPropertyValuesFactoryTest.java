@@ -32,6 +32,8 @@ import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.BeanTester;
+import org.meanbean.test.Configuration;
+import org.meanbean.test.ConfigurationBuilder;
 import org.meanbean.test.beans.ComplexBean;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.util.RandomValueGenerator;
@@ -77,23 +79,27 @@ public class BeanPropertyValuesFactoryTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorShouldPreventNullBeanInformation() throws Exception {
-		new BeanPropertyValuesFactory(null, factoryLookupStrategyMock);
+		new BeanPropertyValuesFactory(null, factoryLookupStrategyMock, newConfiguration());
 	}
+
+    private Configuration newConfiguration() {
+        return new ConfigurationBuilder().build();
+    }
 
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorShouldPreventNullFactoryLookupStrategy() throws Exception {
-		new BeanPropertyValuesFactory(beanInformationMock, null);
+		new BeanPropertyValuesFactory(beanInformationMock, null, newConfiguration());
 	}
 
 	@Test
 	public void constructorShouldPermitNonNullParameters() throws Exception {
-		new BeanPropertyValuesFactory(beanInformationMock, factoryLookupStrategyMock);
+		new BeanPropertyValuesFactory(beanInformationMock, factoryLookupStrategyMock, newConfiguration());
 	}
 
 	@Test
 	public void createShouldReturnMapContainingValuesForWritableProperties() throws Exception {
 		BeanPropertyValuesFactory beanPropertyValuesFactory =
-		        new BeanPropertyValuesFactory(complexBeanInformationReal, factoryLookupStrategyReal);
+		        new BeanPropertyValuesFactory(complexBeanInformationReal, factoryLookupStrategyReal, newConfiguration());
 		Map<String, Object> values = beanPropertyValuesFactory.create();
 		assertTrue(values.containsKey("id"));
 		assertTrue(values.containsKey("firstName"));
@@ -114,7 +120,7 @@ public class BeanPropertyValuesFactoryTest {
 		NonBean bean = new NonBean("TEST");
 		BeanInformation beanInformation = beanInformationFactoryReal.create(bean.getClass());
 		BeanPropertyValuesFactory beanPropertyValuesFactory =
-		        new BeanPropertyValuesFactory(beanInformation, factoryLookupStrategyReal);
+		        new BeanPropertyValuesFactory(beanInformation, factoryLookupStrategyReal, newConfiguration());
 		Map<String, Object> values = beanPropertyValuesFactory.create();
 		assertTrue(values.isEmpty());
 	}
@@ -122,7 +128,7 @@ public class BeanPropertyValuesFactoryTest {
 	@Test
 	public void createShouldReturnNewMapEachInvocation() throws Exception {
 		BeanPropertyValuesFactory beanPropertyValuesFactory =
-		        new BeanPropertyValuesFactory(complexBeanInformationReal, factoryLookupStrategyReal);
+		        new BeanPropertyValuesFactory(complexBeanInformationReal, factoryLookupStrategyReal, newConfiguration());
 		assertThat("Should be different instances.", beanPropertyValuesFactory.create(),
 		        is(not(sameInstance(beanPropertyValuesFactory.create()))));
 	}
@@ -132,7 +138,7 @@ public class BeanPropertyValuesFactoryTest {
 		doThrow(new RuntimeException("TEST EXCEPTION")).when(longFactoryMock).create();
 		beanTesterReal.getFactoryCollection().addFactory(long.class, longFactoryMock);
 		BeanPropertyValuesFactory beanPropertyValuesFactory =
-		        new BeanPropertyValuesFactory(complexBeanInformationReal, factoryLookupStrategyReal);
+		        new BeanPropertyValuesFactory(complexBeanInformationReal, factoryLookupStrategyReal, newConfiguration());
 		beanPropertyValuesFactory.create();
 	}
 }

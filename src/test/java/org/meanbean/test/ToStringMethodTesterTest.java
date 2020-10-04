@@ -23,26 +23,56 @@ package org.meanbean.test;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.domain.Address;
 import org.meanbean.test.beans.domain.Item;
 
 public class ToStringMethodTesterTest {
 
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-	@Test
-	public void testSimple() {
-		ToStringMethodTester tester = new ToStringMethodTester();
-		tester.testToStringMethod(Address.class);
-	}
+    @Test
+    public void testSimple() {
+        ToStringMethodTester tester = new ToStringMethodTester(Configuration.defaultConfigurationProvider());
+        tester.testToStringMethod(Address.class);
+    }
 
-	@Test
-	public void testNoOverride() {
-		ToStringMethodTester tester = new ToStringMethodTester();
+    @Test
+    public void testNoOverride() {
+        ToStringMethodTester tester = new ToStringMethodTester(Configuration.defaultConfigurationProvider());
 
-		thrown.expect(AssertionError.class);
-		thrown.expectMessage("Expected org.meanbean.test.beans.domain.Item class to override toString()");
-		tester.testToStringMethod(Item.class);
-	}
+        thrown.expect(AssertionError.class);
+        thrown.expectMessage("Expected org.meanbean.test.beans.domain.Item class to override toString()");
+        tester.testToStringMethod(Item.class);
+    }
+
+    @Test
+    public void testJavaBean() {
+        BeanVerifier.forClass(BeanWithBadProperties.class)
+                .withSettings(settings -> settings.addIgnoredProperty(BeanWithBadProperties::getId))
+                .withSettings(settings -> settings.addIgnoredProperty(BeanWithBadProperties::getBrokenProperty))
+                .withSettings(settings -> settings.addOverridePropertyFactory(BeanWithBadProperties::getNonBean, () -> new NonBean("foo")))
+                .verify();
+    }
+
+    public static class BeanWithBadProperties extends Address {
+        private NonBean nonBean;
+
+        public NonBean getNonBean() {
+            return nonBean;
+        }
+
+        public void setNonBean(NonBean nonBean) {
+            this.nonBean = nonBean;
+        }
+
+        public String getBrokenProperty() {
+            throw new RuntimeException();
+        }
+
+        public void setBrokenProperty(String str) {
+            throw new RuntimeException();
+        }
+    }
 }

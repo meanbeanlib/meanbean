@@ -35,7 +35,9 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+import static org.meanbean.test.Configuration.customConfigurationProvider;
 import static org.meanbean.util.PropertyNameFinder.findPropertyName;
 
 /**
@@ -80,7 +82,7 @@ public class BeanTesterBuilder {
 	}
 
 	public static ToStringMethodTester newToStringMethodTester() {
-		return new ToStringMethodTester();
+		return new ToStringMethodTester(Configuration.defaultConfigurationProvider());
 	}
 
 	private BeanTesterBuilder() {
@@ -285,20 +287,23 @@ public class BeanTesterBuilder {
 				factoryLookupStrategy,
 				beanInformationFactory,
 				beanPropertyTester,
-				customConfigurations,
-				defaultConfiguration);
+				createConfigurationProvider());
 	}
 
 	public EqualsMethodTester buildEqualsMethodTester() {
-		return EqualsMethodTester.createWithInheritedContext(customConfigurations, defaultConfiguration);
+		return EqualsMethodTester.createWithInheritedContext(createConfigurationProvider());
 	}
 
 	public HashCodeMethodTester buildHashCodeMethodTester() {
-		return HashCodeMethodTester.createWithInheritedContext();
+		return HashCodeMethodTester.createWithInheritedContext(createConfigurationProvider());
 	}
 
 	public ToStringMethodTester buildToStringMethodTester() {
-		return ToStringMethodTester.createWithInheritedContext();
+        return ToStringMethodTester.createWithInheritedContext(createConfigurationProvider());
 	}
+
+    private Function<Class<?>, Configuration> createConfigurationProvider() {
+        return customConfigurationProvider(customConfigurations, defaultConfiguration);
+    }
 
 }

@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
@@ -108,6 +109,18 @@ public class Configuration {
 
     static Configuration defaultMutableConfiguration(int iterations) {
         return new Configuration(iterations, new HashSet<>(), new HashMap<>(), EnumSet.noneOf(Warning.class));
+    }
+
+    static Function<Class<?>, Configuration> customConfigurationProvider(Map<Class<?>, Configuration> customConfigurations,
+            Configuration defaultConfiguration) {
+        return beanClass -> {
+            ValidationHelper.ensureExists("beanClass", "check for custom configuration", beanClass);
+            return customConfigurations.getOrDefault(beanClass, defaultConfiguration);
+        };
+    }
+
+    static Function<Class<?>, Configuration> defaultConfigurationProvider() {
+        return customConfigurationProvider(emptyMap(), defaultConfiguration());
     }
 
 	/**
@@ -245,6 +258,6 @@ public class Configuration {
 		str.append("ignoredProperties=").append(ignoredProperties).append(",");
 		str.append("overrideFactories=").append(overrideFactories);
 		str.append("]");
-		return str.toString();
-	}
+        return str.toString();
+    }
 }

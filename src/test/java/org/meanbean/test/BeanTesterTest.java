@@ -61,26 +61,6 @@ public class BeanTesterTest {
 		beanTester = new BeanTester();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void addCustomConfigurationShouldPreventNullBeanClass() throws Exception {
-		beanTester.addCustomConfiguration(null, configuration);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void addCustomConfigurationShouldPreventNullConfiguration() throws Exception {
-		beanTester.addCustomConfiguration(String.class, null);
-	}
-
-	@Test
-	public void shouldAddCustomConfiguration() throws Exception {
-		assertThat("Configuration should not exist already.", beanTester.hasCustomConfiguration(String.class),
-		        is(false));
-		beanTester.addCustomConfiguration(String.class, configuration);
-		assertThat("Did not add custom configuration.", beanTester.hasCustomConfiguration(String.class), is(true));
-		assertThat("Did not add custom configuration.", beanTester.getCustomConfiguration(String.class),
-		        is(configuration));
-	}
-
 	@Test
 	public void shouldGetRandomValueGenerator() throws Exception {
 		RandomValueGenerator randomValueGenerator = beanTester.getRandomValueGenerator();
