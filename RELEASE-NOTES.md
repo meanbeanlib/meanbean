@@ -1,5 +1,8 @@
 # MeanBean Release Notes
 
+## 3.0.0-M9
+- Fix toString, equals and hashCode verifications to honor custom configuration. #15
+
 ## 3.0.0-M8
 - Detect and enable testing for beans with fluent setters.
 - Fix factory caching that causes failures when chaining bean verifier calls. #8
