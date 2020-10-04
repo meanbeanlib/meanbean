@@ -43,6 +43,7 @@ import org.meanbean.test.beans.MultiPropertyBeanFactory;
 import org.meanbean.test.beans.NonBean;
 import org.meanbean.test.beans.NullEquivalentFactory;
 import org.meanbean.test.beans.SelfReferencingBeanFactory;
+import org.meanbean.util.ServiceFactory;
 
 import java.util.Arrays;
 
@@ -55,6 +56,8 @@ import static org.junit.Assert.fail;
 
 public class PropertyBasedEqualsMethodPropertySignificanceVerifierTest {
 
+    @SuppressWarnings("unused")
+    private final Void voidRef = ServiceFactory.createContext(this);
 	private final FactoryCollection factoryCollection = FactoryCollection.getInstance();
 	private final PropertyBasedEqualsMethodPropertySignificanceVerifier verifier =
 	        new PropertyBasedEqualsMethodPropertySignificanceVerifier();

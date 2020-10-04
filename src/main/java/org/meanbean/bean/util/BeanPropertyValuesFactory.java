@@ -26,6 +26,7 @@ import org.meanbean.bean.util.PropertyInformationFilter.PropertyVisibility;
 import org.meanbean.factories.ObjectCreationException;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
+import org.meanbean.test.Configuration;
 import org.meanbean.util.ValidationHelper;
 
 import java.util.Collection;
@@ -46,25 +47,31 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 
 	/** A means of acquiring a suitable Factory for use when creating values. */
 	private final FactoryLookupStrategy factoryLookupStrategy;
+	
+	/** Provides override configuration */
+	private final Configuration configuration;
 
 	/**
-	 * Construct a new Bean Property Values Factory.
-	 * 
-	 * @param beanInformation
-	 *            Information used to create property values for a bean.
-	 * @param factoryLookupStrategy
-	 *            Provides a means of acquiring a suitable Factory for use when creating values.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             If the specified BeanInformation or FactoryLookupStrategy is deemed illegal. For example, if either
-	 *             is <code>null</code>.
-	 */
-	public BeanPropertyValuesFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy)
-	        throws IllegalArgumentException {
-		ValidationHelper.ensureExists("beanInformation", "populate bean", beanInformation);
-		ValidationHelper.ensureExists("factoryLookupStrategy", "populate bean", factoryLookupStrategy);
-		this.beanInformation = beanInformation;
-		this.factoryLookupStrategy = factoryLookupStrategy;
+     * Construct a new Bean Property Values Factory.
+     * 
+     * @param beanInformation
+     *            Information used to create property values for a bean.
+     * @param factoryLookupStrategy
+     *            Provides a means of acquiring a suitable Factory for use when creating values.
+     * @param configuration
+     *            Provides override configuration
+     * @throws IllegalArgumentException
+     *             If the specified BeanInformation or FactoryLookupStrategy is deemed illegal. For example, if either
+     *             is <code>null</code>.
+     */
+    public BeanPropertyValuesFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy,
+            Configuration configuration) {
+        ValidationHelper.ensureExists("beanInformation", "populate bean", beanInformation);
+        ValidationHelper.ensureExists("factoryLookupStrategy", "populate bean", factoryLookupStrategy);
+        ValidationHelper.ensureExists("configuration", "populate bean", configuration);
+        this.beanInformation = beanInformation;
+        this.factoryLookupStrategy = factoryLookupStrategy;
+        this.configuration = configuration;
 	}
 
 	/**
@@ -82,10 +89,12 @@ public class BeanPropertyValuesFactory implements Factory<Map<String, Object>> {
 		Map<String, Object> propertyValues = new HashMap<String, Object>();
 		Collection<PropertyInformation> writableProperties =
 				PropertyInformationFilter.filter(beanInformation.getProperties(), PropertyVisibility.WRITABLE);
+		writableProperties = PropertyInformationFilter.filter(writableProperties, configuration);
+		
 		for (PropertyInformation property : writableProperties) {
 			String propertyName = property.getName();
 			try {
-				Factory<?> valueFactory = factoryLookupStrategy.getFactory(beanInformation, property, null);
+				Factory<?> valueFactory = factoryLookupStrategy.getFactory(beanInformation, property, configuration);
 				Object value = valueFactory.create();
 				propertyValues.put(propertyName, value);
 			} catch (Exception e) {

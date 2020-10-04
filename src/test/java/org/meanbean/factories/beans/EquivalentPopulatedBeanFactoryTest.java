@@ -32,6 +32,8 @@ import org.meanbean.factories.util.BasicFactoryLookupStrategy;
 import org.meanbean.factories.util.FactoryLookupStrategy;
 import org.meanbean.lang.Factory;
 import org.meanbean.test.BeanTester;
+import org.meanbean.test.Configuration;
+import org.meanbean.test.ConfigurationBuilder;
 import org.meanbean.test.beans.ComplexBean;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -42,6 +44,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -85,15 +89,15 @@ public class EquivalentPopulatedBeanFactoryTest {
 		        new BasicFactoryLookupStrategy(tester.getFactoryCollection(), tester.getRandomValueGenerator());
 		BeanInformationFactory javaBeanInformationFactory = new JavaBeanInformationFactory();
 		beanInformationReal = javaBeanInformationFactory.create(ComplexBean.class);
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(ID_KEY), null))
+		when(factoryLookupStrategyMock.getFactory(eq(beanInformationReal), eq(getProperty(ID_KEY)), any()))
 				.thenReturn((Factory) () -> TEST_ID);
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(FIRST_NAME_KEY), null))
+		when(factoryLookupStrategyMock.getFactory(eq(beanInformationReal), eq(getProperty(FIRST_NAME_KEY)), any()))
 				.thenReturn((Factory) () -> TEST_FIRST_NAME);
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(LAST_NAME_KEY), null))
+		when(factoryLookupStrategyMock.getFactory(eq(beanInformationReal), eq(getProperty(LAST_NAME_KEY)), any()))
 				.thenReturn((Factory) () -> TEST_LAST_NAME);
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(DATE_OF_BIRTH_KEY), null))
+		when(factoryLookupStrategyMock.getFactory(eq(beanInformationReal), eq(getProperty(DATE_OF_BIRTH_KEY)), any()))
 				.thenReturn((Factory) () -> TEST_DATE_OF_BIRTH);
-		when(factoryLookupStrategyMock.getFactory(beanInformationReal, getProperty(FAVOURITE_NUMBER_KEY), null))
+		when(factoryLookupStrategyMock.getFactory(eq(beanInformationReal), eq(getProperty(FAVOURITE_NUMBER_KEY)), any()))
 				.thenReturn((Factory) () -> TEST_FAVOURITE_NUMBER);
 	}
 
@@ -105,34 +109,34 @@ public class EquivalentPopulatedBeanFactoryTest {
 				.get();
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void constructorShouldPreventNullBeanInformation() throws Exception {
-		new EquivalentPopulatedBeanFactory(null, factoryLookupStrategyMock);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorShouldPreventNullBeanInformation() throws Exception {
+        newEquivalentPopulatedBeanFactory(null, factoryLookupStrategyMock);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void constructorShouldPreventNullFactoryLookupStrategy() throws Exception {
-		new EquivalentPopulatedBeanFactory(beanInformationMock, null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorShouldPreventNullFactoryLookupStrategy() throws Exception {
+        newEquivalentPopulatedBeanFactory(beanInformationMock, null);
+    }
+
+    @Test
+    public void constructorShouldPermitNonNullArguments() throws Exception {
+        newEquivalentPopulatedBeanFactory(beanInformationMock, factoryLookupStrategyMock);
+    }
+
+    @Test
+    public void createShouldReturnNewObjectEachInvocation() throws Exception {
+        EquivalentPopulatedBeanFactory factory = newEquivalentPopulatedBeanFactory(beanInformationReal,
+                factoryLookupStrategyReal);
+        assertThat("Should be different instances.", factory.create(), is(not(sameInstance(factory.create()))));
+    }
 
 	@Test
-	public void constructorShouldPermitNonNullArguments() throws Exception {
-		new EquivalentPopulatedBeanFactory(beanInformationMock, factoryLookupStrategyMock);
-	}
-
-	@Test
-	public void createShouldReturnNewObjectEachInvocation() throws Exception {
-		EquivalentPopulatedBeanFactory factory =
-		        new EquivalentPopulatedBeanFactory(beanInformationReal, factoryLookupStrategyReal);
-		assertThat("Should be different instances.", factory.create(), is(not(sameInstance(factory.create()))));
-	}
-
-	@Test
-	public void createdObjectPropertiesShouldBeSameAsThatGeneratedByFactories() throws Exception {
-		EquivalentPopulatedBeanFactory factory =
-		        new EquivalentPopulatedBeanFactory(beanInformationReal, factoryLookupStrategyMock);
-		ComplexBean bean = (ComplexBean) factory.create();
-		assertThat(bean.getFirstName(), is(TEST_FIRST_NAME));
+    public void createdObjectPropertiesShouldBeSameAsThatGeneratedByFactories() throws Exception {
+        EquivalentPopulatedBeanFactory factory = newEquivalentPopulatedBeanFactory(beanInformationReal,
+                factoryLookupStrategyMock);
+        ComplexBean bean = (ComplexBean) factory.create();
+        assertThat(bean.getFirstName(), is(TEST_FIRST_NAME));
 		assertThat(bean.getLastName(), is(TEST_LAST_NAME));
 		assertThat(bean.getFavouriteNumber(), is(TEST_FAVOURITE_NUMBER));
 		assertThat(bean.getDateOfBirth(), is(TEST_DATE_OF_BIRTH));
@@ -141,11 +145,17 @@ public class EquivalentPopulatedBeanFactoryTest {
 	@Test
 	public void createShouldCreateLogicallyEquivalentObjects() throws Exception {
 		EquivalentPopulatedBeanFactory factory =
-		        new EquivalentPopulatedBeanFactory(beanInformationReal, factoryLookupStrategyMock);
+		        newEquivalentPopulatedBeanFactory(beanInformationReal, factoryLookupStrategyMock);
 		ComplexBean bean1 = (ComplexBean) factory.create();
 		ComplexBean bean2 = (ComplexBean) factory.create();
 		ComplexBean bean3 = (ComplexBean) factory.create();
-		assertThat(bean1, is(bean2));
-		assertThat(bean2, is(bean3));
-	}
+        assertThat(bean1, is(bean2));
+        assertThat(bean2, is(bean3));
+    }
+
+    private EquivalentPopulatedBeanFactory newEquivalentPopulatedBeanFactory(BeanInformation beanInformation, FactoryLookupStrategy factoryLookupStrategy) {
+        Configuration configuration = new ConfigurationBuilder().build();
+        return new EquivalentPopulatedBeanFactory(beanInformation, factoryLookupStrategy, configuration);
+    }
+    
 }
