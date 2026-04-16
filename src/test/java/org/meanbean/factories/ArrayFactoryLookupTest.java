@@ -52,8 +52,8 @@ public class ArrayFactoryLookupTest {
 		Factory<UUID[][]> factory = arrayFactoryCollection.getFactory(UUID[][].class);
 		UUID[][] matrix = factory.create();
 
-		assertThat(matrix)
-				.hasSizeLessThanOrEqualTo(arrayFactoryCollection.getMaxSize());
+		assertThat(matrix.length)
+				.isLessThanOrEqualTo(arrayFactoryCollection.getMaxSize());
 		for (UUID[] array : matrix) {
 			assertThat(array)
 					.hasSizeLessThanOrEqualTo(arrayFactoryCollection.getMaxSize());
